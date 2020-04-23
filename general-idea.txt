@@ -12,9 +12,9 @@ User input:
 Algorithm:
 1. The default leverage is always 50x
 2. The buy position is only 1 direction following the 4 hour or 6 hour trend.
-	* Also the buy position is triggered when the price on 1 min certain amount within seconds timestamp
+	* Also the buy position is triggered when the price on 1 min moves certain amount towards the trend within seconds timestamp
 3. Close profit position for 15%
-	* The profit will not be closed when there is no certain amount of price drop within seconds-timestamp
+	* The profit will not be closed when there is no certain amount of price change against the trend within seconds-timestamp
 4. Close losing position at 5-8%, again, depending on the leverage. 
 
 Test Environment:
