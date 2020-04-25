@@ -1,22 +1,35 @@
+Phase 1
 Retrieve Data:
 1. Retrieve data from BitSeven/Bybit for exchange
-2. Retrieve data from BitMEX for 4 hour / 6 hour trending
-3. The trade data should be done within minutes, therefore minute data is mandatory
+2. The trade data should be done within minutes, therefore minute data is mandatory (10 seconds interval)
 
 User input:
 1. User can choose platform to trade (BitSeven/Bybit)
-2. User enter the API for integration.
+2. User enter the API access token for the bot to help to trade.
 3. User able to adjust leverage. (Default 50x)
-4. There is NO alcm implemented. 
+4. User able to enter direction for entry position. (long/short)
 
 Algorithm:
 1. The default leverage is always 50x
-2. The buy position is only 1 direction following the 4 hour or 6 hour trend.
-	* Also the buy position is triggered when the price on 1 min moves certain amount towards the trend within seconds timestamp
+2. The buy position is only 1 direction with the user's input.
+	* The buy position is triggered
+		- When the price on 1 min moves certain amount towards the trend within seconds timestamp
 3. Close profit position for 15%
-	* The profit will not be closed when there is no certain amount of price change against the trend within seconds-timestamp
-4. Close losing position at 5-8%, again, depending on the leverage. 
+	* The profit will not be closed when there is no certain amount of price change against the direction within seconds-timestamp
+4. Close losing position at 5-8% on 50x, again, depending on the leverage. 
 
-Test Environment:
+Backtest Environment:
 1. Retrieve chart data as usual
-2. Using personal fake number data bitcoin to run the simulation to test the efficiency of the program.
+2. Using personal fake bitcoin number data to run the simulation to test the efficiency of the program.
+
+
+Phase 2
+1. Retrieve data from BitMEX for 4 hour / 6 hour trending so the script can run 24 hours
+2. Alcm implemented as a choice for user, the alcm is always 50% of the initial position and user can input alcm number. 
+3. The buy position is only 1 direction following the 4 hour or 6 hour trend.
+4. War Formation detection is implemented for safe mode.
+	* Mode added and can be selected by the user:
+		- Quick mode (Phase 1 algorithm)
+		- Safe mode (War Formation mode)
+		- Alcm mode (Alcm mode) Stop loss immediately when direction changed
+5. 
