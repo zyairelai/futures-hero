@@ -1,2 +1,2 @@
 # leverage-bot
-Leverage Trading Bot for CryptoCurrency, mainly for Bitcoin. 
+Leverage Trading Bot for Bitcoin on Bybit. 
