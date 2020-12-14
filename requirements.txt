@@ -1,0 +1,5 @@
+numpy==1.19.4
+pandas==1.1.5
+cryptography==3.2
+python-binance==0.7.5
+quantiacsToolbox-3.0.1
