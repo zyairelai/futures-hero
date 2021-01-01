@@ -15,7 +15,8 @@ def heikin_ashi_calculations(df):
     
     return heikin_ashi_df
     
-df = pd.read_csv("ohcl.txt", sep="   ", names=['open','high','low','close'],engine='python')
+df = pd.read_csv("ohcl.txt", sep="   ", names=['open', 'high', 'low', 'close'], engine='python')
 print(df)
+
 heikin_ashi_df = heikin_ashi_calculations(df)
 print(heikin_ashi_df)
