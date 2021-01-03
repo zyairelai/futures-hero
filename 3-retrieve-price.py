@@ -13,11 +13,7 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-klines = client.get_historical_klines(symbol, Client.KLINE_INTERVAL_1HOUR, "1 day ago UTC")
-
-candles = client.get_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1HOUR)
-
-for candle in candles:
-    print(candle)
-
-print(len(candle))
+while True:
+    klines = client.get_historical_klines(symbol, Client.KLINE_INTERVAL_1MINUTE, "1 minute ago UTC")
+    print(klines)
+    time.sleep(5)
