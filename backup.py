@@ -27,13 +27,13 @@ def get_current_trend():
 
     if (current_Open == current_High):
         print("📉 Down Trend        :   SHORT\n")
-        return "SHORT"
+        return "DOWN_TREND"
     elif (current_Open == current_Low):
         print("📈 Up Trend          :   LONG\n")
-        return "LONG"
+        return "UP_TREND"
     else:
         print("( v￣▽￣) おやすみ ( ͡° ͜ʖ ͡°)\n")
-        return "WAIT"
+        return "NO_TRADE"
 
 # Historical BLVT NAV Kline/Candlestick 
 # https://binance-docs.github.io/apidocs/futures/en/#taker-buy-sell-volume
