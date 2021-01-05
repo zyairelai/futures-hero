@@ -18,7 +18,7 @@ client      = Client(api_key, api_secret)
 # [4] Close                     HA_Low    = minimum of Low, HA_Open, HA_Close
 
 def get_current_trend():
-    # The <X hour ago UTC> has to be 3x of the Interval Period
+    # The "<X> hour ago UTC" has to be 3x of the KLINE_INTERVAL_<X>HOUR
     klines = client.get_historical_klines(symbol, Client.KLINE_INTERVAL_1HOUR, "3 hour ago UTC")
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
