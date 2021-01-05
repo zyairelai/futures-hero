@@ -41,13 +41,13 @@ def get_current_trend():
 
     if (current_Open == current_High):
         print("📉 Down Trend        :   SHORT\n")
-        return "SHORT"
+        return "GO_SHORT"
     elif (current_Open == current_Low):
         print("📈 Up Trend          :   LONG\n")
-        return "LONG"
+        return "GO_LONG"
     else:
-        print("( v￣▽￣) おやすみ ( ͡° ͜ʖ ͡°)\n")
-        return "REST"
+        print("No Trade Zone おやすみ ( ͡° ͜ʖ ͡°)\n")
+        return "WAIT"
 
 result = get_current_trend()
-print("This is <2-trend.py> and the return value is : " + result)
+print("The <2-trend.py> return value is : " + result)
