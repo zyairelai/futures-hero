@@ -9,14 +9,6 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-# Historical BLVT NAV Kline/Candlestick 
-# https://binance-docs.github.io/apidocs/futures/en/#taker-buy-sell-volume
-# [0] Open Timestamp            
-# [1] Open                      HA_Open   = (previous HA_Open + previous HA_Close) / 2
-# [2] High                      HA_Close  = (Open + High + Low + Close) / 4
-# [3] Low                       HA_High   = maximum of High, HA_Open, HA_Close
-# [4] Close                     HA_Low    = minimum of Low, HA_Open, HA_Close
-
 def get_current_trend():
     # The <X hour ago UTC> has to be 3x of the Interval Period
     klines = client.get_historical_klines(symbol, Client.KLINE_INTERVAL_1HOUR, "3 hour ago UTC")
