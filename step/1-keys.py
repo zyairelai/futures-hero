@@ -18,4 +18,13 @@ print("API OWNER        :   " + api_owner)
 print("API Key          :   " + api_key)
 print("API Secret Key   :   " + api_secret)
 
+# Create Object to call Python Function
 # client = Client(keys.api_key, keys.api_secret)
+
+# Historical BLVT NAV Kline/Candlestick 
+# https://binance-docs.github.io/apidocs/futures/en/#taker-buy-sell-volume
+# [0] Open Timestamp            
+# [1] Open                      HA_Open   = (previous HA_Open + previous HA_Close) / 2
+# [2] High                      HA_Close  = (Open + High + Low + Close) / 4
+# [3] Low                       HA_High   = maximum of High, HA_Open, HA_Close
+# [4] Close                     HA_Low    = minimum of Low, HA_Open, HA_Close

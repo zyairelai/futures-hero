@@ -10,9 +10,9 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-def get_current_trend():
+def get_current_minute():
     # The <limit> has to be 3x of the Interval Period
-    klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
+    klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -32,23 +32,23 @@ def get_current_trend():
     print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_High):
-        print("🩸 Current Trend is DOWN Trend 🩸")
-        trend = "DOWN_TREND"
+        print("🩸 Current MINUTE is RED 🩸")
+        minute_candle = "RED_CANDLE"
     elif (current_Open == current_Low):
-        print("🥦 Current Trend is UP Trend 🥦")
-        trend = "UP_TREND"
+        print("🥦 Current MINUTE is GREEN 🥦")
+        minute_candle = "GREEN_CANDLE"
     else:
         if (current_Open > current_Close):
-            print("No Trade Zone おやすみ 🩸 ( ͡° ͜ʖ ͡°)")
-            trend = "RED_INDECISIVE"
+            print("🩸 RED_INDECISIVE おやすみ ( ͡° ͜ʖ ͡°)")
+            minute_candle = "RED_INDECISIVE"
         elif (current_Close > current_Open):
-            print("No Trade Zone おやすみ 🥦 ( ͡° ͜ʖ ͡°)")
-            trend = "GREEN_INDECISIVE"
+            print("🥦 GREEN_INDECISIVE おやすみ ( ͡° ͜ʖ ͡°)")
+            minute_candle = "GREEN_INDECISIVE"
         else:
-            print("No Color Zone おやすみ ( ͡° ͜ʖ ͡°)")
-            trend = "NO_TRADE"
-    return trend
+            print("No Trade Zone おやすみ ( ͡° ͜ʖ ͡°)")
+            minute_candle = "NO_TRADE"
+    return minute_candle
 
-result = get_current_trend()
-print("\nThe <2-trend.py> return value is : " + result + "\n")
+result = get_current_minute()
+print("\nThe <3-minute.py> return value is : " + result + "\n")
 print(f"Time Taken: {time.time() - start} seconds\n")
