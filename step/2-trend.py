@@ -40,10 +40,10 @@ def get_current_trend():
     print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_High):
-        print("📉 Down Trend        :   SHORT\n")
+        print("🩸 Current Trend is DOWN Trend 🩸 \n")
         return "DOWN_TREND"
     elif (current_Open == current_Low):
-        print("📈 Up Trend          :   LONG\n")
+        print("🥦 Current Trend is UP Trend 🥦 \n")
         return "UP_TREND"
     else:
         print("No Trade Zone おやすみ ( ͡° ͜ʖ ͡°)\n")
