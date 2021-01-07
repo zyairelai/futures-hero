@@ -1,5 +1,5 @@
+import api
 import time
-import api_keys as api
 from datetime import datetime
 from binance.client import Client
 

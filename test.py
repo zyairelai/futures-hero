@@ -1,6 +1,6 @@
+import api
 import time
 import requests
-import api_keys as api
 from binance.client import Client
 
 # start = time.time()
