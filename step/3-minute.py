@@ -32,21 +32,21 @@ def get_current_minute():
     print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_High):
-        print("🩸 Current MINUTE is RED 🩸")
+        print("Current MINUTE   :   🩸 RED 🩸")
         minute_candle = "RED_CANDLE"
     elif (current_Open == current_Low):
-        print("🥦 Current MINUTE is GREEN 🥦")
+        print("Current MINUTE   :   🥦 GREEN 🥦")
         minute_candle = "GREEN_CANDLE"
     else:
         if (current_Open > current_Close):
-            print("🩸 RED_INDECISIVE おやすみ ( ͡° ͜ʖ ͡°)")
+            print("Current MINUTE   :   RED_INDECISIVE 🩸")
             minute_candle = "RED_INDECISIVE"
         elif (current_Close > current_Open):
-            print("🥦 GREEN_INDECISIVE おやすみ ( ͡° ͜ʖ ͡°)")
+            print("Current MINUTE   :   GREEN_INDECISIVE 🥦")
             minute_candle = "GREEN_INDECISIVE"
         else:
-            print("No Trade Zone おやすみ ( ͡° ͜ʖ ͡°)")
-            minute_candle = "NO_TRADE"
+            print("❗Something in get_minute_candle() is going wrong❗")
+            minute_candle = "CLOSE_ALL_POSITION"
     return minute_candle
 
 result = get_current_minute()

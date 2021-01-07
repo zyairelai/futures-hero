@@ -1,5 +1,6 @@
 import os
 import time
+from datetime import datetime
 from binance.client import Client
 
 symbol  =  "BTCUSDT"
@@ -17,7 +18,6 @@ def get_my_current_position():
     return False
 
 def get_current_trend():
-    # The <limit> has to be 3x of the Interval Period
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -31,19 +31,19 @@ def get_current_trend():
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     if (current_Open == current_High):
-        print("🩸 Current Trend is DOWN Trend 🩸")
+        print("Current TREND    :   🩸 DOWN Trend 🩸")
         trend = "DOWN_TREND"
     elif (current_Open == current_Low):
-        print("🥦 Current Trend is UP Trend 🥦")
+        print("Current TREND    :   🥦 UP Trend 🥦")
         trend = "UP_TREND"
     else:
         trend = "NO_TRADE_ZONE"
         if (current_Open > current_Close):
-            print("No Trade Zone おやすみ 🩸 ( ͡° ͜ʖ ͡°)")
+            print("Current TREND    :   😴 No Trade Zone おやすみ 🩸")
         elif (current_Close > current_Open):
-            print("No Trade Zone おやすみ 🥦 ( ͡° ͜ʖ ͡°)")
+            print("Current TREND    :   😴 No Trade Zone おやすみ 🥦")
         else:
-            print("No Color Zone おやすみ ( ͡° ͜ʖ ͡°)")
+            print("Current TREND    :   😴 No Color Zone おやすみ ( ͡° ͜ʖ ͡°)")
     return trend
 
 def get_minute_candle():
@@ -61,43 +61,64 @@ def get_minute_candle():
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     if (current_Open == current_High):
-        print("🩸 Current MINUTE is RED 🩸 ")
+        print("Current MINUTE   :   🩸 RED 🩸")
         minute_candle = "RED_CANDLE"
     elif (current_Open == current_Low):
-        print("🥦 Current MINUTE is GREEN 🥦 ")
+        print("Current MINUTE   :   🥦 GREEN 🥦")
         minute_candle = "GREEN_CANDLE"
     else:
         if (current_Open > current_Close):
-            print("🩸 RED_INDECISIVE おやすみ ( ͡° ͜ʖ ͡°)")
+            print("Current MINUTE   :   RED_INDECISIVE 🩸")
             minute_candle = "RED_INDECISIVE"
         elif (current_Close > current_Open):
-            print("🥦 GREEN_INDECISIVE おやすみ ( ͡° ͜ʖ ͡°)")
+            print("Current MINUTE   :   GREEN_INDECISIVE 🥦")
             minute_candle = "GREEN_INDECISIVE"
         else:
-            print("No Trade Zone おやすみ ( ͡° ͜ʖ ͡°)")
+            print("❗Something in get_minute_candle() is going wrong❗")
             minute_candle = "CLOSE_ALL_POSITION"
     return minute_candle
 
 def get_trade_action(trend, minute_candle):
-
-    if (trend == "UP_TREND") and (minute_candle == "GREEN"):
-        print("Action   :   Go Long")
-    
-    elif (trend == "DOWN_TREND") and (minute_candle == "RED"):
-        print("Action   :   Go Short")
-
-    elif trend == "NO_TRADE":
+    if trend == "NO_TRADE_ZONE":
         # Close all position at and quit trading
-        print("Action   :   Wait")
-
+        print("Action           :   Close Everything and Wait 🦄")
+        trade_action = "CLOSE_ALL_POSITION"
+    elif (trend == "UP_TREND"):
+        if (minute_candle == "GREEN_CANDLE"):
+            print("Action           :   GO_LONG 🚀")
+            trade_action = "GO_LONG"
+        elif (minute_candle == "GREEN_INDECISIVE"):
+            print("Action           :   WAIT 🐺")
+            trade_action = "WAIT"
+        elif (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
+            print("Action           :   CLOSE_LONG 😋 && WAIT 🐺")
+            trade_action = "CLOSE_LONG"
+    elif (trend == "DOWN_TREND"):
+        if (minute_candle == "RED_CANDLE"):
+            print("Action           :   GO_SHORT 💥")
+            trade_action = "GO_SHORT"
+        elif (minute_candle == "RED_INDECISIVE"):
+            print("Action           :   WAIT 🐺")
+            trade_action = "WAIT"
+        elif (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
+            print("Action           :   CLOSE_SHORT 😋 && WAIT 🐺")
+            trade_action = "CLOSE_SHORT"
     else:
-        return "WHATEVER"
+        print("❗Something in get_trade_action() is going wrong❗")
+        trade_action = "CLOSE_ALL_POSITION"
+
+    return trade_action
 
 while True:
-    trend   = get_current_trend()
-    minute  = get_minute_candle()
-
     # get_current_trend() >>> DOWN_TREND // UP_TREND // NO_TRADE_ZONE
     # get_minute_candle() >>> RED_CANDLE // GREEN_CANDLE // RED_INDECISIVE // GREEN_INDECISIVE // CLOSE_ALL_POSITION
+
+    trend   = get_current_trend()
+    minute  = get_minute_candle()
+    action  = get_trade_action(trend, minute)
+    
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print("Last action executed by " + current_time + "\n")
 
     time.sleep(5)

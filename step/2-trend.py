@@ -32,21 +32,19 @@ def get_current_trend():
     print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_High):
-        print("🩸 Current Trend is DOWN Trend 🩸")
+        print("Current TREND    :   🩸 DOWN Trend 🩸")
         trend = "DOWN_TREND"
     elif (current_Open == current_Low):
-        print("🥦 Current Trend is UP Trend 🥦")
+        print("Current TREND    :   🥦 UP Trend 🥦")
         trend = "UP_TREND"
     else:
+        trend = "NO_TRADE_ZONE"
         if (current_Open > current_Close):
-            print("No Trade Zone おやすみ 🩸 ( ͡° ͜ʖ ͡°)")
-            trend = "RED_INDECISIVE"
+            print("Current TREND    :   😴 No Trade Zone おやすみ 🩸")
         elif (current_Close > current_Open):
-            print("No Trade Zone おやすみ 🥦 ( ͡° ͜ʖ ͡°)")
-            trend = "GREEN_INDECISIVE"
+            print("Current TREND    :   😴 No Trade Zone おやすみ 🥦")
         else:
-            print("No Color Zone おやすみ ( ͡° ͜ʖ ͡°)")
-            trend = "NO_TRADE"
+            print("Current TREND    :   😴 No Color Zone おやすみ ( ͡° ͜ʖ ͡°)")
     return trend
 
 result = get_current_trend()

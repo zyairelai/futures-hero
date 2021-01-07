@@ -16,3 +16,6 @@ klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1HO
 
 for k in klines:
     print(k)
+
+position = client.futures_account_balance(timestamp=1591702613943)
+print(position)
