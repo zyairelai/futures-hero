@@ -1,13 +1,13 @@
-import os
 import time
+import api_keys as api
 from binance.client import Client
 
 start   = time.time()
 symbol  =  "BTCUSDT"
 
 # Get environment variables
-api_key     = os.environ.get('API_KEY')
-api_secret  = os.environ.get('API_SECRET')
+api_key     = api.get_key()
+api_secret  = api.get_secret()
 client      = Client(api_key, api_secret)
 
 def get_current_minute():

@@ -1,5 +1,6 @@
-import os
 import time
+import requests
+import api_keys as api
 from binance.client import Client
 
 # start = time.time()
@@ -8,14 +9,22 @@ from binance.client import Client
 symbol  =  "BTCUSDT"
 
 # Get environment variables
-api_key     = os.environ.get('API_KEY')
-api_secret  = os.environ.get('API_SECRET')
+api_key     = api.get_key()
+api_secret  = api.get_secret()
 client      = Client(api_key, api_secret)
 
-klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
+timestamp = float(client.futures_time()["serverTime"])
+print(timestamp)
 
-for k in klines:
-    print(k)
+# payload = {'timestamp': get_timestamp()}
+# r = requests.get('https://fapi.binance.com/fapi/v2/balance', params=payload)
+# print (r.text)
 
-position = client.futures_account_balance(timestamp=1591702613943)
+def get_timestamp():
+    return int(time.time() * 1000)
+
+position = client.futures_account_balance(timestamp=get_timestamp())
 print(position)
+
+mark_price = client.futures_mark_price(symbol=symbol)
+print(mark_price)
