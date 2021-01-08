@@ -1,13 +1,13 @@
+import os
 import time
-import api_keys as api
 from binance.client import Client
 
 start   = time.time()
 symbol  =  "BTCUSDT"
 
 # Get environment variables
-api_key     = api.get_key()
-api_secret  = api.get_secret()
+api_key     = os.environ.get('API_KEY')
+api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_current_trend():
@@ -48,5 +48,5 @@ def get_current_trend():
     return trend
 
 result = get_current_trend()
-print("\nThe <2-trend.py> return value is : " + result + "\n")
+print("\nThe <trend.py> return value is : " + result + "\n")
 print(f"Time Taken: {time.time() - start} seconds\n")
