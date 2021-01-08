@@ -1,6 +1,6 @@
 # Binance Futures Testnet API
 
-def get_key(): 
+def get_key():
     return "0b6bab25b86fe60215b90a805d919eb81a330652ec10624a661300449067d3e5"
 
 def get_secret():
