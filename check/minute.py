@@ -2,7 +2,7 @@ import os
 import time
 from binance.client import Client
 
-start   = time.time()
+start   =   time.time()
 symbol  =  "BTCUSDT"
 
 # Get environment variables

@@ -1,4 +1,4 @@
-import api
+import os
 import time
 from datetime import datetime
 from binance.client import Client
@@ -7,8 +7,8 @@ symbol  =  "BTCUSDT"
 bet     =  10
 
 # Get environment variables
-api_key     = api.get_key()
-api_secret  = api.get_secret()
+api_key     = "0b6bab25b86fe60215b90a805d919eb81a330652ec10624a661300449067d3e5"
+api_secret  = "aafb5b1058ebbab777746ecce25d18606f66ab1f0234fa89129bfcd31d123d85"
 client      = Client(api_key, api_secret)
 
 def get_my_current_position():
