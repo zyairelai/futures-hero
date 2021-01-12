@@ -1,5 +1,5 @@
 # leverage-bot
-Leverage Trading Bot for Bitcoin on Binance. 
+Leverage Trading Bot on Binance Futures. 
 
 ## 1. Requirements
 You need to have these libraries installed:
@@ -14,4 +14,4 @@ export API_OWNER="your_binance_username"
 export API_KEY="your_binance_api_key"
 export API_SECRET="your_binance_secret_key"
 ```
-To check if your key is saved by your environment, run `python3 keys.py`
+To check if your key is saved by your environment, run `python3 check/keys.py`
