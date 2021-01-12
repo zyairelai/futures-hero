@@ -6,22 +6,29 @@ from binance.client import Client
 # start = time.time()
 # print(f"Time Taken: {time.time() - start} seconds\n")
 
-symbol  =  "BTCUSDT"
+symbol   = "BTCUSDT"
+quantity = 0.001
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-timestamp = client.futures_time()["serverTime"]
-print(timestamp) # Type int
+def get_timestamp():
+    return int(time.time() * 1000)
 
-# payload = {'timestamp': get_timestamp()}
-# r = requests.get('https://fapi.binance.com/fapi/v2/balance', params=payload)
-# print (r.text)
+# Success Long / Buy
+# buy_order = client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+# sell_order = client.futures_create_order(symbol=symbol, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+# close_position = client.futures_create_order(symbol=symbol, side="BUY", type="STOP_MARKET", closePosition="true", stopPrice="MARKET", timestamp=get_timestamp())
 
-position = client.futures_account_balance(timestamp=timestamp)
+position = client.futures_position_information(symbol=symbol, timestamp=get_timestamp())
 print(position)
-
-mark_price = client.futures_mark_price(symbol=symbol)
-print(mark_price)
+positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
+print(positionAmt)
+if (positionAmt > 0):
+    print("LONGING")
+elif (positionAmt < 0):
+    print("SHORTING")
+else:
+    print("NO_POSITION")

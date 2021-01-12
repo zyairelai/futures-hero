@@ -3,19 +3,16 @@ import time
 from datetime import datetime
 from binance.client import Client
 
-symbol  =  "BTCUSDT"
-bet     =  10
+symbol   = "BTCUSDT"
+quantity = 0.001
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-def get_my_current_position():
-    retrieve_future_position = "Hello"
-    if (retrieve_future_position == "I_AM_HOLDING_A_POSITION"):
-        return True
-    return False
+def get_timestamp():
+    return int(time.time() * 1000)  
 
 def get_current_trend():
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
@@ -78,6 +75,19 @@ def get_minute_candle():
             minute_candle = "CLOSE_ALL_POSITION"
     return minute_candle
 
+def get_position_info():
+    positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
+    print(positionAmt)
+    if (positionAmt > 0):
+        print("LONGING")
+        return "LONGING"
+    elif (positionAmt < 0):
+        print("SHORTING")
+        return "SHORTING"
+    else:
+        print("NO_POSITION")
+        return "NO_POSITION"
+          
 def get_trade_action(trend, minute_candle):
     if trend == "NO_TRADE_ZONE":
         # Close all position at and quit trading
@@ -112,6 +122,7 @@ def get_trade_action(trend, minute_candle):
 while True:
     # get_current_trend() >>> DOWN_TREND // UP_TREND // NO_TRADE_ZONE
     # get_minute_candle() >>> RED_CANDLE // GREEN_CANDLE // RED_INDECISIVE // GREEN_INDECISIVE // CLOSE_ALL_POSITION
+    # get_position_info() >>> NO_POSITION // LONGING // SHORTING
 
     trend   = get_current_trend()
     minute  = get_minute_candle()
