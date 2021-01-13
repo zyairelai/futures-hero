@@ -17,10 +17,12 @@ client      = Client(api_key, api_secret)
 def get_timestamp():
     return int(time.time() * 1000)
 
-# Success Long / Buy
-# buy_order = client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
-# sell_order = client.futures_create_order(symbol=symbol, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
-# close_position = client.futures_create_order(symbol=symbol, side="BUY", type="STOP_MARKET", closePosition="true", stopPrice="MARKET", timestamp=get_timestamp())
+
+# Success Long Order
+# client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+
+# Success Short Order
+# client.futures_create_order(symbol=symbol, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
 
 position = client.futures_position_information(symbol=symbol, timestamp=get_timestamp())
 print(position)
@@ -32,3 +34,4 @@ elif (positionAmt < 0):
     print("SHORTING")
 else:
     print("NO_POSITION")
+

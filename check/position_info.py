@@ -14,16 +14,18 @@ def get_timestamp():
     return int(time.time() * 1000)  
 
 def get_position_info():
-    positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
-    print(positionAmt)
+    position_response = client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0]
+    positionAmt = float(position_response.get('positionAmt'))
+    print(position_response)
+    
     if (positionAmt > 0):
-        print("LONGING")
+        print("Current Position   :   LONGING")
         return "LONGING"
     elif (positionAmt < 0):
-        print("SHORTING")
+        print("Current Position   :   SHORTING")
         return "SHORTING"
     else:
-        print("NO_POSITION")
+        print("Current Position   :   NO_POSITION")
         return "NO_POSITION"
 
 result = get_position_info()

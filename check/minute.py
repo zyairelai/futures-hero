@@ -45,8 +45,8 @@ def get_current_minute():
             print("Current MINUTE   :   GREEN_INDECISIVE 🥦")
             minute_candle = "GREEN_INDECISIVE"
         else:
-            print("❗Something in get_minute_candle() is going wrong❗")
-            minute_candle = "CLOSE_ALL_POSITION"
+            print("SOMETHING_IS_WRONG in get_minute_candle()❗")
+            minute_candle = "SOMETHING_IS_WRONG"
     return minute_candle
 
 result = get_current_minute()

@@ -71,62 +71,65 @@ def get_minute_candle():
             print("Current MINUTE   :   GREEN_INDECISIVE 🥦")
             minute_candle = "GREEN_INDECISIVE"
         else:
-            print("❗Something in get_minute_candle() is going wrong❗")
-            minute_candle = "CLOSE_ALL_POSITION"
+            print("❗SOMETHING_IS_WRONG in get_minute_candle()❗")
+            minute_candle = "SOMETHING_IS_WRONG"
     return minute_candle
 
 def get_position_info():
     positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
-    print(positionAmt)
     if (positionAmt > 0):
-        print("LONGING")
+        print("Current Position :   LONGING")
         return "LONGING"
     elif (positionAmt < 0):
-        print("SHORTING")
+        print("Current Position :   SHORTING")
         return "SHORTING"
     else:
-        print("NO_POSITION")
+        print("Current Position :   NO_POSITION")
         return "NO_POSITION"
           
-def get_trade_action(trend, minute_candle):
-    if trend == "NO_TRADE_ZONE":
-        # Close all position at and quit trading
-        print("Action           :   Close Everything and Wait 🦄")
-        trade_action = "CLOSE_ALL_POSITION"
-    elif (trend == "UP_TREND"):
-        if (minute_candle == "GREEN_CANDLE"):
-            print("Action           :   GO_LONG 🚀")
-            trade_action = "GO_LONG"
-        elif (minute_candle == "GREEN_INDECISIVE"):
-            print("Action           :   WAIT 🐺")
-            trade_action = "WAIT"
+def trade_action(position_info, trend, minute_candle):
+    if position_info == "LONGING":
+        if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
+            print("Action           :   WAIT 🐺")           # WAIT
         elif (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
-            print("Action           :   CLOSE_LONG 😋 && WAIT 🐺")
-            trade_action = "CLOSE_LONG"
-    elif (trend == "DOWN_TREND"):
-        if (minute_candle == "RED_CANDLE"):
-            print("Action           :   GO_SHORT 💥")
-            trade_action = "GO_SHORT"
-        elif (minute_candle == "RED_INDECISIVE"):
-            print("Action           :   WAIT 🐺")
-            trade_action = "WAIT"
-        elif (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
-            print("Action           :   CLOSE_SHORT 😋 && WAIT 🐺")
-            trade_action = "CLOSE_SHORT"
-    else:
-        print("❗Something in get_trade_action() is going wrong❗")
-        trade_action = "CLOSE_ALL_POSITION"
+            print("Action           :   CLOSE_LONG 😋")
+            # CLOSE_LONG
+            client.futures_create_order(symbol=symbol, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+        else:
+            print("❗SOMETHING_IS_WRONG in trade_action()❗")
 
-    return trade_action
+    elif position_info == "SHORTING":
+        if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
+            print("Action           :   CLOSE_SHORT 😭")
+            # CLOSE_SHORT
+            client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+        elif (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
+            print("Action           :   WAIT 🐺")           # WAIT
+        else:
+            print("❗SOMETHING_IS_WRONG in trade_action()❗")
+            
+    else:
+        if trend == "UP_TREND":
+            if (minute_candle == "GREEN_CANDLE"):
+                print("Action           :   GO_LONG 🚀")
+                client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+            else:
+                print("Action           :   WAIT 🐺")       # WAIT
+        elif trend == "DOWN_TREND":
+            if (minute_candle == "RED_CANDLE"):
+                print("Action           :   GO_SHORT 💥")
+                client.futures_create_order(symbol=symbol, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+            else:
+                print("Action           :   WAIT 🐺")       # WAIT
+        else:
+            print("Action           :   WAIT 🐺")           # WAIT
 
 while True:
-    # get_current_trend() >>> DOWN_TREND // UP_TREND // NO_TRADE_ZONE
-    # get_minute_candle() >>> RED_CANDLE // GREEN_CANDLE // RED_INDECISIVE // GREEN_INDECISIVE // CLOSE_ALL_POSITION
-    # get_position_info() >>> NO_POSITION // LONGING // SHORTING
+    # get_position_info() >>>   LONGING  //    SHORTING    // NO_POSITION
+    # get_current_trend() >>>  UP_TREND  //   DOWN_TREND   // NO_TRADE_ZONE
+    # get_minute_candle() >>> RED_CANDLE //  GREEN_CANDLE  // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
 
-    trend   = get_current_trend()
-    minute  = get_minute_candle()
-    action  = get_trade_action(trend, minute)
+    trade_action(get_position_info(), get_current_trend(), get_minute_candle())
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
