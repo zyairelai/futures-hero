@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+from datetime import datetime
 from binance.client import Client
 
 symbol   = "BTCUSDT"
@@ -22,3 +23,4 @@ def get_timestamp():
 # scheduler.start()
 
 print(get_symbol())
+print(str(datetime.now().strftime("%H:%M:%S")))

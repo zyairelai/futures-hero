@@ -4,6 +4,7 @@ import os
 import time
 from datetime import datetime
 from binance.client import Client
+from binance.exceptions import BinanceAPIException
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
@@ -126,11 +127,18 @@ while True:
 
     try:
         trade_action(get_position_info(), get_current_trend(), get_minute_candle())
-    except ConnectionResetError:
+
+    except ConnectionResetError as e:
+        with open("Error_Message.txt", "a") as error_message:
+            error_message.write("Created at            : " + str(datetime.now().strftime("%H:%M:%S")) + "\n")
+            error_message.write(e + "\n")
+        continue
+    
+    except BinanceAPIException as e:
+        with open("Error_Message.txt", "a") as error_message:
+            error_message.write("Created at            : " + str(datetime.now().strftime("%H:%M:%S")) + "\n")
+            error_message.write(e + "\n")
         continue
 
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("Last action executed by " + current_time + "\n")
-
+    print(datetime.now().strftime("%H:%M:%S"))
     time.sleep(3)
