@@ -3,7 +3,7 @@ import time
 start           =   time.time()
 position_info   =   "LONGING"           # >>> LONGING  //  SHORTING  // NO_POSITION
 trend           =   "UP_TREND"          # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
-minute_candle   =   "GREEN_CANDLE"        # >>> RED_CANDLE // GREEN_CANDLE // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
+minute_candle   =   "GREEN_CANDLE"      # >>> RED_CANDLE // GREEN_CANDLE // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
 
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":

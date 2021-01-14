@@ -10,14 +10,14 @@ client      = Client(api_key, api_secret)
 
 symbol   = "BTCUSDT"
 
-def create_order(side):
-    quantity    =   0.001
-    # side  >>>  "BUY"      For GO_LONG or CLOSE_SHORT
-    # side  >>>  "SELL"     For GO_SHORT or CLOSE_LONG
-    client.futures_create_order(symbol=symbol, side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
-
 def get_timestamp():
     return int(time.time() * 1000)  
+
+def create_order(side):
+    quantity    =   0.001
+    # side  >>>  "BUY"      For >>> GO_LONG // CLOSE_SHORT
+    # side  >>>  "SELL"     For >>> GO_SHORT // CLOSE_LONG
+    client.futures_create_order(symbol=symbol, side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
 
 def get_current_trend():
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
