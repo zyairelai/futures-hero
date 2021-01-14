@@ -24,7 +24,7 @@ def get_position_info():
         position = "SHORTING"
     else:
         position = "NO_POSITION"
-    print("Current Position   :   " + position)
+    print("Current Position :   " + position)
     return position
 
 result = get_position_info()

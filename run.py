@@ -1,3 +1,5 @@
+live_trade  = False
+
 import os
 import time
 from datetime import datetime
@@ -8,8 +10,9 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-symbol      = "BTCUSDT"
-live_trade  = False
+def get_symbol():
+    main_coin = "BTC"
+    return (main_coin + "USDT")
 
 def get_timestamp():
     return int(time.time() * 1000)  
@@ -18,10 +21,10 @@ def create_order(side):
     quantity    =   0.001
     # side  >>>  "BUY"      For >>> GO_LONG // CLOSE_SHORT
     # side  >>>  "SELL"     For >>> GO_SHORT // CLOSE_LONG
-    client.futures_create_order(symbol=symbol, side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
+    client.futures_create_order(symbol=get_symbol(), side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
 
 def get_current_trend():
-    klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+    klines = client.futures_klines(symbol=get_symbol(), interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -45,7 +48,7 @@ def get_current_trend():
     return trend
 
 def get_minute_candle():
-    klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
+    klines = client.futures_klines(symbol=get_symbol(), interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -76,42 +79,42 @@ def get_minute_candle():
     return minute_candle
 
 def get_position_info():
-    positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
+    positionAmt = float(client.futures_position_information(symbol=get_symbol(), timestamp=get_timestamp())[0].get('positionAmt'))
     if (positionAmt > 0):
         position = "LONGING"
     elif (positionAmt < 0):
         position = "SHORTING"
     else:
         position = "NO_POSITION"
-    print("Current Position   :   " + position)
+    print("Current Position :   " + position)
     return position
           
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
         if (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
-            if live_trade: create_order("SELL")
-            print("Action           :   CLOSE_LONG 😋")     ### CREATE SELL ORDER HERE 
+            if live_trade: create_order("SELL")             ### CREATE SELL ORDER HERE 
+            print("Action           :   CLOSE_LONG 😋")
         else:
             print("Action           :   HOLDING_LONG 💪🥦")
 
     elif position_info == "SHORTING":
         if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
-            if live_trade: create_order("BUY")
-            print("Action           :   CLOSE_SHORT 😋")    ### CREATE BUY ORDER HERE 
+            if live_trade: create_order("BUY")              ### CREATE BUY ORDER HERE
+            print("Action           :   CLOSE_SHORT 😋")
         else:
             print("Action           :   HOLDING_SHORT 💪🩸")
 
     else:
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
-                if live_trade: create_order("BUY")
-                print("Action           :   GO_LONG 🚀")    ### CREATE BUY ORDER HERE 
+                if live_trade: create_order("BUY")          ### CREATE BUY ORDER HERE 
+                print("Action           :   GO_LONG 🚀")
             else:
                 print("Action           :   WAIT 🐺")
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
-                if live_trade: create_order("SELL")
-                print("Action           :   GO_SHORT 💥")   ### CREATE SELL ORDER HERE 
+                if live_trade: create_order("SELL")         ### CREATE SELL ORDER HERE 
+                print("Action           :   GO_SHORT 💥")
             else:
                 print("Action           :   WAIT 🐺")
         else:
