@@ -121,10 +121,10 @@ def trade_action(position_info, trend, minute_candle):
 def get_timestamp():
     return int(time.time() * 1000)
 
-def output_exception():
+def output_exception(e):
     with open("Error_Message.txt", "a") as error_message:
-        error_message.write("Created at            : " + datetime.now().strftime("%H:%M:%S") + "\n")
-        error_message.write(e + "\n")
+        error_message.write("Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
+        error_message.write(e + "\n\n")
 
 while True:
     # get_position_info() >>>   LONGING  //    SHORTING    // NO_POSITION
@@ -134,13 +134,13 @@ while True:
     try:
         trade_action(get_position_info(), get_current_trend(), get_minute_candle())
     except ConnectionResetError as e:
-        output_exception()
+        output_exception(str(e))
         continue
     except BinanceAPIException as e:
-        output_exception()
+        output_exception(str(e))
         continue
     except socket.timeout as e:
-        output_exception()
+        output_exception(str(e))
         continue
 
     print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")

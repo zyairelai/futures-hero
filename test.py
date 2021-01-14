@@ -3,6 +3,7 @@ import time
 import requests
 from datetime import datetime
 from binance.client import Client
+from binance.exceptions import BinanceAPIException
 
 symbol   = "BTCUSDT"
 
@@ -18,9 +19,16 @@ def get_symbol():
 def get_timestamp():
     return int(time.time() * 1000)
 
-# scheduler = BlockingScheduler()
-# scheduler.add_job(buy_low_sell_high, 'cron', second='0, 6, 12, 18, 24, 30, 36, 42, 48, 54')
-# scheduler.start()
+def output_exception(e):
+    with open("Error_Message.txt", "a") as error_message:
+        error_message.write("Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
+        error_message.write(e + "\n\n")
 
 print(get_symbol())
 print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
+
+try:
+    print(client.futures_position_information(symbol=get_symbol(), timestamp=get_timestamp(), recvWindow=1)[0])
+
+except Exception as e:
+    output_exception(str(e))
