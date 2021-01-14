@@ -3,13 +3,18 @@ import time
 from datetime import datetime
 from binance.client import Client
 
-symbol   = "BTCUSDT"
-quantity = 0.001
-
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
+
+symbol   = "BTCUSDT"
+
+def create_order(side):
+    quantity    =   0.001
+    # side  >>>  "BUY"      For GO_LONG or CLOSE_SHORT
+    # side  >>>  "SELL"     For GO_SHORT or CLOSE_LONG
+    client.futures_create_order(symbol=symbol, side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
 
 def get_timestamp():
     return int(time.time() * 1000)  
@@ -82,40 +87,34 @@ def get_position_info():
           
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
-        if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
-            print("Action           :   WAIT 🐺")           # WAIT
-        elif (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
-            print("Action           :   CLOSE_LONG 😋")
-            # CLOSE_LONG
-            client.futures_create_order(symbol=symbol, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+        if (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
+            create_order("SELL")
+            print("Action           :   CLOSE_LONG 😋")     ### CREATE SELL ORDER HERE 
         else:
-            print("❗SOMETHING_IS_WRONG in trade_action()❗")
+            print("Action           :   HOLDING_LONG 💪🥦")
 
     elif position_info == "SHORTING":
         if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
-            print("Action           :   CLOSE_SHORT 😭")
-            # CLOSE_SHORT
-            client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
-        elif (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
-            print("Action           :   WAIT 🐺")           # WAIT
+            create_order("BUY")
+            print("Action           :   CLOSE_SHORT 😋")    ### CREATE BUY ORDER HERE 
         else:
-            print("❗SOMETHING_IS_WRONG in trade_action()❗")
-            
+            print("Action           :   HOLDING_SHORT 💪🩸")
+
     else:
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
-                print("Action           :   GO_LONG 🚀")
-                client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                create_order("BUY")
+                print("Action           :   GO_LONG 🚀")    ### CREATE BUY ORDER HERE 
             else:
-                print("Action           :   WAIT 🐺")       # WAIT
+                print("Action           :   WAIT 🐺")
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
-                print("Action           :   GO_SHORT 💥")
-                client.futures_create_order(symbol=symbol, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                create_order("SELL")
+                print("Action           :   GO_SHORT 💥")   ### CREATE SELL ORDER HERE 
             else:
-                print("Action           :   WAIT 🐺")       # WAIT
+                print("Action           :   WAIT 🐺")
         else:
-            print("Action           :   WAIT 🐺")           # WAIT
+            print("Action           :   WAIT 🐺")
 
 while True:
     # get_position_info() >>>   LONGING  //    SHORTING    // NO_POSITION

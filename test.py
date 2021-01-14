@@ -3,9 +3,6 @@ import time
 import requests
 from binance.client import Client
 
-# start = time.time()
-# print(f"Time Taken: {time.time() - start} seconds\n")
-
 symbol   = "BTCUSDT"
 quantity = 0.001
 
@@ -16,7 +13,6 @@ client      = Client(api_key, api_secret)
 
 def get_timestamp():
     return int(time.time() * 1000)
-
 
 # Success Long Order
 # client.futures_create_order(symbol=symbol, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
