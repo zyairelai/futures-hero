@@ -14,9 +14,13 @@ client      = Client(api_key, api_secret)
 def get_timestamp():
     return int(time.time() * 1000)
 
-position = client.futures_position_information(symbol=symbol, timestamp=get_timestamp(), recvWindow=1)
+position = client.futures_position_information(symbol=symbol, timestamp=get_timestamp(), recvWindow=5000)
 print(position)
 
 # scheduler = BlockingScheduler()
 # scheduler.add_job(buy_low_sell_high, 'cron', second='0, 6, 12, 18, 24, 30, 36, 42, 48, 54')
 # scheduler.start()
+
+live_trade = True
+
+if live_trade: print("True Live Trade")

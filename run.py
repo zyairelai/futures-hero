@@ -8,7 +8,8 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-symbol   = "BTCUSDT"
+symbol      = "BTCUSDT"
+live_trade  = False
 
 def get_timestamp():
     return int(time.time() * 1000)  
@@ -88,14 +89,14 @@ def get_position_info():
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
         if (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
-            create_order("SELL")
+            if live_trade: create_order("SELL")
             print("Action           :   CLOSE_LONG 😋")     ### CREATE SELL ORDER HERE 
         else:
             print("Action           :   HOLDING_LONG 💪🥦")
 
     elif position_info == "SHORTING":
         if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
-            create_order("BUY")
+            if live_trade: create_order("BUY")
             print("Action           :   CLOSE_SHORT 😋")    ### CREATE BUY ORDER HERE 
         else:
             print("Action           :   HOLDING_SHORT 💪🩸")
@@ -103,13 +104,13 @@ def trade_action(position_info, trend, minute_candle):
     else:
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
-                create_order("BUY")
+                if live_trade: create_order("BUY")
                 print("Action           :   GO_LONG 🚀")    ### CREATE BUY ORDER HERE 
             else:
                 print("Action           :   WAIT 🐺")
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
-                create_order("SELL")
+                if live_trade: create_order("SELL")
                 print("Action           :   GO_SHORT 💥")   ### CREATE SELL ORDER HERE 
             else:
                 print("Action           :   WAIT 🐺")
