@@ -8,7 +8,7 @@ minute_candle   =   "GREEN_CANDLE"      # >>> RED_CANDLE // GREEN_CANDLE // RED_
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
         if (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
-            # if live_trade: create_order("SELL")             ### CREATE SELL ORDER HERE 
+            # if live_trade: create_order("SELL")             ### CREATE SELL ORDER HERE
             print("Action           :   CLOSE_LONG 😋")
         else:
             print("Action           :   HOLDING_LONG 💪🥦")
@@ -23,13 +23,13 @@ def trade_action(position_info, trend, minute_candle):
     else:
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
-                # if live_trade: create_order("BUY")          ### CREATE BUY ORDER HERE 
+                # if live_trade: create_order("BUY")          ### CREATE BUY ORDER HERE
                 print("Action           :   GO_LONG 🚀")
             else:
                 print("Action           :   WAIT 🐺")
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
-                # if live_trade: create_order("SELL")         ### CREATE SELL ORDER HERE 
+                # if live_trade: create_order("SELL")         ### CREATE SELL ORDER HERE
                 print("Action           :   GO_SHORT 💥")
             else:
                 print("Action           :   WAIT 🐺")

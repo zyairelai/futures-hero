@@ -1,4 +1,4 @@
-live_trade  = False
+live_trade  = True
 
 import os
 import time
@@ -11,11 +11,7 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_symbol():
-    main_coin = "BTC"
-    return (main_coin + "USDT")
-
-def get_timestamp():
-    return int(time.time() * 1000)  
+    return "BTC" + "USDT"
 
 def create_order(side):
     quantity    =   0.001
@@ -24,7 +20,7 @@ def create_order(side):
     client.futures_create_order(symbol=get_symbol(), side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
 
 def get_current_trend():
-    klines = client.futures_klines(symbol=get_symbol(), interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    klines = client.futures_klines(symbol=get_symbol(), interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -88,11 +84,11 @@ def get_position_info():
         position = "NO_POSITION"
     print("Current Position :   " + position)
     return position
-          
+
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
         if (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
-            if live_trade: create_order("SELL")             ### CREATE SELL ORDER HERE 
+            if live_trade: create_order("SELL")             ### CREATE SELL ORDER HERE
             print("Action           :   CLOSE_LONG 😋")
         else:
             print("Action           :   HOLDING_LONG 💪🥦")
@@ -107,33 +103,34 @@ def trade_action(position_info, trend, minute_candle):
     else:
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
-                if live_trade: create_order("BUY")          ### CREATE BUY ORDER HERE 
+                if live_trade: create_order("BUY")          ### CREATE BUY ORDER HERE
                 print("Action           :   GO_LONG 🚀")
             else:
                 print("Action           :   WAIT 🐺")
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
-                if live_trade: create_order("SELL")         ### CREATE SELL ORDER HERE 
+                if live_trade: create_order("SELL")         ### CREATE SELL ORDER HERE
                 print("Action           :   GO_SHORT 💥")
             else:
                 print("Action           :   WAIT 🐺")
         else:
             print("Action           :   WAIT 🐺")
 
+def get_timestamp():
+    return int(time.time() * 1000)
+
 while True:
     # get_position_info() >>>   LONGING  //    SHORTING    // NO_POSITION
     # get_current_trend() >>>  UP_TREND  //   DOWN_TREND   // NO_TRADE_ZONE
     # get_minute_candle() >>> RED_CANDLE //  GREEN_CANDLE  // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
 
-    trade_action(get_position_info(), get_current_trend(), get_minute_candle())
+    try:
+        trade_action(get_position_info(), get_current_trend(), get_minute_candle())
+    except ConnectionResetError:
+        continue
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Last action executed by " + current_time + "\n")
 
     time.sleep(3)
-
-# Run every 30 minutes
-# scheduler = BlockingScheduler()
-# scheduler.add_job(buy_low_sell_high, 'cron', minute='0, 30')
-# scheduler.start()
