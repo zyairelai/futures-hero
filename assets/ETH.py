@@ -13,7 +13,7 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_symbol():
-    return "BTC" + "USDT"
+    return "ETHUSDT"
 
 def create_order(side):
     quantity = 0.001

@@ -20,7 +20,7 @@ def get_timestamp():
 
 def output_exception(e):
     with open("Error_Message.txt", "a") as error_message:
-        error_message.write("Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
+        error_message.write("[!] " + get_symbol() + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
         error_message.write(e + "\n\n")
 
 print(get_symbol())
