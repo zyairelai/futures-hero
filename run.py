@@ -2,6 +2,7 @@ live_trade  = True
 
 import os
 import time
+import socket
 from datetime import datetime
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
@@ -133,12 +134,18 @@ while True:
             error_message.write("Created at            : " + str(datetime.now().strftime("%H:%M:%S")) + "\n")
             error_message.write(e + "\n")
         continue
-    
+
     except BinanceAPIException as e:
         with open("Error_Message.txt", "a") as error_message:
             error_message.write("Created at            : " + str(datetime.now().strftime("%H:%M:%S")) + "\n")
             error_message.write(e + "\n")
         continue
 
-    print(datetime.now().strftime("%H:%M:%S"))
+    except socket.timeout as e:
+        with open("Error_Message.txt", "a") as error_message:
+            error_message.write("Created at            : " + str(datetime.now().strftime("%H:%M:%S")) + "\n")
+            error_message.write(e + "\n")
+        continue
+
+    print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
     time.sleep(3)
