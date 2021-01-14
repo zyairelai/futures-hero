@@ -13,8 +13,7 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_symbol():
-    main_coin = "BTC"
-    return (main_coin + "USDT")
+    return "BTC" + "USDT"
 
 def get_timestamp():
     return int(time.time() * 1000)
@@ -29,6 +28,5 @@ print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
 
 try:
     print(client.futures_position_information(symbol=get_symbol(), timestamp=get_timestamp(), recvWindow=1)[0])
-
 except Exception as e:
     output_exception(str(e))

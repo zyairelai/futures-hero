@@ -16,7 +16,7 @@ def get_symbol():
     return "BTC" + "USDT"
 
 def create_order(side):
-    quantity    =   0.001
+    quantity = 0.001
     # side  >>>  "BUY"      For >>> GO_LONG // CLOSE_SHORT
     # side  >>>  "SELL"     For >>> GO_SHORT // CLOSE_LONG
     client.futures_create_order(symbol=get_symbol(), side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
