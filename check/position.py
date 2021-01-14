@@ -3,7 +3,7 @@ import time
 from binance.client import Client
 
 start   =   time.time()
-symbol   = "BTCUSDT"
+symbol  =   "BTCUSDT"
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
@@ -19,14 +19,13 @@ def get_position_info():
     print(position_response)
     
     if (positionAmt > 0):
-        print("Current Position   :   LONGING")
-        return "LONGING"
+        position = "LONGING"
     elif (positionAmt < 0):
-        print("Current Position   :   SHORTING")
-        return "SHORTING"
+        position = "SHORTING"
     else:
-        print("Current Position   :   NO_POSITION")
-        return "NO_POSITION"
+        position = "NO_POSITION"
+    print("Current Position   :   " + position)
+    return position
 
 result = get_position_info()
 print("\nThe <position.py> return value is : " + result + "\n")

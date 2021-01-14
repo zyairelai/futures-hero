@@ -28,23 +28,17 @@ def get_current_trend():
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     if (current_Open == current_High):
-        print("Current TREND    :   🩸 DOWN Trend 🩸")
         trend = "DOWN_TREND"
+        print("Current TREND    :   🩸 DOWN_TREND 🩸")
     elif (current_Open == current_Low):
-        print("Current TREND    :   🥦 UP Trend 🥦")
         trend = "UP_TREND"
+        print("Current TREND    :   🥦 UP_TREND 🥦")
     else:
         trend = "NO_TRADE_ZONE"
-        if (current_Open > current_Close):
-            print("Current TREND    :   😴 No Trade Zone おやすみ 🩸")
-        elif (current_Close > current_Open):
-            print("Current TREND    :   😴 No Trade Zone おやすみ 🥦")
-        else:
-            print("Current TREND    :   😴 No Color Zone おやすみ ( ͡° ͜ʖ ͡°)")
+        print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
     return trend
 
 def get_minute_candle():
-    # The <limit> has to be 3x of the Interval Period
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -58,34 +52,33 @@ def get_minute_candle():
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     if (current_Open == current_High):
-        print("Current MINUTE   :   🩸 RED 🩸")
         minute_candle = "RED_CANDLE"
+        print("Current MINUTE   :   🩸 RED 🩸")
     elif (current_Open == current_Low):
-        print("Current MINUTE   :   🥦 GREEN 🥦")
         minute_candle = "GREEN_CANDLE"
+        print("Current MINUTE   :   🥦 GREEN 🥦")
     else:
         if (current_Open > current_Close):
-            print("Current MINUTE   :   RED_INDECISIVE 🩸")
             minute_candle = "RED_INDECISIVE"
+            print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
         elif (current_Close > current_Open):
-            print("Current MINUTE   :   GREEN_INDECISIVE 🥦")
             minute_candle = "GREEN_INDECISIVE"
+            print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
         else:
-            print("❗SOMETHING_IS_WRONG in get_minute_candle()❗")
             minute_candle = "SOMETHING_IS_WRONG"
+            print("❗SOMETHING_IS_WRONG in get_minute_candle()❗")
     return minute_candle
 
 def get_position_info():
     positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
     if (positionAmt > 0):
-        print("Current Position :   LONGING")
-        return "LONGING"
+        position = "LONGING"
     elif (positionAmt < 0):
-        print("Current Position :   SHORTING")
-        return "SHORTING"
+        position = "SHORTING"
     else:
-        print("Current Position :   NO_POSITION")
-        return "NO_POSITION"
+        position = "NO_POSITION"
+    print("Current Position   :   " + position)
+    return position
           
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
@@ -135,4 +128,9 @@ while True:
     current_time = now.strftime("%H:%M:%S")
     print("Last action executed by " + current_time + "\n")
 
-    time.sleep(5)
+    time.sleep(3)
+
+# Run every 30 minutes
+# scheduler = BlockingScheduler()
+# scheduler.add_job(buy_low_sell_high, 'cron', minute='0, 30')
+# scheduler.start()

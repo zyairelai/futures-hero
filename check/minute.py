@@ -3,7 +3,7 @@ import time
 from binance.client import Client
 
 start   =   time.time()
-symbol  =  "BTCUSDT"
+symbol  =   "BTCUSDT"
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
@@ -11,7 +11,6 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_current_minute():
-    # The <limit> has to be 3x of the Interval Period
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -32,21 +31,21 @@ def get_current_minute():
     print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_High):
-        print("Current MINUTE   :   🩸 RED 🩸")
         minute_candle = "RED_CANDLE"
+        print("Current MINUTE   :   🩸 RED 🩸")
     elif (current_Open == current_Low):
-        print("Current MINUTE   :   🥦 GREEN 🥦")
         minute_candle = "GREEN_CANDLE"
+        print("Current MINUTE   :   🥦 GREEN 🥦")
     else:
         if (current_Open > current_Close):
-            print("Current MINUTE   :   RED_INDECISIVE 🩸")
             minute_candle = "RED_INDECISIVE"
+            print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
         elif (current_Close > current_Open):
-            print("Current MINUTE   :   GREEN_INDECISIVE 🥦")
             minute_candle = "GREEN_INDECISIVE"
+            print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
         else:
-            print("SOMETHING_IS_WRONG in get_minute_candle()❗")
             minute_candle = "SOMETHING_IS_WRONG"
+            print("SOMETHING_IS_WRONG in get_minute_candle()❗")
     return minute_candle
 
 result = get_current_minute()

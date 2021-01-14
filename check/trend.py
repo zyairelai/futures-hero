@@ -3,7 +3,7 @@ import time
 from binance.client import Client
 
 start   =   time.time()
-symbol  =  "BTCUSDT"
+symbol  =   "BTCUSDT"
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
@@ -11,7 +11,6 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_current_trend():
-    # The <limit> has to be 3x of the Interval Period
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -32,19 +31,14 @@ def get_current_trend():
     print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_High):
-        print("Current TREND    :   🩸 DOWN Trend 🩸")
         trend = "DOWN_TREND"
+        print("Current TREND    :   🩸 DOWN_TREND 🩸")
     elif (current_Open == current_Low):
-        print("Current TREND    :   🥦 UP Trend 🥦")
         trend = "UP_TREND"
+        print("Current TREND    :   🥦 UP_TREND 🥦")
     else:
         trend = "NO_TRADE_ZONE"
-        if (current_Open > current_Close):
-            print("Current TREND    :   😴 No Trade Zone おやすみ 🩸")
-        elif (current_Close > current_Open):
-            print("Current TREND    :   😴 No Trade Zone おやすみ 🥦")
-        else:
-            print("Current TREND    :   😴 No Color Zone おやすみ ( ͡° ͜ʖ ͡°)")
+        print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
     return trend
 
 result = get_current_trend()
