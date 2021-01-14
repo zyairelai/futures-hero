@@ -23,4 +23,4 @@ def get_timestamp():
 # scheduler.start()
 
 print(get_symbol())
-print(str(datetime.now().strftime("%H:%M:%S")))
+print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
