@@ -52,21 +52,23 @@ def get_current_minute():
             
     else:
         if (current_Open > current_Close):
-            print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
             # Red Candle calculation
             price_movement = ((current_Low - current_High) / current_High) * 100
             if (price_movement >= 0.15):
+                print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
                 minute_candle = "RED_INDECISIVE"
             else:
+                print("Current MINUTE   :   🩸 WEAK_RED_INDECISIVE 🩸")
                 minute_candle = "WEAK_RED_INDECISIVE"
 
         elif (current_Close > current_Open):
-            print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
             # Green Candle calculation
             price_movement = ((current_High - current_Low) / current_Low) * 100
             if (price_movement >= 0.15):
+                print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
                 minute_candle = "GREEN_INDECISIVE"
             else:
+                print("Current MINUTE   :   🥦 WEAK_GREEN_INDECISIVE 🥦")
                 minute_candle = "WEAK_GREEN_INDECISIVE"
 
         else:

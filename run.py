@@ -1,4 +1,4 @@
-live_trade  = True
+live_trade = False
 
 import os
 import time
@@ -82,21 +82,23 @@ def get_minute_candle():
             
     else:
         if (current_Open > current_Close):
-            print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
             # Red Candle calculation
             price_movement = ((current_Low - current_High) / current_High) * 100
             if (price_movement >= 0.15):
+                print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
                 minute_candle = "RED_INDECISIVE"
             else:
+                print("Current MINUTE   :   🩸 WEAK_RED_INDECISIVE 🩸")
                 minute_candle = "WEAK_RED_INDECISIVE"
 
         elif (current_Close > current_Open):
-            print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
             # Green Candle calculation
             price_movement = ((current_High - current_Low) / current_Low) * 100
             if (price_movement >= 0.15):
+                print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
                 minute_candle = "GREEN_INDECISIVE"
             else:
+                print("Current MINUTE   :   🥦 WEAK_GREEN_INDECISIVE 🥦")
                 minute_candle = "WEAK_GREEN_INDECISIVE"
 
         else:
@@ -119,32 +121,32 @@ def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
         if (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
             if live_trade: create_order("SELL")             ### CREATE SELL ORDER HERE
-            print("Action           :   CLOSE_LONG 😋")
+            print("Action           :   😋 CLOSE_LONG 😋")
         else:
-            print("Action           :   HOLDING_LONG 💪🥦")
+            print("Action           :   💪 HOLDING_LONG 🥦")
 
     elif position_info == "SHORTING":
         if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
             if live_trade: create_order("BUY")              ### CREATE BUY ORDER HERE
-            print("Action           :   CLOSE_SHORT 😋")
+            print("Action           :   😋 CLOSE_SHORT 😋")
         else:
-            print("Action           :   HOLDING_SHORT 💪🩸")
+            print("Action           :   💪 HOLDING_SHORT 🩸")
 
     else:
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
                 if live_trade: create_order("BUY")          ### CREATE BUY ORDER HERE
-                print("Action           :   GO_LONG 🚀")
+                print("Action           :   🚀 GO_LONG 🚀")
             else:
-                print("Action           :   WAIT 🐺")
+                print("Action           :   🐺 WAIT 🐺")
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
                 if live_trade: create_order("SELL")         ### CREATE SELL ORDER HERE
-                print("Action           :   GO_SHORT 💥")
+                print("Action           :   💥 GO_SHORT 💥")
             else:
-                print("Action           :   WAIT 🐺")
+                print("Action           :   🐺 WAIT 🐺")
         else:
-            print("Action           :   WAIT 🐺")
+            print("Action           :   🐺 WAIT 🐺")
 
 def get_timestamp():
     return int(time.time() * 1000)
