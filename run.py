@@ -3,6 +3,8 @@ live_trade  = True
 import os
 import time
 import socket
+import requests
+import urllib3
 from datetime import datetime
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
@@ -59,18 +61,44 @@ def get_minute_candle():
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     if (current_Open == current_High):
-        minute_candle = "RED_CANDLE"
-        print("Current MINUTE   :   🩸 RED 🩸")
+        # Red Candle calculation
+        price_movement = ((current_Low - current_High) / current_High) * 100
+        if (price_movement >= 0.15):
+            minute_candle = "RED_CANDLE"
+            print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
+        else:
+            minute_candle = "WEAK_RED"
+            print("Current MINUTE   :   🩸🩸 WEAK_RED 🩸🩸")
+
     elif (current_Open == current_Low):
-        minute_candle = "GREEN_CANDLE"
-        print("Current MINUTE   :   🥦 GREEN 🥦")
+        # Green Candle calculation
+        price_movement = ((current_High - current_Low) / current_Low) * 100
+        if (price_movement >= 0.15):
+            minute_candle = "GREEN_CANDLE"
+            print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
+        else:
+            minute_candle = "WEAK_GREEN"
+            print("Current MINUTE   :   🥦🥦 WEAK_GREEN 🥦🥦")
+            
     else:
         if (current_Open > current_Close):
-            minute_candle = "RED_INDECISIVE"
             print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
+            # Red Candle calculation
+            price_movement = ((current_Low - current_High) / current_High) * 100
+            if (price_movement >= 0.15):
+                minute_candle = "RED_INDECISIVE"
+            else:
+                minute_candle = "WEAK_RED_INDECISIVE"
+
         elif (current_Close > current_Open):
-            minute_candle = "GREEN_INDECISIVE"
             print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
+            # Green Candle calculation
+            price_movement = ((current_High - current_Low) / current_Low) * 100
+            if (price_movement >= 0.15):
+                minute_candle = "GREEN_INDECISIVE"
+            else:
+                minute_candle = "WEAK_GREEN_INDECISIVE"
+
         else:
             minute_candle = "SOMETHING_IS_WRONG"
             print("❗SOMETHING_IS_WRONG in get_minute_candle()❗")
@@ -142,6 +170,12 @@ while True:
     except socket.timeout as e:
         output_exception(str(e))
         continue
+    except urllib3.exceptions.ReadTimeoutError as e:
+        output_exception(str(e))
+        continue
+    except requests.exceptions.ReadTimeout as e:
+        output_exception(str(e))
+        continue
 
     print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
-    time.sleep(3)
+    time.sleep(5)
