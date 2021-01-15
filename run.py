@@ -1,4 +1,4 @@
-live_trade = False
+live_trade = True
 
 import os
 import time
@@ -48,6 +48,7 @@ def get_current_trend():
     return trend
 
 def get_minute_candle():
+    price_movement_threshold = 0.12
     klines = client.futures_klines(symbol=get_symbol(), interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -62,8 +63,8 @@ def get_minute_candle():
 
     if (current_Open == current_High):
         # Red Candle calculation
-        price_movement = ((current_Low - current_High) / current_High) * 100
-        if (price_movement >= 0.15):
+        price_movement = abs(((current_High - current_Low) / current_High) * 100)
+        if (price_movement >= price_movement_threshold):
             minute_candle = "RED_CANDLE"
             print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
@@ -72,19 +73,19 @@ def get_minute_candle():
 
     elif (current_Open == current_Low):
         # Green Candle calculation
-        price_movement = ((current_High - current_Low) / current_Low) * 100
-        if (price_movement >= 0.15):
+        price_movement = abs(((current_High - current_Low) / current_Low) * 100)
+        if (price_movement >= price_movement_threshold):
             minute_candle = "GREEN_CANDLE"
             print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
         else:
             minute_candle = "WEAK_GREEN"
             print("Current MINUTE   :   🥦 WEAK_GREEN 🥦")
-            
+
     else:
         if (current_Open > current_Close):
             # Red Candle calculation
-            price_movement = ((current_Low - current_High) / current_High) * 100
-            if (price_movement >= 0.15):
+            price_movement = abs(((current_High - current_Low) / current_High) * 100)
+            if (price_movement >= price_movement_threshold):
                 print("Current MINUTE   :   🩸🩸 RED_INDECISIVE 🩸🩸")
                 minute_candle = "RED_INDECISIVE"
             else:
@@ -93,8 +94,8 @@ def get_minute_candle():
 
         elif (current_Close > current_Open):
             # Green Candle calculation
-            price_movement = ((current_High - current_Low) / current_Low) * 100
-            if (price_movement >= 0.15):
+            price_movement = abs(((current_High - current_Low) / current_Low) * 100)
+            if (price_movement >= price_movement_threshold):
                 print("Current MINUTE   :   🥦🥦 GREEN_INDECISIVE 🥦🥦")
                 minute_candle = "GREEN_INDECISIVE"
             else:
@@ -105,17 +106,6 @@ def get_minute_candle():
             minute_candle = "SOMETHING_IS_WRONG"
             print("❗SOMETHING_IS_WRONG in get_minute_candle()❗")
     return minute_candle
-
-def get_position_info():
-    positionAmt = float(client.futures_position_information(symbol=get_symbol(), timestamp=get_timestamp())[0].get('positionAmt'))
-    if (positionAmt > 0):
-        position = "LONGING"
-    elif (positionAmt < 0):
-        position = "SHORTING"
-    else:
-        position = "NO_POSITION"
-    print("Current Position :   " + position)
-    return position
 
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
@@ -148,6 +138,17 @@ def trade_action(position_info, trend, minute_candle):
         else:
             print("Action           :   🐺 WAIT 🐺")
 
+def get_position_info():
+    positionAmt = float(client.futures_position_information(symbol=get_symbol(), timestamp=get_timestamp())[0].get('positionAmt'))
+    if (positionAmt > 0):
+        position = "LONGING"
+    elif (positionAmt < 0):
+        position = "SHORTING"
+    else:
+        position = "NO_POSITION"
+    print("Current Position :   " + position)
+    return position
+    
 def get_timestamp():
     return int(time.time() * 1000)
 
@@ -179,5 +180,5 @@ while True:
         output_exception(str(e))
         continue
 
-    print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
+    print("Last action executed at " + datetime.now().strftime("%H:%M:%S") + "\n")
     time.sleep(5)

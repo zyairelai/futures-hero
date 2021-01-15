@@ -11,6 +11,7 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_current_minute():
+    price_movement_threshold = 0.12
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -32,30 +33,30 @@ def get_current_minute():
 
     if (current_Open == current_High):
         # Red Candle calculation
-        price_movement = ((current_Low - current_High) / current_High) * 100
-        if (price_movement >= 0.15):
+        price_movement = abs(((current_High - current_Low) / current_High) * 100)
+        if (price_movement >= price_movement_threshold):
             minute_candle = "RED_CANDLE"
             print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
             minute_candle = "WEAK_RED"
-            print("Current MINUTE   :   🩸🩸 WEAK_RED 🩸🩸")
+            print("Current MINUTE   :   🩸 WEAK_RED 🩸")
 
     elif (current_Open == current_Low):
         # Green Candle calculation
-        price_movement = ((current_High - current_Low) / current_Low) * 100
-        if (price_movement >= 0.15):
+        price_movement = abs(((current_High - current_Low) / current_Low) * 100)
+        if (price_movement >= price_movement_threshold):
             minute_candle = "GREEN_CANDLE"
             print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
         else:
             minute_candle = "WEAK_GREEN"
-            print("Current MINUTE   :   🥦🥦 WEAK_GREEN 🥦🥦")
-            
+            print("Current MINUTE   :   🥦 WEAK_GREEN 🥦")
+
     else:
         if (current_Open > current_Close):
             # Red Candle calculation
-            price_movement = ((current_Low - current_High) / current_High) * 100
-            if (price_movement >= 0.15):
-                print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
+            price_movement = abs(((current_High - current_Low) / current_High) * 100)
+            if (price_movement >= price_movement_threshold):
+                print("Current MINUTE   :   🩸🩸 RED_INDECISIVE 🩸🩸")
                 minute_candle = "RED_INDECISIVE"
             else:
                 print("Current MINUTE   :   🩸 WEAK_RED_INDECISIVE 🩸")
@@ -63,9 +64,9 @@ def get_current_minute():
 
         elif (current_Close > current_Open):
             # Green Candle calculation
-            price_movement = ((current_High - current_Low) / current_Low) * 100
-            if (price_movement >= 0.15):
-                print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
+            price_movement = abs(((current_High - current_Low) / current_Low) * 100)
+            if (price_movement >= price_movement_threshold):
+                print("Current MINUTE   :   🥦🥦 GREEN_INDECISIVE 🥦🥦")
                 minute_candle = "GREEN_INDECISIVE"
             else:
                 print("Current MINUTE   :   🥦 WEAK_GREEN_INDECISIVE 🥦")
