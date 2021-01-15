@@ -1,6 +1,8 @@
 import os
 import time
+import socket
 import requests
+import urllib3
 from datetime import datetime
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
@@ -26,5 +28,15 @@ def output_exception(e):
 print(get_symbol())
 print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-realizedPnl = float(client.futures_account_trades(symbol=symbol, timestamp=get_timestamp())[-3].get('realizedPnl'))
-print("whatever " + str(realizedPnl))
+try:
+    realizedPnl = float(client.futures_account_trades(symbol=symbol, timestamp=get_timestamp())[-3].get('realizedPnl'))
+except (BinanceAPIException, 
+        ConnectionResetError, 
+        socket.timeout,
+        urllib3.exceptions.ProtocolError, 
+        urllib3.exceptions.ReadTimeoutError,
+        requests.exceptions.ConnectionError,
+        requests.exceptions.ReadTimeout) as e:
+    output_exception(str(e))
+else:
+    print("whatever " + str(realizedPnl))
