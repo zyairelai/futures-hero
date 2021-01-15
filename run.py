@@ -1,4 +1,7 @@
 live_trade = True
+symbol     = "BTCUSDT"
+quantity   = 0.001
+price_movement_threshold = 0.12
 
 import os
 import time
@@ -14,17 +17,8 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-def get_symbol():
-    return "BTC" + "USDT"
-
-def create_order(side):
-    quantity = 0.001
-    # side  >>>  "BUY"      For >>> GO_LONG // CLOSE_SHORT
-    # side  >>>  "SELL"     For >>> GO_SHORT // CLOSE_LONG
-    client.futures_create_order(symbol=get_symbol(), side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
-
 def get_current_trend():
-    klines = client.futures_klines(symbol=get_symbol(), interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+    klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -48,8 +42,7 @@ def get_current_trend():
     return trend
 
 def get_minute_candle():
-    price_movement_threshold = 0.12
-    klines = client.futures_klines(symbol=get_symbol(), interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
+    klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -139,7 +132,7 @@ def trade_action(position_info, trend, minute_candle):
             print("Action           :   🐺 WAIT 🐺")
 
 def get_position_info():
-    positionAmt = float(client.futures_position_information(symbol=get_symbol(), timestamp=get_timestamp())[0].get('positionAmt'))
+    positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
     if (positionAmt > 0):
         position = "LONGING"
     elif (positionAmt < 0):
@@ -148,13 +141,18 @@ def get_position_info():
         position = "NO_POSITION"
     print("Current Position :   " + position)
     return position
+
+def create_order(side):
+    client.futures_create_order(symbol=symbol, side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
+    # side  >>>  "BUY"      For >>> GO_LONG // CLOSE_SHORT
+    # side  >>>  "SELL"     For >>> GO_SHORT // CLOSE_LONG
     
 def get_timestamp():
     return int(time.time() * 1000)
 
 def output_exception(e):
     with open("Error_Message.txt", "a") as error_message:
-        error_message.write("[!] " + get_symbol() + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
+        error_message.write("[!] " + symbol + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
         error_message.write(e + "\n\n")
 
 while True:
@@ -164,19 +162,14 @@ while True:
 
     try:
         trade_action(get_position_info(), get_current_trend(), get_minute_candle())
-    except ConnectionResetError as e:
-        output_exception(str(e))
-        continue
-    except BinanceAPIException as e:
-        output_exception(str(e))
-        continue
-    except socket.timeout as e:
-        output_exception(str(e))
-        continue
-    except urllib3.exceptions.ReadTimeoutError as e:
-        output_exception(str(e))
-        continue
-    except requests.exceptions.ReadTimeout as e:
+
+    except (BinanceAPIException, 
+            ConnectionResetError, 
+            socket.timeout,
+            urllib3.exceptions.ProtocolError, 
+            urllib3.exceptions.ReadTimeoutError,
+            requests.exceptions.ConnectionError,
+            requests.exceptions.ReadTimeout) as e:
         output_exception(str(e))
         continue
 
