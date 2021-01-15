@@ -26,7 +26,5 @@ def output_exception(e):
 print(get_symbol())
 print("Last action executed by " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-try:
-    print(client.futures_position_information(symbol=get_symbol(), timestamp=get_timestamp(), recvWindow=1)[0])
-except Exception as e:
-    output_exception(str(e))
+realizedPnl = float(client.futures_account_trades(symbol=symbol, timestamp=get_timestamp())[-3].get('realizedPnl'))
+print("whatever " + str(realizedPnl))

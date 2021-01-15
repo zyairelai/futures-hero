@@ -106,14 +106,14 @@ def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
         if (minute_candle == "RED_CANDLE") or (minute_candle == "RED_INDECISIVE"):
             if live_trade: create_order("SELL")             ### CREATE SELL ORDER HERE
-            print("Action           :   😋 CLOSE_LONG 😋")
+            closing("LONG")
         else:
             print("Action           :   💪 HOLDING_LONG 🥦")
 
     elif position_info == "SHORTING":
         if (minute_candle == "GREEN_CANDLE") or (minute_candle == "GREEN_INDECISIVE"):
             if live_trade: create_order("BUY")              ### CREATE BUY ORDER HERE
-            print("Action           :   😋 CLOSE_SHORT 😋")
+            closing("SHORT")
         else:
             print("Action           :   💪 HOLDING_SHORT 🩸")
 
@@ -148,7 +148,20 @@ def create_order(side):
     client.futures_create_order(symbol=symbol, side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
     # side  >>>  "BUY"      For >>> GO_LONG // CLOSE_SHORT
     # side  >>>  "SELL"     For >>> GO_SHORT // CLOSE_LONG
-    
+
+def closing(side): # side  >>>  "LONG" // "SHORT"
+    realizedPnl = float(client.futures_account_trades(symbol=symbol, timestamp=get_timestamp())[-3].get('realizedPnl'))
+    if side == "LONG":
+        if realizedPnl > 0:
+            print("Action           :   😋 CLOSE_LONG " + str(realizedPnl) + " 😋")
+        else:
+            print("Action           :   😭 CLOSE_LONG " + str(realizedPnl) + " 😭")
+    if side == "SHORT":
+        if realizedPnl > 0:
+            print("Action           :   😋 CLOSE_SHORT " + str(realizedPnl) + " 😋")
+        else:
+            print("Action           :   😭 CLOSE_SHORT " + str(realizedPnl) + " 😭")
+
 def get_timestamp():
     return int(time.time() * 1000)
 
