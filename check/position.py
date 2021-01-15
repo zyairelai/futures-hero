@@ -13,7 +13,7 @@ client      = Client(api_key, api_secret)
 def get_timestamp():
     return int(time.time() * 1000)
 
-def get_position_info():
+def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
     position_response = client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0]
     positionAmt = float(position_response.get('positionAmt'))
     print(position_response)

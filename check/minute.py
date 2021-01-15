@@ -12,6 +12,8 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_current_minute():
+    # >>> RED_CANDLE // WEAK_RED // GREEN_CANDLE // WEAK_GREEN // SOMETHING_IS_WRONG 
+    # >>> RED_INDECISIVE // WEAK_RED_INDECISIVE // GREEN_INDECISIVE // WEAK_GREEN_INDECISIVE 
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)

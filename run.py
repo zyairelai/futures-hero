@@ -17,7 +17,7 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-def get_current_trend():
+def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -41,7 +41,9 @@ def get_current_trend():
         print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
     return trend
 
-def get_minute_candle():
+def get_minute_candle(): 
+    # >>> RED_CANDLE // WEAK_RED // GREEN_CANDLE // WEAK_GREEN // SOMETHING_IS_WRONG 
+    # >>> RED_INDECISIVE // WEAK_RED_INDECISIVE // GREEN_INDECISIVE // WEAK_GREEN_INDECISIVE 
     klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
@@ -131,7 +133,7 @@ def trade_action(position_info, trend, minute_candle):
         else:
             print("Action           :   🐺 WAIT 🐺")
 
-def get_position_info():
+def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
     positionAmt = float(client.futures_position_information(symbol=symbol, timestamp=get_timestamp())[0].get('positionAmt'))
     if (positionAmt > 0):
         position = "LONGING"
@@ -140,7 +142,7 @@ def get_position_info():
     else:
         position = "NO_POSITION"
     print("Current Position :   " + position)
-    return position
+    return position # 
 
 def create_order(side):
     client.futures_create_order(symbol=symbol, side=side, type="MARKET", quantity=quantity, timestamp=get_timestamp())
@@ -156,10 +158,6 @@ def output_exception(e):
         error_message.write(e + "\n\n")
 
 while True:
-    # get_position_info() >>>   LONGING  //    SHORTING    // NO_POSITION
-    # get_current_trend() >>>  UP_TREND  //   DOWN_TREND   // NO_TRADE_ZONE
-    # get_minute_candle() >>> RED_CANDLE //  GREEN_CANDLE  // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
-
     try:
         trade_action(get_position_info(), get_current_trend(), get_minute_candle())
 
