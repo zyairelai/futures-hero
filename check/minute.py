@@ -2,9 +2,10 @@ import os
 import time
 from binance.client import Client
 
-start   =   time.time()
-symbol  =   "BTCUSDT"
-price_movement_threshold = 0.12
+start   =  time.time()
+symbol  =  "BTCUSDT"
+entry_threshold = 0.15
+exit_threshold  = 0.12
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
@@ -35,8 +36,8 @@ def get_current_minute():
 
     if (current_Open == current_High):
         # Red Candle calculation
-        price_movement = abs(((current_High - current_Low) / current_High) * 100)
-        if (price_movement >= price_movement_threshold):
+        price_movement = (abs(current_Open - current_Low) / current_Open) * 100
+        if (price_movement >= entry_threshold):
             minute_candle = "RED_CANDLE"
             print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
@@ -45,8 +46,8 @@ def get_current_minute():
 
     elif (current_Open == current_Low):
         # Green Candle calculation
-        price_movement = abs(((current_High - current_Low) / current_Low) * 100)
-        if (price_movement >= price_movement_threshold):
+        price_movement = (abs(current_Open - current_High) / current_Open) * 100
+        if (price_movement >= entry_threshold):
             minute_candle = "GREEN_CANDLE"
             print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
         else:
@@ -56,8 +57,8 @@ def get_current_minute():
     else:
         if (current_Open > current_Close):
             # Red Candle calculation
-            price_movement = abs(((current_High - current_Low) / current_High) * 100)
-            if (price_movement >= price_movement_threshold):
+            price_movement = (abs(current_High - current_Low) / current_High) * 100
+            if (price_movement >= exit_threshold):
                 print("Current MINUTE   :   🩸🩸 RED_INDECISIVE 🩸🩸")
                 minute_candle = "RED_INDECISIVE"
             else:
@@ -66,8 +67,8 @@ def get_current_minute():
 
         elif (current_Close > current_Open):
             # Green Candle calculation
-            price_movement = abs(((current_High - current_Low) / current_Low) * 100)
-            if (price_movement >= price_movement_threshold):
+            price_movement = (abs(current_High - current_Low) / current_Low) * 100
+            if (price_movement >= exit_threshold):
                 print("Current MINUTE   :   🥦🥦 GREEN_INDECISIVE 🥦🥦")
                 minute_candle = "GREEN_INDECISIVE"
             else:
