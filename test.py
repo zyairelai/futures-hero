@@ -24,11 +24,7 @@ client      = Client(api_key, api_secret)
 
 print(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0])
 
-# client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
-# APIError(code=-1111): Precision is over the maximum defined for this asset.
-
-# client.futures_create_order(symbol=pair, side="SELL", type="STOP_MARKET", stopPrice=38000, quantity=quantity, timestamp=get_timestamp())
-
-client.futures_create_order(symbol=pair, side="SELL", type="LIMIT", price=37000, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
-
-# client.futures_create_order(symbol=pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timestamp=get_timestamp())
+"""
+[!] BTCUSDT - Created at : 16-01-2021 @ 18:00:09
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+"""
