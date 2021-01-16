@@ -1,7 +1,7 @@
 live_trade  = True
-pair        = "BNB" + "USDT"
-quantity    = 0.1
-leverage    = 75
+pair        = "BTC" + "USDT"
+quantity    = 0.001
+leverage    = 125
 threshold   = 0.15
 stoplimit   = 0.15
 
