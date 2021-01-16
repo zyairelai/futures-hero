@@ -7,6 +7,7 @@ def get_timestamp(): return int(time.time() * 1000)
 start    = time.time()
 pair     = "BTCUSDT"
 quantity = 0.001
+threshold = 0.15
 
 # Fill your own condition
 position_info = "NO_POSITION"       # >>> LONGING  //  SHORTING  // NO_POSITION
@@ -29,17 +30,21 @@ def trade_action(position_info, trend, minute_candle):
             print("Action           :   ✊🩸 HOLDING_SHORT 🩸💪")
 
     else:
-        client.futures_cancel_all_open_orders(symbol=pair, timestamp=get_timestamp()) # CANCEL ALL OPEN ORDERS
+        client.futures_cancel_all_open_orders(symbol=pair, timestamp=get_timestamp())
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
-                if live_trade: client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                if live_trade: 
+                    client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                    client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=(round(threshold*2),1), quantity=quantity, timestamp=get_timestamp())
                 print("Action           :   🚀 GO_LONG 🚀")
             else:
                 print("Action           :   🐺 WAIT 🐺")
 
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
-                if live_trade: client.futures_create_order(symbol=pair, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                if live_trade: 
+                    client.futures_create_order(symbol=pair, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                    client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=(round(threshold*2),1), quantity=quantity, timestamp=get_timestamp())
                 print("Action           :   💥 GO_SHORT 💥")
             else:
                 print("Action           :   🐺 WAIT 🐺")
