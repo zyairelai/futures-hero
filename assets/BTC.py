@@ -1,8 +1,9 @@
 live_trade  = False
-pair        = "BTCUSDT"
+pair        = "BTC" + "USDT"
 quantity    = 0.001
-leverage    = 75
+leverage    = 125
 threshold   = 0.15
+stoplimit   = 0.15
 
 import os
 import time
@@ -106,17 +107,30 @@ def trade_action(position_info, trend, minute_candle):
             print("Action           :   ✊🩸 HOLDING_SHORT 🩸💪")
 
     else:
+        client.futures_cancel_all_open_orders(symbol=pair, timestamp=get_timestamp())
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
-                if live_trade: client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
-                print("Action           :   🚀 GO_LONG 🚀")
+                if live_trade: 
+                    client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                    print("Action           :   🚀 GO_LONG 🚀")
+                    markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
+                    stopPrice = round((markPrice - (markPrice * stoplimit / 100)), 2)
+                    client.futures_create_order(symbol=pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
+                    # client.futures_create_order(symbol=pair, side="SELL", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
+                    # client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=0.5, reduceOnly=True, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
 
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
-                if live_trade: client.futures_create_order(symbol=pair, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
-                print("Action           :   💥 GO_SHORT 💥")
+                if live_trade: 
+                    client.futures_create_order(symbol=pair, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                    print("Action           :   💥 GO_SHORT 💥")
+                    markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
+                    stopPrice = round((markPrice + (markPrice * stoplimit / 100)), 2)
+                    client.futures_create_order(symbol=pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
+                    # client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
+                    # client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=0.5, reduceOnly=False, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
         else:

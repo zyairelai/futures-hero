@@ -3,7 +3,7 @@ import time
 from binance.client import Client
 
 start = time.time()
-pair  = "BTCUSDT"
+pair  = "BTC" + "USDT"
 threshold = 0.15
 
 def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_GREEN // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG

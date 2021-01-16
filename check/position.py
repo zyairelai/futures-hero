@@ -4,7 +4,7 @@ from binance.client import Client
 def get_timestamp(): return int(time.time() * 1000)
 
 start = time.time()
-pair  = "BTCUSDT"
+pair  = "BTC" + "USDT"
 
 def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
     position_response = client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0]

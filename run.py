@@ -1,5 +1,5 @@
 live_trade  = True
-pair        = "BTCUSDT"
+pair        = "BTC" + "USDT"
 quantity    = 0.001
 leverage    = 125
 threshold   = 0.15

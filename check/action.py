@@ -5,7 +5,7 @@ live_trade = False # Always False !!!!!!
 def get_timestamp(): return int(time.time() * 1000)
 
 start    = time.time()
-pair     = "BTCUSDT"
+pair     = "BTC" + "USDT"
 quantity = 0.001
 threshold = 0.15
 

@@ -3,7 +3,7 @@ import time
 from binance.client import Client
 
 start = time.time()
-pair  = "BTCUSDT"
+pair  = "BTC" + "USDT"
 
 def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
