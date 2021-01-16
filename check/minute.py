@@ -2,20 +2,12 @@ import os
 import time
 from binance.client import Client
 
-start   =  time.time()
-symbol  =  "BTCUSDT"
-entry_threshold = 0.15
-exit_threshold  = 0.12
+start = time.time()
+pair  = "BTCUSDT"
+threshold = 0.15
 
-# Get environment variables
-api_key     = os.environ.get('API_KEY')
-api_secret  = os.environ.get('API_SECRET')
-client      = Client(api_key, api_secret)
-
-def get_current_minute():
-    # >>> RED_CANDLE // WEAK_RED // GREEN_CANDLE // WEAK_GREEN // SOMETHING_IS_WRONG 
-    # >>> RED_INDECISIVE // WEAK_RED_INDECISIVE // GREEN_INDECISIVE // WEAK_GREEN_INDECISIVE 
-    klines = client.futures_klines(symbol=symbol, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
+def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_GREEN // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
+    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -28,58 +20,45 @@ def get_current_minute():
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
+    price_movement = (current_High - current_Low) / current_Open * 100
+
     print("The current_Time is  :   " + str(current_Time))
     print("The current_Open is  :   " + str(current_Open))
     print("The current_Close is :   " + str(current_Close))
     print("The current_High is  :   " + str(current_High))
     print("The current_Low is   :   " + str(current_Low))
+    print("The price_movement is:   " + str(price_movement))
 
-    if (current_Open == current_High):
-        # Red Candle calculation
-        price_movement = (abs(current_Open - current_Low) / current_Open) * 100
-        if (price_movement >= entry_threshold):
+    if (current_Open == current_High):          
+        if (price_movement >= threshold):
             minute_candle = "RED_CANDLE"
             print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
             minute_candle = "WEAK_RED"
             print("Current MINUTE   :   🩸 WEAK_RED 🩸")
-
-    elif (current_Open == current_Low):
-        # Green Candle calculation
-        price_movement = (abs(current_Open - current_High) / current_Open) * 100
-        if (price_movement >= entry_threshold):
+    elif (current_Open == current_Low):         
+        if (price_movement >= threshold):
             minute_candle = "GREEN_CANDLE"
             print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
         else:
             minute_candle = "WEAK_GREEN"
             print("Current MINUTE   :   🥦 WEAK_GREEN 🥦")
-
     else:
         if (current_Open > current_Close):
-            # Red Candle calculation
-            price_movement = (abs(current_High - current_Low) / current_High) * 100
-            if (price_movement >= exit_threshold):
-                print("Current MINUTE   :   🩸🩸 RED_INDECISIVE 🩸🩸")
-                minute_candle = "RED_INDECISIVE"
-            else:
-                print("Current MINUTE   :   🩸 WEAK_RED_INDECISIVE 🩸")
-                minute_candle = "WEAK_RED_INDECISIVE"
-
+            print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
+            minute_candle = "RED_INDECISIVE"
         elif (current_Close > current_Open):
-            # Green Candle calculation
-            price_movement = (abs(current_High - current_Low) / current_Low) * 100
-            if (price_movement >= exit_threshold):
-                print("Current MINUTE   :   🥦🥦 GREEN_INDECISIVE 🥦🥦")
-                minute_candle = "GREEN_INDECISIVE"
-            else:
-                print("Current MINUTE   :   🥦 WEAK_GREEN_INDECISIVE 🥦")
-                minute_candle = "WEAK_GREEN_INDECISIVE"
-
+            print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
+            minute_candle = "GREEN_INDECISIVE"
         else:
             minute_candle = "SOMETHING_IS_WRONG"
             print("❗SOMETHING_IS_WRONG in get_minute_candle()❗")
     return minute_candle
 
-result = get_current_minute()
-print("\nThe <minute.py> return value is : " + result + "\n")
+# Get environment variables
+api_key     = os.environ.get('API_KEY')
+api_secret  = os.environ.get('API_SECRET')
+client      = Client(api_key, api_secret)
+
+print("\nThe <minute.py> return value is : " + get_current_minute() + "\n")
 print(f"Time Taken: {time.time() - start} seconds\n")

@@ -1,0 +1,21 @@
+[!] BTCUSDT - Created at : 16-01-2021 @ 13:11:51
+HTTPSConnectionPool(host='fapi.binance.com', port=443): Read timed out. (read timeout=10)
+
+[!] BTCUSDT - Created at : 16-01-2021 @ 13:12:36
+APIError(code=-1021): Timestamp for this request is outside of the recvWindow.
+
+[!] BTCUSDT - Created at : 16-01-2021 @ 13:12:53
+HTTPSConnectionPool(host='fapi.binance.com', port=443): Read timed out. (read timeout=10)
+
+[!] BTCUSDT - Created at : 16-01-2021 @ 13:12:59
+HTTPSConnectionPool(host='fapi.binance.com', port=443): Max retries exceeded with url: /fapi/v1/positionRisk?symbol=BTCUSDT&timestamp=1610773973947&signature=430187e772962768822f3f4a246fed261fd9813e6fb237914af07f68ecf176a5 (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f88bbf2a520>: Failed to establish a new connection: [Errno 113] No route to host'))
+
+[!] BTCUSDT - Created at : 16-01-2021 @ 13:13:05
+APIError(code=-1021): Timestamp for this request is outside of the recvWindow.
+
+[!] BTCUSDT - Created at : 16-01-2021 @ 13:13:23
+APIError(code=-1021): Timestamp for this request is outside of the recvWindow.
+
+[!] BTCUSDT - Created at : 16-01-2021 @ 13:13:39
+HTTPSConnectionPool(host='fapi.binance.com', port=443): Read timed out. (read timeout=10)
+
