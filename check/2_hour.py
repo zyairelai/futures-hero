@@ -1,7 +1,30 @@
 import os
 import time
 from binance.client import Client
-def get_timestamp(): return int(time.time() * 1000)
+
+def get_2hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
+    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+
+    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), round_decimal)
+    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), round_decimal)
+    previous_Open   = round(((first_run_Open + first_run_Close) / 2), round_decimal)
+    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), round_decimal)
+
+    current_Open    = round(((previous_Open + previous_Close) / 2), round_decimal)
+    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), round_decimal)
+    current_High    = max(float(klines[2][2]), current_Open, current_Close)
+    current_Low     = min(float(klines[2][3]), current_Open, current_Close)
+
+    if (current_Open == current_High):
+        trend = "DOWN_TREND"
+        # print("Current TREND    :   🩸 DOWN_TREND 🩸")
+    elif (current_Open == current_Low):
+        trend = "UP_TREND"
+        # print("Current TREND    :   🥦 UP_TREND 🥦")
+    else:
+        trend = "NO_TRADE_ZONE"
+        # print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
+    return trend
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')
@@ -77,17 +100,6 @@ def asset_info():
 
 asset_info()
 
-# RealizedPNL
-i , overall_PNL = 0, 0 
-trades_list = client.futures_account_trades(symbol=pair, timestamp=get_timestamp(), limit=100)
-for trade in trades_list:
-    overall_PNL = overall_PNL + float(trade.get('realizedPnl'))
-    if (float(trade.get('realizedPnl'))) > 0 : 
-        i = i + 1
-        print(str(i) + ".  " + trade.get('realizedPnl'))
-    elif (float(trade.get('realizedPnl'))) < 0 : 
-        i = i + 1
-        print(str(i) + ". " + trade.get('realizedPnl') + " LOSER TRADE")
-    else: continue
-
-print("\n[!] Overall PNL over the last 50 trades: " + str(overall_PNL) + "\n")
+start = time.time()
+print("\nThe <2_hour.py> return value is : " + get_2hour())
+print(f"Time Taken: {time.time() - start} seconds\n")

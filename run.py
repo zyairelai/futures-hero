@@ -67,8 +67,6 @@ def asset_info():
     print("Round Decimal    :   " + str(round_decimal))
     print()
 
-asset_info()
-
 import os
 import time
 import socket
@@ -217,7 +215,7 @@ def trade_action(position_info, trend, minute_candle):
                     stopPrice = round((markPrice - (markPrice * stoplimit / 100)), (round_decimal - 1))
                     client.futures_create_order(symbol=pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
                     # client.futures_create_order(symbol=pair, side="SELL", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=True, quantity=quantity, timestamp=get_timestamp())
+                    # client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=True, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
 
@@ -230,11 +228,13 @@ def trade_action(position_info, trend, minute_candle):
                     stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (round_decimal - 1))
                     client.futures_create_order(symbol=pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
                     # client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=False, quantity=quantity, timestamp=get_timestamp())
+                    # client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=False, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
         else:
             print("Action           :   🐺 WAIT 🐺")
+
+asset_info()
 
 # Get environment variables && Initial Setup
 api_key     = os.environ.get('API_KEY')
