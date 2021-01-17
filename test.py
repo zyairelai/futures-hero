@@ -15,4 +15,10 @@ client      = Client(api_key, api_secret)
 # stopPrice = round((markPrice - (markPrice * 0.15 / 100)), config.round_decimal)
 # print(stopPrice)
 
-client.futures_create_order(symbol=config.pair, side="BUY", type="LIMIT", quantity=config.quantity, price=1.123, timestamp=get_timestamp(), timeInForce="GTC")
+# client.futures_create_order(symbol=config.pair, side="BUY", type="LIMIT", quantity=config.quantity, price=1.123, timestamp=get_timestamp(), timeInForce="GTC")
+
+from datetime import datetime
+if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
+with open((os.path.join("Error_Message", config.pair + ".txt")), "a") as error_message:
+    error_message.write("[!] " + config.pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
+    error_message.write("hehe" + "\n\n")

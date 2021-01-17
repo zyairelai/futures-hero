@@ -1,4 +1,5 @@
 live_trade  = True
+take_profit = False
 
 import config
 import os
@@ -148,7 +149,7 @@ def trade_action(position_info, trend, minute_candle):
                     markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
                     stopPrice = round((markPrice - (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
                     client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    # client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=True, quantity=quantity, timestamp=get_timestamp())
+                    if take_profit: client.futures_create_order(symbol=config.pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, reduceOnly=True, quantity=config.quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
 
@@ -160,7 +161,7 @@ def trade_action(position_info, trend, minute_candle):
                     markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
                     stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
                     client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    # client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=False, quantity=quantity, timestamp=get_timestamp())
+                    if take_profit: client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, reduceOnly=False, quantity=config.quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
         else:
@@ -184,7 +185,7 @@ while True:
             requests.exceptions.ReadTimeout) as e:
 
         if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
-        with open((os.path.join("Error_Message", config.pair , ".txt")), "a") as error_message:
+        with open((os.path.join("Error_Message", config.pair + ".txt")), "a") as error_message:
             error_message.write("[!] " + config.pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
             error_message.write(str(e) + "\n\n")
         continue

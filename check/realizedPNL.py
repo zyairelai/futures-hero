@@ -22,4 +22,5 @@ for trade in trades_list:
         print(str(i) + ". " + trade.get('realizedPnl') + " LOSER TRADE")
     else: continue
 
-print("\n[!] Overall PNL over the last 50 trades: " + str(overall_PNL) + "\n")
+print("\n[!] Overall PNL over the last 50 trades: " + str(round(overall_PNL, 2)) + " USDT\n")
+

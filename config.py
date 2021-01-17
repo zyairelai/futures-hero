@@ -2,8 +2,9 @@ while True:
     print("Here are the supported Coins: ")
     print("1. BTC")
     print("2. ETH")
-    print("3. LINK")
-    print("4. SUSHI")
+    print("3. BNB")
+    print("4. LINK")
+    print("5. SUSHI")
 
     input_num = input("Choose your Coin :   ") or '1'
 
@@ -28,6 +29,16 @@ while True:
         break
 
     elif input_num == '3': 
+        coin            = "BNB"
+        quantity        = 0.5       # Minimum 0.5
+        leverage        = 75        # 1 - 75
+        threshold       = 0.15
+        stoplimit       = 0.15
+        callbackRate    = 0.3
+        round_decimal   = 4
+        break
+
+    elif input_num == '4': 
         coin            = "LINK"
         quantity        = 1         # Minimum 1
         leverage        = 75        # 1 - 75
@@ -37,7 +48,7 @@ while True:
         round_decimal   = 4
         break
 
-    elif input_num == '4': 
+    elif input_num == '5': 
         coin            = "SUSHI"
         quantity        = 1         # Minimum 1
         leverage        = 50        # 1 - 50
