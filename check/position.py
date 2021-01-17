@@ -5,18 +5,12 @@ from binance.client import Client
 def get_timestamp(): return int(time.time() * 1000)
 
 def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
-    position_response = client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0]
-    positionAmt = float(position_response.get('positionAmt'))
-    print(position_response)
-
-    if (positionAmt > 0):
-        position = "LONGING"
-    elif (positionAmt < 0):
-        position = "SHORTING"
-    else:
-        position = "NO_POSITION"
+    positionAmt = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('positionAmt'))
+    if (positionAmt > 0):   position = "LONGING"
+    elif (positionAmt < 0): position = "SHORTING"
+    else: position = "NO_POSITION"
     print("Current Position :   " + position)
-    return position
+    return position 
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')

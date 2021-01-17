@@ -3,7 +3,7 @@ import time
 import config
 from binance.client import Client
 
-def get_6hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
+def get_6_hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
@@ -16,15 +16,9 @@ def get_6hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    if (current_Open == current_High):
-        trend = "DOWN_TREND"
-        # print("Current TREND    :   🩸 DOWN_TREND 🩸")
-    elif (current_Open == current_Low):
-        trend = "UP_TREND"
-        # print("Current TREND    :   🥦 UP_TREND 🥦")
-    else:
-        trend = "NO_TRADE_ZONE"
-        # print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
+    if (current_Open == current_High):  trend = "DOWN_TREND"
+    elif (current_Open == current_Low): trend = "UP_TREND"
+    else: trend = "NO_TRADE_ZONE"
     return trend
 
 # Get environment variables
@@ -33,5 +27,5 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 start = time.time()
-print("The <6_hour.py> return value is : " + get_6hour())
+print("The <6_hour.py> return value is : " + get_6_hour())
 print(f"Time Taken: {time.time() - start} seconds\n")

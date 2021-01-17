@@ -6,7 +6,7 @@ while True:
     print("4. LINK")
     print("5. SUSHI")
 
-    input_num = input("Choose your Coin :   ") or '1'
+    input_num = input("\nChoose your Coin :   ") or '1'
 
     if input_num == '1': 
         coin            = "BTC"
@@ -20,7 +20,7 @@ while True:
 
     elif input_num == '2': 
         coin            = "ETH"
-        quantity        = 0.01      # Minimum 0.01
+        quantity        = 0.02      # Minimum 0.05
         leverage        = 100       # 1 - 100
         threshold       = 0.15
         stoplimit       = 0.15
@@ -58,7 +58,7 @@ while True:
         round_decimal   = 4
         break
 
-    else: print("Invalid Number. Try again.\n")
+    else: print("[!] Invalid Number. Try again.\n")
 
 pair = coin + "USDT"
 
