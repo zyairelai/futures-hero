@@ -1,6 +1,10 @@
 while True:
     print("Here are the supported Coins: ")
-    print("1. BTC\n" + "2. ETH\n" + "3. LINK\n" + "4. SUSHI\n")
+    print("1. BTC")
+    print("2. ETH")
+    print("3. LINK")
+    print("4. SUSHI")
+
     input_num = input("Choose your Coin :   ") or '1'
 
     if input_num == '1': 
