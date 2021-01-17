@@ -8,7 +8,7 @@ while True:
 
     input_num = input("\nChoose your Coin :   ") or '1'
 
-    if input_num == '1': 
+    if input_num == '1':
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001
         leverage        = 125       # 1 - 125
@@ -18,7 +18,7 @@ while True:
         round_decimal   = 2
         break
 
-    elif input_num == '2': 
+    elif input_num == '2':
         coin            = "ETH"
         quantity        = 0.02      # Minimum 0.05
         leverage        = 100       # 1 - 100
@@ -28,7 +28,7 @@ while True:
         round_decimal   = 2
         break
 
-    elif input_num == '3': 
+    elif input_num == '3':
         coin            = "BNB"
         quantity        = 0.5       # Minimum 0.5
         leverage        = 75        # 1 - 75
@@ -38,7 +38,7 @@ while True:
         round_decimal   = 4
         break
 
-    elif input_num == '4': 
+    elif input_num == '4':
         coin            = "LINK"
         quantity        = 1         # Minimum 1
         leverage        = 75        # 1 - 75
@@ -48,7 +48,7 @@ while True:
         round_decimal   = 4
         break
 
-    elif input_num == '5': 
+    elif input_num == '5':
         coin            = "SUSHI"
         quantity        = 1         # Minimum 1
         leverage        = 50        # 1 - 50

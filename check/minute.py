@@ -28,14 +28,14 @@ def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_G
     print("The current_Low is   :   " + str(current_Low))
     print("The price_movement is:   " + str(price_movement))
 
-    if (current_Open == current_High):          
+    if (current_Open == current_High):
         if (price_movement >= config.threshold):
             minute_candle = "RED_CANDLE"
             print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
             minute_candle = "WEAK_RED"
             print("Current MINUTE   :   🩸 WEAK_RED 🩸")
-    elif (current_Open == current_Low):         
+    elif (current_Open == current_Low):
         if (price_movement >= config.threshold):
             minute_candle = "GREEN_CANDLE"
             print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")

@@ -10,7 +10,7 @@ def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
     elif (positionAmt < 0): position = "SHORTING"
     else: position = "NO_POSITION"
     print("Current Position :   " + position)
-    return position 
+    return position
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')

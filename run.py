@@ -66,7 +66,7 @@ def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_G
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
     previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
-    
+
     current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
     current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
@@ -74,14 +74,14 @@ def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_G
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
-    if (current_Open == current_High):          
+    if (current_Open == current_High):
         if (price_movement >= config.threshold):
             minute_candle = "RED_CANDLE"
             print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
             minute_candle = "WEAK_RED"
             print("Current MINUTE   :   🩸 WEAK_RED 🩸")
-    elif (current_Open == current_Low):         
+    elif (current_Open == current_Low):
         if (price_movement >= config.threshold):
             minute_candle = "GREEN_CANDLE"
             print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
@@ -106,7 +106,7 @@ def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
     elif (positionAmt < 0): position = "SHORTING"
     else: position = "NO_POSITION"
     print("Current Position :   " + position)
-    return position 
+    return position
 
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
@@ -138,7 +138,7 @@ def trade_action(position_info, trend, minute_candle):
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
                 print("Action           :   🚀 GO_LONG 🚀")
-                if live_trade: 
+                if live_trade:
                     client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
                     markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
                     stopPrice = round((markPrice - (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
@@ -148,7 +148,7 @@ def trade_action(position_info, trend, minute_candle):
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
                 print("Action           :   💥 GO_SHORT 💥")
-                if live_trade: 
+                if live_trade:
                     client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
                     markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
                     stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
@@ -165,10 +165,10 @@ client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, tim
 while True:
     try:
         trade_action(get_position_info(), get_current_trend(), get_current_minute())
-    except (BinanceAPIException, 
-            ConnectionResetError, 
+    except (BinanceAPIException,
+            ConnectionResetError,
             socket.timeout,
-            urllib3.exceptions.ProtocolError, 
+            urllib3.exceptions.ProtocolError,
             urllib3.exceptions.ReadTimeoutError,
             requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout) as e:

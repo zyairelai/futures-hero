@@ -43,7 +43,7 @@ def trade_action(position_info, trend, minute_candle):
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
                 print("Action           :   🚀 GO_LONG 🚀")
-                if live_trade: 
+                if live_trade:
                     client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
                     markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
                     stopPrice = round((markPrice - (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
@@ -53,7 +53,7 @@ def trade_action(position_info, trend, minute_candle):
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
                 print("Action           :   💥 GO_SHORT 💥")
-                if live_trade: 
+                if live_trade:
                     client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
                     markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
                     stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
