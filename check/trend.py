@@ -2,11 +2,16 @@ import os
 import time
 from binance.client import Client
 
-start = time.time()
-pair  = "BTC" + "USDT"
+input_num = input("1. BTC\n" + "2. ETH\n" + "3. LINK\n" + "4. SUSHI\n" + "[+] Enter Number: ")
+if input_num == '1': coin = "BTC"
+elif input_num == '2': coin = "ETH"
+elif input_num == '3': coin = "LINK"
+elif input_num == '4': coin = "SUSHI"
+else: coin = "BTC"
+pair = coin + "USDT"
 
 def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
-    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
@@ -41,5 +46,6 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-print("\nThe <trend.py> return value is : " + get_current_trend() + "\n")
+start = time.time()
+print("\nThe <trend.py> return value is : " + get_current_trend())
 print(f"Time Taken: {time.time() - start} seconds\n")

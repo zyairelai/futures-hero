@@ -4,6 +4,8 @@ quantity    = 0.001
 leverage    = 125
 threshold   = 0.15
 stoplimit   = 0.15
+callbackRate = 0.3
+round_decimal = 2
 
 import os
 import time
@@ -16,22 +18,10 @@ from binance.exceptions import BinanceAPIException
 def get_timestamp(): return int(time.time() * 1000)
 
 def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
-    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
-
-    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
-    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
-    previous_Open   = round(((first_run_Open + first_run_Close) / 2), 2)
-    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), 2)
-
-    current_Open    = round(((previous_Open + previous_Close) / 2), 2)
-    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), 2)
-    current_High    = max(float(klines[2][2]), current_Open, current_Close)
-    current_Low     = min(float(klines[2][3]), current_Open, current_Close)
-
-    if (current_Open == current_High):
+    if get_2hour() == "DOWN_TREND" and get_6hour() == "DOWN_TREND":
         trend = "DOWN_TREND"
         print("Current TREND    :   🩸 DOWN_TREND 🩸")
-    elif (current_Open == current_Low):
+    elif get_2hour() == "UP_TREND" and get_6hour() == "UP_TREND":
         trend = "UP_TREND"
         print("Current TREND    :   🥦 UP_TREND 🥦")
     else:
@@ -42,13 +32,13 @@ def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
 def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_GREEN // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
     klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
-    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), 2)
-    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), 2)
-    previous_Open   = round(((first_run_Open + first_run_Close) / 2), 2)
-    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), 2)
+    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), round_decimal)
+    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), round_decimal)
+    previous_Open   = round(((first_run_Open + first_run_Close) / 2), round_decimal)
+    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), round_decimal)
     
-    current_Open    = round(((previous_Open + previous_Close) / 2), 2)
-    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), 2)
+    current_Open    = round(((previous_Open + previous_Close) / 2), round_decimal)
+    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), round_decimal)
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
@@ -79,6 +69,54 @@ def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_G
             minute_candle = "SOMETHING_IS_WRONG"
             print("❗SOMETHING_IS_WRONG in get_minute_candle()❗")
     return minute_candle
+
+def get_2hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
+    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+
+    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), round_decimal)
+    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), round_decimal)
+    previous_Open   = round(((first_run_Open + first_run_Close) / 2), round_decimal)
+    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), round_decimal)
+
+    current_Open    = round(((previous_Open + previous_Close) / 2), round_decimal)
+    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), round_decimal)
+    current_High    = max(float(klines[2][2]), current_Open, current_Close)
+    current_Low     = min(float(klines[2][3]), current_Open, current_Close)
+
+    if (current_Open == current_High):
+        trend = "DOWN_TREND"
+        # print("Current TREND    :   🩸 DOWN_TREND 🩸")
+    elif (current_Open == current_Low):
+        trend = "UP_TREND"
+        # print("Current TREND    :   🥦 UP_TREND 🥦")
+    else:
+        trend = "NO_TRADE_ZONE"
+        # print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
+    return trend
+
+def get_6hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
+    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+
+    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), round_decimal)
+    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), round_decimal)
+    previous_Open   = round(((first_run_Open + first_run_Close) / 2), round_decimal)
+    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), round_decimal)
+
+    current_Open    = round(((previous_Open + previous_Close) / 2), round_decimal)
+    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), round_decimal)
+    current_High    = max(float(klines[2][2]), current_Open, current_Close)
+    current_Low     = min(float(klines[2][3]), current_Open, current_Close)
+
+    if (current_Open == current_High):
+        trend = "DOWN_TREND"
+        # print("Current TREND    :   🩸 DOWN_TREND 🩸")
+    elif (current_Open == current_Low):
+        trend = "UP_TREND"
+        # print("Current TREND    :   🥦 UP_TREND 🥦")
+    else:
+        trend = "NO_TRADE_ZONE"
+        # print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
+    return trend
 
 def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
     positionAmt = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('positionAmt'))
@@ -114,10 +152,10 @@ def trade_action(position_info, trend, minute_candle):
                     client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
                     print("Action           :   🚀 GO_LONG 🚀")
                     markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
-                    stopPrice = round((markPrice - (markPrice * stoplimit / 100)), 2)
+                    stopPrice = round((markPrice - (markPrice * stoplimit / 100)), (round_decimal - 1))
                     client.futures_create_order(symbol=pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
                     # client.futures_create_order(symbol=pair, side="SELL", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    # client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=0.5, reduceOnly=True, quantity=quantity, timestamp=get_timestamp())
+                    client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=True, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
 
@@ -127,10 +165,10 @@ def trade_action(position_info, trend, minute_candle):
                     client.futures_create_order(symbol=pair, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
                     print("Action           :   💥 GO_SHORT 💥")
                     markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
-                    stopPrice = round((markPrice + (markPrice * stoplimit / 100)), 2)
+                    stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (round_decimal - 1))
                     client.futures_create_order(symbol=pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
                     # client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    # client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=0.5, reduceOnly=False, quantity=quantity, timestamp=get_timestamp())
+                    client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=False, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
         else:
@@ -152,7 +190,9 @@ while True:
             urllib3.exceptions.ReadTimeoutError,
             requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout) as e:
-        with open("Error_Message.txt", "a") as error_message:
+
+        if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
+        with open((os.path.join("Error_Message", pair , ".txt")), "a") as error_message:
             error_message.write("[!] " + pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
             error_message.write(str(e) + "\n\n")
         continue

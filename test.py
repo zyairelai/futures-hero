@@ -1,5 +1,5 @@
-pair = "BTCUSDT"
-quantity = 0.001
+pair = "LINK" + "USDT"
+round_decimal = 4
 
 import os
 import time
@@ -11,15 +11,10 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-# RealizedPNL
-# print(client.futures_position_information(symbol=pair, timestamp=get_timestamp()))
-# trades = client.futures_account_trades(symbol=pair, timestamp=get_timestamp(), limit=2)
-# for each in trades:
-#     print(each)
-#     print("\n")
+# markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
+# print(markPrice)
 
-markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
-print(markPrice)
+# stopPrice = round((markPrice - (markPrice * 0.15 / 100)), round_decimal)
+# print(stopPrice)
 
-stopPrice = round((markPrice - (markPrice * 0.15 / 100)), 2)
-print(stopPrice)
+client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", quantity=1, price=1.123, timestamp=get_timestamp(), timeInForce="GTC")

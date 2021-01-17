@@ -2,8 +2,14 @@ import os
 import time
 from binance.client import Client
 
-start = time.time()
-pair  = "BTC" + "USDT"
+input_num = input("1. BTC\n" + "2. ETH\n" + "3. LINK\n" + "4. SUSHI\n" + "[+] Enter Number: ")
+if input_num == '1': coin = "BTC"
+elif input_num == '2': coin = "ETH"
+elif input_num == '3': coin = "LINK"
+elif input_num == '4': coin = "SUSHI"
+else: coin = "BTC"
+pair = coin + "USDT"
+
 threshold = 0.15
 
 def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_GREEN // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
@@ -60,5 +66,11 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-print("\nThe <minute.py> return value is : " + get_current_minute() + "\n")
+# while True:
+#     get_current_minute()
+#     print()
+#     time.sleep(5)
+
+start = time.time()
+print("\nThe <minute.py> return value is : " + get_current_minute())
 print(f"Time Taken: {time.time() - start} seconds\n")

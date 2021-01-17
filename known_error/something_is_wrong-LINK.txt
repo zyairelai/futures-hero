@@ -1,0 +1,28 @@
+py check/minute.py
+The current_Time is  :   1610808780000
+The current_Open is  :   22.34
+The current_Close is :   22.35
+The current_High is  :   22.37
+The current_Low is   :   22.333
+The price_movement is:   0.16562220232767497
+Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦
+
+The <minute.py> return value is : GREEN_INDECISIVE
+Time Taken: 2.799405813217163 seconds
+
+The current_Time is  :   1610808840000
+The current_Open is  :   22.34
+The current_Close is :   22.34
+The current_High is  :   22.359
+The current_Low is   :   22.332
+The price_movement is:   0.120859444941813
+❗SOMETHING_IS_WRONG in get_minute_candle()❗
+
+The <minute.py> return value is : SOMETHING_IS_WRONG
+
+Time Taken: 8.346247673034668 seconds
+
+^CTraceback (most recent call last):
+  File "check/minute.py", line 66, in <module>
+    time.sleep(5)
+KeyboardInterrupt
