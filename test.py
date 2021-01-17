@@ -1,6 +1,3 @@
-pair = "LINK" + "USDT"
-round_decimal = 4
-
 import os
 import time
 from binance.client import Client
@@ -17,4 +14,12 @@ client      = Client(api_key, api_secret)
 # stopPrice = round((markPrice - (markPrice * 0.15 / 100)), round_decimal)
 # print(stopPrice)
 
-client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", quantity=1, price=1.123, timestamp=get_timestamp(), timeInForce="GTC")
+# client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", quantity=1, price=1.123, timestamp=get_timestamp(), timeInForce="GTC")
+
+import config
+
+print(config.pair)
+
+print(config.quantity)
+
+print(config.round_decimal)

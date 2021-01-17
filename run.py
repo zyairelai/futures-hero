@@ -1,72 +1,6 @@
 live_trade  = True
 
-def asset_info():
-    global pair
-    global quantity
-    global leverage
-    global threshold
-    global stoplimit
-    global callbackRate
-    global round_decimal
-    
-    while True:
-        print("Here are the supported Coins: ")
-        print("1. BTC\n" + "2. ETH\n" + "3. LINK\n" + "4. SUSHI\n")
-        input_num = input("Choose your Coin :   ") or '1'
-
-        if input_num == '1': 
-            coin            = "BTC"
-            quantity        = 0.001
-            leverage        = 125
-            threshold       = 0.15
-            stoplimit       = 0.15
-            callbackRate    = 0.3
-            round_decimal   = 2
-            break
-
-        elif input_num == '2': 
-            coin            = "ETH"
-            quantity        = 0.01
-            leverage        = 100
-            threshold       = 0.15
-            stoplimit       = 0.15
-            callbackRate    = 0.3
-            round_decimal   = 2
-            break
-
-        elif input_num == '3': 
-            coin            = "LINK"
-            quantity        = 1
-            leverage        = 75
-            threshold       = 0.15
-            stoplimit       = 0.15
-            callbackRate    = 0.3
-            round_decimal   = 4
-            break
-
-        elif input_num == '4': 
-            coin            = "SUSHI"
-            quantity        = 1
-            leverage        = 50
-            threshold       = 0.15
-            stoplimit       = 0.15
-            callbackRate    = 0.3
-            round_decimal   = 4
-            break
-
-        else:  print("Invalid Number. Try again.\n")
-
-    pair = coin + "USDT"
-
-    print("Pair Name        :   " + str(pair))
-    print("Minimum Quantity :   " + str(quantity))
-    print("Maximum Leverage :   " + str(leverage))
-    print("Price Movement   :   " + str(threshold))
-    print("Stop Limit       :   " + str(stoplimit))
-    print("Call Back Rate   :   " + str(callbackRate))
-    print("Round Decimal    :   " + str(round_decimal))
-    print()
-
+import config
 import os
 import time
 import socket
@@ -90,29 +24,29 @@ def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     return trend
 
 def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_GREEN // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
-    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
-    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), round_decimal)
-    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), round_decimal)
-    previous_Open   = round(((first_run_Open + first_run_Close) / 2), round_decimal)
-    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), round_decimal)
+    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
+    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
+    previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
+    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
     
-    current_Open    = round(((previous_Open + previous_Close) / 2), round_decimal)
-    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), round_decimal)
+    current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
+    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
     if (current_Open == current_High):          
-        if (price_movement >= threshold):
+        if (price_movement >= config.threshold):
             minute_candle = "RED_CANDLE"
             print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
             minute_candle = "WEAK_RED"
             print("Current MINUTE   :   🩸 WEAK_RED 🩸")
     elif (current_Open == current_Low):         
-        if (price_movement >= threshold):
+        if (price_movement >= config.threshold):
             minute_candle = "GREEN_CANDLE"
             print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
         else:
@@ -131,15 +65,15 @@ def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_G
     return minute_candle
 
 def get_2hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
-    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
 
-    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), round_decimal)
-    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), round_decimal)
-    previous_Open   = round(((first_run_Open + first_run_Close) / 2), round_decimal)
-    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), round_decimal)
+    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
+    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
+    previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
+    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
 
-    current_Open    = round(((previous_Open + previous_Close) / 2), round_decimal)
-    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), round_decimal)
+    current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
+    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
@@ -155,15 +89,15 @@ def get_2hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     return trend
 
 def get_6hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
-    klines = client.futures_klines(symbol=pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
 
-    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), round_decimal)
-    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), round_decimal)
-    previous_Open   = round(((first_run_Open + first_run_Close) / 2), round_decimal)
-    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), round_decimal)
+    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
+    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
+    previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
+    previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
 
-    current_Open    = round(((previous_Open + previous_Close) / 2), round_decimal)
-    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), round_decimal)
+    current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
+    current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
@@ -179,7 +113,7 @@ def get_6hour(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     return trend
 
 def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
-    positionAmt = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('positionAmt'))
+    positionAmt = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('positionAmt'))
     if (positionAmt > 0):
         position = "LONGING"
     elif (positionAmt < 0):
@@ -192,29 +126,28 @@ def get_position_info(): # >>> LONGING // SHORTING // NO_POSITION
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":
         if (minute_candle == "RED_CANDLE"):
-            if live_trade: client.futures_create_order(symbol=pair, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+            if live_trade: client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
             print("Action           :   💰 CLOSE_LONG 💰")
         else:
             print("Action           :   ✊🥦 HOLDING_LONG 🥦💪")
 
     elif position_info == "SHORTING":
         if (minute_candle == "GREEN_CANDLE"):
-            if live_trade: client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+            if live_trade: client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
             print("Action           :   💰 CLOSE_SHORT 💰")
         else:
             print("Action           :   ✊🩸 HOLDING_SHORT 🩸💪")
 
     else:
-        client.futures_cancel_all_open_orders(symbol=pair, timestamp=get_timestamp())
+        client.futures_cancel_all_open_orders(symbol=config.pair, timestamp=get_timestamp())
         if trend == "UP_TREND":
             if (minute_candle == "GREEN_CANDLE"):
                 if live_trade: 
-                    client.futures_create_order(symbol=pair, side="BUY", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                    client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
                     print("Action           :   🚀 GO_LONG 🚀")
-                    markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
-                    stopPrice = round((markPrice - (markPrice * stoplimit / 100)), (round_decimal - 1))
-                    client.futures_create_order(symbol=pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    # client.futures_create_order(symbol=pair, side="SELL", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
+                    markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
+                    stopPrice = round((markPrice - (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
+                    client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
                     # client.futures_create_order(symbol=pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=True, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
@@ -222,25 +155,22 @@ def trade_action(position_info, trend, minute_candle):
         elif trend == "DOWN_TREND":
             if (minute_candle == "RED_CANDLE"):
                 if live_trade: 
-                    client.futures_create_order(symbol=pair, side="SELL", type="MARKET", quantity=quantity, timestamp=get_timestamp())
+                    client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
                     print("Action           :   💥 GO_SHORT 💥")
-                    markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
-                    stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (round_decimal - 1))
-                    client.futures_create_order(symbol=pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
-                    # client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", price=stopPrice, quantity=quantity, timeInForce="GTC", timestamp=get_timestamp())
+                    markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
+                    stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
+                    client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
                     # client.futures_create_order(symbol=pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, reduceOnly=False, quantity=quantity, timestamp=get_timestamp())
             else:
                 print("Action           :   🐺 WAIT 🐺")
         else:
             print("Action           :   🐺 WAIT 🐺")
 
-asset_info()
-
 # Get environment variables && Initial Setup
 api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
-client.futures_change_leverage(symbol=pair, leverage=leverage, timestamp=get_timestamp())
+client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
 
 while True:
     try:
@@ -254,8 +184,8 @@ while True:
             requests.exceptions.ReadTimeout) as e:
 
         if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
-        with open((os.path.join("Error_Message", pair , ".txt")), "a") as error_message:
-            error_message.write("[!] " + pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
+        with open((os.path.join("Error_Message", config.pair , ".txt")), "a") as error_message:
+            error_message.write("[!] " + config.pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
             error_message.write(str(e) + "\n\n")
         continue
 
