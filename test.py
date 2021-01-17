@@ -1,5 +1,6 @@
 import os
 import time
+import config
 from binance.client import Client
 def get_timestamp(): return int(time.time() * 1000)
 
@@ -8,18 +9,10 @@ api_key     = os.environ.get('API_KEY')
 api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
-# markPrice = float(client.futures_position_information(symbol=pair, timestamp=get_timestamp())[0].get('markPrice'))
+# markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
 # print(markPrice)
 
-# stopPrice = round((markPrice - (markPrice * 0.15 / 100)), round_decimal)
+# stopPrice = round((markPrice - (markPrice * 0.15 / 100)), config.round_decimal)
 # print(stopPrice)
 
-# client.futures_create_order(symbol=pair, side="BUY", type="LIMIT", quantity=1, price=1.123, timestamp=get_timestamp(), timeInForce="GTC")
-
-import config
-
-print(config.pair)
-
-print(config.quantity)
-
-print(config.round_decimal)
+client.futures_create_order(symbol=config.pair, side="BUY", type="LIMIT", quantity=config.quantity, price=1.123, timestamp=get_timestamp(), timeInForce="GTC")
