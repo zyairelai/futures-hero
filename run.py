@@ -1,4 +1,4 @@
-live_trade = False
+live_trade = True
 
 import config
 import os
