@@ -1,5 +1,5 @@
 while True:
-    print("Here are the supported Pairs: ")
+    print("\nHere are the supported Pairs: ")
     print("1. BTC-USDT")
     print("2. ETH-USDT")
 
@@ -9,8 +9,8 @@ while True:
         coin            = "BTC"
         quantity        = 0.001     # 0.001 BTC == 0.30 USDT @36XXX with leverage 125x
         leverage        = 125       # Maximum 125
-        threshold       = 0.15      # Optimal 0.15
-        stoplimit       = 0.15      # shall be 70-100% of threshold
+        threshold       = 0.15      # Optimal 0.15 for entry
+        stoplimit       = 0.12      # shall be 70-100% of threshold
         round_decimal   = 2
         break
 
@@ -19,7 +19,7 @@ while True:
         quantity        = 0.02      # 0.02 ETH == 0.25 USDT @12XX with leverage 100x
         leverage        = 100       # Maximum 100
         threshold       = 0.15
-        stoplimit       = 0.15
+        stoplimit       = 0.12
         round_decimal   = 2
         break
 
