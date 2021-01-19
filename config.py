@@ -3,6 +3,7 @@ while True:
     print("1. BTC-USDT")
     print("2. ETH-USDT")
     print("3. LTC-USDT")
+    print("4. BCH-USDT")
 
     input_pair = input("\nChoose your Pair :   ").upper() or 'BTC'
 

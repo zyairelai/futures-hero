@@ -17,11 +17,11 @@ def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // 
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
-    print("The current_Open is  :   " + str(current_Open))
-    print("The current_Close is :   " + str(current_Close))
-    print("The current_High is  :   " + str(current_High))
-    print("The current_Low is   :   " + str(current_Low))
-    print("The price_movement is:   " + str(price_movement))
+    # print("The current_Open is  :   " + str(current_Open))
+    # print("The current_Close is :   " + str(current_Close))
+    # print("The current_High is  :   " + str(current_High))
+    # print("The current_Low is   :   " + str(current_Low))
+    # print("The price_movement is:   " + str(price_movement))
 
     if (current_Open == current_High):
         if (price_movement >= config.threshold):

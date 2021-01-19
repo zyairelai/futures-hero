@@ -2,13 +2,14 @@ import config
 from keys import client
 from binance.client import Client
 
+def main_direction(): return get_6_hour()     # get_4_hour    // get_6_hour
+def recent_minute(): return get_15_minute()   # get_15_minute // get_30_minute // get_1_hour
+
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
-    main_direction  =  get_6_hour()         # get_4_hour    // get_6_hour
-    recent_minute   =  get_15_minute()      # get_15_minute // get_30_minute // get_1_hour
-    if (main_direction == "UP") and (recent_minute == "UP"):
+    if (main_direction() == "UP") and (recent_minute() == "UP"):
         trend = "UP_TREND"
         print("Current TREND    :   🥦 UP_TREND 🥦")
-    elif (main_direction == "DOWN") and (recent_minute == "DOWN"):
+    elif (main_direction() == "DOWN") and (recent_minute() == "DOWN"):
         trend = "DOWN_TREND"
         print("Current TREND    :   🩸 DOWN_TREND 🩸")
     else:

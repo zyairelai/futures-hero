@@ -1,6 +1,4 @@
 import time
-import keys
-from keys import client
 
 while True:
     print("What do you want to check? ")
@@ -12,6 +10,7 @@ while True:
     input_num = input("\nEnter a number   :   ") or '1'
 
     if (input_num == '1'):
+        import keys
         print("API OWNER        :   " + keys.api_owner)
         print("API Key          :   " + keys.api_key)
         print("API Secret Key   :   " + keys.api_secret)
@@ -21,8 +20,8 @@ while True:
     elif (input_num == '2'):
         start = time.time()
         import trend
-        print("Main direction   :   " + trend.main_direction)
-        print("Recent Minute    :   " + trend.recent_minute)
+        print("Main direction   :   " + trend.main_direction())
+        print("Recent Minute    :   " + trend.recent_minute())
         print("\nThe <trend.py> return value is : " + trend.get_current_trend())
         print(f"Time Taken: {time.time() - start} seconds\n")
         break
@@ -50,6 +49,7 @@ while True:
 
     elif (input_num == '5'):
         import config
+        from keys import client
         i, overall_PNL = 0, 0
         trades_list = client.futures_account_trades(symbol=config.pair, timestamp=int(time.time()*1000), limit=40)
         for trade in trades_list:
