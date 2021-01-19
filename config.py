@@ -3,7 +3,7 @@ while True:
     print("1. BTC-USDT")
     print("2. ETH-USDT")
 
-    input_num = input("\nChoose your Pair :   ") 
+    input_num = input("\nChoose your Pair :   ")
 
     if (input_num == '1') or (input_num == 'btc') or (input_num == 'BTC'):
         coin            = "BTC"

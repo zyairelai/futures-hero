@@ -7,9 +7,6 @@ from binance.client import Client
 def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     main_direction  =  get_6_hour()
     recent_minute   =  get_30_minute()
-    
-    # print("6 hour direction :   " + main_direction)
-    # print("Recent 30 Minute :   " + recent_minute)
 
     if (main_direction == "UP") and (recent_minute == "UP"):
         trend = "UP_TREND"
