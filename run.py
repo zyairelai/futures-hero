@@ -74,6 +74,7 @@ while True:
             urllib3.exceptions.ProtocolError,
             urllib3.exceptions.ReadTimeoutError,
             requests.exceptions.ConnectionError,
+            requests.exceptions.ConnectTimeout,
             requests.exceptions.ReadTimeout) as e:
 
         if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
