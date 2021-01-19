@@ -2,6 +2,8 @@ while True:
     print("\nHere are the supported Pairs: ")
     print("1. BTC-USDT")
     print("2. ETH-USDT")
+    print("3. LTC-USDT")
+    print("4. BCH-USDT")
 
     input_num = input("\nChoose your Pair :   ")
 
@@ -19,6 +21,26 @@ while True:
         coin            = "ETH"
         quantity        = 0.02      # 0.02 ETH == 0.25 USDT @12XX with leverage 100x
         leverage        = 100       # Maximum 100
+        threshold       = 0.15
+        stoplimit       = 0.12
+        callbackRate    = 0.2
+        round_decimal   = 2
+        break
+
+    elif (input_num == '3') or (input_num == 'ltc') or (input_num == 'LTC'):
+        coin            = "LTC"
+        quantity        = 0.1       # 0.1 LTC == 0.22 USDT @165 with leverage 75x
+        leverage        = 75        # Maximum 75
+        threshold       = 0.15
+        stoplimit       = 0.12
+        callbackRate    = 0.2
+        round_decimal   = 2
+        break
+
+    elif (input_num == '4') or (input_num == 'bch') or (input_num == 'BCH'):
+        coin            = "BCH"
+        quantity        = 0.03      # 0.03 BCH == 0.22 USDT @5XX with leverage 75x
+        leverage        = 75        # Maximum 75
         threshold       = 0.15
         stoplimit       = 0.12
         callbackRate    = 0.2

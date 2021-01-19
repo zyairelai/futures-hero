@@ -1,5 +1,5 @@
-import keys
 import config
+from keys import client
 from binance.client import Client
 
 def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
@@ -15,7 +15,7 @@ def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
     return trend
 
 def get_15_minute():
-    klines = keys.client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_15MINUTE , limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_15MINUTE , limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
@@ -30,7 +30,7 @@ def get_15_minute():
     return trend
 
 def get_30_minute():
-    klines = keys.client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_30MINUTE , limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_30MINUTE , limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
@@ -45,7 +45,7 @@ def get_30_minute():
     return trend
 
 def get_1_hour():
-    klines = keys.client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
@@ -60,7 +60,7 @@ def get_1_hour():
     return trend
 
 def get_4_hour():
-    klines = keys.client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
@@ -75,7 +75,7 @@ def get_4_hour():
     return trend
 
 def get_6_hour():
-    klines = keys.client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)

@@ -1,5 +1,6 @@
 live_trade = True
-trailing_stop = False
+stop_loss  = False
+trailing_stop = True
 
 import config
 import os
@@ -48,10 +49,11 @@ def trade_action(position_info, trend, minute_candle):
                 print("Action           :   🚀 GO_LONG 🚀")
                 if live_trade:
                     client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
-                    markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
-                    stopPrice = round((markPrice - (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
-                    client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
                     if trailing_stop: client.futures_create_order(symbol=config.pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, quantity=config.quantity, timestamp=get_timestamp())
+                    if stop_loss: 
+                        markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
+                        stopPrice = round((markPrice - (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
+                        client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
             else: print("Action           :   🐺 WAIT 🐺")
 
         elif trend == "DOWN_TREND":
@@ -59,10 +61,11 @@ def trade_action(position_info, trend, minute_candle):
                 print("Action           :   💥 GO_SHORT 💥")
                 if live_trade:
                     client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
-                    markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
-                    stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
-                    client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
                     if trailing_stop: client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, quantity=config.quantity, timestamp=get_timestamp())
+                    if stop_loss: 
+                        markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
+                        stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
+                        client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
             else: print("Action           :   🐺 WAIT 🐺")
         else: print("Action           :   🐺 WAIT 🐺")
 
