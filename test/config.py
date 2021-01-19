@@ -21,7 +21,7 @@ while True:
         quantity        = 0.1       # 1USDT == 0.1 ETH @ 1200
         leverage        = 100       # Maximum 100
         threshold       = 0.15
-        stoplimit       = 0.08
+        stoplimit       = 0.10
         callbackRate    = 0.2
         round_decimal   = 2
         break

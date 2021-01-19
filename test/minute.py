@@ -2,7 +2,7 @@ import config
 from keys import client
 from binance.client import Client
 
-def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_GREEN // RED_INDECISIVE // GREEN_INDECISIVE // SOMETHING_IS_WRONG
+def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
@@ -17,11 +17,11 @@ def get_current_minute(): # >>> RED_CANDLE // GREEN_CANDLE // WEAK_RED // WEAK_G
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
-    # print("The current_Open is  :   " + str(current_Open))
-    # print("The current_Close is :   " + str(current_Close))
-    # print("The current_High is  :   " + str(current_High))
-    # print("The current_Low is   :   " + str(current_Low))
-    # print("The price_movement is:   " + str(price_movement))
+    print("The current_Open is  :   " + str(current_Open))
+    print("The current_Close is :   " + str(current_Close))
+    print("The current_High is  :   " + str(current_High))
+    print("The current_Low is   :   " + str(current_Low))
+    print("The price_movement is:   " + str(price_movement))
 
     if (current_Open == current_High):
         if (price_movement >= config.threshold):

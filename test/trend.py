@@ -2,7 +2,9 @@ import config
 from keys import client
 from binance.client import Client
 
-def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
+def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
+    main_direction  =  get_6_hour()         # get_4_hour    // get_6_hour
+    recent_minute   =  get_15_minute()      # get_15_minute // get_30_minute // get_1_hour
     if (main_direction == "UP") and (recent_minute == "UP"):
         trend = "UP_TREND"
         print("Current TREND    :   🥦 UP_TREND 🥦")
@@ -14,7 +16,7 @@ def get_current_trend(): # >>> UP_TREND // DOWN_TREND // NO_TRADE_ZONE
         print("Current TREND    :   😴 NO_TRADE_ZONE 😴")
     return trend
 
-def get_15_minute():
+def get_15_minute(): # >>> "UP" // "DOWN" // "INDECISIVE"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_15MINUTE , limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -29,7 +31,7 @@ def get_15_minute():
     else                                    :   trend = "INDECISIVE"
     return trend
 
-def get_30_minute():
+def get_30_minute(): # >>> "UP" // "DOWN" // "INDECISIVE"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_30MINUTE , limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -44,7 +46,7 @@ def get_30_minute():
     else                                    :   trend = "INDECISIVE"
     return trend
 
-def get_1_hour():
+def get_1_hour(): # >>> "UP" // "DOWN" // "INDECISIVE"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -59,7 +61,7 @@ def get_1_hour():
     else                                    :   trend = "INDECISIVE"
     return trend
 
-def get_4_hour():
+def get_4_hour(): # >>> "UP" // "DOWN" // "INDECISIVE"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -74,7 +76,7 @@ def get_4_hour():
     else                                    :   trend = "INDECISIVE"
     return trend
 
-def get_6_hour():
+def get_6_hour(): # >>> "UP" // "DOWN" // "INDECISIVE"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -88,6 +90,3 @@ def get_6_hour():
     elif    (current_Open == current_High)  :   trend = "DOWN"
     else                                    :   trend = "INDECISIVE"
     return trend
-
-main_direction  =  get_6_hour()         # get_4_hour    // get_6_hour
-recent_minute   =  get_15_minute()      # get_15_minute // get_30_minute // get_1_hour
