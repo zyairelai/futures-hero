@@ -9,7 +9,7 @@ while True:
 
     if (input_num == '1') or (input_num == 'btc') or (input_num == 'BTC'):
         coin            = "BTC"
-        quantity        = 0.001     # 0.001 BTC == 0.30 USDT @36XXX with leverage 125x
+        quantity        = 0.003     # 1USDT == 0.003 BTC @ 37XXX
         leverage        = 125       # Maximum 125
         threshold       = 0.15      # Optimal 0.15 for entry
         stoplimit       = 0.12      # shall be 70-100% of threshold
@@ -19,7 +19,7 @@ while True:
 
     elif (input_num == '2') or (input_num == 'eth') or (input_num == 'ETH'):
         coin            = "ETH"
-        quantity        = 0.02      # 0.02 ETH == 0.25 USDT @12XX with leverage 100x
+        quantity        = 0.07      # 1USDT == 0.07 ETH @ 1400
         leverage        = 100       # Maximum 100
         threshold       = 0.15
         stoplimit       = 0.12
@@ -29,7 +29,7 @@ while True:
 
     elif (input_num == '3') or (input_num == 'ltc') or (input_num == 'LTC'):
         coin            = "LTC"
-        quantity        = 0.1       # 0.1 LTC == 0.22 USDT @165 with leverage 75x
+        quantity        = 0.4       # 1USDT == 0.4 LTC @ 165
         leverage        = 75        # Maximum 75
         threshold       = 0.15
         stoplimit       = 0.12
@@ -39,7 +39,7 @@ while True:
 
     elif (input_num == '4') or (input_num == 'bch') or (input_num == 'BCH'):
         coin            = "BCH"
-        quantity        = 0.03      # 0.03 BCH == 0.22 USDT @5XX with leverage 75x
+        quantity        = 0.12      # 1USDT == 0.12 BCH @ 535
         leverage        = 75        # Maximum 75
         threshold       = 0.15
         stoplimit       = 0.12
