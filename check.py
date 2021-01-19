@@ -21,8 +21,8 @@ while True:
     elif (input_num == '2'):
         start = time.time()
         import trend
-        print("6 hour direction :   " + trend.get_6_hour())
-        print("Recent 30 Minute :   " + trend.get_30_minute())
+        print("6 hour direction :   " + trend.get_6_hour())     # get_4_hour // get_6_hour
+        print("Recent Minute    :   " + trend.get_30_minute())  # get_15_minute // get_30_minute // get_1_hour
         print("\nThe <trend.py> return value is : " + trend.get_current_trend())
         print(f"Time Taken: {time.time() - start} seconds\n")
         break
