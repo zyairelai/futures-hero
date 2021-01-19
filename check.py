@@ -34,7 +34,7 @@ while True:
             while True:
                 get_current_minute()
                 print()
-                time.sleep(5)
+                time.sleep(3)
         else:
             start = time.time()
             print("\nThe <minute.py> return value is : " + get_current_minute())

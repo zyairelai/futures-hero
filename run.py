@@ -1,6 +1,6 @@
 live_trade = True
-stop_loss  = False
-trailing_stop = True
+stop_loss  = True
+trailing_stop = False
 
 import config
 import os
@@ -25,7 +25,7 @@ def trade_action(position_info, trend, minute_candle):
                 if live_trade: client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
             else: print("Action           :   ✊🥦 HOLDING_LONG 🥦💪")
         else:
-            if not (minute_candle == "GREEN_CANDLE") or not (minute_candle == "WEAK_RED"):
+            if not (minute_candle == "GREEN_CANDLE") or not (minute_candle == "WEAK_GREEN"):
                 print("Action           :   😭 CLOSE_LONG 😭")
                 if live_trade: client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
             else: print("Action           :   ✊🥦 HOLDING_LONG 🥦💪")
