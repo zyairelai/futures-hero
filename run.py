@@ -1,6 +1,6 @@
 try:
     live_trade = True
-    stop_loss  = True
+    stop_loss  = False
     trailing_stop = False
 
     import os
@@ -69,8 +69,11 @@ try:
                             client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
                 else: print("Action           :   🐺 WAIT 🐺")
             
-            elif trend == "COOLDOWN": print("Action           :   🐺 WAIT for COOLDOWN 🐺")
-            else: print("Action           :   🐺 WAIT 🐺")
+            elif trend == "COOLDOWN":
+                print("Action           :   🐺 WAIT for COOLDOWN 🐺")
+
+            else:
+                print("Action           :   🐺 WAIT 🐺")
 
     client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
 
@@ -95,4 +98,4 @@ try:
         print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
         time.sleep(5)
 
-except KeyboardInterrupt: print("\n\nAborted.")
+except KeyboardInterrupt: print("\n\nAborted.\n")

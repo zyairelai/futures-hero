@@ -2,19 +2,39 @@ import config
 from keys import client
 from binance.client import Client
 
-def main_direction():   return get_6_hour()     # get_4_hour() // get_6_hour()
-def recent_minute():    return get_15_minute()  # get_5_minute() // get_15_minute() // get_30_minute() // get_1_hour()
-def cooldown_period():  return get_5_minute()   # get_3_minute() // get_5_minute()
+def main_direction(): return get_6_hour()   # get_4_hour() // get_6_hour()
+def recent_minute(): return get_15_minute() # get_15_minute() // get_30_minute() // get_1_hour()
+
+def avoid_fakeout():
+    avoid_fakeout = get_3_minute()   
+    if avoid_fakeout == "UP": print("Recent 3 min     :   🥦")
+    elif avoid_fakeout == "DOWN": print("Recent 3 min     :   🩸")
+    elif avoid_fakeout == "INDECISIVE": print("Recent 3 min     :   😴")
+    else: print("SOMETHING_IS_BROKEN_IN_AVOIDING_FAKEOUT")
+    return avoid_fakeout
+
+def cooldown_period():
+    cooldown_period = get_5_minute()   
+    if cooldown_period == "UP": print("Recent 5 min     :   🥦")
+    elif cooldown_period == "DOWN": print("Recent 5 min     :   🩸")
+    elif cooldown_period == "INDECISIVE": print("Recent 5 min     :   😴")
+    else: print("SOMETHING_IS_BROKEN_IN_AVOIDING_FAKEOUT")
+    return cooldown_period
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
-    if (main_direction() == "UP") and (recent_minute() == "UP"):
+    direction  = main_direction()
+    recent_min = recent_minute()
+    fakeout    = avoid_fakeout()
+    cooldown   = cooldown_period()
+
+    if (direction == "UP") and (recent_min == "UP"):
         print("Current TREND    :   🥦 UP_TREND 🥦")
-        if cooldown_period() == "UP": trend = "UP_TREND"
+        if ((fakeout == "UP") and (cooldown == "UP")): trend = "UP_TREND"
         else: trend = "COOLDOWN"
 
-    elif (main_direction() == "DOWN") and (recent_minute() == "DOWN"):
+    elif (direction == "DOWN") and (recent_min == "DOWN"):
         print("Current TREND    :   🩸 DOWN_TREND 🩸")
-        if cooldown_period() == "DOWN": trend = "DOWN_TREND"
+        if ((fakeout == "DOWN") and (cooldown == "DOWN")): trend = "DOWN_TREND"
         else: trend = "COOLDOWN"
 
     else:
