@@ -5,21 +5,22 @@ from binance.client import Client
 def main_direction(): return get_6_hour()   # get_4_hour() // get_6_hour()
 def recent_minute(): return get_15_minute() # get_15_minute() // get_30_minute() // get_1_hour()
 
+def cooldown_period():
+    cooldown_period = get_3_minute()   
+    if cooldown_period == "UP": print("Recent 3 min     :   🥦 BOUNCE BACK! 🥦")
+    elif cooldown_period == "DOWN": print("Recent 3 min     :   🩸 READY TO BOUNCE 🩸")
+    elif cooldown_period == "INDECISIVE": print("Recent 3 min     :   😴 BE PATIENT 😴")
+    else: print("SOMETHING_IS_BROKEN_IN_AVOIDING_FAKEOUT")
+    return cooldown_period
+
 def avoid_fakeout():
-    avoid_fakeout = get_3_minute()   
-    if avoid_fakeout == "UP": print("Recent 3 min     :   🥦")
-    elif avoid_fakeout == "DOWN": print("Recent 3 min     :   🩸")
-    elif avoid_fakeout == "INDECISIVE": print("Recent 3 min     :   😴")
+    avoid_fakeout = get_5_minute()   
+    if avoid_fakeout == "UP": print("Recent 5 min     :   🥦 FAKEOUT PUMP 🥦")
+    elif avoid_fakeout == "DOWN": print("Recent 5 min     :   🩸 FAKEOUT DUMP 🩸")
+    elif avoid_fakeout == "INDECISIVE": print("Recent 5 min     :   😴 BE PATIENT 😴")
     else: print("SOMETHING_IS_BROKEN_IN_AVOIDING_FAKEOUT")
     return avoid_fakeout
 
-def cooldown_period():
-    cooldown_period = get_5_minute()   
-    if cooldown_period == "UP": print("Recent 5 min     :   🥦")
-    elif cooldown_period == "DOWN": print("Recent 5 min     :   🩸")
-    elif cooldown_period == "INDECISIVE": print("Recent 5 min     :   😴")
-    else: print("SOMETHING_IS_BROKEN_IN_AVOIDING_FAKEOUT")
-    return cooldown_period
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     direction  = main_direction()
