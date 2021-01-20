@@ -11,11 +11,11 @@ try:
     from binance.client import Client
     from binance.exceptions import BinanceAPIException
     from datetime import datetime
-    from function import config
-    from function.keys import client
-    from function.minute import get_current_minute
-    from function.trend import get_current_trend
-    from function.position import get_position_info
+    import config
+    from keys import client
+    from minute import get_current_minute
+    from trend import get_current_trend
+    from position import get_position_info
     def get_timestamp(): return int(time.time() * 1000)
 
     def trade_action(position_info, trend, minute_candle):
