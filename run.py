@@ -68,6 +68,8 @@ try:
                             stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
                             client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
                 else: print("Action           :   🐺 WAIT 🐺")
+            
+            elif trend == "COOLDOWN": print("Action           :   🐺 WAIT for COOLDOWN 🐺")
             else: print("Action           :   🐺 WAIT 🐺")
 
     client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())

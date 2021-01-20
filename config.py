@@ -2,7 +2,7 @@ while True:
     print("\nHere are the supported Pairs: ")
     print("1. BTC-USDT")
     print("2. ETH-USDT")
-    print("3. LTC-USDT")
+    print("3. LTC-USDT (Not Available)")
 
     input_pair = input("\nChoose your Pair :   ").upper() or 'BTC'
 
@@ -26,15 +26,15 @@ while True:
         round_decimal   = 2
         break
 
-    elif (input_pair == '3') or (input_pair == 'LTC'):
-        coin            = "LTC"
-        quantity        = 0.5       # 1USDT == 0.5 LTC @ 150USDT @ 75x
-        leverage        = 75        # Maximum 75
-        threshold       = 0.15                                  # Might need to increase threshold
-        stoplimit       = 0.10                                  # And decrease stoplimit to reduce lose
-        callbackRate    = 0.1
-        round_decimal   = 2
-        break
+    # elif (input_pair == '3') or (input_pair == 'LTC'):
+    #     coin            = "LTC"
+    #     quantity        = 0.5       # 1USDT == 0.5 LTC @ 150USDT @ 75x
+    #     leverage        = 75        # Maximum 75
+    #     threshold       = 0.15                                  # Might need to increase threshold
+    #     stoplimit       = 0.10                                  # And decrease stoplimit to reduce lose
+    #     callbackRate    = 0.1
+    #     round_decimal   = 2
+    #     break
 
     else: print("❗Invalid Number❗Try again❗\n")
 
