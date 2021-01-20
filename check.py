@@ -10,7 +10,7 @@ while True:
     input_num = input("\nEnter a number   :   ") or '1'
 
     if (input_num == '1'):
-        import keys
+        from function import keys
         print("API OWNER        :   " + keys.api_owner)
         print("API Key          :   " + keys.api_key)
         print("API Secret Key   :   " + keys.api_secret)
@@ -19,7 +19,7 @@ while True:
 
     elif (input_num == '2'):
         start = time.time()
-        import trend
+        from function import trend
         print("Main direction   :   " + trend.main_direction())
         print("Recent Minute    :   " + trend.recent_minute())
         print("\nThe <trend.py> return value is : " + trend.get_current_trend())
@@ -27,7 +27,7 @@ while True:
         break
 
     elif (input_num == '3'):
-        from minute import get_current_minute
+        from function.minute import get_current_minute
         loop = input("Do you want to loop? [Y/n]") or 'n'
         if loop == 'Y':
             while True:
@@ -42,16 +42,16 @@ while True:
 
     elif (input_num == '4'):
         start = time.time()
-        from position import get_position_info
+        from function.position import get_position_info
         print("\nThe <position.py> return value is : " + get_position_info())
         print(f"Time Taken: {time.time() - start} seconds\n")
         break
 
     elif (input_num == '5'):
-        import config
-        from keys import client
+        from function import config
+        from function.keys import client
         i, overall_PNL = 0, 0
-        trades_list = client.futures_account_trades(symbol=config.pair, timestamp=int(time.time()*1000), limit=40)
+        trades_list = client.futures_account_trades(symbol=config.pair, timestamp=int(time.time()*1000), limit=100)
         for trade in trades_list:
             overall_PNL = overall_PNL + float(trade.get('realizedPnl'))
             if (float(trade.get('realizedPnl'))) > 0 :
