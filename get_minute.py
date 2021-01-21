@@ -5,8 +5,8 @@ from keys import client
 from binance.client import Client
 from termcolor import colored
 
-def get_3_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_3MINUTE, limit=3)
+def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
+    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -30,29 +30,29 @@ def get_3_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // "WEAK_
     if (current_Open == current_High):
         if (price_movement >= config.threshold):
             minute_candle = "RED_CANDLE"
-            print(colored("CURRENT 3 MINUTE :   🩸 RED 🩸", "red"))
+            print(colored("CURRENT MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸", "red"))
         else:
             minute_candle = "WEAK_RED"
-            print(colored("CURRENT 3 MINUTE :   WEAK_RED", "red"))
+            print(colored("CURRENT MINUTE   :   🩸 WEAK_RED 🩸", "red"))
 
     elif (current_Open == current_Low):
         if (price_movement >= config.threshold):
             minute_candle = "GREEN_CANDLE"
-            print(colored("CURRENT 3 MINUTE :   🥦 GREEN 🥦", "green"))
+            print(colored("CURRENT MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦", "green"))
         else:
             minute_candle = "WEAK_GREEN"
-            print(colored("CURRENT 3 MINUTE :   WEAK_GREEN", "green"))
-
+            print(colored("CURRENT MINUTE   :   🥦 WEAK_GREEN 🥦", "green"))
+            
     else:
         if (current_Open > current_Close):
-            print(colored("CURRENT 3 MINUTE :   RED_INDECISIVE", "red"))
+            print(colored("CURRENT MINUTE   :   🩸 RED_INDECISIVE 🩸", "red"))
             minute_candle = "RED_INDECISIVE"
 
         elif (current_Close > current_Open):
-            print(colored("CURRENT 3 MINUTE :   GREEN_INDECISIVE", "green"))
+            print(colored("CURRENT MINUTE   :   🥦 GREEN_INDECISIVE 🥦", "green"))
             minute_candle = "GREEN_INDECISIVE"
-            
+
         else:
             minute_candle = "NO_MOVEMENT"
-            print(colored("CURRENT 3 MINUTE :   🐌 NO_MOVEMENT 🐌", "yellow"))
+            print(colored("CURRENT MINUTE   :   🐌 NO_MOVEMENT 🐌", "yellow"))
     return minute_candle

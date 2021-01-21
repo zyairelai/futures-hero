@@ -8,31 +8,29 @@ while True:
 
     if (input_pair == '1') or (input_pair == 'BTC'):
         coin            = "BTC"
-        quantity        = 0.005     # 1USDT == 0.005 @ 35000USDT @ 125x
-        leverage        = 125       # Maximum 125
+        quantity        = 0.001
+        leverage        = 75        # Maximum 125
         threshold       = 0.15      # Optimal 0.15 for entry
+        exit_threshold  = 0.2
         stoplimit       = 0.2       # shall be 70-100% of threshold
-        callbackRate    = 0.1       # Same as StopLimit == 0.1 , but with secure Profit
         round_decimal   = 2
         break
 
     elif (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
-        quantity        = 0.1       # 1USDT == 0.1 ETH @ 1200USDT @ 100x
-        leverage        = 100       # Maximum 100
+        quantity        = 0.04
+        leverage        = 50        # Maximum 100
         threshold       = 0.15
         stoplimit       = 0.20
-        callbackRate    = 0.1
         round_decimal   = 2
         break
 
     # elif (input_pair == '3') or (input_pair == 'LTC'):
     #     coin            = "LTC"
-    #     quantity        = 0.5       # 1USDT == 0.5 LTC @ 150USDT @ 75x
-    #     leverage        = 75        # Maximum 75
+    #     quantity        = 0.5
+    #     leverage        = 30        # Maximum 75
     #     threshold       = 0.15
     #     stoplimit       = 0.20
-    #     callbackRate    = 0.1
     #     round_decimal   = 2
     #     break
 
