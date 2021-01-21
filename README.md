@@ -4,6 +4,7 @@ Leverage Trading Bot on Binance Futures.
 ## 1. Requirements
 You need to have these libraries installed:
 ```
+pip3 install termcolor==1.1.0
 pip3 install cryptography==3.2 
 pip3 install python-binance==0.7.5
 ```

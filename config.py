@@ -12,7 +12,7 @@ while True:
         leverage        = 125       # Maximum 125
         threshold       = 0.15      # Optimal 0.15 for entry
         stoplimit       = 0.2       # shall be 70-100% of threshold
-        callbackRate    = 0.1       # Same as StopLimit == 0.1 , but with secure Profit 
+        callbackRate    = 0.1       # Same as StopLimit == 0.1 , but with secure Profit
         round_decimal   = 2
         break
 

@@ -3,6 +3,7 @@ output_minute = False
 import config
 from keys import client
 from binance.client import Client
+from termcolor import colored
 
 def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
@@ -29,25 +30,25 @@ def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // 
     if (current_Open == current_High):
         if (price_movement >= config.threshold):
             minute_candle = "RED_CANDLE"
-            print("CURRENT MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
+            print(colored("CURRENT MINUTE   :   🩸 RED 🩸", "red"))
         else:
             minute_candle = "WEAK_RED"
-            print("CURRENT MINUTE   :   🩸 WEAK_RED 🩸")
+            print(colored("CURRENT MINUTE   :   WEAK_RED", "red"))
     elif (current_Open == current_Low):
         if (price_movement >= config.threshold):
             minute_candle = "GREEN_CANDLE"
-            print("CURRENT MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
+            print(colored("CURRENT MINUTE   :   🥦 GREEN 🥦", "green"))
         else:
             minute_candle = "WEAK_GREEN"
-            print("CURRENT MINUTE   :   🥦 WEAK_GREEN 🥦")
+            print(colored("CURRENT MINUTE   :   WEAK_GREEN", "green"))
     else:
         if (current_Open > current_Close):
-            print("CURRENT MINUTE   :   🩸 RED_INDECISIVE 🩸")
+            print(colored("CURRENT MINUTE   :   RED_INDECISIVE", "red"))
             minute_candle = "RED_INDECISIVE"
         elif (current_Close > current_Open):
-            print("CURRENT MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
+            print(colored("CURRENT MINUTE   :   GREEN_INDECISIVE", "green"))
             minute_candle = "GREEN_INDECISIVE"
         else:
             minute_candle = "NO_MOVEMENT"
-            print("CURRENT MINUTE   :   🐌 NO_MOVEMENT 🐌")
+            print(colored("CURRENT MINUTE   :   🐌 NO_MOVEMENT 🐌", "yellow"))
     return minute_candle

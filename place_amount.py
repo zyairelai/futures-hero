@@ -1,3 +1,5 @@
+from keys import client
+
 def calculate_Quantity():
     coin            = "BTC"
     pair            = "BTCUSDT"
@@ -7,3 +9,4 @@ def calculate_Quantity():
     stoplimit       = 0.12      # shall be 70-100% of threshold
     callbackRate    = 0.2
     round_decimal   = 2
+

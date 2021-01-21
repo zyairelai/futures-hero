@@ -1,6 +1,7 @@
 import config
 import time
 from keys import client
+from termcolor import colored
 def get_timestamp(): return int(time.time() * 1000)
 
 i, overall_PNL = 0, 0
@@ -15,4 +16,7 @@ for trade in trades_list:
         i = i + 1
         print(str(i) + ". " + trade.get('realizedPnl') + " LOSER TRADE")
     else: continue
-print("\n❗ Overall PNL over the last 30 trades: " + str(round(overall_PNL, 2)) + " USDT\n")
+
+if overall_PNL > 0 : print(colored("\nOverall PNL over the last 30 trades: " + str(round(overall_PNL, 2)) + " USDT\n", "green"))
+elif overall_PNL < 0 : print(colored("\nOverall PNL over the last 30 trades: " + str(round(overall_PNL, 2)) + " USDT\n", "red"))
+else: print("\nOverall PNL over the last 30 trades: " + str(round(overall_PNL, 2)) + " USDT\n")
