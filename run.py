@@ -12,10 +12,11 @@ try:
     from binance.exceptions import BinanceAPIException
     from datetime import datetime
     import config
+    import place_order
     from keys import client
-    from minute import get_current_minute
-    from trend import get_current_trend
-    from position import get_position_info
+    from get_trend import get_current_trend
+    from get_minute import get_current_minute
+    from get_position import get_position_info
     def get_timestamp(): return int(time.time() * 1000)
 
     def trade_action(position_info, trend, minute_candle):
@@ -23,24 +24,26 @@ try:
             if trend == "UP_TREND":
                 if (minute_candle == "RED_CANDLE"):
                     print("Action           :   💰 CLOSE_LONG 💰")
-                    if live_trade: client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
+                    if live_trade: place_order.close_position("LONG")
                 else: print("Action           :   ✊🥦 HOLDING_LONG 🥦💪")
             else:
+                # HERE IS FOR STOP LOSS DOUBLE ORDER HANDLING
                 if not (minute_candle == "GREEN_CANDLE") or not (minute_candle == "WEAK_GREEN"):
                     print("Action           :   😭 CLOSE_LONG 😭")
-                    if live_trade: client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
+                    if live_trade: place_order.close_position("LONG")
                 else: print("Action           :   ✊🥦 HOLDING_LONG 🥦💪")
 
         elif position_info == "SHORTING":
             if trend == "DOWN_TREND":
                 if (minute_candle == "GREEN_CANDLE"):
                     print("Action           :   💰 CLOSE_SHORT 💰")
-                    if live_trade: client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
+                    if live_trade: place_order.close_position("SHORT")
                 else: print("Action           :   ✊🩸 HOLDING_SHORT 🩸💪")
             else:
+                # HERE IS FOR STOP LOSS DOUBLE ORDER HANDLING
                 if not (minute_candle == "RED_CANDLE") or not (minute_candle == "WEAK_RED"):
                     print("Action           :   😭 CLOSE_LONG 😭")
-                    if live_trade: client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
+                    if live_trade: place_order.close_position("SHORT")
                 else: print("Action           :   ✊🥦 HOLDING_LONG 🥦💪")
 
         else:
@@ -49,26 +52,20 @@ try:
                 if (minute_candle == "GREEN_CANDLE"):
                     print("Action           :   🚀 GO_LONG 🚀")
                     if live_trade:
-                        client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
-                        if trailing_stop: client.futures_create_order(symbol=config.pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, quantity=config.quantity, timestamp=get_timestamp())
-                        if stop_loss: 
-                            markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
-                            stopPrice = round((markPrice - (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
-                            client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
+                        place_order.place_order("LONG")
+                        if trailing_stop: place_order.set_trailing_stop("LONG")
+                        if stop_loss: place_order.set_stop_loss("LONG")
                 else: print("Action           :   🐺 WAIT 🐺")
 
             elif trend == "DOWN_TREND":
                 if (minute_candle == "RED_CANDLE"):
                     print("Action           :   💥 GO_SHORT 💥")
                     if live_trade:
-                        client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
-                        if trailing_stop: client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, quantity=config.quantity, timestamp=get_timestamp())
-                        if stop_loss: 
-                            markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
-                            stopPrice = round((markPrice + (markPrice * config.stoplimit / 100)), (config.round_decimal - 1))
-                            client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
+                        place_order.place_order("SHORT")
+                        if trailing_stop: place_order.set_trailing_stop("SHORT")
+                        if stop_loss: place_order.set_stop_loss("SHORT")
                 else: print("Action           :   🐺 WAIT 🐺")
-            
+
             elif trend == "COOLDOWN":
                 print("Action           :   🐺 WAIT for COOLDOWN 🐺")
 

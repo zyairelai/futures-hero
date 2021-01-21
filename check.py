@@ -19,15 +19,13 @@ while True:
 
     elif (input_num == '2'):
         start = time.time()
-        import trend
-        print("Main direction   :   " + trend.main_direction())
-        print("Recent Minute    :   " + trend.recent_minute())
-        print("\nThe <trend.py> return value is : " + trend.get_current_trend())
+        from get_trend import get_current_trend
+        print("\nThe <trend.py> return value is : " + get_current_trend())
         print(f"Time Taken: {time.time() - start} seconds\n")
         break
 
     elif (input_num == '3'):
-        from minute import get_current_minute
+        from get_minute import get_current_minute
         loop = input("Do you want to loop? [Y/n]") or 'n'
         if loop == 'Y':
             while True:
@@ -42,7 +40,7 @@ while True:
 
     elif (input_num == '4'):
         start = time.time()
-        from position import get_position_info
+        from get_position import get_position_info
         print("\nThe <position.py> return value is : " + get_position_info())
         print(f"Time Taken: {time.time() - start} seconds\n")
         break

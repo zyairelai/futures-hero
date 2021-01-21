@@ -1,3 +1,5 @@
+output_minute = False
+
 import config
 from keys import client
 from binance.client import Client
@@ -17,34 +19,35 @@ def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // 
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
-    # print("The current_Open is  :   " + str(current_Open))
-    # print("The current_Close is :   " + str(current_Close))
-    # print("The current_High is  :   " + str(current_High))
-    # print("The current_Low is   :   " + str(current_Low))
-    # print("The price_movement is:   " + str(price_movement))
+    if output_minute:
+        print("The current_Open is  :   " + str(current_Open))
+        print("The current_Close is :   " + str(current_Close))
+        print("The current_High is  :   " + str(current_High))
+        print("The current_Low is   :   " + str(current_Low))
+        print("The price_movement is:   " + str(price_movement))
 
     if (current_Open == current_High):
         if (price_movement >= config.threshold):
             minute_candle = "RED_CANDLE"
-            print("Current MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
+            print("CURRENT MINUTE   :   🩸🩸🩸 RED 🩸🩸🩸")
         else:
             minute_candle = "WEAK_RED"
-            print("Current MINUTE   :   🩸 WEAK_RED 🩸")
+            print("CURRENT MINUTE   :   🩸 WEAK_RED 🩸")
     elif (current_Open == current_Low):
         if (price_movement >= config.threshold):
             minute_candle = "GREEN_CANDLE"
-            print("Current MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
+            print("CURRENT MINUTE   :   🥦🥦🥦 GREEN 🥦🥦🥦")
         else:
             minute_candle = "WEAK_GREEN"
-            print("Current MINUTE   :   🥦 WEAK_GREEN 🥦")
+            print("CURRENT MINUTE   :   🥦 WEAK_GREEN 🥦")
     else:
         if (current_Open > current_Close):
-            print("Current MINUTE   :   🩸 RED_INDECISIVE 🩸")
+            print("CURRENT MINUTE   :   🩸 RED_INDECISIVE 🩸")
             minute_candle = "RED_INDECISIVE"
         elif (current_Close > current_Open):
-            print("Current MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
+            print("CURRENT MINUTE   :   🥦 GREEN_INDECISIVE 🥦")
             minute_candle = "GREEN_INDECISIVE"
         else:
             minute_candle = "NO_MOVEMENT"
-            print("Current MINUTE   :   🐌 NO_MOVEMENT 🐌")
+            print("CURRENT MINUTE   :   🐌 NO_MOVEMENT 🐌")
     return minute_candle
