@@ -26,7 +26,7 @@ def check():
             break
 
         elif (input_num == '3'):
-            from get_minute import get_current_minute
+            from get_1_minute import get_current_minute
             loop = input("Do you want to loop? [Y/n]") or 'n'
             if loop == 'Y':
                 while True:

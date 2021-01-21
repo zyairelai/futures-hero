@@ -15,26 +15,26 @@ def trade_action(position_info, trend, minute_candle):
             if (minute_candle == "RED_CANDLE"):
                 print("ACTION           :   💰 CLOSE_LONG 💰")
                 if live_trade: place_order.close_position("LONG")
-            else: print(colored("ACTION           :   ✊🥦 HOLDING_LONG 🥦💪"), "green")
+            else: print(colored("ACTION           :   ✊🥦 HOLDING_LONG 🥦💪", "green"))
 
         else: # HERE IS FOR STOP LOSS DOUBLE ORDER HANDLING
             if not (minute_candle == "GREEN_CANDLE") or not (minute_candle == "WEAK_GREEN"):
                 print("ACTION           :   😭 CLOSE_LONG 😭")
                 if live_trade: place_order.close_position("LONG")
-            else: print(colored("ACTION           :   ✊🥦 HOLDING_LONG 🥦💪"), "green")
+            else: print(colored("ACTION           :   ✊🥦 HOLDING_LONG 🥦💪", "green"))
 
     elif position_info == "SHORTING":
         if trend == "DOWN_TREND":
             if (minute_candle == "GREEN_CANDLE"):
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
                 if live_trade: place_order.close_position("SHORT")
-            else: print(colored("ACTION           :   ✊🩸 HOLDING_SHORT 🩸💪"), "red")
+            else: print(colored("ACTION           :   ✊🩸 HOLDING_SHORT 🩸💪", "red"))
 
         else: # HERE IS FOR STOP LOSS DOUBLE ORDER HANDLING
             if not (minute_candle == "RED_CANDLE") or not (minute_candle == "WEAK_RED"):
                 print("ACTION           :   😭 CLOSE_LONG 😭")
                 if live_trade: place_order.close_position("SHORT")
-            else: print(colored("ACTION           :   ✊🩸 HOLDING_SHORT 🩸💪"), "red")
+            else: print(colored("ACTION           :   ✊🩸 HOLDING_SHORT 🩸💪", "red"))
 
     else:
         client.futures_cancel_all_open_orders(symbol=config.pair, timestamp=get_timestamp())

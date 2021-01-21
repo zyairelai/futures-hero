@@ -6,30 +6,36 @@ try:
     import requests
     import socket
     import urllib3
-    from binance.client import Client
-    from binance.exceptions import BinanceAPIException
     from datetime import datetime
     from termcolor import colored
+    from binance.client import Client
+    from binance.exceptions import BinanceAPIException
     import config
     import place_order
     from keys import client
     from get_trend import get_current_trend
-    from get_minute import get_current_minute
+    from get_1_minute import get_current_minute
+    from get_3_minute import get_3_minute
     from get_position import get_position_info
     def get_timestamp(): return int(time.time() * 1000)
 
-    def trade_action(position_info, trend, minute_candle):
+    def trade_action():
+        position_info   = get_position_info()
+        trend           = get_current_trend()
+        minute_candle   = get_current_minute()
+        fakeout_candle  = get_3_minute()
+
         if position_info == "LONGING":
-            if (minute_candle == "RED_CANDLE"):
+            if (minute_candle == "RED_CANDLE"):# and (fakeout_candle == "RED_CANDLE"):
                 print("ACTION           :   💰 CLOSE_LONG 💰")
                 if live_trade: place_order.close_position("LONG")
-            else: print(colored("ACTION           :   ✊🥦 HOLDING_LONG 🥦💪"), "green")
+            else: print(colored("ACTION           :   ✊HOLDING_LONG💪", "green"))
 
         elif position_info == "SHORTING":
-            if (minute_candle == "GREEN_CANDLE"):
+            if (minute_candle == "GREEN_CANDLE"):# and (fakeout_candle == "GREEN_CANDLE"):
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
                 if live_trade: place_order.close_position("SHORT")
-            else: print(colored("ACTION           :   ✊🩸 HOLDING_SHORT 🩸💪"), "red")
+            else: print(colored("ACTION           :   ✊HOLDING_SHORT💪", "red"))
 
         else:
             client.futures_cancel_all_open_orders(symbol=config.pair, timestamp=get_timestamp())
@@ -54,8 +60,7 @@ try:
     client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
 
     while True:
-        try:
-            trade_action(get_position_info(), get_current_trend(), get_current_minute())
+        try:    trade_action()
         except (BinanceAPIException,
                 ConnectionResetError,
                 socket.timeout,
