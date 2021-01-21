@@ -16,45 +16,54 @@ try:
     from get_trend import get_current_trend
     from get_minute import get_current_minute
     from get_position import get_position_info
+    from get_entry_minute import get_entry_minute
+    from get_exit_minute import get_exit_minute
     def get_timestamp(): return int(time.time() * 1000)
 
     def trade_action():
         position_info   = get_position_info()
         trend           = get_current_trend()
-        minute_candle   = get_current_minute()
+        # minute_candle   = get_current_minute()
+
+        title = "ACTION           :   "
 
         if position_info == "LONGING":
+            minute_candle = get_exit_minute()
+
             if (minute_candle == "RED_CANDLE"):
-                print("ACTION           :   💰 CLOSE_LONG 💰")
+                print(title + "💰 CLOSE_LONG 💰")
                 if live_trade: place_order.close_position("LONG")
-            else: print(colored("ACTION           :   ✊ HOLDING_LONG 💪", "green"))
+            else: print(colored("✊ HOLDING_LONG 💪", "green"))
 
         elif position_info == "SHORTING":
+            minute_candle = get_exit_minute()
+
             if (minute_candle == "GREEN_CANDLE"):
-                print("ACTION           :   💰 CLOSE_SHORT 💰")
+                print(title + "💰 CLOSE_SHORT 💰")
                 if live_trade: place_order.close_position("SHORT")
-            else: print(colored("ACTION           :   ✊ HOLDING_SHORT 💪", "red"))
+            else: print(colored(title + "✊ HOLDING_SHORT 💪", "red"))
 
         else:
+            minute_candle = get_entry_minute()
+
             if trend == "UP_TREND":
                 if (minute_candle == "GREEN_CANDLE"):
-                    print(colored("Action           :   🚀 GO_LONG 🚀", "green"))
+                    print(colored(title + "🚀 GO_LONG 🚀", "green"))
                     if live_trade: place_order.place_order("LONG")
-                else: print("ACTION           :   🐺 WAIT 🐺")
+                else: print(title + "🐺 WAIT 🐺")
 
             elif trend == "DOWN_TREND":
                 if (minute_candle == "RED_CANDLE"):
-                    print(colored("Action           :   💥 GO_SHORT 💥", "red"))
+                    print(colored(title + "💥 GO_SHORT 💥", "red"))
                     if live_trade: place_order.place_order("SHORT")
-                else: print("ACTION           :   🐺 WAIT 🐺")
-
-            elif trend == "COOLDOWN":
-                print("ACTION           :   🐺 WAIT for COOLDOWN 🐺")
+                else: print(title + "🐺 WAIT 🐺")
                 
-            else:
-                print("ACTION           :   🐺 WAIT 🐺")
+            else: print(title + "🐺 WAIT 🐺")
 
+    # Initialize SETUP
     client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
+    if client.futures_position_information(symbol=config.pair, timestamp=get_timestamp)[0].get('marginType') != "isolated":
+        client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp)
 
     while True:
         try:    trade_action()
@@ -74,6 +83,6 @@ try:
             continue
 
         print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
-        time.sleep(5)
+        time.sleep(1)
 
 except KeyboardInterrupt: print("\n\nAborted.\n")

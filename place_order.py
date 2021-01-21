@@ -32,4 +32,3 @@ def set_trailing_stop(position):
         client.futures_create_order(symbol=config.pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, quantity=config.quantity, timestamp=get_timestamp())
     elif position == "SHORT":
         client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=config.callbackRate, quantity=config.quantity, timestamp=get_timestamp())
-
