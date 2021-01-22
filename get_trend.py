@@ -1,17 +1,18 @@
 import config
+import get_recent_min_count
 from keys import client
 from binance.client import Client
 from termcolor import colored
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     main_direction = get_6_hour()
-    recent_minute_count = get_5_minute()
+    recent_minute_count = get_recent_min_count.recent_minute_count()
 
-    if (main_direction == "UP") and (recent_minute_count == "UP"):
+    if (main_direction == "UP") and (recent_minute_count == "GREEN_CANDLE"):
         print(colored("CURRENT TREND    :   🥦 UP_TREND 🥦", "green"))
         trend = "UP_TREND"
 
-    elif (main_direction == "DOWN") and (recent_minute_count == "DOWN"):
+    elif (main_direction == "DOWN") and (recent_minute_count == "RED_CANDLE"):
         print(colored("CURRENT TREND    :   🩸 DOWN_TREND 🩸", "red"))
         trend = "DOWN_TREND"
 
@@ -34,15 +35,6 @@ def heikin_ashi(klines):
     elif (current_Open == current_High): trend = "DOWN"
     else: trend = "INDECISIVE"
     return trend
-
-def get_5_minute(): # >>> "UP" // "DOWN" // "INDECISIVE"
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE , limit=3)
-    heikin_ashi_candle = heikin_ashi(klines)
-    title = "RECENT 5 MINUTE  :   "
-    if heikin_ashi_candle == "UP": print(title + "🥦🥦🥦")
-    elif heikin_ashi_candle == "DOWN": print(title + "🩸🩸🩸")
-    else: print(title + "😴😴😴")
-    return heikin_ashi_candle
 
 def get_4_hour(): # >>> "UP" // "DOWN" // "INDECISIVE"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
