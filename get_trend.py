@@ -6,7 +6,7 @@ from termcolor import colored
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     main_direction = get_hour(1)
-    recent_minute_count = get_minute.recent_minute_count(5)
+    recent_minute_count = get_minute.recent_minute_count(3)
     if (main_direction == "UP_TREND") and (recent_minute_count == "GREEN"): trend = "UP_TREND"
     elif (main_direction == "DOWN_TREND") and (recent_minute_count == "RED"): trend = "DOWN_TREND"
     else: trend = "NO_TRADE_ZONE"

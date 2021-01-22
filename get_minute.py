@@ -82,7 +82,7 @@ def recent_minute_count(minute):
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    threshold       = config.entry_threshold * 5
+    threshold       = config.entry_threshold * minute
     price_movement  = (current_High - current_Low) / current_Open * 100
 
     if output_minute:
