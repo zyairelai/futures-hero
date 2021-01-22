@@ -25,6 +25,7 @@ while True:
 
     else: print("❗Invalid Number❗Try again❗\n")
 
+universal_threshold = 0.15
 pair = coin + "USDT"
 
 print("Pair Name        :   " + str(pair))

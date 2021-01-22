@@ -23,7 +23,7 @@ def get_current_minute(entry_exit):
 
     if entry_exit == "ENTRY": threshold = config.entry_threshold
     elif entry_exit == "EXIT": threshold = config.exit_threshold
-    else: threshold = 0.15
+    else: threshold = config.universal_threshold
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
