@@ -31,7 +31,7 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    title = hour + " HOUR DIRECTION :   "
+    title = str(hour) + " HOUR DIRECTION :   "
 
     if (current_Open == current_Low) == "UP":
         print(colored(title + "UP_TREND", "green"))
