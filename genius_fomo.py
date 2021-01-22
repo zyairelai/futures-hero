@@ -13,15 +13,15 @@ try:
     import config
     import place_order
     from keys import client
-    from get_trend import get_current_trend
     from get_minute import get_current_minute
+    from get_minute import recent_minute_count
     from get_position import get_position_info
     def get_timestamp(): return int(time.time() * 1000)
 
     def trade_action():
         title           = "ACTION           :   "
         position_info   = get_position_info()
-        trend           = get_current_trend()
+        recent_minute   = recent_minute_count(3)
 
         if position_info == "LONGING":
             minute_candle = get_current_minute("ENTRY")
@@ -39,18 +39,15 @@ try:
 
         else:
             minute_candle = get_current_minute("YOU_KNOW_I_GO_GET")
-            if trend == "UP_TREND":
-                if (minute_candle == "GREEN"):
-                    print(colored(title + "🚀 GO_LONG 🚀", "green"))
-                    if live_trade: place_order.place_order("LONG")
-                else: print(title + "WAIT")
 
-            elif trend == "DOWN_TREND":
-                if (minute_candle == "RED"):
-                    print(colored(title + "💥 GO_SHORT 💥", "red"))
-                    if live_trade: place_order.place_order("SHORT")
-                else: print(title + "WAIT")
-                
+            if (minute_candle == "GREEN") and (recent_minute == "GREEN"):
+                print(colored(title + "🚀 GO_LONG 🚀", "green"))
+                if live_trade: place_order.place_order("LONG")
+
+            elif (minute_candle == "RED") and (recent_minute == "RED"):
+                print(colored(title + "💥 GO_SHORT 💥", "red"))
+                if live_trade: place_order.place_order("SHORT")
+
             else: print(title + "WAIT")
 
     # Initialize SETUP
