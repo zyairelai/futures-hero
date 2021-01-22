@@ -4,18 +4,21 @@ from binance.client import Client
 from termcolor import colored
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
-    main_direction = get_4_hour() # Test with get_30_minute() next time
+    main_direction = get_6_hour()
     recent_minute_count = get_5_minute()
 
     if (main_direction == "UP") and (recent_minute_count == "UP"):
         print(colored("CURRENT TREND    :   🥦 UP_TREND 🥦", "green"))
         trend = "UP_TREND"
+
     elif (main_direction == "DOWN") and (recent_minute_count == "DOWN"):
         print(colored("CURRENT TREND    :   🩸 DOWN_TREND 🩸", "red"))
         trend = "DOWN_TREND"
+
     else:
         trend = "NO_TRADE_ZONE"
         print(colored("CURRENT TREND    :   😴 NO_TRADE_ZONE 😴", "yellow"))
+        
     return trend
 
 def heikin_ashi(klines):
@@ -36,24 +39,6 @@ def get_5_minute(): # >>> "UP" // "DOWN" // "INDECISIVE"
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE , limit=3)
     heikin_ashi_candle = heikin_ashi(klines)
     title = "RECENT 5 MINUTE  :   "
-    if heikin_ashi_candle == "UP": print(title + "🥦🥦🥦")
-    elif heikin_ashi_candle == "DOWN": print(title + "🩸🩸🩸")
-    else: print(title + "😴😴😴")
-    return heikin_ashi_candle
-
-def get_30_minute(): # >>> "UP" // "DOWN" // "INDECISIVE"
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_30MINUTE , limit=3)
-    heikin_ashi_candle = heikin_ashi(klines)
-    title = "RECENT 30 MINUTE :   "
-    if heikin_ashi_candle == "UP": print(title + "🥦🥦🥦")
-    elif heikin_ashi_candle == "DOWN": print(title + "🩸🩸🩸")
-    else: print(title + "😴😴😴")
-    return heikin_ashi_candle
-
-def get_1_hour(): # >>> "UP" // "DOWN" // "INDECISIVE"
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
-    heikin_ashi_candle = heikin_ashi(klines)
-    title = "1 HOUR DIRECTION :   "
     if heikin_ashi_candle == "UP": print(title + "🥦🥦🥦")
     elif heikin_ashi_candle == "DOWN": print(title + "🩸🩸🩸")
     else: print(title + "😴😴😴")

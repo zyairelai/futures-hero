@@ -7,30 +7,20 @@ while True:
 
     if (input_pair == '1') or (input_pair == 'BTC'):
         coin            = "BTC"
-        quantity        = 0.002
-        leverage        = 75        # Maximum 125
-        threshold       = 0.15      # Optimal 0.15 for entry
-
+        quantity        = 0.001     # Minimum 0.001
+        leverage        = 99        # Maximum 125 // Recommended 75-100
         entry_threshold = 0.15
         exit_threshold  = 0.1
-
-        stoplimit       = 0.2       # shall be 70-100% of threshold
         round_decimal   = 2
-        callbackRate    = 0.5
         break
 
     elif (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
-        quantity        = 0.04
-        leverage        = 50        # Maximum 100
-        threshold       = 0.15
-        
+        quantity        = 0.02      # Minimum 0.01
+        leverage        = 75        # Maximum 100 // Recommended 50-75
         entry_threshold = 0.15
         exit_threshold  = 0.1
-
-        stoplimit       = 0.20
         round_decimal   = 2
-        callbackRate    = 0.5
         break
 
     else: print("❗Invalid Number❗Try again❗\n")
@@ -40,7 +30,6 @@ pair = coin + "USDT"
 print("Pair Name        :   " + str(pair))
 print("Trade Quantity   :   " + str(quantity) + " " + str(coin))
 print("Leverage         :   " + str(leverage) + "x")
-print("Price Movement   :   " + str(threshold) + " %")
-print("Stop Limit       :   " + str(stoplimit) + " %")
-print("Round Decimal    :   " + str(round_decimal) + " decimal place")
+print("Entry Threshold  :   " + str(entry_threshold) + " %")
+print("Exit Threshold   :   " + str(exit_threshold) + " %")
 print()

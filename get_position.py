@@ -9,10 +9,13 @@ def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
     if (positionAmt > 0):
         position = "LONGING"
         print(colored("CURRENT POSITION :   " + position, "green"))
+
     elif (positionAmt < 0):
         position = "SHORTING"
         print(colored("CURRENT POSITION :   " + position, "red"))
+
     else:
         position = "NO_POSITION"
         print("CURRENT POSITION :   " + position)
+        
     return position

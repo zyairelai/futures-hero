@@ -5,7 +5,9 @@ from keys import client
 from binance.client import Client
 from termcolor import colored
 
-def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
+# Return Type >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
+
+def get_current_minute(entry_exit): 
     klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
@@ -17,6 +19,10 @@ def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // 
     current_Close   = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[2][3]) + float(klines[2][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
+
+    if entry_exit == "ENTRY" : threshold = config.entry_threshold
+    elif entry_exit == "EXIT": threshold = config.exit_threshold
+    else: threshold = 0.15
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
@@ -30,7 +36,7 @@ def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // 
     title = "CURRENT MINUTE   :   "
 
     if (current_Open == current_High):
-        if (price_movement >= config.threshold):
+        if (price_movement >= threshold):
             minute_candle = "RED_CANDLE"
             print(colored(title + "🩸🩸🩸 RED 🩸🩸🩸", "red"))
         else:
@@ -38,7 +44,7 @@ def get_current_minute(): # >>> "RED_CANDLE" // "GREEN_CANDLE" // "WEAK_RED" // 
             print(colored(title + "🩸 WEAK_RED 🩸", "red"))
 
     elif (current_Open == current_Low):
-        if (price_movement >= config.threshold):
+        if (price_movement >= threshold):
             minute_candle = "GREEN_CANDLE"
             print(colored(title + "🥦🥦🥦 GREEN 🥦🥦🥦", "green"))
         else:

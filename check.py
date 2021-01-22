@@ -30,12 +30,12 @@ def check():
             loop = input("Do you want to loop? [Y/n]") or 'n'
             if loop == 'Y':
                 while True:
-                    get_current_minute()
+                    get_current_minute("YOU_KNOW_I_GO_GET")
                     print()
                     time.sleep(3)
             else:
                 start = time.time()
-                print("\nThe <minute.py> return value is : " + get_current_minute())
+                print("\nThe <minute.py> return value is : " + get_current_minute("YOU_KNOW_I_GO_GET"))
                 print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
