@@ -65,8 +65,13 @@ def get_current_minute(entry_exit):
             print(colored(title + "NO_MOVEMENT", "yellow"))
     return minute_candle
 
-def recent_minute_count(): 
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
+def recent_minute_count(minute): 
+    if minute == 3: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_3MINUTE, limit=3)
+    elif minute == 5: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
+    else:
+        minute = 5
+        klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
+
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -78,7 +83,7 @@ def recent_minute_count():
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    title           = "RECENT 5 MINUTE  :   "
+    title           = "RECENT " + minute + " MINUTE  :   "
     threshold       = config.entry_threshold * 5
     price_movement  = (current_High - current_Low) / current_Open * 100
 

@@ -5,8 +5,8 @@ from binance.client import Client
 from termcolor import colored
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
-    main_direction = get_6_hour()
-    recent_minute_count = get_minute.recent_minute_count()
+    main_direction = get_hour(6)
+    recent_minute_count = get_minute.recent_minute_count(5)
     if (main_direction == "UP") and (recent_minute_count == "GREEN_CANDLE"): trend = "UP_TREND"
     elif (main_direction == "DOWN") and (recent_minute_count == "RED_CANDLE"): trend = "DOWN_TREND"
     else: trend = "NO_TRADE_ZONE"
@@ -26,19 +26,18 @@ def heikin_ashi(klines):
     else: trend = "INDECISIVE"
     return trend
 
-def get_4_hour(): # >>> "UP" // "DOWN" // "INDECISIVE"
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
-    heikin_ashi_candle = heikin_ashi(klines)
-    title = "4 HOUR DIRECTION :   "
-    if heikin_ashi_candle == "UP": print(colored(title + "UP_TREND", "green"))
-    elif heikin_ashi_candle == "DOWN": print(colored(title + "DOWN_TREND", "red"))
-    else: print(colored(title + "NO_TRADE_ZONE", "yellow"))
-    return heikin_ashi_candle
+def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
+    if hour == 1: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
+    elif hour == 2: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+    elif hour == 4: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
+    elif hour == 6: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    else: 
+        hour = 6
+        klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
 
-def get_6_hour(): # >>> "UP" // "DOWN" // "INDECISIVE"
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
     heikin_ashi_candle = heikin_ashi(klines)
-    title = "6 HOUR DIRECTION :   "
+    title = hour + " HOUR DIRECTION :   "
+
     if heikin_ashi_candle == "UP": print(colored(title + "UP_TREND", "green"))
     elif heikin_ashi_candle == "DOWN": print(colored(title + "DOWN_TREND", "red"))
     else: print(colored(title + "NO_TRADE_ZONE", "yellow"))
