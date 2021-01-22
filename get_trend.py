@@ -1,11 +1,10 @@
 import config
 import get_minute
-from keys import client
-from binance.client import Client
+import binance_futures
 from termcolor import colored
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
-    main_direction = get_hour(1)
+    main_direction = get_hour(6)
     recent_minute_count = get_minute.recent_minute_count(3)
     if (main_direction == "UP_TREND") and (recent_minute_count == "GREEN"): trend = "UP_TREND"
     elif (main_direction == "DOWN_TREND") and (recent_minute_count == "RED"): trend = "DOWN_TREND"
@@ -13,13 +12,13 @@ def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     return trend
 
 def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
-    if hour == 1: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
-    elif hour == 2: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
-    elif hour == 4: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
-    elif hour == 6: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
+    elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
+    elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
+    elif hour == 6: klines = binance_futures.KLINE_INTERVAL_6HOUR()
     else: 
         hour = 6
-        klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+        klines = binance_futures.KLINE_INTERVAL_6HOUR()
     title = str(hour) + " HOUR DIRECTION :   "
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)

@@ -1,15 +1,14 @@
 output_minute = False
 
 import config
-from keys import client
-from binance.client import Client
+import binance_futures
 from termcolor import colored
 
 # Return Type >>> "RED" // "GREEN" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
 
 def get_current_minute(entry_exit):
     title = "CURRENT MINUTE   :   "
-    klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
+    klines = binance_futures.KLINE_INTERVAL_1MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -65,11 +64,11 @@ def get_current_minute(entry_exit):
     return minute_candle
 
 def recent_minute_count(minute): 
-    if minute == 3: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_3MINUTE, limit=3)
-    elif minute == 5: klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
+    if   minute == 3: klines = binance_futures.KLINE_INTERVAL_3MINUTE()
+    elif minute == 5: klines = binance_futures.KLINE_INTERVAL_5MINUTE()
     else:
         minute = 5
-        klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
+        klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
     title           = "RECENT " + str(minute) + " MINUTE  :   "
     
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
@@ -98,7 +97,7 @@ def recent_minute_count(minute):
             print(colored(title + minute_candle, "red"))
         else:
             minute_candle = "WEAK_RED"
-            print(title + colored(minute_candle, "red"))
+            print(colored(title + minute_candle, "red"))
 
     elif (current_Open == current_Low):
         if (price_movement >= threshold):
@@ -106,18 +105,18 @@ def recent_minute_count(minute):
             print(colored(title + minute_candle, "green"))
         else:
             minute_candle = "WEAK_GREEN"
-            print(title + colored(minute_candle, "green"))
+            print(colored(title + minute_candle, "green"))
             
     else:
         if (current_Open > current_Close):
             minute_candle = "RED_INDECISIVE"
-            print(title + colored(minute_candle, "red"))
+            print(colored(title + minute_candle, "red"))
 
         elif (current_Close > current_Open):
             minute_candle = "GREEN_INDECISIVE"
-            print(title + colored(minute_candle, "green"))
+            print(colored(title + minute_candle, "green"))
 
         else:
             minute_candle = "NO_MOVEMENT"
-            print(title + colored(minute_candle, "white"))
+            print(colored(title + minute_candle, "white"))
     return minute_candle

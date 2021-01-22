@@ -6,17 +6,14 @@ try:
     import requests
     import socket
     import urllib3
+    import config
+    import binance_futures
     from datetime import datetime
     from termcolor import colored
-    from binance.client import Client
-    from binance.exceptions import BinanceAPIException
-    import config
-    import place_order
-    from keys import client
     from get_trend import get_current_trend
     from get_minute import get_current_minute
     from get_position import get_position_info
-    def get_timestamp(): return int(time.time() * 1000)
+    from binance.exceptions import BinanceAPIException
 
     def trade_action():
         title           = "ACTION           :   "
@@ -27,14 +24,14 @@ try:
             minute_candle = get_current_minute("ENTRY")
             if (minute_candle == "RED"):
                 print(title + "💰 CLOSE_LONG 💰")
-                if live_trade: place_order.close_position("LONG")
+                if live_trade: binance_futures.close_position("LONG")
             else: print(colored(title + "HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
             minute_candle = get_current_minute("EXIT")
             if (minute_candle == "GREEN"):
                 print(title + "💰 CLOSE_SHORT 💰")
-                if live_trade: place_order.close_position("SHORT")
+                if live_trade: binance_futures.close_position("SHORT")
             else: print(colored(title + "HOLDING_SHORT", "red"))
 
         else:
@@ -42,21 +39,20 @@ try:
             if trend == "UP_TREND":
                 if (minute_candle == "GREEN"):
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))
-                    if live_trade: place_order.place_order("LONG")
+                    if live_trade: binance_futures.open_position("LONG")
                 else: print(title + "WAIT")
 
             elif trend == "DOWN_TREND":
                 if (minute_candle == "RED"):
                     print(colored(title + "💥 GO_SHORT 💥", "red"))
-                    if live_trade: place_order.place_order("SHORT")
-                else: print(title + "WAIT")
+                    if live_trade: binance_futures.open_position("SHORT")
+                else: print(title + "🐺 WAIT 🐺")
                 
-            else: print(title + "WAIT")
+            else: print(title + "🐺 WAIT 🐺")
 
     # Initialize SETUP
-    client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
-    if client.futures_position_information(symbol=config.pair, timestamp=get_timestamp)[0].get('marginType') != "isolated":
-        client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp)
+    binance_futures.change_leverage()
+    if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
 
     while True:
         try:    trade_action()

@@ -1,13 +1,48 @@
-import config
 import time
+import config
 from keys import client
 from binance.client import Client
-def get_timestamp(): return int(time.time() * 1000)
 
-stoplimit       = 0.2
-callbackRate    = 0.5
+stoplimit    = 0.2
+callbackRate = 0.5
 
-def place_order(position):
+def get_timestamp():
+    return int(time.time() * 1000)
+    
+def position_information():
+    return client.futures_position_information(symbol=config.pair, timestamp=get_timestamp)
+
+def change_leverage():
+    return client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
+
+def change_margin_to_ISOLATED():
+    return client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp)
+
+def account_trades(trades):
+    return client.futures_account_trades(symbol=config.pair, timestamp=get_timestamp(), limit=(trades*2))
+
+def KLINE_INTERVAL_1MINUTE():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
+
+def KLINE_INTERVAL_3MINUTE():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_3MINUTE, limit=3)
+
+def KLINE_INTERVAL_5MINUTE():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
+
+def KLINE_INTERVAL_1HOUR():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
+
+def KLINE_INTERVAL_2HOUR():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+
+def KLINE_INTERVAL_4HOUR():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
+
+def KLINE_INTERVAL_6HOUR():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+
+def open_position(position):
     if position == "LONG":
         client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
     if position == "SHORT":
