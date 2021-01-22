@@ -7,8 +7,8 @@ from termcolor import colored
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     main_direction = get_hour(6)
     recent_minute_count = get_minute.recent_minute_count(5)
-    if (main_direction == "UP") and (recent_minute_count == "GREEN_CANDLE"): trend = "UP_TREND"
-    elif (main_direction == "DOWN") and (recent_minute_count == "RED_CANDLE"): trend = "DOWN_TREND"
+    if (main_direction == "UP_TREND") and (recent_minute_count == "GREEN"): trend = "UP_TREND"
+    elif (main_direction == "DOWN_TREND") and (recent_minute_count == "RED"): trend = "DOWN_TREND"
     else: trend = "NO_TRADE_ZONE"
     return trend
 
@@ -20,6 +20,7 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
     else: 
         hour = 6
         klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    title = str(hour) + " HOUR DIRECTION :   "
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -31,18 +32,16 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    title = str(hour) + " HOUR DIRECTION :   "
-
     if (current_Open == current_Low) == "UP":
-        print(colored(title + "UP_TREND", "green"))
-        trend = "UP"
+        trend = "UP_TREND"
+        print(colored(title + trend, "green"))
 
     elif (current_Open == current_High) == "DOWN":
-        print(colored(title + "DOWN_TREND", "red"))
-        trend = "DOWN"
+        trend = "DOWN_TREND"
+        print(colored(title + trend, "red"))
 
     else:
-        print(colored(title + "NO_TRADE_ZONE", "yellow"))
-        trend = "INDECISIVE"
+        trend = "NO_TRADE_ZONE"
+        print(colored(title + trend, "yellow"))
 
     return trend

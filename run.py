@@ -19,20 +19,20 @@ try:
     def get_timestamp(): return int(time.time() * 1000)
 
     def trade_action():
+        title           = "ACTION           :   "
         position_info   = get_position_info()
         trend           = get_current_trend()
-        title           = "ACTION           :   "
 
         if position_info == "LONGING":
             minute_candle = get_current_minute("ENTRY")
-            if (minute_candle == "RED_CANDLE"):
+            if (minute_candle == "RED"):
                 print(title + "💰 CLOSE_LONG 💰")
                 if live_trade: place_order.close_position("LONG")
             else: print(colored("HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
             minute_candle = get_current_minute("EXIT")
-            if (minute_candle == "GREEN_CANDLE"):
+            if (minute_candle == "GREEN"):
                 print(title + "💰 CLOSE_SHORT 💰")
                 if live_trade: place_order.close_position("SHORT")
             else: print(colored(title + "HOLDING_SHORT", "red"))
@@ -40,13 +40,13 @@ try:
         else:
             minute_candle = get_current_minute("YOU_KNOW_I_GO_GET")
             if trend == "UP_TREND":
-                if (minute_candle == "GREEN_CANDLE"):
+                if (minute_candle == "GREEN"):
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))
                     if live_trade: place_order.place_order("LONG")
                 else: print(title + "WAIT")
 
             elif trend == "DOWN_TREND":
-                if (minute_candle == "RED_CANDLE"):
+                if (minute_candle == "RED"):
                     print(colored(title + "💥 GO_SHORT 💥", "red"))
                     if live_trade: place_order.place_order("SHORT")
                 else: print(title + "WAIT")
