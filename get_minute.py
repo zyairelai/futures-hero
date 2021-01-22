@@ -69,7 +69,6 @@ def recent_minute_count(minute):
     else:
         minute = 5
         klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
-    title           = "RECENT " + str(minute) + " MINUTE  :   "
     
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -81,6 +80,7 @@ def recent_minute_count(minute):
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
+    title           = "RECENT " + str(minute) + " MINUTE  :   "
     threshold       = config.entry_threshold * minute
     price_movement  = (current_High - current_Low) / current_Open * 100
 

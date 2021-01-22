@@ -19,7 +19,6 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
     else: 
         hour = 6
         klines = binance_futures.KLINE_INTERVAL_6HOUR()
-    title = str(hour) + " HOUR DIRECTION :   "
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -31,14 +30,26 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    if (current_Open == current_Low) == "UP":
-        trend = "UP_TREND"
-        print(colored(title + trend, "green"))
+    title = str(hour) + " HOUR DIRECTION :   "
+    price_movement = (current_High - current_Low) / current_Open * 100
+    threshold = config.entry_threshold * 10
 
-    elif (current_Open == current_High) == "DOWN":
-        trend = "DOWN_TREND"
-        print(colored(title + trend, "red"))
+    if (current_Open == current_Low):
+        if (price_movement >= threshold):
+            trend = "UP_TREND"
+            print(colored(title + trend, "green"))
+        else:
+            trend = "NO_TRADE_ZONE" # "WEAK_RED"
+            print(colored(title + trend, "green"))
 
+    elif (current_Open == current_High):
+        if (price_movement >= threshold):
+            trend = "DOWN_TREND"
+            print(colored(title + trend, "red"))
+        else:
+            trend = "NO_TRADE_ZONE" # "WEAK_GREEN"
+            print(colored(title + trend, "red"))
+            
     else:
         trend = "NO_TRADE_ZONE"
         print(colored(title + trend, "yellow"))
