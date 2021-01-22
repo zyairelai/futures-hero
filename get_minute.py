@@ -24,6 +24,7 @@ def get_current_minute(entry_exit):
     elif entry_exit == "EXIT": threshold = config.exit_threshold
     else: threshold = 0.15
 
+    title = "CURRENT MINUTE   :   "
     price_movement = (current_High - current_Low) / current_Open * 100
 
     if output_minute:
@@ -32,8 +33,6 @@ def get_current_minute(entry_exit):
         print("The current_High is  :   " + str(current_High))
         print("The current_Low is   :   " + str(current_Low))
         print("The price_movement is:   " + str(price_movement))
-
-    title = "CURRENT MINUTE   :   "
 
     if (current_Open == current_High):
         if (price_movement >= threshold):
@@ -71,7 +70,6 @@ def recent_minute_count(minute):
     else:
         minute = 5
         klines = client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
-
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
