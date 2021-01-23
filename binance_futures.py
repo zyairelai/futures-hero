@@ -24,6 +24,9 @@ def change_leverage():
 def change_margin_to_ISOLATED():
     return client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp)
 
+def cancel_all_open_orders():
+    client.futures_cancel_all_open_orders(symbol=config.pair, timestamp=get_timestamp())
+
 def account_trades(trades):
     return client.futures_account_trades(symbol=config.pair, timestamp=get_timestamp(), limit=(trades*2))
 
