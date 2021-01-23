@@ -39,7 +39,6 @@ pair = coin + "USDT"
 
 print("Pair Name        :   " + str(pair))
 print("Trade Quantity   :   " + str(quantity) + " " + str(coin))
-print("Leverage         :   " + str(leverage) + "x")
-print("Entry Threshold  :   " + str(entry_threshold) + " %")
-print("Exit Threshold   :   " + str(exit_threshold) + " %")
-print()
+# print("Leverage         :   " + str(leverage) + "x")
+import binance_futures
+print("Current Leverage :   " + binance_futures.position_information()[0].get("leverage") + "x\n")

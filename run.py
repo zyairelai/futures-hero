@@ -40,7 +40,7 @@ try:
                 if (minute_candle == "GREEN"):
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))
                     if live_trade: binance_futures.open_position("LONG")
-                else: print(title + "WAIT")
+                else: print(title + "🐺 WAIT 🐺")
 
             elif trend == "DOWN_TREND":
                 if (minute_candle == "RED"):
@@ -52,6 +52,7 @@ try:
 
     # Initialize SETUP
     binance_futures.change_leverage()
+    # print("Current Leverage :   " + binance_futures.position_information()[0].get("leverage") + "x\n")
     if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
 
     while True:

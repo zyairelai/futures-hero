@@ -1,10 +1,16 @@
+import os
 import time
 import config
-from keys import client
 from binance.client import Client
 
 stoplimit    = 0.2
 callbackRate = 0.5
+
+# Get environment variables
+api_owner   = os.environ.get('API_OWNER')
+api_key     = os.environ.get('API_KEY')
+api_secret  = os.environ.get('API_SECRET')
+client      = Client(api_key, api_secret)
 
 def get_timestamp():
     return int(time.time() * 1000)

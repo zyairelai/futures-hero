@@ -3,9 +3,7 @@ stop_loss = False
 trailing_stop = False
 
 import config
-import place_order
 import time
-from keys import client
 from termcolor import colored
 def get_timestamp(): return int(time.time() * 1000)
 

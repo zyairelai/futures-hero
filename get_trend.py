@@ -1,3 +1,5 @@
+output = False
+
 import config
 import get_minute
 import binance_futures
@@ -5,9 +7,10 @@ from termcolor import colored
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     main_direction = get_hour(6)
-    recent_minute_count = get_minute.recent_minute_count(3)
-    if (main_direction == "UP_TREND") and (recent_minute_count == "GREEN"): trend = "UP_TREND"
-    elif (main_direction == "DOWN_TREND") and (recent_minute_count == "RED"): trend = "DOWN_TREND"
+    support_direction = get_hour(1)
+    recent_minute_count = get_minute.recent_minute_count(5)
+    if (main_direction == "UP_TREND") and (support_direction == "UP_TREND") and (recent_minute_count == "GREEN"): trend = "UP_TREND"
+    elif (main_direction == "DOWN_TREND") and (support_direction == "DOWN_TREND") and (recent_minute_count == "RED"): trend = "DOWN_TREND"
     else: trend = "NO_TRADE_ZONE"
     return trend
 
@@ -31,8 +34,15 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     title = str(hour) + " HOUR DIRECTION :   "
-    price_movement = (current_High - current_Low) / current_Open * 100
+    price_movement = abs((current_Open - current_Close) / current_Open * 100)
     threshold = config.entry_threshold * 10
+    
+    if output:
+        print("The current_Open is  :   " + str(current_Open))
+        print("The current_Close is :   " + str(current_Close))
+        print("The current_High is  :   " + str(current_High))
+        print("The current_Low is   :   " + str(current_Low))
+        print("The price_movement is:   " + str(price_movement))
 
     if (current_Open == current_Low):
         if (price_movement >= threshold):

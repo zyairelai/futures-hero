@@ -3,29 +3,20 @@ import time
 def check():
     while True:
         print("What do you want to check? ")
-        print("1. keys")
-        print("2. trend")
-        print("3. minute")
-        print("4. position")
-        print("5. realizedPNL")
+        print("1. trend")
+        print("2. minute")
+        print("3. position")
+        print("4. realizedPNL")
         input_num = input("\nEnter a number   :   ") or '1'
 
         if (input_num == '1'):
-            import keys
-            print("API OWNER        :   " + keys.api_owner)
-            print("API Key          :   " + keys.api_key)
-            print("API Secret Key   :   " + keys.api_secret)
-            print()
-            break
-
-        elif (input_num == '2'):
             start = time.time()
             from get_trend import get_current_trend
             print("\nThe <trend.py> return value is : " + get_current_trend())
             print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
-        elif (input_num == '3'):
+        elif (input_num == '2'):
             from get_minute import get_current_minute
             loop = input("Do you want to loop? [Y/n]") or 'n'
             if loop == 'Y':
@@ -39,14 +30,14 @@ def check():
                 print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
-        elif (input_num == '4'):
+        elif (input_num == '3'):
             start = time.time()
             from get_position import get_position_info
             print("\nThe <position.py> return value is : " + get_position_info())
             print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
-        elif (input_num == '5'):
+        elif (input_num == '4'):
             import realizedPNL
             break
 

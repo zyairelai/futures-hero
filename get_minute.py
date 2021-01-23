@@ -1,4 +1,4 @@
-output_minute = False
+output = False
 
 import config
 import binance_futures
@@ -26,7 +26,7 @@ def get_current_minute(entry_exit):
 
     price_movement = (current_High - current_Low) / current_Open * 100
 
-    if output_minute:
+    if output:
         print("The current_Open is  :   " + str(current_Open))
         print("The current_Close is :   " + str(current_Close))
         print("The current_High is  :   " + str(current_High))
@@ -81,10 +81,10 @@ def recent_minute_count(minute):
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     title           = "RECENT " + str(minute) + " MINUTE  :   "
-    threshold       = config.entry_threshold * minute
+    threshold       = config.entry_threshold * (minute - 1)
     price_movement  = (current_High - current_Low) / current_Open * 100
 
-    if output_minute:
+    if output:
         print("The current_Open is  :   " + str(current_Open))
         print("The current_Close is :   " + str(current_Close))
         print("The current_High is  :   " + str(current_High))
