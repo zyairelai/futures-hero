@@ -9,7 +9,7 @@ while True:
     if (input_pair == '1') or (input_pair == 'BTC'):
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001
-        leverage        = 75        # Maximum 125 // Recommended 75-99
+        leverage        = 125       # Maximum 125 // Recommended 75-99
         threshold       = 0.15
         round_decimal   = 2
         break
@@ -34,6 +34,11 @@ while True:
 universal_threshold = 0.15
 pair = coin + "USDT"
 
+output = False
+show_candle_price = input("Show candle price? [Y/n] ")
+if show_candle_price == 'Y': output = True
+
+print()
 print("Pair Name        :   " + str(pair))
 print("Trade Quantity   :   " + str(quantity) + " " + str(coin))
 # print("Leverage         :   " + str(leverage) + "x")

@@ -1,10 +1,9 @@
-output = False
-
 import config
 import binance_futures
 from termcolor import colored
 
 # Return Type >>> "RED" // "GREEN" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
+threshold = 0
 
 def get_current_minute():
     title = "CURRENT MINUTE   :   "
@@ -20,10 +19,10 @@ def get_current_minute():
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    threshold = config.threshold
+    # threshold = config.threshold
     price_movement = (current_High - current_Low) / current_Open * 100
 
-    if output:
+    if config.output:
         print("The current_Open is  :   " + str(current_Open))
         print("The current_Close is :   " + str(current_Close))
         print("The current_High is  :   " + str(current_High))
@@ -78,10 +77,10 @@ def recent_minute_count(minute):
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     title           = "RECENT " + str(minute) + " MINUTE  :   "
-    threshold       = config.threshold * (minute - 1)
+    # threshold       = config.threshold * (minute - 1)
     price_movement  = (current_High - current_Low) / current_Open * 100
 
-    if output:
+    if config.output:
         print("The current_Open is  :   " + str(current_Open))
         print("The current_Close is :   " + str(current_Close))
         print("The current_High is  :   " + str(current_High))

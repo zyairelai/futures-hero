@@ -11,8 +11,9 @@ def check():
 
         if (input_num == '1'):
             start = time.time()
-            from get_trend import get_current_trend
-            print("\nThe <trend.py> return value is : " + get_current_trend())
+            from get_trend import get_hour
+            input_hour = input("Enter hour (1, 2, 4, 6) : ") or 6
+            print("\nThe <get_trend.py> return value is : " + get_hour(int(input_hour)))
             print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
@@ -26,14 +27,14 @@ def check():
                     time.sleep(3)
             else:
                 start = time.time()
-                print("\nThe <minute.py> return value is : " + get_current_minute())
+                print("\nThe <get_minute.py> return value is : " + get_current_minute())
                 print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
         elif (input_num == '3'):
             start = time.time()
             from get_position import get_position_info
-            print("\nThe <position.py> return value is : " + get_position_info())
+            print("\nThe <get_position.py> return value is : " + get_position_info())
             print(f"Time Taken: {time.time() - start} seconds\n")
             break
 

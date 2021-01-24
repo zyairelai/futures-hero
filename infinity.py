@@ -10,18 +10,17 @@ try:
     import binance_futures
     from datetime import datetime
     from termcolor import colored
-    from get_trend import get_current_trend
     from get_minute import get_current_minute
+    from get_minute import recent_minute_count
     from get_position import get_position_info
     from pencil_wick import pencil_wick_test
     from binance.exceptions import BinanceAPIException
 
-    def trade_action():
+    def infinity():
         title           = "ACTION           :   "
         position_info   = get_position_info()
-        trend           = get_current_trend() # Get the Entry condition
         minute_candle   = get_current_minute()
-
+        
         if position_info == "LONGING":
             if (minute_candle == "RED") or (pencil_wick_test("GREEN") == "FAIL"):
                 print(title + "💰 CLOSE_LONG 💰")
@@ -35,18 +34,16 @@ try:
             else: print(colored(title + "HOLDING_SHORT", "red"))
 
         else:
-            if trend == "UP_TREND":
-                if (minute_candle == "GREEN") and (pencil_wick_test("GREEN") == "PASS"):
+            if (minute_candle == "GREEN"):
+                if (pencil_wick_test("GREEN") == "PASS"): 
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))
                     if live_trade: binance_futures.open_position("LONG")
-                else: print(title + "🐺 WAIT 🐺")
 
-            elif trend == "DOWN_TREND":
-                if (minute_candle == "RED") and (pencil_wick_test("RED") == "PASS"):
+            elif (minute_candle == "RED"):
+                if (pencil_wick_test("RED") == "PASS"): 
                     print(colored(title + "💥 GO_SHORT 💥", "red"))
                     if live_trade: binance_futures.open_position("SHORT")
-                else: print(title + "🐺 WAIT 🐺")
-                
+
             else: print(title + "🐺 WAIT 🐺")
 
         print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
@@ -59,8 +56,8 @@ try:
 
     while True:
         try:
-            trade_action()
-            time.sleep(5)
+            infinity()
+            time.sleep(2)
             
         except (BinanceAPIException,
                 ConnectionResetError,

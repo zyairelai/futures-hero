@@ -1,5 +1,3 @@
-output = False
-
 import config
 import get_minute
 import binance_futures
@@ -15,13 +13,14 @@ def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     return trend
 
 def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
+    threshold = 0.3
     if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
     elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
     elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    elif hour == 6: klines = binance_futures.KLINE_INTERVAL_6HOUR()
     else: 
         hour = 6
         klines = binance_futures.KLINE_INTERVAL_6HOUR()
+        threshold = config.threshold * 10
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -35,9 +34,8 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
 
     title = str(hour) + " HOUR DIRECTION :   "
     price_movement = abs((current_Open - current_Close) / current_Open * 100)
-    threshold = config.threshold * 10
-    
-    if output:
+
+    if config.output:
         print("The current_Open is  :   " + str(current_Open))
         print("The current_Close is :   " + str(current_Close))
         print("The current_High is  :   " + str(current_High))
