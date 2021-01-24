@@ -9,8 +9,8 @@ def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
     main_direction = get_hour(6)
     support_direction = get_hour(1)
     recent_minute_count = get_minute.recent_minute_count(5)
-    if (main_direction == "UP_TREND") and (support_direction == "UP_TREND") and (recent_minute_count == "GREEN"): trend = "UP_TREND"
-    elif (main_direction == "DOWN_TREND") and (support_direction == "DOWN_TREND") and (recent_minute_count == "RED"): trend = "DOWN_TREND"
+    if (main_direction == "GREEN") and (support_direction == "GREEN") and (recent_minute_count == "GREEN"): trend = "UP_TREND"
+    elif (main_direction == "RED") and (support_direction == "RED") and (recent_minute_count == "RED"): trend = "DOWN_TREND"
     else: trend = "NO_TRADE_ZONE"
     return trend
 
@@ -35,7 +35,7 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
 
     title = str(hour) + " HOUR DIRECTION :   "
     price_movement = abs((current_Open - current_Close) / current_Open * 100)
-    threshold = config.entry_threshold * 10
+    threshold = config.threshold * 10
     
     if output:
         print("The current_Open is  :   " + str(current_Open))
@@ -46,18 +46,18 @@ def get_hour(hour): # >>> "UP" // "DOWN" // "INDECISIVE"
 
     if (current_Open == current_Low):
         if (price_movement >= threshold):
-            trend = "UP_TREND"
+            trend = "GREEN"
             print(colored(title + trend, "green"))
         else:
-            trend = "NO_TRADE_ZONE" # "WEAK_RED"
+            trend = "INDECISIVE" # "WEAK_RED"
             print(colored(title + trend, "green"))
 
     elif (current_Open == current_High):
         if (price_movement >= threshold):
-            trend = "DOWN_TREND"
+            trend = "RED"
             print(colored(title + trend, "red"))
         else:
-            trend = "NO_TRADE_ZONE" # "WEAK_GREEN"
+            trend = "INDECISIVE" # "WEAK_GREEN"
             print(colored(title + trend, "red"))
             
     else:

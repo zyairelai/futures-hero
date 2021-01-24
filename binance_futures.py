@@ -14,15 +14,15 @@ client      = Client(api_key, api_secret)
 
 def get_timestamp():
     return int(time.time() * 1000)
-    
+
 def position_information():
-    return client.futures_position_information(symbol=config.pair, timestamp=get_timestamp)
+    return client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())
 
 def change_leverage():
     return client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
 
 def change_margin_to_ISOLATED():
-    return client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp)
+    return client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp())
 
 def cancel_all_open_orders():
     client.futures_cancel_all_open_orders(symbol=config.pair, timestamp=get_timestamp())

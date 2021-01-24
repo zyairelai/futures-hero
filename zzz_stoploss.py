@@ -6,7 +6,6 @@ import config
 import time
 import binance_futures
 from termcolor import colored
-def get_timestamp(): return int(time.time() * 1000)
 
 def trade_action(position_info, trend, minute_candle):
     if position_info == "LONGING":

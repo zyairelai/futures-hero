@@ -13,37 +13,36 @@ try:
     from get_trend import get_current_trend
     from get_minute import get_current_minute
     from get_position import get_position_info
+    from pencil_wick import pencil_wick_test
     from binance.exceptions import BinanceAPIException
 
     def trade_action():
         title           = "ACTION           :   "
         position_info   = get_position_info()
         trend           = get_current_trend()
+        minute_candle   = get_current_minute()
 
         if position_info == "LONGING":
-            minute_candle = get_current_minute("ENTRY")
-            if (minute_candle == "RED"):
+            if (minute_candle == "RED") or (pencil_wick_test("GREEN") == "FAIL"):
                 print(title + "💰 CLOSE_LONG 💰")
                 if live_trade: binance_futures.close_position("LONG")
             else: print(colored(title + "HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
-            minute_candle = get_current_minute("EXIT")
-            if (minute_candle == "GREEN"):
+            if (minute_candle == "GREEN") or (pencil_wick_test("RED") == "FAIL"):
                 print(title + "💰 CLOSE_SHORT 💰")
                 if live_trade: binance_futures.close_position("SHORT")
             else: print(colored(title + "HOLDING_SHORT", "red"))
 
         else:
-            minute_candle = get_current_minute("YOU_KNOW_I_GO_GET")
             if trend == "UP_TREND":
-                if (minute_candle == "GREEN"):
+                if (minute_candle == "GREEN") and (pencil_wick_test("GREEN") == "PASS"):
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))
                     if live_trade: binance_futures.open_position("LONG")
                 else: print(title + "🐺 WAIT 🐺")
 
             elif trend == "DOWN_TREND":
-                if (minute_candle == "RED"):
+                if (minute_candle == "RED") and (pencil_wick_test("RED") == "PASS"):
                     print(colored(title + "💥 GO_SHORT 💥", "red"))
                     if live_trade: binance_futures.open_position("SHORT")
                 else: print(title + "🐺 WAIT 🐺")
@@ -51,9 +50,10 @@ try:
             else: print(title + "🐺 WAIT 🐺")
 
     # Initialize SETUP
-    binance_futures.change_leverage()
-    # print("Current Leverage :   " + binance_futures.position_information()[0].get("leverage") + "x\n")
     if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
+    if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
+        binance_futures.change_leverage()
+        print("Changed Leverage :   " + binance_futures.position_information()[0].get("leverage") + "x\n")
 
     while True:
         try:    trade_action()
@@ -73,6 +73,6 @@ try:
             continue
 
         print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
-        time.sleep(1)
+        time.sleep(5)
 
 except KeyboardInterrupt: print("\n\nAborted.\n")

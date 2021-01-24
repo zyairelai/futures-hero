@@ -10,8 +10,7 @@ while True:
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001
         leverage        = 75        # Maximum 125 // Recommended 75-99
-        entry_threshold = 0.15
-        exit_threshold  = 0.05
+        threshold       = 0.15
         round_decimal   = 2
         break
 
@@ -19,8 +18,7 @@ while True:
         coin            = "ETH"
         quantity        = 0.01      # Minimum 0.01
         leverage        = 50        # Maximum 100 // Recommended 50-75
-        entry_threshold = 0.15
-        exit_threshold  = 0.05
+        threshold       = 0.15
         round_decimal   = 2
         break
 
@@ -28,8 +26,7 @@ while True:
         coin            = "LTC"
         quantity        = 0.05      # Minimum 0.01
         leverage        = 30        # Maximum 75 // Recommended 30-45
-        entry_threshold = 0.15
-        exit_threshold  = 0.1
+        threshold       = 0.15
         round_decimal   = 2
         break
     else: print("❗Invalid Number❗Try again❗\n")

@@ -6,7 +6,7 @@ from termcolor import colored
 
 # Return Type >>> "RED" // "GREEN" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
 
-def get_current_minute(entry_exit):
+def get_current_minute():
     title = "CURRENT MINUTE   :   "
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
 
@@ -20,10 +20,7 @@ def get_current_minute(entry_exit):
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    if entry_exit == "ENTRY": threshold = config.entry_threshold
-    elif entry_exit == "EXIT": threshold = config.exit_threshold
-    else: threshold = config.universal_threshold
-
+    threshold = config.threshold
     price_movement = (current_High - current_Low) / current_Open * 100
 
     if output:
@@ -81,7 +78,7 @@ def recent_minute_count(minute):
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     title           = "RECENT " + str(minute) + " MINUTE  :   "
-    threshold       = config.entry_threshold * (minute - 1)
+    threshold       = config.threshold * (minute - 1)
     price_movement  = (current_High - current_Low) / current_Open * 100
 
     if output:

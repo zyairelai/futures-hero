@@ -1,4 +1,4 @@
-from keys import client
+import binance_futures
 
 def calculate_Quantity():
     coin            = "BTC"
