@@ -2,11 +2,12 @@ import config
 import binance_futures
 from termcolor import colored
 
-# Return Type >>> "RED" // "GREEN" // "WEAK_RED" // "WEAK_GREEN" // "RED_INDECISIVE" // "GREEN_INDECISIVE" // "NO_MOVEMENT"
-
-def get_current_minute(entry_exit):
-    title = "CURRENT MINUTE   :   "
-    klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+def recent_minute_count(minute):
+    if   minute == 3: klines = binance_futures.KLINE_INTERVAL_3MINUTE()
+    elif minute == 5: klines = binance_futures.KLINE_INTERVAL_5MINUTE()
+    else:
+        minute = 5
+        klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -18,9 +19,8 @@ def get_current_minute(entry_exit):
     current_High    = max(float(klines[2][2]), current_Open, current_Close)
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
-    if entry_exit == "EXIT": threshold = config.threshold / 2
-    else: threshold = config.threshold
-
+    title           = "RECENT " + str(minute) + " MINUTE  :   "
+    threshold       = config.threshold * (minute - 1)
     price_movement  = (current_High - current_Low) / current_Open * 100
 
     if config.output:
@@ -57,5 +57,5 @@ def get_current_minute(entry_exit):
 
         else:
             minute_candle = "NO_MOVEMENT"
-            print(colored(title + minute_candle, "yellow"))
+            print(colored(title + minute_candle, "white"))
     return minute_candle

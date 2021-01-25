@@ -20,21 +20,23 @@ try:
         title           = "ACTION           :   "
         position_info   = get_position_info()
         trend           = get_current_trend() # Get the Entry condition
-        minute_candle   = get_current_minute()
-
+        
         if position_info == "LONGING":
+            minute_candle   = get_current_minute("YOU_KNOW_I_GO_GET")
             if (minute_candle == "RED") or (pencil_wick_test("GREEN") == "FAIL"):
                 print(title + "💰 CLOSE_LONG 💰")
                 if live_trade: binance_futures.close_position("LONG")
             else: print(colored(title + "HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
+            minute_candle   = get_current_minute("YOU_KNOW_I_GO_GET")
             if (minute_candle == "GREEN") or (pencil_wick_test("RED") == "FAIL"):
                 print(title + "💰 CLOSE_SHORT 💰")
                 if live_trade: binance_futures.close_position("SHORT")
             else: print(colored(title + "HOLDING_SHORT", "red"))
 
         else:
+            minute_candle   = get_current_minute("EXIT")
             if trend == "UP_TREND":
                 if (minute_candle == "GREEN") and (pencil_wick_test("GREEN") == "PASS"):
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))

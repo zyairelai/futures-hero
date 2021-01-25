@@ -1,5 +1,5 @@
 try:
-    live_trade = False
+    live_trade = True
 
     import os
     import time
@@ -11,7 +11,6 @@ try:
     from datetime import datetime
     from termcolor import colored
     from get_minute import get_current_minute
-    from get_minute import recent_minute_count
     from get_position import get_position_info
     from pencil_wick import pencil_wick_test
     from binance.exceptions import BinanceAPIException
@@ -19,28 +18,29 @@ try:
     def infinity():
         title           = "ACTION           :   "
         position_info   = get_position_info()
-        recent_minute   = recent_minute_count(5)
-        minute_candle   = get_current_minute()
 
         if position_info == "LONGING":
+            minute_candle = get_current_minute("EXIT")
             if (minute_candle == "RED") or (pencil_wick_test("GREEN") == "FAIL"):
                 print(title + "💰 CLOSE_LONG 💰")
                 if live_trade: binance_futures.close_position("LONG")
             else: print(colored(title + "HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
+            minute_candle = get_current_minute("EXIT")
             if (minute_candle == "GREEN") or (pencil_wick_test("RED") == "FAIL"):
                 print(title + "💰 CLOSE_SHORT 💰")
                 if live_trade: binance_futures.close_position("SHORT")
             else: print(colored(title + "HOLDING_SHORT", "red"))
 
         else:
-            if (minute_candle == "GREEN") and (recent_minute == "GREEN"):
+            minute_candle = get_current_minute("YOU_KNOW_I_GO_GET")
+            if (minute_candle == "GREEN"):
                 if (pencil_wick_test("GREEN") == "PASS"):
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))
                     if live_trade: binance_futures.open_position("LONG")
 
-            elif (minute_candle == "RED") and (recent_minute == "RED"):
+            elif (minute_candle == "RED"):
                 if (pencil_wick_test("RED") == "PASS"):
                     print(colored(title + "💥 GO_SHORT 💥", "red"))
                     if live_trade: binance_futures.open_position("SHORT")
@@ -59,7 +59,7 @@ try:
     while True:
         try:
             infinity()
-            time.sleep(2)
+            time.sleep(3)
 
         except (BinanceAPIException,
                 ConnectionResetError,

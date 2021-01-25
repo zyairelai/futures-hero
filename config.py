@@ -1,8 +1,7 @@
-check_how_many_trades = 30
+check_how_many_trades = 100
 output       = False
 main_hour    = 6
 support_dir  = 1
-recent_min   = 3
 
 while True:
     print("\nHere are the supported Pairs: ")
@@ -15,16 +14,16 @@ while True:
     if (input_pair == '1') or (input_pair == 'BTC'):
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001
-        leverage        = 75        # Maximum 125 // Recommended 75-99
-        threshold       = 0.05
+        leverage        = 99        # Maximum 125 // Recommended 75-99
+        threshold       = 0.1
         round_decimal   = 2
         break
 
     elif (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
         quantity        = 0.01      # Minimum 0.01
-        leverage        = 50        # Maximum 100 // Recommended 50-75
-        threshold       = 0.05
+        leverage        = 75        # Maximum 100 // Recommended 50-75
+        threshold       = 0.1
         round_decimal   = 2
         break
 
