@@ -12,8 +12,10 @@ def check():
         if (input_num == '1'):
             start = time.time()
             from get_trend import get_hour
-            input_hour = input("Enter hour (1, 2, 4, 6) : ") or 6
-            print("\nThe <get_trend.py> return value is : " + get_hour(int(input_hour)))
+            get_hour(1)
+            get_hour(2)
+            get_hour(4)
+            get_hour(6)
             print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
