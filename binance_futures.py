@@ -39,6 +39,12 @@ def KLINE_INTERVAL_3MINUTE():
 def KLINE_INTERVAL_5MINUTE():
     return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
 
+def KLINE_INTERVAL_15MINUTE():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_15MINUTE, limit=3)
+
+def KLINE_INTERVAL_30MINUTE():
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_30MINUTE, limit=3)
+
 def KLINE_INTERVAL_1HOUR():
     return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
 

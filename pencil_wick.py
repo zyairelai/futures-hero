@@ -8,7 +8,7 @@ def pencil_wick_test(CANDLE):
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
-    
+
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
     previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
     previous_High   = max(float(klines[1][2]), previous_Open, previous_Close)
@@ -22,15 +22,15 @@ def pencil_wick_test(CANDLE):
     threshold = 0.05
 
     if CANDLE == "GREEN":
-        if current_High < previous_High: 
-            if ((current_High - previous_High) / current_High * 100) < threshold: 
+        if current_High < previous_High:
+            if ((current_High - previous_High) / current_High * 100) < threshold:
                 result = "PASS"
             else: result = "FAIL"
         else: result = "PASS"
 
     elif CANDLE == "RED":
-        if current_Low > previous_Low: 
-            if ((previous_Low - current_Low) / previous_Low * 100) < threshold: 
+        if current_Low > previous_Low:
+            if ((previous_Low - current_Low) / previous_Low * 100) < threshold:
                 result = "PASS"
             else: result = "FAIL"
         else: result = "PASS"
@@ -38,4 +38,4 @@ def pencil_wick_test(CANDLE):
     if result == "PASS": print(colored(title + result, "green"))
     else: print(colored(title + result, "red"))
 
-    return result 
+    return result

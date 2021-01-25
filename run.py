@@ -46,7 +46,7 @@ try:
                     print(colored(title + "💥 GO_SHORT 💥", "red"))
                     if live_trade: binance_futures.open_position("SHORT")
                 else: print(title + "🐺 WAIT 🐺")
-                
+
             else: print(title + "🐺 WAIT 🐺")
 
         print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
@@ -61,7 +61,7 @@ try:
         try:
             trade_action()
             time.sleep(5)
-            
+
         except (BinanceAPIException,
                 ConnectionResetError,
                 socket.timeout,

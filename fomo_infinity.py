@@ -19,8 +19,9 @@ try:
     def infinity():
         title           = "ACTION           :   "
         position_info   = get_position_info()
+        recent_minute   = recent_minute_count(5)
         minute_candle   = get_current_minute()
-        
+
         if position_info == "LONGING":
             if (minute_candle == "RED") or (pencil_wick_test("GREEN") == "FAIL"):
                 print(title + "💰 CLOSE_LONG 💰")
@@ -34,13 +35,13 @@ try:
             else: print(colored(title + "HOLDING_SHORT", "red"))
 
         else:
-            if (minute_candle == "GREEN"):
-                if (pencil_wick_test("GREEN") == "PASS"): 
+            if (minute_candle == "GREEN") and (recent_minute == "GREEN"):
+                if (pencil_wick_test("GREEN") == "PASS"):
                     print(colored(title + "🚀 GO_LONG 🚀", "green"))
                     if live_trade: binance_futures.open_position("LONG")
 
-            elif (minute_candle == "RED"):
-                if (pencil_wick_test("RED") == "PASS"): 
+            elif (minute_candle == "RED") and (recent_minute == "RED"):
+                if (pencil_wick_test("RED") == "PASS"):
                     print(colored(title + "💥 GO_SHORT 💥", "red"))
                     if live_trade: binance_futures.open_position("SHORT")
 
@@ -58,7 +59,7 @@ try:
         try:
             infinity()
             time.sleep(2)
-            
+
         except (BinanceAPIException,
                 ConnectionResetError,
                 socket.timeout,
