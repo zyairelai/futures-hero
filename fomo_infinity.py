@@ -1,5 +1,5 @@
 try:
-    live_trade = True
+    live_trade = False
 
     import os
     import time
@@ -50,10 +50,11 @@ try:
         print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
     # Initialize SETUP
-    if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
-    if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
-        binance_futures.change_leverage()
-        print("Changed Leverage :   " + binance_futures.position_information()[0].get("leverage") + "x\n")
+    if live_trade:
+        if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
+        if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
+            binance_futures.change_leverage()
+            print("Changed Leverage :   " + binance_futures.position_information()[0].get("leverage") + "x\n")
 
     while True:
         try:

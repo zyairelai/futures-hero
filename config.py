@@ -14,7 +14,7 @@ while True:
     if (input_pair == '1') or (input_pair == 'BTC'):
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001
-        leverage        = 99        # Maximum 125 // Recommended 75-99
+        leverage        = 75        # Maximum 125 // Recommended 75-99
         threshold       = 0.05
         round_decimal   = 2
         break
