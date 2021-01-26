@@ -1,7 +1,7 @@
 check_how_many_trades = 100
 output       = False
 main_hour    = 6
-support_dir  = 1
+support_hour = 1
 
 while True:
     print("\nHere are the supported Pairs: ")

@@ -3,8 +3,9 @@ import binance_futures
 from termcolor import colored
 
 def get_current_trend(): # >>> "UP_TREND" // "DOWN_TREND" // "NO_TRADE_ZONE"
-    main_direction = get_hour(config.main_hour)
-    support_direction = get_hour(config.support_dir)
+    main_direction    = get_hour(config.main_hour)
+    support_direction = get_hour(config.support_hour)
+
     if (main_direction == "GREEN") and (support_direction == "GREEN"): trend = "UP_TREND"
     elif (main_direction == "RED") and (support_direction == "RED"): trend = "DOWN_TREND"
     else: trend = "NO_TRADE_ZONE"
