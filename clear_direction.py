@@ -32,19 +32,19 @@ def get_clear_direction():
 
     if (current_Open == current_Low):
         current = "GREEN"
-        trend = "GREEN"
+        trend = "UP_TREND"
         print(colored("CURRENT 6 HOUR   :   " + current, "green"))
     elif (current_Open == current_High):
         current = "RED"
-        trend = "RED"
+        trend = "DOWN_TREND"
         print(colored("CURRENT 6 HOUR   :   " + current, "red"))
     else:
         current = "NO_TRADE_ZONE"
         trend = "NO_TRADE_ZONE"
         print(colored("CURRENT 6 HOUR   :   " + current, "yellow"))
 
-    # if (previous == "GREEN") and (current == "GREEN"): trend = "GREEN"
-    # elif (previous == "RED") and (current == "RED"): trend = "RED"
+    # if (previous == "GREEN") and (current == "GREEN"): trend = "UP_TREND"
+    # elif (previous == "RED") and (current == "RED"): trend = "DOWN_TREND"
     # else: trend = "NO_TRADE_ZONE"
     return trend
 
