@@ -5,7 +5,6 @@ from termcolor import colored
 from get_trend import get_current_trend
 from get_minute import get_current_minute
 from get_position import get_position_info
-from get_clear_direction import get_clear_direction
 from pencil_wick import pencil_wick_test
 
 print()

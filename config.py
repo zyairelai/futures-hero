@@ -14,7 +14,7 @@ while True:
     if (input_pair == '1') or (input_pair == 'BTC'):
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001
-        leverage        = 50        # Maximum 125 // Recommended 75-99
+        leverage        = 50        # Maximum 125 // Recommended 75-99 // Oracle 50x
         threshold       = 0.1
         round_decimal   = 2
         break
@@ -22,7 +22,7 @@ while True:
     elif (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
         quantity        = 0.01      # Minimum 0.01
-        leverage        = 40       # Maximum 100 // Recommended 50-75
+        leverage        = 40       # Maximum 100 // Recommended 50-75 // Oracle 40x
         threshold       = 0.1
         round_decimal   = 2
         break
