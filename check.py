@@ -12,26 +12,21 @@ def check():
         if (input_num == '1'):
             start = time.time()
             from get_trend import get_hour
-            get_hour(15)
-            get_hour(30)
-            get_hour(1)
-            get_hour(2)
-            get_hour(4)
-            get_hour(6)
+            get_hour()
             print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
         elif (input_num == '2'):
-            from get_minute import get_current_minute
+            from get_minute import recent_minute
             loop = input("Do you want to loop? [Y/n]") or 'n'
             if loop == 'Y':
                 while True:
-                    get_current_minute("YOU_KNOW_I_GO_GET")
+                    recent_minute()
                     print()
                     time.sleep(3)
             else:
                 start = time.time()
-                print("\nThe <get_minute.py> return value is : " + get_current_minute("YOU_KNOW_I_GO_GET"))
+                print("\nThe <get_minute.py> return value is : " + recent_minute())
                 print(f"Time Taken: {time.time() - start} seconds\n")
             break
 
