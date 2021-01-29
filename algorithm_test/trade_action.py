@@ -2,7 +2,7 @@ title           = "ACTION           :   "
 import binance_futures
 from datetime import datetime
 from termcolor import colored
-from get_trend import get_current_trend
+from get_hour import get_current_trend
 from get_minute import get_current_minute
 from get_position import get_position_info
 from pencil_wick import pencil_wick_test

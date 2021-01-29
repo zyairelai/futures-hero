@@ -6,8 +6,14 @@ from datetime import datetime
 from termcolor import colored
 from get_position import get_position_info
 
-def get_hour():
-    klines = binance_futures.KLINE_INTERVAL_6HOUR()
+def get_hour(hour):
+    title = str(hour) + " HOUR DIRECTION :   "
+    if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
+    elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
+    elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
+    else:
+        hour = 6
+        klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -25,26 +31,27 @@ def get_hour():
     if (current_Open == current_Low):
         current = "GREEN"
         trend = "UP_TREND"
-        print(colored("CURRENT 6 HOUR   :   " + current, "green"))
+        print(colored(title + current, "green"))
     elif (current_Open == current_High):
         current = "RED"
         trend = "DOWN_TREND"
-        print(colored("CURRENT 6 HOUR   :   " + current, "red"))
+        print(colored(title + current, "red"))
     else:
         current = "NO_TRADE_ZONE"
         trend = "NO_TRADE_ZONE"
-        print(colored("CURRENT 6 HOUR   :   " + current, "yellow"))
+        print(colored(title + current, "yellow"))
 
     if super_clear_direction:
+        title = str(hour) + " HOUR DIRECTION :   "
         if (previous_Open == previous_Low):
             previous = "GREEN"
-            print(colored("PREVIOUS 6 HOUR  :   " + previous, "green"))
+            print(colored(title + previous, "green"))
         elif (previous_Open == previous_High):
             previous = "RED"
-            print(colored("PREVIOUS 6 HOUR  :   " + previous, "red"))
+            print(colored(title + previous, "red"))
         else:
             previous = "NO_TRADE_ZONE"
-            print(colored("PREVIOUS 6 HOUR  :   " + previous, "yellow"))
+            print(colored(title + previous, "yellow"))
 
         if (previous == "GREEN") and (current == "GREEN"): trend = "UP_TREND"
         elif (previous == "RED") and (current == "RED"): trend = "DOWN_TREND"

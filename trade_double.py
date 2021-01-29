@@ -5,9 +5,10 @@ from get_hour import get_hour
 from get_minute import recent_minute
 from get_position import get_position_info
 
-def standard_main_hour(hour):
+def check_6_confirm_1():
     position_info = get_position_info()
-    direction     = get_hour(hour)
+    main_hour     = get_hour(6)
+    support_hour  = get_hour(1)
     minute_candle = recent_minute()
 
     if position_info == "LONGING":
@@ -23,13 +24,13 @@ def standard_main_hour(hour):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if direction == "UP_TREND":
+        if main_hour == "UP_TREND" and support_hour == "UP_TREND":
             if (minute_candle == "GREEN"):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 binance_futures.open_position("LONG")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif direction == "DOWN_TREND":
+        elif main_hour == "DOWN_TREND" and support_hour == "DOWN_TREND":
             if (minute_candle == "RED"):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 binance_futures.open_position("SHORT")

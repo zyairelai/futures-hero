@@ -1,7 +1,7 @@
 import binance_futures
 from datetime import datetime
 from termcolor import colored
-from get_trend import get_hour
+from get_hour import get_hour
 from get_minute import recent_minute
 from get_position import get_position_info
 
