@@ -5,10 +5,10 @@ from get_hour import get_hour
 from get_minute import recent_minute
 from get_position import get_position_info
 
-def check_6_confirm_1():
+def double_confirm(main, support):
     position_info = get_position_info()
-    main_hour     = get_hour(6)
-    support_hour  = get_hour(1)
+    main_hour     = get_hour(main)
+    support_hour  = get_hour(support)
     minute_candle = recent_minute()
 
     if position_info == "LONGING":
