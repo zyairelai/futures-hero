@@ -8,7 +8,8 @@ try:
     import binance_futures
     from datetime import datetime
     from termcolor import colored
-    from five_min_trade import five_min_trade
+    from trade_fomo import fomo_trade
+    from trade_standard import five_min_trade
     from binance.exceptions import BinanceAPIException
     from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -19,7 +20,7 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():
-        try: five_min_trade()
+        try: fomo_trade()                           # five_min_trade // fomo_trade
         except (BinanceAPIException,
                 ConnectionResetError,
                 socket.timeout,
