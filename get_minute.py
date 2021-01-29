@@ -48,13 +48,15 @@ def emergency_minute():
     current_Low     = min(float(klines[2][3]), current_Open, current_Close)
 
     threshold = 0.3
+    emergency = "INDECISIVE"
     price_movement  = (current_High - current_Low) / current_Open * 100
 
     if (current_Open == current_High): 
         if (price_movement >= threshold): 
-            minute_candle = "RED"
+            emergency = "RED"
+
     elif (current_Open == current_Low): 
         if (price_movement >= threshold): 
-            minute_candle = "GREEN"
-    else: minute_candle = "INDECISIVE"
-    return minute_candle
+            emergency = "GREEN"
+            
+    return emergency
