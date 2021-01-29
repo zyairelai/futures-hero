@@ -38,7 +38,7 @@ def check():
             break
 
         elif (input_num == '4'):
-            import realizedPNL
+            import get_realizedPNL
             break
 
         else: print("❗Invalid Number❗Try again❗\n")
