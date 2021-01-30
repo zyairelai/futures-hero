@@ -21,7 +21,7 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def trade_action():
-        try: double_confirm(6, 1)                 # standard_main_hour(hour) // fomo_trade() // double_confirm(main, support)
+        try: standard_main_hour(6)                 # standard_main_hour(hour) // fomo_trade() // double_confirm(main, support)
         except (BinanceAPIException,
                 ConnectionResetError,
                 socket.timeout,
