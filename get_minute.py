@@ -51,12 +51,12 @@ def emergency_minute():
     emergency = "INDECISIVE"
     price_movement  = (current_High - current_Low) / current_Open * 100
 
-    if (current_Open == current_High): 
-        if (price_movement >= threshold): 
+    if (current_Open == current_High):
+        if (price_movement >= threshold):
             emergency = "RED"
 
-    elif (current_Open == current_Low): 
-        if (price_movement >= threshold): 
+    elif (current_Open == current_Low):
+        if (price_movement >= threshold):
             emergency = "GREEN"
 
     return emergency
