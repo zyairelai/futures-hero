@@ -27,13 +27,13 @@ def double_confirm(main, support):
 
     else:
         if main_hour == "UP_TREND" and support_hour == "UP_TREND":
-            if (minute_candle == "GREEN"):
+            if (minute_candle == "GREEN") and (emergency != "RED"):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 binance_futures.open_position("LONG")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif main_hour == "DOWN_TREND" and support_hour == "DOWN_TREND":
-            if (minute_candle == "RED"):
+            if (minute_candle == "RED") and (emergency != "GREEN"):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 binance_futures.open_position("SHORT")
             else: print("ACTION           :   🐺 WAIT 🐺")
