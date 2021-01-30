@@ -42,11 +42,11 @@ try:
         if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
             binance_futures.change_leverage()
             print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
-        
+
         scheduler = BlockingScheduler()
         scheduler.add_job(trade_action, 'interval', seconds=10)
         scheduler.start()
-    
+
     else:
         while True:
             try:

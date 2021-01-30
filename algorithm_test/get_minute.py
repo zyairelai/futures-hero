@@ -10,7 +10,7 @@ def get_current_minute(entry_exit):
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
-    
+
     previous_Open   = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
     previous_Close  = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
     previous_High   = max(float(klines[1][2]), previous_Open, previous_Close)

@@ -31,7 +31,7 @@ while True:
     #     threshold       = 0.05
     #     round_decimal   = 2
     #     break
-    
+
     else: print("❗Invalid Number❗Try again❗\n")
 
 pair = coin + "USDT"

@@ -23,7 +23,7 @@ print()
 def minute_trade():
     position_info   = get_position_info()
     trend           = get_current_trend() # Get the Entry condition
-    
+
     if position_info == "LONGING":
         minute_candle   = get_current_minute("EXIT")
         if (minute_candle == "RED") or (pencil_wick_test("GREEN") == "FAIL"):

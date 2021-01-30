@@ -10,7 +10,7 @@ def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
     positionAmt = float(response.get('positionAmt'))
     unRealizedProfit = round(float(binance_futures.position_information()[0].get('unRealizedProfit')), config.round_decimal)
     # print(binance_futures.position_information()[0])
-    
+
     if (positionAmt > 0):
         position = "LONGING"
         print(colored(title + position, "green"))
