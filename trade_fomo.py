@@ -6,7 +6,7 @@ from get_minute import recent_minute
 from get_minute import emergency_minute
 from get_position import get_position_info
 
-def fomo_trade():
+def fomo_no_trend():
     position_info = get_position_info()
     minute_candle = recent_minute()
     emergency     = emergency_minute()
