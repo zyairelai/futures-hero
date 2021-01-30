@@ -26,13 +26,13 @@ def standard_main_hour(hour):
 
     else:
         if direction == "UP_TREND":
-            if (minute_candle == "GREEN"):
+            if (minute_candle == "GREEN") and (emergency != "RED"):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 binance_futures.open_position("LONG")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif direction == "DOWN_TREND":
-            if (minute_candle == "RED"):
+            if (minute_candle == "RED") and (emergency != "GREEN"):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 binance_futures.open_position("SHORT")
             else: print("ACTION           :   🐺 WAIT 🐺")
