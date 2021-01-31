@@ -7,7 +7,7 @@ from get_minute import recent_minute
 from get_minute import emergency_minute
 from get_position import get_position_info
 
-def scalping():
+def get_current_minute():
     title = "CURRENT MINUTE   :   "
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
 
