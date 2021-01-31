@@ -1,5 +1,3 @@
-super_clear_direction = False
-
 import config
 import binance_futures
 from datetime import datetime
@@ -41,19 +39,4 @@ def get_hour(hour):
         trend = "NO_TRADE_ZONE"
         print(colored(title + current, "yellow"))
 
-    if super_clear_direction:
-        title = str(hour) + " HOUR DIRECTION :   "
-        if (previous_Open == previous_Low):
-            previous = "GREEN"
-            print(colored(title + previous, "green"))
-        elif (previous_Open == previous_High):
-            previous = "RED"
-            print(colored(title + previous, "red"))
-        else:
-            previous = "NO_TRADE_ZONE"
-            print(colored(title + previous, "yellow"))
-
-        if (previous == "GREEN") and (current == "GREEN"): trend = "UP_TREND"
-        elif (previous == "RED") and (current == "RED"): trend = "DOWN_TREND"
-        else: trend = "NO_TRADE_ZONE"
     return trend
