@@ -5,10 +5,11 @@ from get_hour import get_hour
 from get_minute import recent_minute
 from get_minute import emergency_minute
 from get_position import get_position_info
+from get_clear_direction import get_clear_direction
 
 def standard_main_hour(hour):
     position_info = get_position_info()
-    direction     = get_hour(hour)
+    direction     = get_clear_direction(hour)
     minute_candle = recent_minute()
     emergency     = emergency_minute()
 
