@@ -23,6 +23,10 @@ Let's make the magic happens!
 ```
 python3 run.py
 ```
+To check the trend and many others:
+```
+python3 check.py
+```
 
 ## 4. Donate for MORE!!
 If you found this useful to generate your passive income, feel free to donate to me so I can IMPROVE MORE!  
