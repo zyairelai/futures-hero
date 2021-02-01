@@ -74,7 +74,7 @@ def set_trailing_stop(position):
         client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=config.quantity, timestamp=get_timestamp())
 
 def set_take_profit(position):
-    stoplimit = config.stoplimit
+    stoplimit = 0.25 # config.stoplimit
     if position == "LONG":
         markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
         stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (config.round_decimal - 1))
@@ -86,7 +86,7 @@ def set_take_profit(position):
         client.futures_create_order(symbol=config.pair, side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
 def set_stop_loss(position):
-    stoplimit = config.stoplimit / 2
+    stoplimit = 0.25 # config.stoplimit / 2
     if position == "LONG":
         markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
         stopPrice = round((markPrice - (markPrice * stoplimit / 100)), (config.round_decimal - 1))
