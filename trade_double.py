@@ -9,7 +9,7 @@ from get_clear_direction import get_clear_direction
 
 def double_confirmation(main, support):
     position_info = get_position_info()
-    main_hour     = get_hour(main)
+    main_hour     = get_clear_direction(main)
     support_hour  = get_hour(support)
     minute_candle = recent_minute()
     emergency     = emergency_minute()
