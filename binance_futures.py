@@ -28,31 +28,31 @@ def account_trades(trades):
     return client.futures_account_trades(symbol=config.pair, timestamp=get_timestamp(), limit=(trades*2))
 
 def KLINE_INTERVAL_1MINUTE():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=4)
 
 def KLINE_INTERVAL_3MINUTE():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_3MINUTE, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_3MINUTE, limit=4)
 
 def KLINE_INTERVAL_5MINUTE():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_5MINUTE, limit=4)
 
 def KLINE_INTERVAL_15MINUTE():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_15MINUTE, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_15MINUTE, limit=4)
 
 def KLINE_INTERVAL_30MINUTE():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_30MINUTE, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_30MINUTE, limit=4)
 
 def KLINE_INTERVAL_1HOUR():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1HOUR, limit=4)
 
 def KLINE_INTERVAL_2HOUR():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_2HOUR, limit=4)
 
 def KLINE_INTERVAL_4HOUR():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_4HOUR, limit=4)
 
 def KLINE_INTERVAL_6HOUR():
-    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=3)
+    return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_6HOUR, limit=4)
 
 def open_position(position):
     if position == "LONG":
