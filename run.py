@@ -23,7 +23,7 @@ try:
     print("Available Strategies: ")
     print("1. double_confirmation")
     print("2. fomo_no_trend")
-    print("3. scalping")
+    print("3. scalping_no_trend")
     print("4. standard_main_hour(6)")
     prompt_TRADE = input("\nChoose Your Strategy: ") or '1'
 
