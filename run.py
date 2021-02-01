@@ -10,6 +10,7 @@ try:
     from termcolor import colored
     from trade_double import double_confirmation
     from trade_fomo import fomo_no_trend
+    from trade_scalping import scalping
     from trade_standard import standard_main_hour
     from binance.exceptions import BinanceAPIException
     from apscheduler.schedulers.blocking import BlockingScheduler
@@ -24,7 +25,7 @@ try:
     def choose_strategy():
         if prompt_TRADE == '1': double_confirmation(6,1)
         elif prompt_TRADE == '2': fomo_no_trend()
-        elif prompt_TRADE == '3': fomo_no_trend()
+        elif prompt_TRADE == '3': scalping()
         elif prompt_TRADE == '4': standard_main_hour(6)
         else: double_confirmation(6,1)
 
