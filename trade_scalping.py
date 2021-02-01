@@ -43,31 +43,26 @@ def get_current_minute():
 
     return minute_candle
 
-def scalping():
+def scalping_no_trend():
+    title = "ACTION           :   "
     position_info = get_position_info()
     minute_candle = get_current_minute()
 
-    if position_info == "LONGING":
-        if (minute_candle == "RED"):
-            print("ACTION           :   💰 CLOSE_LONG 💰")
-            binance_futures.close_position("LONG")
-        else: print(colored("ACTION           :   HOLDING_LONG", "green"))
-
-    elif position_info == "SHORTING":
-        if (minute_candle == "GREEN"):
-            print("ACTION           :   💰 CLOSE_SHORT 💰")
-            binance_futures.close_position("SHORT")
-        else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
-
+    if position_info == "LONGING": print(colored(title + "HOLDING_LONG", "green"))
+    elif position_info == "SHORTING": print(colored(title + "HOLDING_SHORT", "red"))
     else:
         if (minute_candle == "GREEN"):
-            print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
             binance_futures.open_position("LONG")
+            binance_futures.set_stop_loss("LONG")
+            binance_futures.set_take_profit("LONG")
+            print(colored(title + "🚀 GO_LONG 🚀", "green"))
 
         elif (minute_candle == "RED"):
-            print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
             binance_futures.open_position("SHORT")
+            binance_futures.set_stop_loss("SHORT")
+            binance_futures.set_take_profit("SHORT")
+            print(colored(title + "💥 GO_SHORT 💥", "red"))
 
-        else: print("ACTION           :   🐺 WAIT 🐺")
+        else: print(title + "🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")

@@ -3,9 +3,6 @@ import time
 import config
 from binance.client import Client
 
-stoplimit    = 0.4
-callbackRate = 3
-
 # Get environment variables
 api_owner   = os.environ.get('API_OWNER')
 api_key     = os.environ.get('API_KEY')
@@ -70,12 +67,14 @@ def close_position(position):
         client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=config.quantity, timestamp=get_timestamp())
 
 def set_trailing_stop(position):
+    callbackRate = 3
     if position == "LONG":
         client.futures_create_order(symbol=config.pair, side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=config.quantity, timestamp=get_timestamp())
     elif position == "SHORT":
         client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=config.quantity, timestamp=get_timestamp())
 
 def set_take_profit(position):
+    stoplimit = config.stoplimit
     if position == "LONG":
         markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
         stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (config.round_decimal - 1))
@@ -87,8 +86,7 @@ def set_take_profit(position):
         client.futures_create_order(symbol=config.pair, side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
 def set_stop_loss(position):
-    stoplimit = stoplimit
-    stoplimit = (stoplimit / 2)
+    stoplimit = config.stoplimit / 2
     if position == "LONG":
         markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
         stopPrice = round((markPrice - (markPrice * stoplimit / 100)), (config.round_decimal - 1))
