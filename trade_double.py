@@ -5,6 +5,7 @@ from get_hour import get_hour
 from get_minute import recent_minute
 from get_minute import emergency_minute
 from get_position import get_position_info
+from get_clear_direction import get_clear_direction
 
 def double_confirmation(main, support):
     position_info = get_position_info()
