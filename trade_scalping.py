@@ -53,6 +53,7 @@ def scalping_no_trend():
     if position_info == "LONGING": print(colored(title + "HOLDING_LONG", "green"))
     elif position_info == "SHORTING": print(colored(title + "HOLDING_SHORT", "red"))
     else:
+        binance_futures.cancel_all_open_orders()
         if (minute_candle == "GREEN"):
             binance_futures.open_position("LONG")
             binance_futures.set_stop_loss("LONG")
