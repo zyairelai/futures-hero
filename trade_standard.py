@@ -8,10 +8,10 @@ from get_hour import get_hour
 from get_position import get_position_info
 from get_clear_direction import get_clear_direction
 
-def standard_main_hour(hour):
+def standard_main_hour():
     position_info = get_position_info()
-    if clear_direction: direction = get_clear_direction(hour)
-    else: direction = get_hour(hour)
+    if clear_direction: direction = get_clear_direction(4)
+    else: direction = get_hour(6)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
     emergency     = get_minute.emergency_minute()

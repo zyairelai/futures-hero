@@ -8,11 +8,11 @@ from get_hour import get_hour
 from get_position import get_position_info
 from get_clear_direction import get_clear_direction
 
-def double_confirmation(main, support):
+def double_confirmation():
     position_info = get_position_info()
-    if clear_direction: main_hour = get_clear_direction(main)
-    else: main_hour = get_hour(main)
-    support_hour  = get_hour(support)
+    if clear_direction: main_hour = get_clear_direction(4)
+    else: main_hour = get_hour(6)
+    support_hour  = get_hour(1)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
     emergency     = get_minute.emergency_minute()

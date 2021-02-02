@@ -55,7 +55,7 @@ def emergency_minute():
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    threshold = 0.3
+    threshold = config.exit_threshold
     emergency = "INDECISIVE"
     price_movement  = (current_High - current_Low) / current_Open * 100
 

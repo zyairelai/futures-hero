@@ -8,10 +8,11 @@ try:
     import binance_futures
     from datetime import datetime
     from termcolor import colored
-    from trade_double import double_confirmation
     from trade_fomo import fomo_no_trend
-    from trade_scalping import scalping_no_trend
+    from trade_double import double_confirmation
     from trade_standard import standard_main_hour
+    from trade_scalping import scalping_no_trend
+    from trade_scalping import scalping_with_trend
     from binance.exceptions import BinanceAPIException
     from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -22,17 +23,19 @@ try:
 
     print("Available Strategies: ")
     print("1. double_confirmation")
-    print("2. fomo_no_trend")
-    print("3. scalping_no_trend")
-    print("4. standard_main_hour")
-    prompt_TRADE = input("\nChoose Your Strategy: ") or '1'
+    print("2. standard_main_hour")
+    print("3. scalping_with_trend")
+    print("4. scalping_no_trend")
+    print("5. fomo_no_trend")
+    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '1'
 
     def choose_strategy():
-        if prompt_TRADE == '1': double_confirmation(6,1)
-        elif prompt_TRADE == '2': fomo_no_trend()
-        elif prompt_TRADE == '3': scalping_no_trend()
-        elif prompt_TRADE == '4': standard_main_hour(6)
-        else: double_confirmation(6,1)
+        if prompt_TRADE == '1': double_confirmation()
+        elif prompt_TRADE == '2': standard_main_hour()
+        elif prompt_TRADE == '3': scalping_with_trend()
+        elif prompt_TRADE == '4': scalping_no_trend()
+        elif prompt_TRADE == '5': fomo_no_trend()
+        else: double_confirmation()
 
     def trade_action():
         try: choose_strategy()

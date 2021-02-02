@@ -1,6 +1,5 @@
 check_how_many_trades = 30
 output = False
-threshold = 0.1
 
 while True:
     print("\nHere are the supported Pairs: ")
@@ -15,15 +14,17 @@ while True:
         quantity        = 0.001     # Minimum 0.001
         leverage        = 50        # Maximum 125 // Recommended 75-99 // Oracle 50x
         round_decimal   = 2
-        stoplimit       = 0.3
+        exit_threshold  = 0.2       # Used in double_confirm() and standard_main_hour()
+        stoplimit       = 0.2       # Used in scalping()
         break
 
     elif (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
         quantity        = 0.01      # Minimum 0.01
-        leverage        = 40       # Maximum 100 // Recommended 50-75 // Oracle 40x
+        leverage        = 40        # Maximum 100 // Recommended 50-75 // Oracle 40x
         round_decimal   = 2
-        stoplimit       = 0.25
+        exit_threshold  = 0.2       # Used in double_confirm() and standard_main_hour()
+        stoplimit       = 0.2       # Used in scalping()
         break
 
     # elif (input_pair == '3') or (input_pair == 'LTC'):
