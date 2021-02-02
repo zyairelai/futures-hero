@@ -15,7 +15,7 @@ while True:
         quantity        = 0.001     # Minimum 0.001
         leverage        = 50        # Maximum 125 // Recommended 75-99 // Oracle 50x
         round_decimal   = 2
-        stoplimit       = 0.4
+        stoplimit       = 0.3
         break
 
     elif (input_pair == '2') or (input_pair == 'ETH'):
@@ -23,7 +23,7 @@ while True:
         quantity        = 0.01      # Minimum 0.01
         leverage        = 40       # Maximum 100 // Recommended 50-75 // Oracle 40x
         round_decimal   = 2
-        stoplimit       = 0.5
+        stoplimit       = 0.3
         break
 
     # elif (input_pair == '3') or (input_pair == 'LTC'):

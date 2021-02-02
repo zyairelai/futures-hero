@@ -24,7 +24,7 @@ try:
     print("1. double_confirmation")
     print("2. fomo_no_trend")
     print("3. scalping_no_trend")
-    print("4. standard_main_hour(6)")
+    print("4. standard_main_hour")
     prompt_TRADE = input("\nChoose Your Strategy: ") or '1'
 
     def choose_strategy():
