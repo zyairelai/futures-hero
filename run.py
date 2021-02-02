@@ -50,8 +50,12 @@ try:
                 error_message.write("[!] " + config.pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
                 error_message.write(str(e) + "\n\n")
 
-    scheduler = BlockingScheduler()
-    scheduler.add_job(trade_action, 'interval', seconds=10)
-    scheduler.start()
+    # scheduler = BlockingScheduler()
+    # scheduler.add_job(trade_action, 'interval', seconds=8)
+    # scheduler.start()
+
+    while True: 
+        trade_action()
+        time.sleep(5)
 
 except KeyboardInterrupt: print("\n\nAborted.\n")

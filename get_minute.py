@@ -2,8 +2,10 @@ import config
 import binance_futures
 from termcolor import colored
 
-def recent_minute():
-    klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
+def current_minute(minute):
+    if minute == 1: klines = klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+    elif minute == 3: klines = klines = binance_futures.KLINE_INTERVAL_3MINUTE()
+    elif minute == 5: klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -19,21 +21,23 @@ def recent_minute():
 
     if (current_Open == current_High):
         minute_candle = "RED"
-        print(colored("RECENT 5 MINUTE  :   " + minute_candle, "red"))
+        print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "red"))
+        
     elif (current_Open == current_Low):
         minute_candle = "GREEN"
-        print(colored("RECENT 5 MINUTE  :   " + minute_candle, "green"))
+        print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "green"))
 
+    elif (current_Open > current_Close):
+        minute_candle = "RED_INDECISIVE"
+        print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "red"))
+    
+    elif (current_Close > current_Open):
+        minute_candle = "GREEN_INDECISIVE"
+        print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "green"))
+    
     else:
-        if (current_Open > current_Close):
-            minute_candle = "RED_INDECISIVE"
-            print(colored("RECENT 5 MINUTE  :   " + minute_candle, "red"))
-        elif (current_Close > current_Open):
-            minute_candle = "GREEN_INDECISIVE"
-            print(colored("RECENT 5 MINUTE  :   " + minute_candle, "green"))
-        else:
-            minute_candle = "NO_MOVEMENT"
-            print(colored("RECENT 5 MINUTE  :   " + minute_candle, "white"))
+        minute_candle = "NO_MOVEMENT"
+        print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "white"))
     return minute_candle
 
 def emergency_minute():
