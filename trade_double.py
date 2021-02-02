@@ -5,6 +5,7 @@ import binance_futures
 from datetime import datetime
 from termcolor import colored
 from get_hour import get_hour
+from pencil_wick import pencil_wick_test
 from get_position import get_position_info
 from get_clear_direction import get_clear_direction
 
@@ -18,13 +19,13 @@ def double_confirmation():
     emergency     = get_minute.emergency_minute()
 
     if position_info == "LONGING":
-        if (five_minute == "RED") or (five_minute == "RED_INDECISIVE") or (emergency == "RED"):
+        if (five_minute == "RED") or (five_minute == "RED_INDECISIVE") or (emergency == "RED") or (pencil_wick_test("GREEN") == "FAIL"):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if (five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE") or (emergency == "GREEN"):
+        if (five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE") or (emergency == "GREEN") or (pencil_wick_test("RED") == "FAIL"):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
