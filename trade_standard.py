@@ -25,7 +25,7 @@ def with_stoploss():
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else:
-            if binance_futures.get_open_orders == []: binance_futures.set_stop_loss("LONG", 50)
+            if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", 50)
             print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
@@ -34,7 +34,7 @@ def with_stoploss():
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: 
-            if binance_futures.get_open_orders == []: binance_futures.set_stop_loss("SHORT", 50)
+            if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", 50)
             print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
