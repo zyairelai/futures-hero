@@ -12,8 +12,8 @@ client      = Client(api_key, api_secret)
 def get_timestamp():
     return int(time.time() * 1000)
 
-def position_information():
-    return client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())
+def account_trades(trades):
+    return client.futures_account_trades(symbol=config.pair, timestamp=get_timestamp(), limit=(trades*2))
 
 def change_leverage():
     return client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
@@ -22,10 +22,13 @@ def change_margin_to_ISOLATED():
     return client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp())
 
 def cancel_all_open_orders():
-    client.futures_cancel_all_open_orders(symbol=config.pair, timestamp=get_timestamp())
+    return client.futures_cancel_all_open_orders(symbol=config.pair, timestamp=get_timestamp())
 
-def account_trades(trades):
-    return client.futures_account_trades(symbol=config.pair, timestamp=get_timestamp(), limit=(trades*2))
+def get_open_orders():
+    return client.futures_get_open_orders(symbol=config.pair, timestamp=get_timestamp())
+
+def position_information():
+    return client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())
 
 def KLINE_INTERVAL_1MINUTE():
     return client.futures_klines(symbol=config.pair, interval=Client.KLINE_INTERVAL_1MINUTE, limit=4)
@@ -73,8 +76,8 @@ def set_trailing_stop(position):
     elif position == "SHORT":
         client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=config.quantity, timestamp=get_timestamp())
 
-def set_take_profit(position):
-    stoplimit = config.stoplimit
+def set_take_profit(position): # Percentage to achieve so you could close the position
+    stoplimit = 0.2
     if position == "LONG":
         markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
         stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (config.round_decimal - 1))
@@ -85,23 +88,14 @@ def set_take_profit(position):
         stopPrice = round((markPrice - (markPrice * stoplimit / 100)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
-def set_stop_loss(position):
-    stoplimit = config.stoplimit
+def set_stop_loss(position, percentage): # Percentage of the initial amount that you are willing to lose
+    entryPrice = float(position_information()[0].get("entryPrice"))
+    liquidationPrice = float(position_information()[0].get("liquidationPrice"))
+
     if position == "LONG":
-        markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
-        stopPrice = round((markPrice - (markPrice * stoplimit / 100)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * percentage / 100)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
     elif position == "SHORT":
-        markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
-        stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * percentage / 100)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
-
-def place_alcm(position):
-    liquidationPrice = float(position_information()[0].get("liquidationPrice"))
-    client.futures_change_leverage(symbol=config.pair, leverage=1, timestamp=get_timestamp())
-    if position == "LONG":
-        client.futures_create_order(symbol=config.pair, side="BUY", type="LIMIT", price=liquidationPrice+config.alcm, quantity=config.quantity, timestamp=get_timestamp())
-    elif position == "SHORT":
-        client.futures_create_order(symbol=config.pair, side="SELL", type="LIMIT", price=liquidationPrice-config.alcm, quantity=config.quantity, timestamp=get_timestamp())
-    client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())

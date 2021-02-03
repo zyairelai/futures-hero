@@ -12,21 +12,17 @@ while True:
     if (input_pair == '1') or (input_pair == 'BTC'):
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001
-        leverage        = 75        # Maximum 125 // Recommended 75-99 // Oracle 50x
+        leverage        = 50        # Maximum 125 // Recommended 75-99 // Oracle 50x
         round_decimal   = 2
         exit_threshold  = 0.2       # Used in double_confirm() and standard_main_hour()
-        stoplimit       = 0.2       # Used in scalping()
-        alcm            = 20
         break
 
     elif (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
         quantity        = 0.01      # Minimum 0.01
-        leverage        = 60        # Maximum 100 // Recommended 50-75 // Oracle 40x
+        leverage        = 40        # Maximum 100 // Recommended 50-75 // Oracle 40x
         round_decimal   = 2
         exit_threshold  = 0.2       # Used in double_confirm() and standard_main_hour()
-        stoplimit       = 0.2       # Used in scalping()
-        alcm            = 2
         break
 
     # elif (input_pair == '3') or (input_pair == 'LTC'):
