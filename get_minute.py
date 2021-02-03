@@ -22,7 +22,7 @@ def current_minute(minute):
     if (current_Open == current_High):
         minute_candle = "RED"
         print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "red"))
-        
+
     elif (current_Open == current_Low):
         minute_candle = "GREEN"
         print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "green"))
@@ -30,11 +30,11 @@ def current_minute(minute):
     elif (current_Open > current_Close):
         minute_candle = "RED_INDECISIVE"
         print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "red"))
-    
+
     elif (current_Close > current_Open):
         minute_candle = "GREEN_INDECISIVE"
         print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "green"))
-    
+
     else:
         minute_candle = "NO_MOVEMENT"
         print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "white"))

@@ -31,10 +31,10 @@ try:
     else: print(colored("Stoploss Disabled\n", "red"))
 
     def choose_strategy():
-        if prompt_TRADE == '1': 
+        if prompt_TRADE == '1':
             if use_SL == 'Y': trade_double.with_stoploss()
             else: trade_double.without_stoploss()
-        elif prompt_TRADE == '2': 
+        elif prompt_TRADE == '2':
             if use_SL == 'Y': trade_standard.with_stoploss()
             else: trade_standard.without_stoploss()
         elif prompt_TRADE == '3': trade_scalping.with_trend()
@@ -42,8 +42,8 @@ try:
         elif prompt_TRADE == '5': trade_fomo.fomo_no_trend()
         else: trade_standard.without_stoploss()
 
-    while True: 
-        try: 
+    while True:
+        try:
             choose_strategy()
             time.sleep(5)
 

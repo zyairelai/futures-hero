@@ -27,7 +27,7 @@ def get_clear_direction(hour):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    title = "PREVIOUS " + str(hour) + " HOUR  :   " 
+    title = "PREVIOUS " + str(hour) + " HOUR  :   "
     if (previous_Open == previous_Low):
         previous = "GREEN"
         print(colored(title + previous, "green"))
@@ -38,7 +38,7 @@ def get_clear_direction(hour):
         previous = "NO_TRADE_ZONE"
         print(colored(title + previous, "yellow"))
 
-    title = "CURRENT " + str(hour) + " HOUR   :   " 
+    title = "CURRENT " + str(hour) + " HOUR   :   "
     if (current_Open == current_Low):
         current = "GREEN"
         print(colored(title + current, "green"))
