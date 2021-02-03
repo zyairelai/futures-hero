@@ -5,14 +5,13 @@ try:
     import socket
     import urllib3
     import config
+    import trade_double
+    import trade_fomo
+    import trade_scalping
+    import trade_standard
     import binance_futures
     from datetime import datetime
     from termcolor import colored
-    from trade_fomo import fomo_no_trend
-    from trade_double import double_confirmation
-    from trade_standard import standard_main_hour
-    from trade_scalping import scalping_no_trend
-    from trade_scalping import scalping_with_trend
     from binance.exceptions import BinanceAPIException
     from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -23,19 +22,23 @@ try:
 
     print("Available Strategies: ")
     print("1. double_confirmation")
-    print("2. standard_main_hour")
-    print("3. scalping_with_trend")
-    print("4. scalping_no_trend")
-    print("5. fomo_no_trend")
+    print("2. double_confirmation_NO_STOPLOSS")
+    print("3. standard_main_hour")
+    print("4. standard_main_hour_NO_STOPLOSS")
+    print("5. scalping_with_trend")
+    print("6. scalping_no_trend")
+    print("7. fomo_no_trend")
     prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '2'
 
     def choose_strategy():
-        if prompt_TRADE == '1': double_confirmation()
-        elif prompt_TRADE == '2': standard_main_hour()
-        elif prompt_TRADE == '3': scalping_with_trend()
-        elif prompt_TRADE == '4': scalping_no_trend()
-        elif prompt_TRADE == '5': fomo_no_trend()
-        else: double_confirmation()
+        if prompt_TRADE == '1': trade_double.with_stoploss()
+        elif prompt_TRADE == '2': trade_double.without_stoploss()
+        elif prompt_TRADE == '3': trade_standard.with_stoploss()
+        elif prompt_TRADE == '4': trade_standard.without_stoploss()
+        elif prompt_TRADE == '5': trade_scalping.with_trend()
+        elif prompt_TRADE == '6': trade_scalping.without_trend()
+        elif prompt_TRADE == '7': trade_fomo.fomo_no_trend()
+        else: trade_standard.without_stoploss()
 
     def trade_action():
         try: choose_strategy()

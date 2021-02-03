@@ -28,3 +28,9 @@ def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
         print(title + position)
 
     return position
+
+def get_pending_PNL():
+    unRealizedProfit = round(float(binance_futures.position_information()[0].get('unRealizedProfit')), config.round_decimal)
+
+    if unRealizedProfit > 0: return "PROFIT"
+    else: return "LOSS"

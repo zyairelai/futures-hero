@@ -9,7 +9,7 @@ from get_minute import emergency_minute
 from get_position import get_position_info
 from get_clear_direction import get_clear_direction
 
-def scalping_no_trend():
+def without_trend():
     title = "ACTION           :   "
     position_info = get_position_info()
     five_minute   = get_minute.current_minute(5)
@@ -35,7 +35,7 @@ def scalping_no_trend():
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-def scalping_with_trend():
+def with_trend():
     title = "ACTION           :   "
     position_info = get_position_info()
     if clear_direction: direction = get_clear_direction(4)
