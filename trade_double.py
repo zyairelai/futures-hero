@@ -13,7 +13,7 @@ from get_clear_direction import get_clear_direction
 
 def with_stoploss():
     position_info = get_position_info()
-    if clear_direction: main_hour = get_clear_direction(4)
+    if clear_direction: main_hour = get_clear_direction(6)
     else: main_hour = get_hour(6)
     support_hour  = get_hour(1)
     five_minute   = get_minute.current_minute(5)
@@ -58,7 +58,7 @@ def with_stoploss():
 
 def without_stoploss():
     position_info = get_position_info()
-    if clear_direction: main_hour = get_clear_direction(4)
+    if clear_direction: main_hour = get_clear_direction(6)
     else: main_hour = get_hour(6)
     support_hour  = get_hour(1)
     five_minute   = get_minute.current_minute(5)
