@@ -96,3 +96,12 @@ def set_stop_loss(position):
         markPrice = float(client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())[0].get('markPrice'))
         stopPrice = round((markPrice + (markPrice * stoplimit / 100)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
+
+def place_alcm(position):
+    liquidationPrice = float(position_information()[0].get("liquidationPrice"))
+    client.futures_change_leverage(symbol=config.pair, leverage=1, timestamp=get_timestamp())
+    if position == "LONG":
+        client.futures_create_order(symbol=config.pair, side="BUY", type="LIMIT", price=liquidationPrice+config.alcm, quantity=config.quantity, timestamp=get_timestamp())
+    elif position == "SHORT":
+        client.futures_create_order(symbol=config.pair, side="SELL", type="LIMIT", price=liquidationPrice-config.alcm, quantity=config.quantity, timestamp=get_timestamp())
+    client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())

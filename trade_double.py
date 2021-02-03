@@ -1,5 +1,6 @@
 clear_direction = True
 
+import time
 import get_minute
 import binance_futures
 from datetime import datetime
@@ -21,14 +22,14 @@ def with_stoploss():
 
     if position_info == "LONGING":
         pencil_wick = pencil_wick_test("GREEN")
-        if ((five_minute == "RED") or (five_minute == "RED_INDECISIVE") or (emergency == "RED") or (pencil_wick == "FAIL")) and (get_pending_PNL == "PROFIT"):
+        if (five_minute == "RED") or (five_minute == "RED_INDECISIVE") or (emergency == "RED") or (pencil_wick == "FAIL"):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         pencil_wick = pencil_wick_test("RED")
-        if ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE") or (emergency == "GREEN") or (pencil_wick == "FAIL")) and (get_pending_PNL == "PROFIT"):
+        if (five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE") or (emergency == "GREEN") or (pencil_wick == "FAIL"):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -78,12 +79,16 @@ def without_stoploss():
             if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 binance_futures.open_position("LONG")
+                time.sleep(10) # PUT ALCM HERE
+                binance_futures.place_alcm("LONG")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif main_hour == "DOWN_TREND" and support_hour == "DOWN_TREND":
             if (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 binance_futures.open_position("SHORT")
+                time.sleep(10) # PUT ALCM HERE
+                binance_futures.place_alcm("SHORT")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
