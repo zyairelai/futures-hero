@@ -20,16 +20,18 @@ def check():
             break
 
         elif (input_num == '2'):
-            from get_minute import recent_minute
+            import get_minute
             loop = input("Do you want to loop? [Y/n]") or 'n'
             if loop == 'Y':
                 while True:
-                    recent_minute()
+                    get_minute.current_minute(1)
+                    get_minute.current_minute(5)
                     print()
                     time.sleep(3)
             else:
                 start = time.time()
-                print("\nThe <get_minute.py> return value is : " + recent_minute())
+                get_minute.current_minute(1)
+                get_minute.current_minute(5)
                 print(f"Time Taken: {time.time() - start} seconds\n")
             break
 

@@ -33,17 +33,20 @@ def standard_main_hour():
 
     else:
         if direction == "UP_TREND":
-            pencil_wick = pencil_wick_test("GREEN")
-            if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (pencil_wick == "PASS"):
-                print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-                binance_futures.open_position("LONG")
+            if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
+                if pencil_wick_test("GREEN") == "PASS":
+                    print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
+                    binance_futures.open_position("LONG")
+                else: print("ACTION           :   🐺 WAIT 🐺")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif direction == "DOWN_TREND":
             pencil_wick = pencil_wick_test("RED")
-            if (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (pencil_wick == "PASS"):
-                print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-                binance_futures.open_position("SHORT")
+            if (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")):
+                if pencil_wick_test("RED") == "PASS":
+                    print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
+                    binance_futures.open_position("SHORT")
+                else: print("ACTION           :   🐺 WAIT 🐺")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
