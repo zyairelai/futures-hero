@@ -2,7 +2,6 @@ import config
 import binance_futures
 from datetime import datetime
 from termcolor import colored
-from get_position import get_position_info
 
 def get_hour(hour):
     title = str(hour) + " HOUR DIRECTION :   "
