@@ -21,22 +21,25 @@ try:
 
     print("Available Strategies: ")
     print("1. double_confirmation")
-    print("2. double_confirmation_NO_STOPLOSS")
-    print("3. standard_main_hour")
-    print("4. standard_main_hour_NO_STOPLOSS")
-    print("5. scalping_with_trend")
-    print("6. scalping_no_trend")
-    print("7. fomo_no_trend")
+    print("2. standard_main_hour")
+    print("3. scalping_with_trend")
+    print("4. scalping_no_trend")
+    print("5. fomo_no_trend")
     prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '4'
+    if prompt_TRADE == '1' or prompt_TRADE == '2': use_SL = input("Use Stoploss? [Y/n] ") or 'n'
+    if use_SL == 'Y': print(colored("Stoploss Enabled\n", "green"))
+    else: print(colored("Stoploss Disabled\n", "red"))
 
     def choose_strategy():
-        if prompt_TRADE == '1': trade_double.with_stoploss()
-        elif prompt_TRADE == '2': trade_double.without_stoploss()
-        elif prompt_TRADE == '3': trade_standard.with_stoploss()
-        elif prompt_TRADE == '4': trade_standard.without_stoploss()
-        elif prompt_TRADE == '5': trade_scalping.with_trend()
-        elif prompt_TRADE == '6': trade_scalping.without_trend()
-        elif prompt_TRADE == '7': trade_fomo.fomo_no_trend()
+        if prompt_TRADE == '1': 
+            if use_SL == 'Y': trade_double.with_stoploss()
+            else: trade_double.without_stoploss()
+        elif prompt_TRADE == '2': 
+            if use_SL == 'Y': trade_standard.with_stoploss()
+            else: trade_standard.without_stoploss()
+        elif prompt_TRADE == '3': trade_scalping.with_trend()
+        elif prompt_TRADE == '4': trade_scalping.without_trend()
+        elif prompt_TRADE == '5': trade_fomo.fomo_no_trend()
         else: trade_standard.without_stoploss()
 
     while True: 
