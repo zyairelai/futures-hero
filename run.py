@@ -25,10 +25,11 @@ try:
     print("3. scalping_with_trend")
     print("4. scalping_no_trend")
     print("5. fomo_no_trend")
-    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '4'
-    if prompt_TRADE == '1' or prompt_TRADE == '2': use_SL = input("Use Stoploss? [Y/n] ") or 'n'
-    if use_SL == 'Y': print(colored("Stoploss Enabled\n", "green"))
-    else: print(colored("Stoploss Disabled\n", "red"))
+    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '2'
+    if prompt_TRADE == '1' or prompt_TRADE == '2': 
+        use_SL = input("Use Stoploss? [Y/n] ") or 'n'
+        if use_SL == 'Y': print(colored("Stoploss Enabled\n", "green"))
+        else: print(colored("Stoploss Disabled\n", "red"))
 
     def choose_strategy():
         if prompt_TRADE == '1':
@@ -45,7 +46,7 @@ try:
     while True:
         try:
             choose_strategy()
-            time.sleep(5)
+            time.sleep(3)
 
         except (BinanceAPIException,
                 ConnectionResetError,
