@@ -38,6 +38,7 @@ def with_stoploss():
             print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
+        binance_futures.cancel_all_open_orders()
         if direction == "UP_TREND":
             if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
                 if pencil_wick_test("GREEN") == "PASS":
@@ -82,6 +83,7 @@ def without_stoploss():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
+        binance_futures.cancel_all_open_orders()
         if direction == "UP_TREND":
             if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
                 if pencil_wick_test("GREEN") == "PASS":
