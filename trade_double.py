@@ -11,7 +11,7 @@ from get_clear_direction import get_clear_direction
 
 def double_confirmation():
     position_info = get_position_info()
-    if clear_direction: main_hour = get_clear_direction(4)
+    if clear_direction: main_hour = get_clear_direction(6)
     else: main_hour = get_hour(6)
     support_hour  = get_hour(1)
     five_minute   = get_minute.current_minute(5)
@@ -19,26 +19,30 @@ def double_confirmation():
     emergency     = get_minute.emergency_minute()
 
     if position_info == "LONGING":
-        if (five_minute == "RED") or (five_minute == "RED_INDECISIVE") or (emergency == "RED") or (pencil_wick_test("GREEN") == "FAIL"):
+        pencil_wick   = pencil_wick_test("GREEN")
+        if (five_minute == "RED") or (five_minute == "RED_INDECISIVE") or (emergency == "RED") or (pencil_wick == "FAIL"):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if (five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE") or (emergency == "GREEN") or (pencil_wick_test("RED") == "FAIL"):
+        pencil_wick   = pencil_wick_test("RED")
+        if (five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE") or (emergency == "GREEN") or (pencil_wick == "FAIL"):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
         if main_hour == "UP_TREND" and support_hour == "UP_TREND":
-            if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
+            pencil_wick = pencil_wick_test("GREEN")
+            if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (pencil_wick == "PASS"):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 binance_futures.open_position("LONG")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif main_hour == "DOWN_TREND" and support_hour == "DOWN_TREND":
-            if (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")):
+            pencil_wick = pencil_wick_test("RED")
+            if (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (pencil_wick == "PASS"):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 binance_futures.open_position("SHORT")
             else: print("ACTION           :   🐺 WAIT 🐺")

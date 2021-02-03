@@ -3,7 +3,6 @@ import binance_futures
 from termcolor import colored
 
 def pencil_wick_test(CANDLE):
-    title  = "PENCIL WICK TEST :   "
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
@@ -20,24 +19,28 @@ def pencil_wick_test(CANDLE):
     current_Close   = round(((float(klines[3][1]) + float(klines[3][2]) + float(klines[3][3]) + float(klines[3][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
-    
+
+    print(previous_High)
+    print(current_High)
+
     threshold = 0.08
 
     if CANDLE == "GREEN":
         if current_High < previous_High:
-            if ((current_High - previous_High) / current_High * 100) < threshold:
-                result = "PASS"
+            if (((current_High - previous_High) / current_High) * 100) < threshold: result = "PASS"
             else: result = "FAIL"
         else: result = "PASS"
 
     elif CANDLE == "RED":
         if current_Low > previous_Low:
-            if ((previous_Low - current_Low) / previous_Low * 100) < threshold:
-                result = "PASS"
+            if (((previous_Low - current_Low) / previous_Low )* 100) < threshold: result = "PASS"
             else: result = "FAIL"
         else: result = "PASS"
 
+    title  = "PENCIL WICK TEST :   "
     if result == "PASS": print(colored(title + result, "green"))
     else: print(colored(title + result, "red"))
 
     return result
+
+pencil_wick_test("GREEN")

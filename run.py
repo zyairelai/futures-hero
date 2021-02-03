@@ -27,7 +27,7 @@ try:
     print("3. scalping_with_trend")
     print("4. scalping_no_trend")
     print("5. fomo_no_trend")
-    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '1'
+    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '2'
 
     def choose_strategy():
         if prompt_TRADE == '1': double_confirmation()
