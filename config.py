@@ -1,6 +1,6 @@
 check_how_many_trades = 30
 output = False
-live_trade = False
+live_trade = True
 
 main_hour       = 6      # Use either 6 hour or 4 hour as main trend
 clear_direction = True   # True to minimize lose, False to maximize profit
@@ -26,7 +26,7 @@ while True:
     elif (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
         quantity        = 0.01      # Minimum 0.01
-        leverage        = 40        # Maximum 100 // Recommended 50-75 // Oracle 40x
+        leverage        = 50        # Maximum 100 // Recommended 50-75 // Oracle 40x
         round_decimal   = 2
         exit_threshold  = 0.1      # Used in double_confirm() and standard_main_hour()
         break
