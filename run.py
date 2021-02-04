@@ -34,20 +34,20 @@ try:
 
     def choose_strategy():
         if prompt_TRADE == '1':
-            if use_SL == 'Y': trade_double.stoploss()
-            else: trade_double.no_stoploss()
+            if use_SL == 'Y': trade_double.with_stoploss()
+            else: trade_double.without_stoploss()
 
         elif prompt_TRADE == '2':
-            if use_SL == 'Y': trade_standard.stoploss()
-            else: trade_standard.no_stoploss()
+            if use_SL == 'Y': trade_standard.with_stoploss()
+            else: trade_standard.without_stoploss()
 
         elif prompt_TRADE == '3':
-            if use_SL == 'Y': trade_fomo.stoploss()
-            else: trade_fomo.no_stoploss()
+            if use_SL == 'Y': trade_fomo.with_stoploss()
+            else: trade_fomo.without_stoploss()
 
-        elif prompt_TRADE == '4': trade_scalping.trend()
-        elif prompt_TRADE == '5': trade_scalping.no_trend()
-        else: trade_standard.stoploss()
+        elif prompt_TRADE == '4': trade_scalping.with_trend()
+        elif prompt_TRADE == '5': trade_scalping.without_trend()
+        else: trade_standard.with_stoploss()
 
     while True:
         try:

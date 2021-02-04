@@ -11,7 +11,7 @@ import binance_futures
 from datetime import datetime
 from termcolor import colored
 
-def stoploss():
+def with_stoploss():
     position_info = get_position.get_position_info()
     if config.clear_direction: main_hour = get_clear_direction.clear_direction(config.main_hour)
     else: main_hour = get_hour.get_hour(config.main_hour)
@@ -52,7 +52,7 @@ def stoploss():
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-def no_stoploss():
+def without_stoploss():
     position_info = get_position.get_position_info()
     if config.clear_direction: main_hour = get_clear_direction.clear_direction(config.main_hour)
     else: main_hour = get_hour.get_hour(config.main_hour)

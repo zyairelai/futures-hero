@@ -1,4 +1,4 @@
-live_trade = False
+live_trade = True
 main_hour = 6            # Use either 6 hour or 4 hour as main trend
 clear_direction = True   # True to minimize lose, False to maximize profit
 

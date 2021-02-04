@@ -12,7 +12,7 @@ import binance_futures
 from datetime import datetime
 from termcolor import colored
 
-def no_trend():
+def without_trend():
     title = "ACTION           :   "
     position_info = get_position.get_position_info()
     five_minute   = get_minute.current_minute(5)
@@ -44,7 +44,7 @@ def no_trend():
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-def trend():
+def with_trend():
     title = "ACTION           :   "
     position_info = get_position.get_position_info()
     if config.clear_direction: direction = get_clear_direction.clear_direction(config.main_hour)

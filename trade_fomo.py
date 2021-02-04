@@ -9,7 +9,7 @@ import binance_futures
 from datetime import datetime
 from termcolor import colored
 
-def stoploss():
+def with_stoploss():
     position_info = get_position.get_position_info()
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
@@ -44,7 +44,7 @@ def stoploss():
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-def no_stoploss():
+def without_stoploss():
     position_info = get_position.get_position_info()
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
