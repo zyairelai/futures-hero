@@ -2,6 +2,7 @@ stoploss   = 8  # Percentage that you are willing to lose
 takeprofit = 20  # Percentage to close position when the profit hits
 
 import config
+import entry_exit
 import get_hour
 import get_minute
 import get_position
@@ -31,11 +32,11 @@ def no_trend():
 
     else:
         binance_futures.cancel_all_open_orders()
-        if entry_exit_condition.ENTER_LONG(one_minute, five_minute):
+        if entry_exit.GO_LONG(one_minute, five_minute):
             if config.live_trade: binance_futures.open_position("LONG")
             print(colored(title + "🚀 GO_LONG 🚀", "green"))
 
-        elif entry_exit_condition.ENTER_SHORT(one_minute, five_minute):
+        elif entry_exit.GO_SHORT(one_minute, five_minute):
             if config.live_trade: binance_futures.open_position("SHORT")
             print(colored(title + "💥 GO_SHORT 💥", "red"))
 
@@ -66,13 +67,13 @@ def trend():
     else:
         binance_futures.cancel_all_open_orders()
         if direction == "UP_TREND":
-            if entry_exit_condition.ENTER_LONG(one_minute, five_minute):
+            if entry_exit.GO_LONG(one_minute, five_minute):
                 if config.live_trade: binance_futures.open_position("LONG")
                 print(colored(title + "🚀 GO_LONG 🚀", "green"))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         if direction == "DOWN_TREND":
-            if entry_exit_condition.ENTER_SHORT(one_minute, five_minute):
+            if entry_exit.GO_SHORT(one_minute, five_minute):
                 if config.live_trade: binance_futures.open_position("SHORT")
                 print(colored(title + "💥 GO_SHORT 💥", "red"))
             else: print("ACTION           :   🐺 WAIT 🐺")

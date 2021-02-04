@@ -9,7 +9,6 @@ try:
     import trade_fomo
     import trade_scalping
     import trade_standard
-    import trade_strifing
     import binance_futures
     from datetime import datetime
     from termcolor import colored
@@ -52,8 +51,7 @@ try:
 
     while True:
         try:
-            # choose_strategy()
-            trade_strifing.strifing()
+            choose_strategy()
             time.sleep(5)
 
         except (BinanceAPIException,

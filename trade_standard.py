@@ -1,6 +1,7 @@
 stoploss  = 40  # Percentage that you are willing to lose
 
 import config
+import entry_exit
 import get_hour
 import get_minute
 import get_position
@@ -20,14 +21,14 @@ def stoploss():
 
     if position_info == "LONGING":
         if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", stoploss)
-        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit_condition.EXIT_LONG(five_minute, emergency):
+        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(five_minute, emergency):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", stoploss)
-        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit_condition.EXIT_SHORT(five_minute, emergency):
+        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(five_minute, emergency):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -35,13 +36,13 @@ def stoploss():
     else:
         binance_futures.cancel_all_open_orders()
         if direction == "UP_TREND":
-            if entry_exit_condition.ENTER_LONG(one_minute, five_minute):
+            if entry_exit.GO_LONG(one_minute, five_minute):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif direction == "DOWN_TREND":
-            if entry_exit_condition.ENTER_SHORT(one_minute, five_minute):
+            if entry_exit.GO_SHORT(one_minute, five_minute):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT")
             else: print("ACTION           :   🐺 WAIT 🐺")
@@ -59,13 +60,13 @@ def no_stoploss():
     emergency     = get_minute.emergency_minute()
 
     if position_info == "LONGING":
-        if entry_exit_condition.EXIT_LONG(five_minute, emergency):
+        if entry_exit.CLOSE_LONG(five_minute, emergency):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if entry_exit_condition.EXIT_SHORT(five_minute, emergency):
+        if entry_exit.CLOSE_SHORT(five_minute, emergency):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -73,13 +74,13 @@ def no_stoploss():
     else:
         binance_futures.cancel_all_open_orders()
         if direction == "UP_TREND":
-            if entry_exit_condition.ENTER_LONG(one_minute, five_minute):
+            if entry_exit.GO_LONG(one_minute, five_minute):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG")
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif direction == "DOWN_TREND":
-            if entry_exit_condition.ENTER_SHORT(one_minute, five_minute):
+            if entry_exit.GO_SHORT(one_minute, five_minute):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT")
             else: print("ACTION           :   🐺 WAIT 🐺")
