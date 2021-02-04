@@ -1,9 +1,8 @@
-check_how_many_trades = 30
-output = False
-live_trade = True
-
-main_hour       = 6      # Use either 6 hour or 4 hour as main trend
+live_trade = False
+main_hour = 6            # Use either 6 hour or 4 hour as main trend
 clear_direction = True   # True to minimize lose, False to maximize profit
+
+output = False           # Always False, True For Troubleshooting
 
 while True:
     print("\nHere are the supported Pairs: ")

@@ -9,6 +9,7 @@ try:
     import trade_fomo
     import trade_scalping
     import trade_standard
+    import trade_strifing
     import binance_futures
     from datetime import datetime
     from termcolor import colored
@@ -19,33 +20,40 @@ try:
         binance_futures.change_leverage()
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    print("Available Strategies: ")
+    print("Available Strategies (Lowest Risk to High Risk) : ")
     print("1. double_confirmation")
     print("2. standard_main_hour")
-    print("3. scalping_with_trend")
-    print("4. scalping_no_trend")
-    print("5. fomo_no_trend")
+    print("3. strifing aka FOMO")
+    print("4. scalping_with_trend")
+    print("5. scalping_no_trend")
     prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '2'
-    if prompt_TRADE == '1' or prompt_TRADE == '2': 
+
+    if prompt_TRADE == '1' or prompt_TRADE == '2' or prompt_TRADE == '3': 
         use_SL = input("Use Stoploss? [Y/n] ") or 'n'
         if use_SL == 'Y': print(colored("Stoploss Enabled\n", "green"))
         else: print(colored("Stoploss Disabled\n", "red"))
 
     def choose_strategy():
         if prompt_TRADE == '1':
-            if use_SL == 'Y': trade_double.with_stoploss()
-            else: trade_double.without_stoploss()
+            if use_SL == 'Y': trade_double.stoploss()
+            else: trade_double.no_stoploss()
+
         elif prompt_TRADE == '2':
-            if use_SL == 'Y': trade_standard.with_stoploss()
-            else: trade_standard.without_stoploss()
-        elif prompt_TRADE == '3': trade_scalping.with_trend()
-        elif prompt_TRADE == '4': trade_scalping.without_trend()
-        elif prompt_TRADE == '5': trade_fomo.fomo_no_trend()
-        else: trade_standard.without_stoploss()
+            if use_SL == 'Y': trade_standard.stoploss()
+            else: trade_standard.no_stoploss()
+
+        elif prompt_TRADE == '3':
+            if use_SL == 'Y': trade_fomo.stoploss()
+            else: trade_fomo.no_stoploss()
+
+        elif prompt_TRADE == '4': trade_scalping.trend()
+        elif prompt_TRADE == '5': trade_scalping.no_trend()
+        else: trade_standard.stoploss()
 
     while True:
         try:
-            choose_strategy()
+            # choose_strategy()
+            trade_strifing.strifing()
             time.sleep(5)
 
         except (BinanceAPIException,

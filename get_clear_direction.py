@@ -3,7 +3,7 @@ import binance_futures
 from datetime import datetime
 from termcolor import colored
 
-def get_clear_direction(hour):
+def clear_direction(hour):
     if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
     elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
     elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
