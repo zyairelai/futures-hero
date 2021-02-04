@@ -1,7 +1,4 @@
-clear_direction = False
-stoploss = 10 # Percentage that you are willing to lose
-takeprofit = 10 # Close position when the pencentage hits
-
+import config
 import get_minute
 import binance_futures
 from datetime import datetime
@@ -19,14 +16,14 @@ def without_trend():
 
     if position_info == "LONGING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("LONG", stoploss)
-            binance_futures.set_take_profit("LONG", takeprofit)
+            binance_futures.set_stop_loss("LONG")
+            binance_futures.set_take_profit("LONG")
         print(colored(title + "HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("SHORT", stoploss)
-            binance_futures.set_take_profit("SHORT", takeprofit)
+            binance_futures.set_stop_loss("SHORT")
+            binance_futures.set_take_profit("SHORT")
         print(colored(title + "HOLDING_SHORT", "red"))
 
     else:
@@ -46,21 +43,21 @@ def without_trend():
 def with_trend():
     title = "ACTION           :   "
     position_info = get_position_info()
-    if clear_direction: direction = get_clear_direction(6)
-    else: direction = get_hour(6)
+    if config.clear_direction: direction = get_clear_direction(config.main_hour)
+    else: direction = get_hour(config.main_hour)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
 
     if position_info == "LONGING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("LONG", stoploss)
-            binance_futures.set_take_profit("LONG", takeprofit)
+            binance_futures.set_stop_loss("LONG")
+            binance_futures.set_take_profit("LONG")
         print(colored(title + "HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("SHORT", stoploss)
-            binance_futures.set_take_profit("SHORT", takeprofit)
+            binance_futures.set_stop_loss("SHORT")
+            binance_futures.set_take_profit("SHORT")
         print(colored(title + "HOLDING_SHORT", "red"))
 
     else:

@@ -46,7 +46,7 @@ try:
     while True:
         try:
             choose_strategy()
-            time.sleep(3)
+            time.sleep(5)
 
         except (BinanceAPIException,
                 ConnectionResetError,

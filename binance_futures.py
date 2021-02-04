@@ -76,28 +76,26 @@ def set_trailing_stop(position):
     elif position == "SHORT":
         client.futures_create_order(symbol=config.pair, side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=config.quantity, timestamp=get_timestamp())
 
-def set_take_profit(position, percentage): # Percentage to achieve so you could close the position
+def set_take_profit(position): # Percentage to achieve so you could close the position
     entryPrice = float(position_information()[0].get("entryPrice"))
-    liquidationPrice = float(position_information()[0].get("liquidationPrice"))
 
     if position == "LONG":
-        stopPrice = round((entryPrice + (abs(liquidationPrice - entryPrice) * percentage / 100)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice + (entryPrice * config.takeprofit / 10000)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="SELL", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
     # Need to recheck the shorting price when in bearish market
     elif position == "SHORT":
-        stopPrice = round((entryPrice - (abs(entryPrice - liquidationPrice) * percentage / 100)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice - (entryPrice * config.takeprofit / 10000)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
-def set_stop_loss(position, percentage): # Percentage of the initial amount that you are willing to lose
+def set_stop_loss(position): # Percentage of the initial amount that you are willing to lose
     entryPrice = float(position_information()[0].get("entryPrice"))
-    liquidationPrice = float(position_information()[0].get("liquidationPrice"))
 
     if position == "LONG":
-        stopPrice = round((entryPrice - (abs(entryPrice - liquidationPrice) * percentage / 100)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice - (entryPrice * config.stoploss / 10000)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
     # Need to recheck the shorting price when in bearish market
     elif position == "SHORT":
-        stopPrice = round((entryPrice + (abs(liquidationPrice - entryPrice) * percentage / 100)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice + (entryPrice * config.stoploss / 10000)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())

@@ -1,7 +1,4 @@
-clear_direction = True
-stoploss = 20 # Percentage that you are willing to lose
-
-import time
+import config
 import get_minute
 import binance_futures
 from datetime import datetime
@@ -14,15 +11,15 @@ from get_clear_direction import get_clear_direction
 
 def with_stoploss():
     position_info = get_position_info()
-    if clear_direction: main_hour = get_clear_direction(6)
-    else: main_hour = get_hour(6)
+    if config.clear_direction: main_hour = get_clear_direction(config.main_hour)
+    else: main_hour = get_hour(config.main_hour)
     support_hour  = get_hour(1)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
     emergency     = get_minute.emergency_minute()
 
     if position_info == "LONGING":
-        if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", stoploss)
+        if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG")
         pencil_wick = pencil_wick_test("GREEN")
         if ((five_minute == "RED") or (five_minute == "RED_INDECISIVE") or (emergency == "RED") or (pencil_wick == "FAIL")) and (get_unRealizedProfit == "PROFIT"):
             print("ACTION           :   💰 CLOSE_LONG 💰")
@@ -30,7 +27,7 @@ def with_stoploss():
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", stoploss)
+        if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT")
         pencil_wick = pencil_wick_test("RED")
         if ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE") or (emergency == "GREEN") or (pencil_wick == "FAIL")) and (get_unRealizedProfit == "PROFIT"):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
@@ -57,8 +54,8 @@ def with_stoploss():
 
 def without_stoploss():
     position_info = get_position_info()
-    if clear_direction: main_hour = get_clear_direction(6)
-    else: main_hour = get_hour(6)
+    if config.clear_direction: main_hour = get_clear_direction(config.main_hour)
+    else: main_hour = get_hour(config.main_hour)
     support_hour  = get_hour(1)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
