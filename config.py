@@ -4,8 +4,6 @@ live_trade = True
 
 main_hour       = 6      # Use either 6 hour or 4 hour as main trend
 clear_direction = True   # True to minimize lose, False to maximize profit
-stoploss        = 20     # Percentage that you are willing to lose
-takeprofit      = 20     # Percentage to close position when the profit hits
 
 while True:
     print("\nHere are the supported Pairs: ")

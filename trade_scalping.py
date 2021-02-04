@@ -1,3 +1,6 @@
+stoploss   = 10  # Percentage that you are willing to lose
+takeprofit = 20  # Percentage to close position when the profit hits
+
 import config
 import get_minute
 import binance_futures
@@ -16,14 +19,14 @@ def without_trend():
 
     if position_info == "LONGING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("LONG")
-            binance_futures.set_take_profit("LONG")
+            binance_futures.set_stop_loss("LONG", stoploss)
+            binance_futures.set_take_profit("LONG", takeprofit)
         print(colored(title + "HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("SHORT")
-            binance_futures.set_take_profit("SHORT")
+            binance_futures.set_stop_loss("SHORT", stoploss)
+            binance_futures.set_take_profit("SHORT", takeprofit)
         print(colored(title + "HOLDING_SHORT", "red"))
 
     else:
@@ -50,14 +53,14 @@ def with_trend():
 
     if position_info == "LONGING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("LONG")
-            binance_futures.set_take_profit("LONG")
+            binance_futures.set_stop_loss("LONG", stoploss)
+            binance_futures.set_take_profit("LONG", takeprofit)
         print(colored(title + "HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if binance_futures.get_open_orders() == []:
-            binance_futures.set_stop_loss("SHORT")
-            binance_futures.set_take_profit("SHORT")
+            binance_futures.set_stop_loss("SHORT", stoploss)
+            binance_futures.set_take_profit("SHORT", takeprofit)
         print(colored(title + "HOLDING_SHORT", "red"))
 
     else:
