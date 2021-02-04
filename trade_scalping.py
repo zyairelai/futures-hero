@@ -29,11 +29,11 @@ def without_trend():
     else:
         binance_futures.cancel_all_open_orders()
         if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
-            binance_futures.open_position("LONG")
+            if config.live_trade: binance_futures.open_position("LONG")
             print(colored(title + "🚀 GO_LONG 🚀", "green"))
 
         elif (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")):
-            binance_futures.open_position("SHORT")
+            if config.live_trade: binance_futures.open_position("SHORT")
             print(colored(title + "💥 GO_SHORT 💥", "red"))
 
         else: print(title + "🐺 WAIT 🐺")
@@ -64,13 +64,13 @@ def with_trend():
         binance_futures.cancel_all_open_orders()
         if direction == "UP_TREND":
             if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
-                binance_futures.open_position("LONG")
+                if config.live_trade: binance_futures.open_position("LONG")
                 print(colored(title + "🚀 GO_LONG 🚀", "green"))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         if direction == "DOWN_TREND":
             if (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")):
-                binance_futures.open_position("SHORT")
+                if config.live_trade: binance_futures.open_position("SHORT")
                 print(colored(title + "💥 GO_SHORT 💥", "red"))
             else: print("ACTION           :   🐺 WAIT 🐺")
 

@@ -27,10 +27,10 @@ def fomo_no_trend():
     else:
         if (one_minute == "GREEN") and ((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")):
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-            binance_futures.open_position("LONG")
+            if config.live_trade: binance_futures.open_position("LONG")
         elif (one_minute == "RED") and ((five_minute == "RED") or (five_minute == "RED_INDECISIVE")):
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-            binance_futures.open_position("SHORT")
+            if config.live_trade: binance_futures.open_position("SHORT")
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
