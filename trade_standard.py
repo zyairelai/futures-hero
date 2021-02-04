@@ -60,12 +60,14 @@ def without_stoploss():
     emergency     = get_minute.emergency_minute()
 
     if position_info == "LONGING":
+        # if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", stoploss)
         if entry_exit.CLOSE_LONG(five_minute, emergency):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
+        # if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", stoploss)
         if entry_exit.CLOSE_SHORT(five_minute, emergency):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
