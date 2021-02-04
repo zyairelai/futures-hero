@@ -1,4 +1,4 @@
-stoploss   = 10  # Percentage that you are willing to lose
+stoploss   = 8  # Percentage that you are willing to lose
 takeprofit = 20  # Percentage to close position when the profit hits
 
 import config

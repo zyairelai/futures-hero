@@ -1,4 +1,4 @@
-stoploss  = 10  # Percentage that you are willing to lose
+stoploss  = 40  # Percentage that you are willing to lose
 
 import config
 import get_minute

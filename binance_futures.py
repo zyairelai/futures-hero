@@ -85,7 +85,7 @@ def set_take_profit(position, percentage): # Percentage to achieve so you could 
 
     # Need to recheck the shorting price when in bearish market
     elif position == "SHORT":
-        stopPrice = round((entryPrice - (entryPrice * config.takeprofit / 10000)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice - (entryPrice * percentage / 10000)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
 
 def set_stop_loss(position, percentage): # Percentage of the initial amount that you are willing to lose
@@ -97,5 +97,5 @@ def set_stop_loss(position, percentage): # Percentage of the initial amount that
 
     # Need to recheck the shorting price when in bearish market
     elif position == "SHORT":
-        stopPrice = round((entryPrice + (entryPrice * config.stoploss / 10000)), (config.round_decimal - 1))
+        stopPrice = round((entryPrice + (entryPrice * percentage / 10000)), (config.round_decimal - 1))
         client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=config.quantity, timeInForce="GTC", timestamp=get_timestamp())
