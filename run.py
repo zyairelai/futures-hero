@@ -5,8 +5,10 @@ try:
     import socket
     import urllib3
     import config
+    import trade_alcm
     import trade_double
     import trade_fomo
+    import trade_strife
     import trade_scalping
     import trade_standard
     import binance_futures
@@ -16,16 +18,19 @@ try:
 
     if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
     if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
-        binance_futures.change_leverage()
+        binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    print("Available Strategies (Lowest Risk to High Risk) : ")
+    print("Available Strategies (Lowest Risk to Highest Risk) : ")
     print("1. double_confirmation")
     print("2. standard_main_hour")
     print("3. strifing aka FOMO")
     print("4. scalping_with_trend")
     print("5. scalping_no_trend")
-    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '2'
+    print("6. alcm_dead_or_alive")
+    print("7. strife_with_direction 🔥")
+    
+    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '7'
 
     if prompt_TRADE == '1' or prompt_TRADE == '2' or prompt_TRADE == '3': 
         use_SL = input("Use Stoploss? [Y/n] ") or 'n'
@@ -47,6 +52,9 @@ try:
 
         elif prompt_TRADE == '4': trade_scalping.with_trend()
         elif prompt_TRADE == '5': trade_scalping.without_trend()
+        elif prompt_TRADE == '6': trade_alcm.dead_or_alive()
+        elif prompt_TRADE == '7': trade_strife.strife_with_direction()
+
         else: trade_standard.with_stoploss()
 
     while True:

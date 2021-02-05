@@ -15,8 +15,8 @@ def get_timestamp():
 def account_trades(trades):
     return client.futures_account_trades(symbol=config.pair, timestamp=get_timestamp(), limit=(trades*2))
 
-def change_leverage():
-    return client.futures_change_leverage(symbol=config.pair, leverage=config.leverage, timestamp=get_timestamp())
+def change_leverage(leverage):
+    return client.futures_change_leverage(symbol=config.pair, leverage=leverage, timestamp=get_timestamp())
 
 def change_margin_to_ISOLATED():
     return client.futures_change_margin_type(symbol=config.pair, marginType="ISOLATED", timestamp=get_timestamp())
