@@ -10,9 +10,9 @@ from termcolor import colored
 from pencil_wick import pencil_wick_test
 
 def dead_or_alive():
-    if int(binance_futures.position_information()[0].get("leverage")) != int(config.leverage/2):
-        binance_futures.change_leverage(int(config.leverage/2))
-        print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
+    # if int(binance_futures.position_information()[0].get("leverage")) != int(config.leverage/2):
+    #     binance_futures.change_leverage(int(config.leverage/2))
+    #     print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     position_info = get_position.get_position_info()
     if config.clear_direction: direction = get_clear_direction.clear_direction(config.main_hour)

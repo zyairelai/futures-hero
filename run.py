@@ -27,10 +27,10 @@ try:
     print("3. strifing aka FOMO")
     print("4. scalping_with_trend")
     print("5. scalping_no_trend")
-    print("6. alcm_dead_or_alive")
-    print("7. strife_with_direction 🔥")
+    print("6. alcm_dead_or_alive 🔥")
+    print("7. strife_with_direction")
     
-    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '7'
+    prompt_TRADE = input("\nCHOOSE STRATEGY  :   ") or '6'
 
     if prompt_TRADE == '1' or prompt_TRADE == '2' or prompt_TRADE == '3': 
         use_SL = input("Use Stoploss? [Y/n] ") or 'n'
