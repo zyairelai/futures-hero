@@ -3,13 +3,8 @@ import binance_futures
 from datetime import datetime
 from termcolor import colored
 
-def clear_direction(hour):
-    if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    else:
-        hour = 6
-        klines = binance_futures.KLINE_INTERVAL_6HOUR()
+def clear_direction():
+    klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -26,7 +21,12 @@ def clear_direction(hour):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    title = "PREVIOUS " + str(hour) + " HOUR  :   "
+    print("The current_Open is  :   " + str(current_Open))
+    print("The current_Close is :   " + str(current_Close))
+    print("The current_High is  :   " + str(current_High))
+    print("The current_Low is   :   " + str(current_Low))
+
+    title = "PREVIOUS 6 HOUR  :   "
     if (previous_Open == previous_Low):
         previous = "GREEN"
         print(colored(title + previous, "green"))
@@ -37,7 +37,7 @@ def clear_direction(hour):
         previous = "NO_TRADE_ZONE"
         print(colored(title + previous, "yellow"))
 
-    title = "CURRENT " + str(hour) + " HOUR   :   "
+    title = "CURRENT 6 HOUR   :   "
     if (current_Open == current_Low):
         current = "GREEN"
         print(colored(title + current, "green"))

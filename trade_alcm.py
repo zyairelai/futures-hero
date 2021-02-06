@@ -15,8 +15,8 @@ def dead_or_alive():
     #     print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     position_info = get_position.get_position_info()
-    if config.clear_direction: direction = get_clear_direction.clear_direction(config.main_hour)
-    else: direction = get_hour.get_hour(config.main_hour)
+    if config.clear_direction: direction = get_clear_direction.clear_direction()
+    else: direction = get_hour.get_hour(6)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
     emergency     = get_minute.emergency_minute()
