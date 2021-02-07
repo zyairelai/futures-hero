@@ -20,20 +20,24 @@ def pencil_wick_test(CANDLE):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    threshold = 0.08
-
     if CANDLE == "GREEN":
+        previous_wick = previous_High - previous_Close
+        current_wick  = current_High - current_Close
         title  = "PENCIL WICK GREEN:   "
+
         if current_High < previous_High:
-            if (((current_High - previous_High) / current_High) * 100) < threshold: result = "PASS"
-            else: result = "FAIL"
+            if current_wick < (previous_wick/2): result = "FAIL"
+            else: result = "PASS"
         else: result = "PASS"
 
     elif CANDLE == "RED":
+        previous_wick = previous_Close - previous_Low
+        current_wick  = current_Close - current_Low
         title  = "PENCIL WICK RED  :   "
+
         if current_Low > previous_Low:
-            if (((previous_Low - current_Low) / previous_Low )* 100) < threshold: result = "PASS"
-            else: result = "FAIL"
+            if current_wick < (previous_wick/2): result = "FAIL"
+            else: result = "PASS"
         else: result = "PASS"
 
     if result == "PASS": print(colored(title + result, "green"))

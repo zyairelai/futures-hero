@@ -52,35 +52,19 @@ def emergency_minute():
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     first_Open      = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
     first_Close     = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
+
     previous_Open   = round(((first_Open + first_Close) / 2), config.round_decimal)
     previous_Close  = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[1][3]) + float(klines[2][4])) / 4), config.round_decimal)
+    previous_High   = max(float(klines[2][2]), previous_Open, previous_Close)
+    previous_Low    = min(float(klines[2][3]), previous_Open, previous_Close)
 
     current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
     current_Close   = round(((float(klines[3][1]) + float(klines[3][2]) + float(klines[3][3]) + float(klines[3][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    threshold = config.exit_threshold
-    emergency = "INDECISIVE"
-    price_movement  = (current_High - current_Low) / current_Open * 100
-
-    if (current_Open == current_High):
-        if (price_movement > threshold):
-            emergency = "RED"
-
-    elif (current_Open == current_Low):
-        if (price_movement > threshold):
-            emergency = "GREEN"
-
-    elif (current_Open > current_Close):
-        if ((current_Open - current_Low) / current_Open * 100) > threshold:
-            emergency = "RED"
-
-    elif (current_Close > current_Open):
-        if ((current_High - current_Open) / current_High * 100) > threshold:
-            emergency = "GREEN"
-
-    return emergency
-
-
-
+    if (current_Open == current_High) and (current_Low < previous_Low): return "RED"
+    elif (current_Open == current_Low) and (current_High < previous_High): return "GREEN"
+    elif (current_Open > current_Close) and (current_Low < previous_Low): return "RED"
+    elif (current_Close > current_Open) and (current_High < previous_High): return "GREEN"
+    else: return "INDECISIVE"

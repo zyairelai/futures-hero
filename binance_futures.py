@@ -119,7 +119,7 @@ def calculate_trade_amount():
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    markPrice       = position_information()[0].get("markPrice")
+    markPrice       = float(position_information()[0].get("markPrice"))
     trade_amount    = config.quantity # Default 0.003
 
     if current_Open == current_Low:
