@@ -12,10 +12,11 @@ def check():
         if (input_num == '1'):
             start = time.time()
             from get_hour import get_hour
+            from get_clear_direction import clear_direction
             get_hour(1)
             get_hour(2)
             get_hour(4)
-            get_hour(6)
+            clear_direction()
             print(f"Time Taken: {time.time() - start} seconds\n")
             break
 

@@ -25,6 +25,7 @@ def clear_direction():
     # print("The current_Close is :   " + str(current_Close))
     # print("The current_High is  :   " + str(current_High))
     # print("The current_Low is   :   " + str(current_Low))
+    # print("The Mark Price is    :   " + binance_futures.position_information()[0].get("markPrice"))
 
     title = "PREVIOUS 6 HOUR  :   "
     if (previous_Open == previous_Low):

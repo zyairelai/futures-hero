@@ -124,16 +124,20 @@ def calculate_trade_amount():
 
     if current_Open == current_Low:
         if current_High > previous_High:
-            if markPrice > current_Close: trade_amount = (config.quantity / 3) * 2      # 0.002
+            if (markPrice < previous_High) or (markPrice < current_Close): trade_amount = config.quantity               # Maximum Trade Amount
+            elif (markPrice > previous_High) or (markPrice > current_Close): trade_amount = (config.quantity / 3) * 1   # Minimum Trade Amount
+            else: (config.quantity / 3) * 2     # Moderate Trade Amount
         else: 
-            if markPrice > current_Close: trade_amount = (config.quantity / 3) * 2      # 0.002
-            else: trade_amount = (config.quantity / 3) * 1                              # 0.001
+            if markPrice > current_Close: trade_amount = (config.quantity / 3) * 2      # Moderate Trade Amount
+            else: trade_amount = (config.quantity / 3) * 1                              # Minimum Trade Amount
 
     elif current_Open == current_High:
         if current_Low < previous_Low:
-            if markPrice < current_Close: trade_amount = (config.quantity / 3) * 2      # 0.002
+            if (markPrice > previous_Low) or (markPrice > current_Close): trade_amount = config.quantity               # Maximum Trade Amount
+            elif (markPrice < previous_Low) or (markPrice < current_Close): trade_amount = (config.quantity / 3) * 1   # Minimum Trade Amount
+            else: (config.quantity / 3) * 2     # Moderate Trade Amount
         else:
-            if markPrice < current_Close: trade_amount = (config.quantity / 3) * 2      # 0.002
-            else: trade_amount = (config.quantity / 3) * 1                              # 0.001
+            if markPrice < current_Close: trade_amount = (config.quantity / 3) * 2      # Moderate Trade Amount
+            else: trade_amount = (config.quantity / 3) * 1                              # Minimum Trade Amount
 
     return trade_amount
