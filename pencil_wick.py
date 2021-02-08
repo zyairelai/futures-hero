@@ -24,20 +24,22 @@ def pencil_wick_test(CANDLE):
         previous_wick = previous_High - previous_Close
         current_wick  = current_High - current_Close
         title  = "PENCIL WICK GREEN:   "
-
-        if current_High < previous_High:
-            if current_wick < (previous_wick/2): result = "FAIL"
-            else: result = "PASS"
+        if previous_High > current_High:
+            if current_Close > previous_Close: result = "PASS"
+            else: 
+                if (previous_wick / 3) > current_wick: result = "FAIL"
+                else: result = "PASS"
         else: result = "PASS"
 
     elif CANDLE == "RED":
         previous_wick = previous_Close - previous_Low
         current_wick  = current_Close - current_Low
         title  = "PENCIL WICK RED  :   "
-
-        if current_Low > previous_Low:
-            if current_wick < (previous_wick/2): result = "FAIL"
-            else: result = "PASS"
+        if previous_Low < current_Low:
+            if current_Close < previous_Close: result = "PASS"
+            else:
+                if (previous_wick / 3) > current_wick: result = "FAIL"
+                else: result = "PASS"
         else: result = "PASS"
 
     if result == "PASS": print(colored(title + result, "green"))

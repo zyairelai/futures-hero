@@ -8,7 +8,7 @@ def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
 
     response = binance_futures.position_information()[0]
     positionAmt = float(response.get('positionAmt'))
-    unRealizedProfit = round(float(binance_futures.position_information()[0].get('unRealizedProfit')), config.round_decimal)
+    unRealizedProfit = round(float(response.get('unRealizedProfit')), config.round_decimal)
     # print(binance_futures.position_information()[0])
 
     if (positionAmt > 0):
@@ -30,7 +30,12 @@ def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
     return position
 
 def get_unRealizedProfit():
-    unRealizedProfit = round(float(binance_futures.position_information()[0].get('unRealizedProfit')), config.round_decimal)
+    response         = binance_futures.position_information()[0]
+    markPrice        = round(float(response.get("markPrice")), config.round_decimal)
+    positionAmt      = abs(round(float(response.get("positionAmt")), config.round_decimal))
+    unRealizedProfit = round(float(response.get('unRealizedProfit')), config.round_decimal)
+    taker_maker_fees = 0.04
+    breakeven_USDT   = (markPrice * positionAmt * taker_maker_fees) / 100
 
-    if unRealizedProfit > 0: return "PROFIT"
+    if unRealizedProfit > breakeven_USDT: return "PROFIT"
     else: return "LOSS"
