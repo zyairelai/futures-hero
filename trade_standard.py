@@ -1,3 +1,4 @@
+# Standard: The most average risk level. Minimizing Loss && Maximize profit. This is my FIRST and EVER algorithm that earns me 300% capital overnight 
 stoploss  = 40  # Percentage that you are willing to lose
 
 import config

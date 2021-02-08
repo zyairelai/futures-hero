@@ -1,5 +1,6 @@
-use_stoploss = False    # ALCM is meant to NOT using stoplos, so always False. If really want to use stoploss: 
-stoploss = 100          # Percentage that you are willing to lose, in ALCM the stoploss cannot be less than 70% at 50x leverage
+# ALCM: Dead or Alive. Either you get liquidated or you hodl till you win. This is the highest winrate yet, HIGHEST RISK
+use_stoploss = False    # ALCM is meant to NOT using any stoploss, so always False. If really want to use stoploss: 
+stoploss = 100          # Percentage that you are willing to lose, in ALCM the stoploss cannot be less than 70% @50x leverage
 
 import config
 import entry_exit

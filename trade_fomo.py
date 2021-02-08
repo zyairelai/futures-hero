@@ -1,3 +1,4 @@
+# FOMO: Going both long and short without considering the direction. 
 stoploss = 30 # Percentage that you are willing to lose
 
 import config

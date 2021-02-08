@@ -1,3 +1,4 @@
+# Double confirmation: It check the current 6 hour trend && also the recent 1 hour. This is the most steady, yet, missing out. Minimizing loss && also minimizing profit.
 stoploss = 30 # Percentage that you are willing to lose
 
 import config

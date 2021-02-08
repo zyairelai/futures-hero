@@ -1,3 +1,4 @@
+# Strife: Going both long && short when there is a clear direction
 stoploss  = 40  # Percentage that you are willing to lose
 
 import config
