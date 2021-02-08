@@ -3,7 +3,7 @@ clear_direction = True      # True to minimize lose, False to maximize profit
 
 # Asset Configuration
 coin            = "BTC"
-quantity        = 0.003     # Minimum 0.003 (Must be the multiplier of 3)
+quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount
 leverage        = 125       # Maximum 125 // Recommended 75-99 // Oracle 50x
 round_decimal   = 2
 
