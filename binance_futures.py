@@ -120,24 +120,23 @@ def calculate_trade_amount():
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
     markPrice       = float(position_information()[0].get("markPrice"))
-    trade_amount    = config.quantity # Default 0.003
 
     if current_Open == current_Low:
         if current_High > previous_High:
-            if (markPrice < previous_High) or (markPrice < current_Close): trade_amount = config.quantity               # Maximum Trade Amount
-            elif (markPrice > previous_High) or (markPrice > current_Close): trade_amount = (config.quantity / 3) * 1   # Minimum Trade Amount
-            else: (config.quantity / 3) * 2     # Moderate Trade Amount
+            if (markPrice < previous_High) or (markPrice < current_Close): trade_amount = config.quantity * 3       # Maximum Trade Amount
+            elif (markPrice > previous_High) or (markPrice > current_Close): trade_amount = config.quantity * 1     # Minimum Trade Amount
+            else: trade_amount = config.quantity * 2    # Moderate Trade Amount
         else: 
-            if markPrice > current_Close: trade_amount = (config.quantity / 3) * 2      # Moderate Trade Amount
-            else: trade_amount = (config.quantity / 3) * 1                              # Minimum Trade Amount
+            if markPrice > current_Close: trade_amount = config.quantity * 2    # Moderate Trade Amount
+            else: trade_amount = config.quantity * 1    # Minimum Trade Amount
 
     elif current_Open == current_High:
         if current_Low < previous_Low:
-            if (markPrice > previous_Low) or (markPrice > current_Close): trade_amount = config.quantity               # Maximum Trade Amount
-            elif (markPrice < previous_Low) or (markPrice < current_Close): trade_amount = (config.quantity / 3) * 1   # Minimum Trade Amount
-            else: (config.quantity / 3) * 2     # Moderate Trade Amount
+            if (markPrice > previous_Low) or (markPrice > current_Close): trade_amount = config.quantity * 3        # Maximum Trade Amount
+            elif (markPrice < previous_Low) or (markPrice < current_Close): trade_amount = config.quantity * 1      # Minimum Trade Amount
+            else: trade_amount = config.quantity * 2    # Moderate Trade Amount
         else:
-            if markPrice < current_Close: trade_amount = (config.quantity / 3) * 2      # Moderate Trade Amount
-            else: trade_amount = (config.quantity / 3) * 1                              # Minimum Trade Amount
+            if markPrice < current_Close: trade_amount = config.quantity * 2    # Moderate Trade Amount
+            else: trade_amount = config.quantity * 1                            # Minimum Trade Amount
 
     return trade_amount
