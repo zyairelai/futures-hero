@@ -11,7 +11,6 @@ import get_clear_direction
 import binance_futures
 from datetime import datetime
 from termcolor import colored
-from pencil_wick import pencil_wick_test
 
 def dead_or_alive():
     position_info = get_position.get_position_info()

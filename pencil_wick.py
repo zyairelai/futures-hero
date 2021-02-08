@@ -2,8 +2,9 @@ import config
 import binance_futures
 from termcolor import colored
 
-def pencil_wick_test(CANDLE):
-    klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+def pencil_wick_test(minute, CANDLE):
+    if minute == 1: klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+    elif minute == 5: klines = binance_futures.KLINE_INTERVAL_5MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -23,7 +24,7 @@ def pencil_wick_test(CANDLE):
     if CANDLE == "GREEN":
         previous_wick = previous_High - previous_Close
         current_wick  = current_High - current_Close
-        title  = "PENCIL WICK GREEN:   "
+        # title  = "PENCIL WICK GREEN:   "
         if previous_High > current_High:
             if current_Close > previous_Close: result = "PASS"
             else: 
@@ -34,7 +35,7 @@ def pencil_wick_test(CANDLE):
     elif CANDLE == "RED":
         previous_wick = previous_Close - previous_Low
         current_wick  = current_Close - current_Low
-        title  = "PENCIL WICK RED  :   "
+        # title  = "PENCIL WICK RED  :   "
         if previous_Low < current_Low:
             if current_Close < previous_Close: result = "PASS"
             else:
@@ -42,7 +43,7 @@ def pencil_wick_test(CANDLE):
                 else: result = "PASS"
         else: result = "PASS"
 
-    if result == "PASS": print(colored(title + result, "green"))
-    else: print(colored(title + result, "red"))
+    # if result == "PASS": print(colored(title + result, "green"))
+    # else: print(colored(title + result, "red"))
 
     return result
