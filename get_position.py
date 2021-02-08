@@ -34,7 +34,7 @@ def get_unRealizedProfit():
     markPrice        = round(float(response.get("markPrice")), config.round_decimal)
     positionAmt      = abs(round(float(response.get("positionAmt")), config.round_decimal))
     unRealizedProfit = round(float(response.get('unRealizedProfit')), config.round_decimal)
-    taker_maker_fees = 0.08 # One transaction is 0.04, buy and sell means 0.04 * 2 = 0.08
+    taker_maker_fees = 0.1 # One transaction is 0.04, buy and sell means 0.04 * 2 = 0.08
     breakeven_USDT   = (markPrice * positionAmt * taker_maker_fees) / 100
 
     if unRealizedProfit > breakeven_USDT: return "PROFIT"
