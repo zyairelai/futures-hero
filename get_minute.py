@@ -64,7 +64,7 @@ def emergency_minute():
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
     if (current_Open == current_High) and (current_Low < previous_Low): return "RED"
-    elif (current_Open == current_Low) and (current_High < previous_High): return "GREEN"
+    elif (current_Open == current_Low) and (current_High > previous_High): return "GREEN"
     elif (current_Open > current_Close) and (current_Low < previous_Low): return "RED"
-    elif (current_Close > current_Open) and (current_High < previous_High): return "GREEN"
+    elif (current_Close > current_Open) and (current_High > previous_High): return "GREEN"
     else: return "INDECISIVE"
