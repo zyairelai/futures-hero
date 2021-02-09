@@ -1,11 +1,11 @@
 from pencil_wick import pencil_wick_test
 
 def GO_LONG(one_minute, five_minute):
-    if (one_minute == "GREEN") and ((five_minute == "GREEN") or ((five_minute == "GREEN_INDECISIVE") and (pencil_wick_test(5, "GREEN") == "PASS") )) and (pencil_wick_test(1, "GREEN") == "PASS"): return True
+    if (one_minute == "GREEN") and (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (pencil_wick_test(5, "GREEN") == "PASS")) and (pencil_wick_test(1, "GREEN") == "PASS"): return True
     else: return False
 
 def GO_SHORT(one_minute, five_minute):
-    if (one_minute == "RED") and ((five_minute == "RED") or ((five_minute == "RED_INDECISIVE") and (pencil_wick_test(5, "GREEN") == "PASS"))) and (pencil_wick_test(1, "RED") == "PASS"): return True
+    if (one_minute == "RED") and (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (pencil_wick_test(5, "RED") == "PASS")) and (pencil_wick_test(1, "RED") == "PASS"): return True
     else: return False
 
 def CLOSE_LONG(five_minute, emergency):
