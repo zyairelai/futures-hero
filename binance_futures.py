@@ -114,14 +114,24 @@ def calculate_trade_amount():
     previous_High   = max(float(klines[2][2]), previous_Open, previous_Close)
     previous_Low    = min(float(klines[2][3]), previous_Open, previous_Close)
 
+    if (previous_Open == previous_Low): previous_direction = "GREEN"
+    elif (previous_Open == previous_High): previous_direction = "RED"
+    else: previous_direction = "INDECISIVE"
+
     current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
     current_Close   = round(((float(klines[3][1]) + float(klines[3][2]) + float(klines[3][3]) + float(klines[3][4])) / 4), config.round_decimal)
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
+    if (current_Open == current_Low): current_direction = "GREEN"
+    elif (current_Open == current_High): current_direction = "RED"
+    else: current_direction = "INDECISIVE"
+
     markPrice       = float(position_information()[0].get("markPrice"))
 
-    if current_Open == current_Low:
+    if previous_direction == "INDECISIVE": trade_amount = config.quantity * 1   # Dangerous Witching Hour // Minimum Trade Amount
+
+    elif (previous_direction != "INDECISIVE") and (current_direction == "GREEN"):
         if current_High > previous_High:
             if (markPrice < previous_High) or (markPrice < current_Close): trade_amount = config.quantity * 3       # Maximum Trade Amount
             elif (markPrice > previous_High) or (markPrice > current_Close): trade_amount = config.quantity * 1     # Minimum Trade Amount
@@ -130,7 +140,7 @@ def calculate_trade_amount():
             if markPrice > current_Close: trade_amount = config.quantity * 2    # Moderate Trade Amount
             else: trade_amount = config.quantity * 1    # Minimum Trade Amount
 
-    elif current_Open == current_High:
+    elif (previous_direction != "INDECISIVE") and (current_direction == "RED"):
         if current_Low < previous_Low:
             if (markPrice > previous_Low) or (markPrice > current_Close): trade_amount = config.quantity * 3        # Maximum Trade Amount
             elif (markPrice < previous_Low) or (markPrice < current_Close): trade_amount = config.quantity * 1      # Minimum Trade Amount
