@@ -24,6 +24,11 @@ def get_hour(hour):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
+    # print("The current_Open is  :   " + str(current_Open))
+    # print("The current_Close is :   " + str(current_Close))
+    # print("The current_High is  :   " + str(current_High))
+    # print("The current_Low is   :   " + str(current_Low))
+
     if (current_Open == current_Low):
         current = "GREEN"
         trend = "UP_TREND"

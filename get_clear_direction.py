@@ -21,11 +21,15 @@ def clear_direction():
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
+    # print("The previous_Open is  :   " + str(previous_Open))
+    # print("The previous_Close is :   " + str(previous_Close))
+    # print("The previous_High is  :   " + str(previous_High))
+    # print("The previous_Low is   :   " + str(previous_Low))
+
     # print("The current_Open is  :   " + str(current_Open))
     # print("The current_Close is :   " + str(current_Close))
     # print("The current_High is  :   " + str(current_High))
     # print("The current_Low is   :   " + str(current_Low))
-    # print("The Mark Price is    :   " + binance_futures.position_information()[0].get("markPrice"))
 
     title = "PREVIOUS 6 HOUR  :   "
     if (previous_Open == previous_Low):
