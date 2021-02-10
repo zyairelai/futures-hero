@@ -10,6 +10,7 @@ try:
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
+    from apscheduler.schedulers.blocking import BlockingScheduler
 
     if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
     if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
@@ -28,10 +29,17 @@ try:
         use_stoploss = False
         percentage = 0
 
+    def added_to_job():
+        dead_or_alive.dead_or_alive(use_stoploss, int(percentage))
+
     while True:
         try:
-            dead_or_alive.dead_or_alive(use_stoploss, int(percentage))
-            time.sleep(8)
+            # added_to_job()
+            # time.sleep(8)
+
+            scheduler = BlockingScheduler()
+            scheduler.add_job(added_to_job, 'cron', second='0,6,12,18,24,30,36,42,48,54')
+            scheduler.start()
 
         except (BinanceAPIException,
                 ConnectionResetError,
@@ -43,7 +51,7 @@ try:
                 requests.exceptions.ReadTimeout) as e:
 
             if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
-            with open((os.path.join("Error_Message", config.pair + ".txt")), "a") as error_message:
+            with open((os.path.join("Error_Message", config.pair + ".txt")), "a", encoding="utf-8") as error_message:
                 error_message.write("[!] " + config.pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
                 error_message.write(str(e) + "\n\n")
 
