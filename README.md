@@ -1,5 +1,10 @@
-# leverage-bot
-Leverage Trading Bot on Binance Futures. 
+# futures-omax
+Leverage Trading Automation on Binance Futures.
+
+# DISCLAIMER
+This automation software is purely handcoded by me @zyairelai from scratch with my personal manual trading strategy.  
+Kindly provide feedback if you are using my repository, as well as if you are changing my code and help me with improvements.  
+Distribution of the software is allowed. However, SELLING is NOT allowed.
 
 ## 1. Environment Setup
 Paste the following into your Default Shell
