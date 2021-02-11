@@ -5,9 +5,9 @@ try:
     import socket
     import urllib3
     import config
+    import get_hour
     import dead_or_alive
     import binance_futures
-    import get_clear_direction
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -31,7 +31,7 @@ try:
         percentage = 0
 
     def added_to_job():
-        if get_clear_direction.clear_direction == "NO_TRADE_ZONE": dead_or_alive.fomo(use_stoploss, int(percentage))
+        if get_hour.get_hour(6) == "NO_TRADE_ZONE": dead_or_alive.fomo(use_stoploss, int(percentage))
         else: dead_or_alive.dead_or_alive(use_stoploss, int(percentage))
 
     while True:
