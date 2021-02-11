@@ -18,21 +18,9 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    use_SL = input("Use Stoploss? [Y/n] ") or 'n'
-
-    if use_SL == 'Y':
-        print(colored("Stoploss Enabled", "green"))
-        use_stoploss = True
-        percentage = input("Percentage % that you are willing to lose (Default 70): ") or '70'
-        print(colored("Stoploss         :   " + percentage + "%\n"))
-    else:
-        print(colored("Stoploss Disabled\n", "red"))
-        use_stoploss = False
-        percentage = 0
-
     def added_to_job():
-        if get_hour.get_hour(6) == "NO_TRADE_ZONE": dead_or_alive.fomo(use_stoploss, int(percentage))
-        else: dead_or_alive.dead_or_alive(use_stoploss, int(percentage))
+        # dead_or_alive.fomo()
+        dead_or_alive.dead_or_alive()
 
     while True:
         try:
@@ -40,7 +28,7 @@ try:
             # time.sleep(8)
 
             scheduler = BlockingScheduler()
-            scheduler.add_job(added_to_job, 'cron', second='0,5,10,15,20,25,30,35,40,45,50,55')
+            scheduler.add_job(added_to_job, 'cron', second='0,6,12,18,24,30,36,42,48,54')
             scheduler.start()
 
         except (BinanceAPIException,

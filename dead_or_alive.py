@@ -8,7 +8,7 @@ import binance_futures
 from datetime import datetime
 from termcolor import colored
 
-def dead_or_alive(use_stoploss, percentage):
+def dead_or_alive():
     position_info = get_position.get_position_info()
     if config.clear_direction: direction = get_clear_direction.clear_direction()
     else: direction = get_hour.get_hour(6)
@@ -17,16 +17,12 @@ def dead_or_alive(use_stoploss, percentage):
     exit_minute   = get_minute.exit_minute()
 
     if position_info == "LONGING":
-        if use_stoploss:
-            if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", percentage)
         if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or (five_minute == "RED"):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if use_stoploss:
-            if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", percentage)
         if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)) or (five_minute == "GREEN"):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
@@ -50,23 +46,19 @@ def dead_or_alive(use_stoploss, percentage):
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-def fomo(use_stoploss, percentage):
+def fomo():
     position_info = get_position.get_position_info()
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
     exit_minute   = get_minute.exit_minute()
 
     if position_info == "LONGING":
-        if use_stoploss:
-            if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", percentage)
         if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.EMERGENCY_EXIT_LONG(five_minute):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if use_stoploss:
-            if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", percentage)
         if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)) or entry_exit.EMERGENCY_EXIT_SHORT(five_minute):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
