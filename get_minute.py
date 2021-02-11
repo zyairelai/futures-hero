@@ -45,7 +45,7 @@ def current_minute(minute):
         print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "white"))
     return minute_candle
 
-def emergency_minute():
+def exit_minute():
     klines = klines = binance_futures.KLINE_INTERVAL_1MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)

@@ -26,7 +26,7 @@ def pencil_wick_test(CANDLE):
         # title  = "PENCIL WICK GREEN:   "
         if previous_High > current_High:
             if current_Close > previous_Close: result = "PASS"
-            else: 
+            else:
                 if (previous_wick / 3) > current_wick: result = "FAIL"
                 else: result = "PASS"
         else: result = "PASS"
@@ -65,10 +65,10 @@ def re_entry(CANDLE):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    if CANDLE == "GREEN": 
+    if CANDLE == "GREEN":
         if (current_High > previous_High): return "PASS"
         else: return "FAIL"
-    elif CANDLE == "RED": 
+    elif CANDLE == "RED":
         if (current_Low < previous_Low): return "PASS"
         else: return "FAIL"
-    
+

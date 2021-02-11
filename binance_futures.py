@@ -129,14 +129,14 @@ def calculate_trade_amount():
 
     markPrice       = float(position_information()[0].get("markPrice"))
 
-    if previous_direction == "INDECISIVE": trade_amount = config.quantity * 1   # Dangerous Witching Hour // Minimum Trade Amount
+    if previous_direction == "INDECISIVE" or current_direction == "INDECISIVE": trade_amount = config.quantity * 1   # Dangerous Witching Hour // Minimum Trade Amount
 
     elif (previous_direction != "INDECISIVE") and (current_direction == "GREEN"):
         if current_High > previous_High:
             if (markPrice < previous_High) or (markPrice < current_Close): trade_amount = config.quantity * 3       # Maximum Trade Amount
             elif (markPrice > previous_High) or (markPrice > current_Close): trade_amount = config.quantity * 1     # Minimum Trade Amount
             else: trade_amount = config.quantity * 2    # Moderate Trade Amount
-        else: 
+        else:
             if markPrice > current_Close: trade_amount = config.quantity * 2    # Moderate Trade Amount
             else: trade_amount = config.quantity * 1    # Minimum Trade Amount
 

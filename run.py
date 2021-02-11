@@ -18,19 +18,19 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     use_SL = input("Use Stoploss? [Y/n] ") or 'n'
-        
-    if use_SL == 'Y': 
+
+    if use_SL == 'Y':
         print(colored("Stoploss Enabled", "green"))
         use_stoploss = True
         percentage = input("Percentage % that you are willing to lose? (Default 70): ") or '70'
         print(colored("Stoploss         :   " + percentage + "%\n"))
-    else: 
+    else:
         print(colored("Stoploss Disabled\n", "red"))
         use_stoploss = False
         percentage = 0
 
     def added_to_job():
-        dead_or_alive.dead_or_alive(use_stoploss, int(percentage))
+        dead_or_alive.fomo(use_stoploss, int(percentage))
 
     while True:
         try:

@@ -17,13 +17,13 @@ def strife_with_direction():
     else: direction = get_hour.get_hour(6)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
-    emergency     = get_minute.emergency_minute()
+    exit_minute   = get_minute.exit_minute()
 
     if position_info == "LONGING":
         if binance_futures.get_open_orders() == []: 
             if direction == "UP_TREND": binance_futures.set_stop_loss("LONG", stoploss)
             else: binance_futures.set_stop_loss("LONG", stoploss/2)
-        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(five_minute, emergency):
+        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
@@ -32,7 +32,7 @@ def strife_with_direction():
         if binance_futures.get_open_orders() == []: 
             if direction == "DOWN_TREND": binance_futures.set_stop_loss("SHORT", stoploss)
             else: binance_futures.set_stop_loss("SHORT", stoploss/2)
-        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(five_minute, emergency):
+        if (get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
