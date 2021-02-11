@@ -22,7 +22,7 @@ try:
     if use_SL == 'Y':
         print(colored("Stoploss Enabled", "green"))
         use_stoploss = True
-        percentage = input("Percentage % that you are willing to lose? (Default 70): ") or '70'
+        percentage = input("Percentage % that you are willing to lose (Default 70): ") or '70'
         print(colored("Stoploss         :   " + percentage + "%\n"))
     else:
         print(colored("Stoploss Disabled\n", "red"))
@@ -38,7 +38,7 @@ try:
             # time.sleep(8)
 
             scheduler = BlockingScheduler()
-            scheduler.add_job(added_to_job, 'cron', second='0,6,12,18,24,30,36,42,48,54')
+            scheduler.add_job(added_to_job, 'cron', second='0,5,10,15,20,25,30,35,40,45,50,55')
             scheduler.start()
 
         except (BinanceAPIException,

@@ -2,9 +2,8 @@
 Leverage Trading Automation on Binance Futures.
 
 # DISCLAIMER
-This automation software is purely handcoded by me @zyairelai from scratch with my personal manual trading strategy.  
-Kindly provide feedback if you are using my repository, as well as if you are changing my code please share the improved version with me.  
-Distribution of the software is allowed. However, SELLING is NOT allowed.
+
+This automation software is purely handcoded by me [@zyairelai](#https://github.com/zyairelai) from scratch with my personal manual trading strategy. Kindly provide feedback if you are using my repository, as well as if you are updating my code please share the improved version with me. Distribution of the software is allowed. However, SELLING is NOT allowed.
 
 ## 1. Environment Setup
 Paste the following into your Default Shell
@@ -28,7 +27,7 @@ Let's make the magic happens!
 ```
 python3 run.py
 ```
-To check the trend and many others:
+To check the trend, position, realizedPNL and many others:
 ```
 python3 check.py
 ```
