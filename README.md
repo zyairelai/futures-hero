@@ -6,7 +6,7 @@ Leverage Trading Automation on Binance Futures.
 This automation software is purely handcoded by me [@zyairelai](https://github.com/zyairelai) from scratch with my personal manual trading strategy.  
 Kindly provide feedback through my email `zyairelai@gmail.com` if you are using my repository.  
 If you had modified or improved my code feel free to share with me and we may have futher discussion on this project!  
-Distribution of the software is allowed. However, SELLING is NOT allowed.  
+Anybody may copy, redistribute, modify of the software. However, limited to NON-COMMERCIAL USED only.  
 LEVERAGE TRADING IS A HIGH RISK GAME. PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.
 
 ## 1. Environment Setup
