@@ -149,4 +149,5 @@ def calculate_trade_amount():
             if markPrice < current_Close: trade_amount = config.quantity * 2    # Moderate Trade Amount
             else: trade_amount = config.quantity * 1                            # Minimum Trade Amount
 
-    return trade_amount
+    # return trade_amount
+    return config.quantity

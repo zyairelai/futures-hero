@@ -19,17 +19,17 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():
-        # dead_or_alive.fomo()
-        dead_or_alive.dead_or_alive()
+        dead_or_alive.fomo()
+        # dead_or_alive.dead_or_alive()
 
     while True:
         try:
-            # added_to_job()
-            # time.sleep(8)
+            added_to_job()
+            time.sleep(5)
 
-            scheduler = BlockingScheduler()
-            scheduler.add_job(added_to_job, 'cron', second='0,6,12,18,24,30,36,42,48,54')
-            scheduler.start()
+            # scheduler = BlockingScheduler()
+            # scheduler.add_job(added_to_job, 'cron', second='0,6,12,18,24,30,36,42,48,54')
+            # scheduler.start()
 
         except (BinanceAPIException,
                 ConnectionResetError,
