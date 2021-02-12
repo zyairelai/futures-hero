@@ -17,6 +17,14 @@ export API_KEY="your_binance_api_key"
 export API_SECRET="your_binance_secret_key"
 ```
 
+Or as an alternative, you can change `line 7-10` in `binance_futures.py` to following: 
+```
+api_owner   = "your_binance_username"
+api_key     = "your_binance_api_key"
+api_secret  = "your_binance_secret_key"
+client      = Client(api_key, api_secret)
+```
+
 ## 2. Pip3 Requirements
 You need to have these libraries installed:
 ```
