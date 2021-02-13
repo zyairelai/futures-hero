@@ -15,4 +15,5 @@ round_decimal   = 2         # Some crypto pairs like chainlink read up to 3 deci
 pair = coin + "USDT"
 print("Pair Name        :   " + str(pair))
 print("Trade Quantity   :   " + str(quantity) + " " + str(coin))
+print("Set Levarage     :   " + str(leverage))
 print()
