@@ -19,8 +19,8 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():
-        dead_or_alive.fomo()
-        # dead_or_alive.dead_or_alive()
+        # dead_or_alive.fomo()
+        dead_or_alive.dead_or_alive()
 
     while True:
         try:
