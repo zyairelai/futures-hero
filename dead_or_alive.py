@@ -55,6 +55,7 @@ def dead_or_alive():
 
 def fomo():
     position_info = get_position.get_position_info()
+    direction     = get_hour.get_hour(6)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
     exit_minute   = get_minute.exit_minute()
@@ -73,14 +74,15 @@ def fomo():
 
     else:
         binance_futures.cancel_all_open_orders()
-        if entry_exit.GO_LONG(one_minute, five_minute):
-            print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-            if config.live_trade: binance_futures.open_position("LONG")
+        if direction != "NO_TRADE_ZONE":
+            if entry_exit.GO_LONG(one_minute, five_minute):
+                print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
+                if config.live_trade: binance_futures.open_position("LONG")
 
-        elif entry_exit.GO_SHORT(one_minute, five_minute):
-            print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-            if config.live_trade: binance_futures.open_position("SHORT")
-
+            elif entry_exit.GO_SHORT(one_minute, five_minute):
+                print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
+                if config.live_trade: binance_futures.open_position("SHORT")
+            else: print("ACTION           :   🐺 WAIT 🐺")
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
