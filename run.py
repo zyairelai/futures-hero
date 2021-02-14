@@ -1,6 +1,6 @@
 try:
     import os, time, requests, socket, urllib3
-    import binance_futures, config, dead_or_alive
+    import binance_futures, config, strategy
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -11,13 +11,8 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    both_direction = input("Trade by Following Trend (1) or Trade Both Direction (2) : ") or '1'
-    if both_direction == '1': print(colored("Trading by Following Trend\n", "green"))
-    else: print(colored("Trading Both Direction\n", "red"))
-
     def added_to_job():
-        if both_direction == '1': dead_or_alive.dead_or_alive("CHILL")
-        else: dead_or_alive.dead_or_alive("FOMO")
+        strategy.dead_or_alive("CHILL")
 
     while True:
         try:

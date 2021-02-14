@@ -1,5 +1,5 @@
 use_stoploss = True
-percentage = 50
+percentage = 20
 
 import config
 import entry_exit
@@ -41,7 +41,7 @@ def dead_or_alive(CHILL_OR_FOMO):
     else:
         binance_futures.cancel_all_open_orders()
 
-        if CHILL_OR_FOMO == "FOMO":
+        if CHILL_OR_FOMO == "FOMO" or CHILL_OR_FOMO == "fomo":
             if direction != "NO_TRADE_ZONE":
                 if entry_exit.GO_LONG(one_minute, five_minute):
                     print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
