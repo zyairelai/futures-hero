@@ -1,4 +1,4 @@
-use_stoploss = False
+use_stoploss = True
 percentage = 50
 
 import config
@@ -22,7 +22,7 @@ def dead_or_alive():
     if position_info == "LONGING":
         if use_stoploss:
             if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", percentage)
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or (five_minute == "RED"):
+        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)):# or (five_minute == "RED"):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
@@ -30,7 +30,7 @@ def dead_or_alive():
     elif position_info == "SHORTING":
         if use_stoploss:
             if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", percentage)
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)) or (five_minute == "GREEN"):
+        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)):# or (five_minute == "GREEN"):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
