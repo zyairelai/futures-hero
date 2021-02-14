@@ -12,7 +12,7 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():
-        strategy.dead_or_alive("CHILL")
+        strategy.dead_or_alive("FOMO")
 
     while True:
         try:
