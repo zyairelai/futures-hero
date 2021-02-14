@@ -55,7 +55,8 @@ def dead_or_alive():
 
 def fomo():
     position_info = get_position.get_position_info()
-    direction     = get_hour.get_hour(6)
+    if config.clear_direction: direction = get_clear_direction.clear_direction()
+    else: direction = get_hour.get_hour(6)
     five_minute   = get_minute.current_minute(5)
     one_minute    = get_minute.current_minute(1)
     exit_minute   = get_minute.exit_minute()
