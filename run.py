@@ -1,13 +1,6 @@
 try:
-    import os
-    import time
-    import requests
-    import socket
-    import urllib3
-    import config
-    import get_hour
-    import dead_or_alive
-    import binance_futures
+    import os, time, requests, socket, urllib3
+    import binance_futures, config, dead_or_alive
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -23,8 +16,8 @@ try:
     else: print(colored("Trading Both Direction\n", "red"))
 
     def added_to_job():
-        if both_direction == '1': dead_or_alive.dead_or_alive()
-        else: dead_or_alive.fomo()
+        if both_direction == '1': dead_or_alive.dead_or_alive("CHILL")
+        else: dead_or_alive.dead_or_alive("FOMO")
 
     while True:
         try:

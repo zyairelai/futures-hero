@@ -71,4 +71,3 @@ def re_entry(CANDLE):
     elif CANDLE == "RED":
         if (current_Low < previous_Low): return "PASS"
         else: return "FAIL"
-
