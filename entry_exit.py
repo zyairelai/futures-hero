@@ -51,13 +51,13 @@ def EMERGENCY_EXIT(EXIT):
 
     if (previous_Open == previous_High): previous_candle = "RED"
     elif (previous_Open == previous_Low): previous_candle = "GREEN"
-    elif (previous_Open > previous_Close): previous_candle = "RED_INDECISIVE"
-    elif (previous_Close > previous_Open): previous_candle = "GREEN_INDECISIVE"
-    else: previous_candle = "NO_MOVEMENT"
+    # elif (previous_Open > previous_Close): previous_candle = "RED_INDECISIVE"
+    # elif (previous_Close > previous_Open): previous_candle = "GREEN_INDECISIVE"
+    else: previous_candle = "INDECISIVE"
 
     if EXIT == "SHORT":
-        if ((previous_candle == "GREEN") or (previous_candle == "GREEN_INDECISIVE")) and (current_High > previous_High): return True
+        if ((previous_candle == "INDECISIVE") or (previous_candle == "GREEN")) and (current_High > previous_High): return True
         else: return False
     elif EXIT == "LONG":
-        if ((previous_candle == "RED") or (previous_candle == "RED_INDECISIVE")) and(current_Low < previous_Low): return True
+        if ((previous_candle == "INDECISIVE") or (previous_candle == "RED")) and(current_Low < previous_Low): return True
         else: return False
