@@ -22,13 +22,13 @@ def CLOSE_SHORT(exit_minute):
     else: return False
 
 def EMERGENCY_EXIT_LONG(five_minute):
-    if ((five_minute == "RED") and (re_entry("RED") == "PASS")): return True
-    # if (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (re_entry("RED") == "PASS")): return True
+    # if ((five_minute == "RED") and (re_entry("RED") == "PASS")): return True
+    if (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (re_entry("RED") == "PASS")): return True
     else: return False
 
 def EMERGENCY_EXIT_SHORT(five_minute):
-    if ((five_minute == "GREEN") and (re_entry("GREEN") == "PASS")): return True
-    # if (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (re_entry("GREEN") == "PASS")): return True
+    # if ((five_minute == "GREEN") and (re_entry("GREEN") == "PASS")): return True
+    if (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (re_entry("GREEN") == "PASS")): return True
     else: return False
 
 def EMERGENCY_EXIT(EXIT):
