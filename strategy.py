@@ -1,5 +1,5 @@
-use_stoploss = True
-percentage = 20
+use_stoploss = False
+percentage = 50
 
 import config
 import entry_exit
