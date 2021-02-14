@@ -21,22 +21,29 @@ def dead_or_alive(CHILL_OR_FOMO):
     if position_info == "LONGING":
         if use_stoploss:
             if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("LONG", percentage)
-        # if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.EMERGENCY_EXIT_LONG(five_minute):
-        # if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.EMERGENCY_EXIT("LONG"):
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)):
-            print("ACTION           :   💰 CLOSE_LONG 💰")
-            binance_futures.close_position("LONG")
-        else: print(colored("ACTION           :   HOLDING_LONG", "green"))
+            if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)):
+                print("ACTION           :   💰 CLOSE_LONG 💰")
+                binance_futures.close_position("LONG")
+            else: print(colored("ACTION           :   HOLDING_LONG", "green"))
+        else:
+            if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.EMERGENCY_EXIT("LONG"):
+                print("ACTION           :   💰 CLOSE_LONG 💰")
+                binance_futures.close_position("LONG")
+            else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if use_stoploss:
             if binance_futures.get_open_orders() == []: binance_futures.set_stop_loss("SHORT", percentage)
-        # if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.EMERGENCY_EXIT_SHORT(five_minute):
-        # if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.EMERGENCY_EXIT("SHORT"):
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)):
-            print("ACTION           :   💰 CLOSE_SHORT 💰")
-            binance_futures.close_position("SHORT")
-        else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
+            if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)):
+                print("ACTION           :   💰 CLOSE_SHORT 💰")
+                binance_futures.close_position("SHORT")
+            else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
+
+        else: 
+            if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.EMERGENCY_EXIT("SHORT"):
+                print("ACTION           :   💰 CLOSE_SHORT 💰")
+                binance_futures.close_position("SHORT")
+            else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
         binance_futures.cancel_all_open_orders()
