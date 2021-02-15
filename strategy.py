@@ -79,6 +79,7 @@ def fomo():
             elif entry_exit.GO_SHORT(one_minute, five_minute) and (one_hour != "GREEN" and pencil_wick.one_hour_test("GREEN") == "FAIL"):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
+
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
