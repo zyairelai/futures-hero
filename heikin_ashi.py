@@ -2,8 +2,9 @@ import config
 import binance_futures
 from datetime import datetime
 from termcolor import colored
+troubleshooting = config.troubleshooting
 
-def get_clear_direction():
+def get_clear_direction(): # return RED // GREEN // INDECISIVE
     klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
@@ -21,15 +22,16 @@ def get_clear_direction():
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    # print("The previous_Open is  :   " + str(previous_Open))
-    # print("The previous_Close is :   " + str(previous_Close))
-    # print("The previous_High is  :   " + str(previous_High))
-    # print("The previous_Low is   :   " + str(previous_Low))
+    if troubleshooting:
+        print("The previous_Open is  :   " + str(previous_Open))
+        print("The previous_Close is :   " + str(previous_Close))
+        print("The previous_High is  :   " + str(previous_High))
+        print("The previous_Low is   :   " + str(previous_Low))
 
-    # print("The current_Open is  :   " + str(current_Open))
-    # print("The current_Close is :   " + str(current_Close))
-    # print("The current_High is  :   " + str(current_High))
-    # print("The current_Low is   :   " + str(current_Low))
+        print("The current_Open is  :   " + str(current_Open))
+        print("The current_Close is :   " + str(current_Close))
+        print("The current_High is  :   " + str(current_High))
+        print("The current_Low is   :   " + str(current_Low))
 
     title = "PREVIOUS 6 HOUR  :   "
     if (previous_Open == previous_Low):
@@ -39,7 +41,7 @@ def get_clear_direction():
         previous = "RED"
         print(colored(title + previous, "red"))
     else:
-        previous = "NO_TRADE_ZONE"
+        previous = "INDECISIVE"
         print(colored(title + previous, "yellow"))
 
     title = "CURRENT 6 HOUR   :   "
@@ -50,15 +52,15 @@ def get_clear_direction():
         current = "RED"
         print(colored(title + current, "red"))
     else:
-        current = "NO_TRADE_ZONE"
+        current = "INDECISIVE"
         print(colored(title + current, "yellow"))
 
-    if (previous == "GREEN") and (current == "GREEN"): trend = "UP_TREND"
-    elif (previous == "RED") and (current == "RED"): trend = "DOWN_TREND"
-    else: trend = "NO_TRADE_ZONE"
+    if (previous == "GREEN") and (current == "GREEN"): trend = "GREEN"
+    elif (previous == "RED") and (current == "RED"): trend = "RED"
+    else: trend = "INDECISIVE"
     return trend
 
-def get_hour(hour):
+def get_hour(hour): # return RED // GREEN // INDECISIVE
     title = str(hour) + " HOUR DIRECTION :   "
     if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
     elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
@@ -79,27 +81,25 @@ def get_hour(hour):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    # print("The current_Open is  :   " + str(current_Open))
-    # print("The current_Close is :   " + str(current_Close))
-    # print("The current_High is  :   " + str(current_High))
-    # print("The current_Low is   :   " + str(current_Low))
+    if troubleshooting:
+        print("The current_Open is  :   " + str(current_Open))
+        print("The current_Close is :   " + str(current_Close))
+        print("The current_High is  :   " + str(current_High))
+        print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_Low):
         current = "GREEN"
-        trend = "UP_TREND"
         print(colored(title + current, "green"))
     elif (current_Open == current_High):
         current = "RED"
-        trend = "DOWN_TREND"
         print(colored(title + current, "red"))
     else:
-        current = "NO_TRADE_ZONE"
-        trend = "NO_TRADE_ZONE"
+        current = "INDECISIVE"
         print(colored(title + current, "yellow"))
 
-    return trend
+    return current
 
-def get_current_minute(minute):
+def get_current_minute(minute): # return RED // GREEN // RED_INDECISIVE // GREEN_INDECISIVE // NO_MOVEMENT
     if minute == 1: klines = klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     elif minute == 3: klines = klines = binance_futures.KLINE_INTERVAL_3MINUTE()
     elif minute == 5: klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
@@ -116,10 +116,11 @@ def get_current_minute(minute):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    # print("The current_Open is  :   " + str(current_Open))
-    # print("The current_Close is :   " + str(current_Close))
-    # print("The current_High is  :   " + str(current_High))
-    # print("The current_Low is   :   " + str(current_Low))
+    if troubleshooting:
+        print("The current_Open is  :   " + str(current_Open))
+        print("The current_Close is :   " + str(current_Close))
+        print("The current_High is  :   " + str(current_High))
+        print("The current_Low is   :   " + str(current_Low))
 
     if (current_Open == current_High):
         minute_candle = "RED"
@@ -142,7 +143,7 @@ def get_current_minute(minute):
         print(colored("RECENT " + str(minute) + " MINUTE  :   " + minute_candle, "white"))
     return minute_candle
 
-def exit_minute():
+def exit_minute(): # return RED // GREEN // INDECISIVE
     klines = klines = binance_futures.KLINE_INTERVAL_1MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)

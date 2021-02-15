@@ -1,24 +1,25 @@
 import config
 import binance_futures
-from pencil_wick import re_entry
-from pencil_wick import pencil_wick_test
+from pencil_wick import one_minute_test
+from pencil_wick import five_minute_test
+from pencil_wick import one_hour_test
 
 def GO_LONG(one_minute, five_minute):
-    # if ((one_minute == "GREEN") and (pencil_wick_test("GREEN") == "PASS")) and ((five_minute == "GREEN") and (re_entry("GREEN") == "PASS")): return True # Too Slow
-    if ((one_minute == "GREEN") and (pencil_wick_test("GREEN") == "PASS")) and (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (re_entry("GREEN") == "PASS")): return True
+    # if ((one_minute == "GREEN") and (one_minute_test("GREEN") == "PASS")) and ((five_minute == "GREEN") and (five_minute_test("GREEN") == "PASS")): return True # Too Slow
+    if ((one_minute == "GREEN") and (one_minute_test("GREEN") == "PASS")) and (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (five_minute_test("GREEN") == "PASS")): return True
     else: return False
 
 def GO_SHORT(one_minute, five_minute):
-    # if ((one_minute == "RED") and (pencil_wick_test("RED") == "PASS")) and ((five_minute == "RED") and (re_entry("RED") == "PASS")): return True # Too Slow
-    if ((one_minute == "RED") and (pencil_wick_test("RED") == "PASS")) and (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (re_entry("RED") == "PASS")): return True
+    # if ((one_minute == "RED") and (one_minute_test("RED") == "PASS")) and ((five_minute == "RED") and (five_minute_test("RED") == "PASS")): return True # Too Slow
+    if ((one_minute == "RED") and (one_minute_test("RED") == "PASS")) and (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (five_minute_test("RED") == "PASS")): return True
     else: return False
 
 def CLOSE_LONG(exit_minute):
-    if (exit_minute == "RED") or (pencil_wick_test("GREEN") == "FAIL"): return True
+    if (exit_minute == "RED") or (one_minute_test("GREEN") == "FAIL"): return True
     else: return False
 
 def CLOSE_SHORT(exit_minute):
-    if (exit_minute == "GREEN") or (pencil_wick_test("RED") == "FAIL"): return True
+    if (exit_minute == "GREEN") or (one_minute_test("RED") == "FAIL"): return True
     else: return False
 
 def EMERGENCY_EXIT(EXIT):
@@ -52,12 +53,12 @@ def EMERGENCY_EXIT(EXIT):
         if ((previous_candle == "INDECISIVE") or (previous_candle == "RED")) and(current_Low < previous_Low): return True
         else: return False
 
-def EMERGENCY_EXIT_LONG(five_minute):
-    # if ((five_minute == "RED") and (re_entry("RED") == "PASS")): return True
-    if (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (re_entry("RED") == "PASS")): return True
+def DIRECTION_CHANGE_EXIT_LONG(one_hour):
+    if ((one_hour == "RED") and (one_hour_test("RED") == "PASS")): return True
+    # if (((one_hour == "RED") or (one_hour == "INDECISIVE")) and (one_hour_test("RED") == "PASS")): return True
     else: return False
 
-def EMERGENCY_EXIT_SHORT(five_minute):
-    # if ((five_minute == "GREEN") and (re_entry("GREEN") == "PASS")): return True
-    if (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (re_entry("GREEN") == "PASS")): return True
+def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
+    if ((one_hour == "GREEN") and (one_hour_test("GREEN") == "PASS")): return True
+    # if (((one_hour == "GREEN") or (one_hour == "INDECISIVE")) and (one_hour_test("GREEN") == "PASS")): return True
     else: return False
