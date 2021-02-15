@@ -17,14 +17,7 @@ while True:
 
     input_pair = input("\nChoose your Pair :   ").upper() or 'BTC'
 
-    if (input_pair == '1') or (input_pair == 'BTC'):
-        coin            = "BTC"
-        quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount
-        leverage        = 50        # Maximum 125 // Recommended 25-35 // Oracle 50x
-        round_decimal   = 2         # Some crypto pairs like chainlink read up to 3 decimal place of USDT
-        break
-
-    elif (input_pair == '2') or (input_pair == 'ETH'):
+    if (input_pair == '2') or (input_pair == 'ETH'):
         coin            = "ETH"
         quantity        = 0.01
         leverage        = 40        # Maximum 100 // Recommended 20-30 // Oracle 40x
@@ -73,7 +66,12 @@ while True:
         round_decimal   = 4
         break
 
-    else: print("❗Invalid Number❗Try again❗\n")
+    else:
+        coin            = "BTC"
+        quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount
+        leverage        = 50        # Maximum 125 // Recommended 25-35 // Oracle 50x
+        round_decimal   = 2         # Some crypto pairs like chainlink read up to 3 decimal place of USDT
+        break
 
 pair = coin + "USDT"
 print("Pair Name        :   " + str(pair))

@@ -29,10 +29,14 @@ def check_previous(INTERVAL):
     elif (previous_Close > previous_Open): previous = "GREEN_INDECISIVE"
     else: previous = "NO_MOVEMENT"
 
-    current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
-    current_Close   = round(((float(klines[3][1]) + float(klines[3][2]) + float(klines[3][3]) + float(klines[3][4])) / 4), config.round_decimal)
-    current_High    = max(float(klines[3][2]), current_Open, current_Close)
-    current_Low     = min(float(klines[3][3]), current_Open, current_Close)
+    if previous == "GREEN": "GREEN_GETTING_WEAKER"
+    elif previous == "RED": "RED_GETTING_WEAKER"
+    else: "JUST_WAIT"
+
+    # current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
+    # current_Close   = round(((float(klines[3][1]) + float(klines[3][2]) + float(klines[3][3]) + float(klines[3][4])) / 4), config.round_decimal)
+    # current_High    = max(float(klines[3][2]), current_Open, current_Close)
+    # current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
     # if (current_Open == current_High): current = "RED"
     # elif (current_Open == current_Low): current = "GREEN"
@@ -40,4 +44,4 @@ def check_previous(INTERVAL):
     # elif (current_Close > current_Open): current = "GREEN_INDECISIVE"
     # else: current = "NO_MOVEMENT"
 
-    return previous
+    # return previous

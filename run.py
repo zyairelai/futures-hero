@@ -13,12 +13,12 @@ try:
 
     def added_to_job():
         strategy.dead_or_alive()    # Trade ONE direction
-        # strategy.fomo()             # Trade BOTH direction
+#        strategy.fomo()             # Trade BOTH direction
 
     while True:
         try:
             added_to_job()
-            time.sleep(8)
+            time.sleep(5)
 
             # scheduler = BlockingScheduler()
             # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
