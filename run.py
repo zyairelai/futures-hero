@@ -11,9 +11,17 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
+    print("Which mode do you want to use?")
+    print("1. Safe Mode - Only trade one direction to MINIMIZE LOSS")
+    print("2. Risk Mode - Might trade against direction to MAXIMIZE PROFITS")
+    user_mode = input("Enter a number   :   ") or '1'
+
+    if user_mode == '2': print(colored("RISK MODE ENABLED\n", "red"))
+    else: print(colored("SAFE MODE ENABLED\n", "green"))
+
     def added_to_job():
-        strategy.dead_or_alive()    # Trade ONE direction
-#        strategy.fomo()             # Trade BOTH direction
+        if user_mode == '2': strategy.fomo()
+        else: strategy.dead_or_alive()
 
     while True:
         try:
