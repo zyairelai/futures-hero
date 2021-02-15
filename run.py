@@ -12,8 +12,9 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():
-#        strategy.dead_or_alive()    # Trade ONE direction
-        strategy.fomo()             # Trade BOTH direction
+        #strategy.dead_or_alive()    # Trade ONE direction
+        strategy.strife()             # Trade BOTH direction following 1 hour trend
+        # strategy.fomo()             # Trade BOTH direction within 5 minute
 
     while True:
         try:
