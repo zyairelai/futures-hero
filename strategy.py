@@ -92,6 +92,7 @@ def fomo():
 
 def strife():
     position_info = get_position.get_position_info()
+    # six_hour      = heikin_ashi.get_hour(6)
     one_hour      = heikin_ashi.get_hour(1)
     five_minute   = heikin_ashi.get_current_minute(5)
     one_minute    = heikin_ashi.get_current_minute(1)
