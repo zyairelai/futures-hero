@@ -12,14 +12,13 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():
-        #strategy.dead_or_alive()    # Trade ONE direction
-        strategy.strife()             # Trade BOTH direction following 1 hour trend
-        # strategy.fomo()             # Trade BOTH direction within 5 minute
+        strategy.dead_or_alive()    # Trade ONE direction
+        # strategy.fomo()             # Trade BOTH direction
 
     while True:
         try:
             added_to_job()
-            time.sleep(5)
+            time.sleep(8)
 
             # scheduler = BlockingScheduler()
             # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
