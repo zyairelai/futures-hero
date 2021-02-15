@@ -1,5 +1,7 @@
 live_trade      = True      # False to see the output & verify your API key is working
 clear_direction = True      # True to minimize lose, False to maximize profit
+use_stoploss    = True      # Recommend (use_stoploss == True) if (clear_direction == True)
+SL_percentage   = 50        # Percentage that you are willing to lose
 
 # Asset Configuration
 coin            = "BTC"

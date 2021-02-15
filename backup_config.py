@@ -1,5 +1,7 @@
-live_trade      = True      # False to see the output && verify your API key is working
-clear_direction = True      # True to minimize lose, False to maximize profit
+live_trade      = True      # False to see the output & verify your API key is working
+clear_direction = False     # True to minimize lose, False to maximize profit
+use_stoploss    = False     # Recommend (use_stoploss == True) if (clear_direction == True)
+SL_percentage   = 50        # Percentage that you are willing to lose
 
 while True:
     print("\nHere are the supported Pairs: ")
@@ -77,4 +79,5 @@ while True:
 pair = coin + "USDT"
 print("Pair Name        :   " + str(pair))
 print("Trade Quantity   :   " + str(quantity) + " " + str(coin))
+print("Set Levarage     :   " + str(leverage))
 print()

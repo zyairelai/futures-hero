@@ -1,6 +1,3 @@
-use_stoploss = False
-percentage = 50
-
 import config
 import entry_exit
 import heikin_ashi
@@ -9,6 +6,9 @@ import get_position
 import binance_futures
 from datetime import datetime
 from termcolor import colored
+
+use_stoploss = config.use_stoploss
+percentage = config.SL_percentage
 
 def dead_or_alive(CHILL_OR_FOMO):
     position_info = get_position.get_position_info()

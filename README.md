@@ -32,7 +32,12 @@ pip3 install python-binance==0.7.5
 pip3 install termcolor==1.1.0
 ```
 
-## 3. Run
+## 3. Before Running......
+Make sure you go to `config.py`, read the comments and adjust your risk level!  
+The script is mainly focusing on `BTC/USDT` and `ETH/USDT` movement pattern.  
+If you'd like to test with other pairs, you can renamed `backup_config.py` to `config.py`
+
+## 4. Run
 Let's make the magic happens!
 ```
 python3 run.py
@@ -42,7 +47,7 @@ To check the trend, position, realizedPNL and many others:
 python3 check.py
 ```
 
-## 4. Donate for MORE!!
+## 5. Donate for MORE!!
 If you found this useful to generate your passive income, feel free to donate to me so I can IMPROVE MORE!  
 ```
 BTC  (BTC)   : 15VowsyMp9A5DWbKbZEVt4A4r7dQQgddtn
