@@ -22,7 +22,17 @@ def CLOSE_SHORT(exit_minute):
     if (exit_minute == "GREEN") or (one_minute_test("RED") == "FAIL"): return True
     else: return False
 
-def EMERGENCY_EXIT(EXIT):
+def DIRECTION_CHANGE_EXIT_LONG(one_hour):
+    if ((one_hour == "RED") and (one_hour_test("RED") == "PASS")): return True
+    # if (((one_hour == "RED") or (one_hour == "INDECISIVE")) and (one_hour_test("RED") == "PASS")): return True
+    else: return False
+
+def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
+    if ((one_hour == "GREEN") and (one_hour_test("GREEN") == "PASS")): return True
+    # if (((one_hour == "GREEN") or (one_hour == "INDECISIVE")) and (one_hour_test("GREEN") == "PASS")): return True
+    else: return False
+
+def EMERGENCY_EXIT(POSITION):
     klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
@@ -46,19 +56,9 @@ def EMERGENCY_EXIT(EXIT):
     # elif (previous_Close > previous_Open): previous_candle = "GREEN_INDECISIVE"
     else: previous_candle = "INDECISIVE"
 
-    if EXIT == "SHORT":
+    if POSITION == "SHORT":
         if ((previous_candle == "INDECISIVE") or (previous_candle == "GREEN")) and (current_High > previous_High): return True
         else: return False
-    elif EXIT == "LONG":
+    elif POSITION == "LONG":
         if ((previous_candle == "INDECISIVE") or (previous_candle == "RED")) and(current_Low < previous_Low): return True
         else: return False
-
-def DIRECTION_CHANGE_EXIT_LONG(one_hour):
-    if ((one_hour == "RED") and (one_hour_test("RED") == "PASS")): return True
-    # if (((one_hour == "RED") or (one_hour == "INDECISIVE")) and (one_hour_test("RED") == "PASS")): return True
-    else: return False
-
-def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
-    if ((one_hour == "GREEN") and (one_hour_test("GREEN") == "PASS")): return True
-    # if (((one_hour == "GREEN") or (one_hour == "INDECISIVE")) and (one_hour_test("GREEN") == "PASS")): return True
-    else: return False
