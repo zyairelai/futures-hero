@@ -15,7 +15,7 @@ if user_input == '2':
     leverage        = 40
     round_decimal   = 2
 
-else: 
+else:
     coin            = "BTC"
     quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount
     leverage        = 50        # Maximum 125 // Recommended 30-40
