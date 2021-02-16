@@ -32,9 +32,10 @@ try:
             # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
             # scheduler.start()
 
-        except (BinanceAPIException,
-                ConnectionResetError,
+        except (KeyError,
                 socket.timeout,
+                BinanceAPIException,
+                ConnectionResetError,
                 urllib3.exceptions.ProtocolError,
                 urllib3.exceptions.ReadTimeoutError,
                 requests.exceptions.ConnectionError,
