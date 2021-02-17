@@ -17,15 +17,13 @@ def dead_or_alive():
     exit_minute  = heikin_ashi.exit_minute()
 
     if position_info == "LONGING":
-        if entry_exit.DIRECTION_CHANGE_EXIT_LONG(one_hour) or \
-           ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)):
+        if entry_exit.DIRECTION_CHANGE_EXIT_LONG(one_hour, direction) or ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if entry_exit.DIRECTION_CHANGE_EXIT_SHORT(one_hour) or \
-           ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)):
+        if entry_exit.DIRECTION_CHANGE_EXIT_SHORT(one_hour, direction) or ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -34,15 +32,13 @@ def dead_or_alive():
         binance_futures.cancel_all_open_orders()
 
         if direction == "GREEN":
-            if entry_exit.GO_LONG(one_minute, five_minute) and \
-               ((one_hour != "RED" or one_hour != "RED_INDECISIVE") and not (pencil_wick.one_hour_test("RED"))):
+            if entry_exit.GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", config.quantity)
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif direction == "RED":
-            if entry_exit.GO_SHORT(one_minute, five_minute) and \
-               ((one_hour != "GREEN" or one_hour != "GREEN_INDECISIVE") and not (pencil_wick.one_hour_test("GREEN"))):
+            if entry_exit.GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
             else: print("ACTION           :   🐺 WAIT 🐺")
@@ -60,38 +56,30 @@ def fomo():
     exit_minute  = heikin_ashi.exit_minute()
 
     if position_info == "LONGING":
-        if entry_exit.DIRECTION_CHANGE_EXIT_LONG(one_hour) or \
-           ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or \
-           ((six_hour == "RED") and ((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and pencil_wick.one_hour_test("RED")):
+        if entry_exit.DIRECTION_CHANGE_EXIT_LONG(one_hour, six_hour) or ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if entry_exit.DIRECTION_CHANGE_EXIT_SHORT(one_hour) or \
-           ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)) or \
-           ((six_hour == "GREEN") and ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE")) and pencil_wick.one_hour_test("GREEN")):
+        if entry_exit.DIRECTION_CHANGE_EXIT_SHORT(one_hour, six_hour) or ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
         binance_futures.cancel_all_open_orders()
-
         if six_hour == "RED" or six_hour == "GREEN":
 
-            if entry_exit.GO_LONG(one_minute, five_minute) and \
-               ((one_hour != "RED" or one_hour != "RED_INDECISIVE") and not (pencil_wick.one_hour_test("RED"))):
+            if entry_exit.GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", config.quantity)
 
-            elif entry_exit.GO_SHORT(one_minute, five_minute) and \
-                ((one_hour != "GREEN" or one_hour != "GREEN_INDECISIVE") and not (pencil_wick.one_hour_test("GREEN"))):
+            elif entry_exit.GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
 
             else: print("ACTION           :   🐺 WAIT 🐺")
-
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
