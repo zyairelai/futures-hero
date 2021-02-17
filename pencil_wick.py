@@ -45,12 +45,14 @@ def one_minute_exit_test(CANDLE):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
+    threshold = abs((previous_Open - previous_Close) / 4)
+
     if CANDLE == "GREEN":
-        if (previous_High > current_High) and (current_Low < current_Open): return True
+        if (previous_High > current_High) and (current_Low < (previous_Low + threshold)): return True
         elif current_Low < previous_Low: return True
         else: return False
     elif CANDLE == "RED":
-        if (current_Low > previous_Low) and (current_High > current_Open): return True
+        if (current_Low > previous_Low) and (current_High > (previous_High - threshold)): return True
         elif current_High > previous_High: return True
         else: return False
 
