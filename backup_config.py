@@ -21,7 +21,7 @@ while True:
         coin            = "ETH"
         quantity        = 0.01
         leverage        = 40        # Maximum 100 // Recommended 20-30 // Oracle 40x
-        round_decimal   = 2
+        round_decimal   = 1
         break
 
     elif (input_pair == '3') or (input_pair == 'LTC'):
@@ -70,7 +70,7 @@ while True:
         coin            = "BTC"
         quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount
         leverage        = 50        # Maximum 125 // Recommended 25-35 // Oracle 50x
-        round_decimal   = 2         # Some crypto pairs like chainlink read up to 3 decimal place of USDT
+        round_decimal   = 0         # Some crypto pairs like chainlink read up to 3 decimal place of USDT
         break
 
 pair = coin + "USDT"

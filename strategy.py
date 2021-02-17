@@ -56,13 +56,17 @@ def fomo():
     exit_minute  = heikin_ashi.exit_minute()
 
     if position_info == "LONGING":
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or entry_exit.DIRECTION_CHANGE_EXIT_LONG(one_hour):
+        if entry_exit.DIRECTION_CHANGE_EXIT_LONG(one_hour) or \
+           ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_LONG(exit_minute)) or \
+           ((six_hour == "RED") and ((one_hour == "RED") or (one_hour == "INDECISIVE")) and pencil_wick.one_hour_test("RED")):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)) or entry_exit.DIRECTION_CHANGE_EXIT_SHORT(one_hour):
+        if entry_exit.DIRECTION_CHANGE_EXIT_SHORT(one_hour) or \
+           ((get_position.get_unRealizedProfit() == "PROFIT") and entry_exit.CLOSE_SHORT(exit_minute)) or \
+           ((six_hour == "GREEN") and ((one_hour == "GREEN") or (one_hour == "INDECISIVE")) and pencil_wick.one_hour_test("GREEN")):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
