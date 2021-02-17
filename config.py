@@ -13,7 +13,7 @@ if user_input == '2':
     coin            = "ETH"
     quantity        = 0.01
     leverage        = 40
-    round_decimal   = 2
+    round_decimal   = 1
 
 else:
     coin            = "BTC"

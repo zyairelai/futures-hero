@@ -82,11 +82,11 @@ def set_take_profit(position, percentage): # Percentage to achieve so you could 
     liquidationPrice = float(position_information()[0].get("liquidationPrice"))
 
     if position == "LONG":
-        stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), (config.round_decimal - 1))
+        stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), (config.round_decimal))
         client.futures_create_order(symbol=config.pair, side="SELL", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
 
     elif position == "SHORT":
-        stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * (percentage / 100))), (config.round_decimal - 1))
+        stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * (percentage / 100))), (config.round_decimal))
         client.futures_create_order(symbol=config.pair, side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
 
 def set_stop_loss(position, percentage): # Percentage of the initial amount that you are willing to lose
@@ -95,9 +95,9 @@ def set_stop_loss(position, percentage): # Percentage of the initial amount that
     liquidationPrice = float(position_information()[0].get("liquidationPrice"))
 
     if position == "LONG":
-        stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * (percentage / 100))), (config.round_decimal - 1))
+        stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * (percentage / 100))), (config.round_decimal))
         client.futures_create_order(symbol=config.pair, side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
 
     elif position == "SHORT":
-        stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), (config.round_decimal - 1))
+        stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), (config.round_decimal))
         client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
