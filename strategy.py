@@ -32,13 +32,13 @@ def dead_or_alive():
         binance_futures.cancel_all_open_orders()
 
         if direction == "GREEN":
-            if entry_exit.GO_LONG(one_minute, five_minute) and (one_hour != "RED" and pencil_wick.one_hour_test("RED") == "FAIL"):
+            if entry_exit.GO_LONG(one_minute, five_minute) and (one_hour != "RED" and not (pencil_wick.one_hour_test("RED"))):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", config.quantity)
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif direction == "RED":
-            if entry_exit.GO_SHORT(one_minute, five_minute) and (one_hour != "GREEN" and pencil_wick.one_hour_test("GREEN") == "FAIL"):
+            if entry_exit.GO_SHORT(one_minute, five_minute) and (one_hour != "GREEN" and not (pencil_wick.one_hour_test("GREEN"))):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
             else: print("ACTION           :   🐺 WAIT 🐺")
@@ -72,11 +72,11 @@ def fomo():
 
         if six_hour != "INDECISIVE":
 
-            if entry_exit.GO_LONG(one_minute, five_minute) and (one_hour != "RED" and pencil_wick.one_hour_test("RED") == "FAIL"):
+            if entry_exit.GO_LONG(one_minute, five_minute) and (one_hour != "RED" and not (pencil_wick.one_hour_test("RED"))):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", config.quantity)
 
-            elif entry_exit.GO_SHORT(one_minute, five_minute) and (one_hour != "GREEN" and pencil_wick.one_hour_test("GREEN") == "FAIL"):
+            elif entry_exit.GO_SHORT(one_minute, five_minute) and (one_hour != "GREEN" and not (pencil_wick.one_hour_test("GREEN"))):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
 

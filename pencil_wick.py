@@ -21,11 +21,11 @@ def one_minute_entry_test(CANDLE):
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
     if CANDLE == "GREEN":
-        if (current_High > previous_High): return "PASS"
-        else: return "FAIL"
+        if (current_High > previous_High): return True
+        else: return False
     elif CANDLE == "RED":
-        if (current_Low < previous_Low): return "PASS"
-        else: return "FAIL"
+        if (current_Low < previous_Low): return True
+        else: return False
 
 def one_minute_exit_test(CANDLE):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
@@ -46,26 +46,35 @@ def one_minute_exit_test(CANDLE):
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
     if CANDLE == "GREEN":
-        previous_wick = previous_High - previous_Close
-        current_wick  = current_High - current_Close
-        if previous_High > current_High:
-            if current_Close > previous_Close: result = "PASS"
-            else:
-                if (previous_wick / 3) > current_wick: result = "FAIL"
-                else: result = "PASS"
-        else: result = "PASS"
-
+        if (current_High < previous_High) and (current_Low < current_Open): return True
+        elif current_Low < previous_Low: return True
+        else: return False
     elif CANDLE == "RED":
-        previous_wick = previous_Close - previous_Low
-        current_wick  = current_Close - current_Low
-        if previous_Low < current_Low:
-            if current_Close < previous_Close: result = "PASS"
-            else:
-                if (previous_wick / 3) > current_wick: result = "FAIL"
-                else: result = "PASS"
-        else: result = "PASS"
+        if (current_Low > previous_Low) and (current_High > current_Open): return True
+        elif current_High < previous_High: return True
+        else: return False
 
-    return result
+    # if CANDLE == "GREEN":
+    #     previous_wick = previous_High - previous_Close
+    #     current_wick  = current_High - current_Close
+    #     if previous_High > current_High:
+    #         if current_Close > previous_Close: result = True
+    #         else:
+    #             if (previous_wick / 3) > current_wick: result = False
+    #             else: result = True
+    #     else: result = True
+
+    # elif CANDLE == "RED":
+    #     previous_wick = previous_Close - previous_Low
+    #     current_wick  = current_Close - current_Low
+    #     if previous_Low < current_Low:
+    #         if current_Close < previous_Close: result = True
+    #         else:
+    #             if (previous_wick / 3) > current_wick: result = False
+    #             else: result = True
+    #     else: result = True
+
+    # return result
 
 def five_minute_test(CANDLE):
     klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
@@ -86,11 +95,11 @@ def five_minute_test(CANDLE):
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
     if CANDLE == "GREEN":
-        if (current_High > previous_High): return "PASS"
-        else: return "FAIL"
+        if (current_High > previous_High): return True
+        else: return False
     elif CANDLE == "RED":
-        if (current_Low < previous_Low): return "PASS"
-        else: return "FAIL"
+        if (current_Low < previous_Low): return True
+        else: return False
 
 def one_hour_test(CANDLE):
     klines = klines = binance_futures.KLINE_INTERVAL_1HOUR()
@@ -111,8 +120,8 @@ def one_hour_test(CANDLE):
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
     if CANDLE == "GREEN":
-        if (current_High > previous_High): return "PASS"
-        else: return "FAIL"
+        if (current_High > previous_High): return True
+        else: return False
     elif CANDLE == "RED":
-        if (current_Low < previous_Low): return "PASS"
-        else: return "FAIL"
+        if (current_Low < previous_Low): return True
+        else: return False
