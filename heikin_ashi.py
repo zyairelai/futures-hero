@@ -90,11 +90,21 @@ def get_hour(hour): # return RED // GREEN // INDECISIVE
     if (current_Open == current_Low):
         current = "GREEN"
         print(colored(title + current, "green"))
+
+    elif (current_Close > current_Open):
+        current = "GREEN_INDECISIVE"
+        print(colored(title + current, "yellow"))
+
     elif (current_Open == current_High):
         current = "RED"
         print(colored(title + current, "red"))
+
+    elif (current_Open > current_Close):
+        current = "RED_INDECISIVE"
+        print(colored(title + current, "yellow"))
+
     else:
-        current = "INDECISIVE"
+        current = "NO_MOVEMENT"
         print(colored(title + current, "yellow"))
 
     return current

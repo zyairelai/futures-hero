@@ -28,10 +28,10 @@ def CLOSE_SHORT(exit_minute):
 
 def DIRECTION_CHANGE_EXIT_LONG(one_hour):
     if ((one_hour == "RED") and (one_hour_test("RED"))) or \
-       ((one_hour == "INDECISIVE") and (check_previous("1HOUR") == "GREEN")) and (one_hour_test("RED")): return True
+       ((one_hour == "RED_INDECISIVE") and (check_previous("1HOUR") == "GREEN")) and (one_hour_test("RED")): return True
     else: return False
 
 def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
     if ((one_hour == "GREEN") and (one_hour_test("GREEN"))) or \
-       ((one_hour == "INDECISIVE") and (check_previous("1HOUR") == "RED") and (one_hour_test("GREEN"))): return True
+       ((one_hour == "GREEN_INDECISIVE") and (check_previous("1HOUR") == "RED") and (one_hour_test("GREEN"))): return True
     else: return False
