@@ -29,14 +29,12 @@ def CLOSE_SHORT(exit_minute):
     if (exit_minute == "GREEN") or (one_minute_exit_test("RED") == "PASS"): return True
     else: return False
 
-def DIRECTION_CHANGE_EXIT_LONG(one_hour, six_hour):
+def DIRECTION_CHANGE_EXIT_LONG(one_hour):
     if ((one_hour == "RED") and (one_hour_test("RED") == "PASS")) or \
-       ((one_hour == "RED_INDECISIVE") and (check_previous("1HOUR") == "GREEN")) and (one_hour_test("RED") == "PASS") or \
-       ((six_hour == "RED") and ((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and one_hour_test("RED") == "PASS"): return True
+       ((one_hour == "RED_INDECISIVE") and (check_previous("1HOUR") == "GREEN")) and (one_hour_test("RED") == "PASS"): return True
     else: return False
 
-def DIRECTION_CHANGE_EXIT_SHORT(one_hour, six_hour):
+def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
     if ((one_hour == "GREEN") and (one_hour_test("GREEN") == "PASS")) or \
-       ((one_hour == "GREEN_INDECISIVE") and (check_previous("1HOUR") == "RED") and (one_hour_test("GREEN") == "PASS")) or \
-       ((six_hour == "GREEN") and ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE")) and one_hour_test("GREEN") == "PASS"): return True
+       ((one_hour == "GREEN_INDECISIVE") and (check_previous("1HOUR") == "RED") and (one_hour_test("GREEN") == "PASS")): return True
     else: return False
