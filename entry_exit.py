@@ -9,13 +9,13 @@ from time_travel import check_previous
 def GO_LONG(one_minute, five_minute, one_hour):
     if ((one_minute == "GREEN") and (one_minute_entry_test("GREEN") == "PASS")) and \
        (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (five_minute_test("GREEN") == "PASS")) and \
-       ((one_hour != "RED" or one_hour != "RED_INDECISIVE") and not (one_hour_test("RED") == "FAIL")): return True
+       ((one_hour != "RED" or one_hour != "RED_INDECISIVE") and (one_hour_test("RED") == "FAIL")): return True
     else: return False
 
 def GO_SHORT(one_minute, five_minute, one_hour):
     if ((one_minute == "RED") and (one_minute_entry_test("RED") == "PASS")) and \
        (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (five_minute_test("RED") == "PASS"))\
-       ((one_hour != "GREEN" or one_hour != "GREEN_INDECISIVE") and not (one_hour_test("GREEN") == "FAIL")): return True
+       ((one_hour != "GREEN" or one_hour != "GREEN_INDECISIVE") and (one_hour_test("GREEN") == "FAIL")): return True
     else: return False
 
 def CLOSE_LONG(exit_minute):
