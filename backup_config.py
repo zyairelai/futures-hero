@@ -4,14 +4,14 @@ troubleshooting = False
 
 while True:
     print("\nHere are the supported Pairs: ")
-    print("1. BTC-USDT")
-    print("2. ETH-USDT")
-    print("3. LTC-USDT")
-    print("4. BNB-USDT")
-    print("5. BCH-USDT")
-    print("6. EOS-USDT")
-    print("7. LINK-USDT")
-    print("8. XRP-USDT")
+    print("1. BTC_USDT")
+    print("2. ETH_USDT")
+    print("3. LTC_USDT")
+    print("4. BNB_USDT")
+    print("5. BCH_USDT")
+    print("6. EOS_USDT")
+    print("7. LINK_USDT")
+    print("8. XRP_USDT")
     # print("9. ")
     # print("0. Others (Require More Input)")
 

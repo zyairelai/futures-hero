@@ -2,9 +2,9 @@ live_trade      = True      # False to see the output & verify your API key is w
 clear_direction = False     # True to minimize lose, False to maximize profit
 troubleshooting = False     # Troubleshooting mode for @zyairelai
 
-print("Which Asset do you want to trade?")
-print("1. Bitcoin - BTC/USDT")
-print("2. Ethereum - ETH/USDT")
+print("Which pair do you want to trade?")
+print("1. BTC_USDT")
+print("2. ETH_USDT")
 user_input = input("\nEnter a number   :   ") or '1'
 
 # Asset Configuration

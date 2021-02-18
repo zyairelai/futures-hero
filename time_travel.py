@@ -71,13 +71,7 @@ def pattern_broken(INTERVAL):
     elif (current_Open == current_High): current = "RED"
     else: current = "INDECISIVE"
 
-    print(first)
-    print(previous)
-    print(current)
-
     if ((first == "INDECISIVE") and (previous == "INDECISIVE") and (current == "INDECISIVE")) or \
        ((first == "GREEN") and (previous == "GREEN") and (current == "INDECISIVE")) or \
        ((first == "RED") and (previous == "RED") and (current == "INDECISIVE")): return "BROKEN"
     else: return "NOT_BROKEN"
-
-pattern_broken("1HOUR")
