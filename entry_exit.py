@@ -20,12 +20,12 @@ def GO_SHORT(one_minute, five_minute, one_hour):
        (((one_hour != "GREEN") or (one_hour != "GREEN_INDECISIVE")) and (entry_test("GREEN", "1HOUR") == "FAIL")): return True
     else: return False
 
-def CLOSE_LONG(exit_minute):
-    if (exit_minute == "RED") or (one_minute_exit_test("GREEN") == "PASS"): return True
+def CLOSE_LONG():
+    if (one_minute_exit_test("GREEN") == "PASS"): return True
     else: return False
 
-def CLOSE_SHORT(exit_minute):
-    if (exit_minute == "GREEN") or (one_minute_exit_test("RED") == "PASS"): return True
+def CLOSE_SHORT():
+    if (one_minute_exit_test("RED") == "PASS"): return True
     else: return False
 
 def DIRECTION_CHANGE_EXIT_LONG(one_hour):

@@ -1,5 +1,5 @@
 live_trade      = True      # False to see the output & verify your API key is working
-clear_direction = False     # True to minimize lose, False to maximize profit
+clear_direction = True      # True to minimize lose, False to maximize profit
 troubleshooting = False     # Troubleshooting mode for @zyairelai
 
 print("Which pair do you want to trade?")
