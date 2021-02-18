@@ -46,7 +46,9 @@ def pattern_broken(INTERVAL):
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
     first_Open      = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
     first_Close     = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
-
+    first_High      = max(float(klines[1][2]), first_Open, first_Close)
+    first_Low       = min(float(klines[1][3]), first_Open, first_Close)
+    
     previous_Open   = round(((first_Open + first_Close) / 2), config.round_decimal)
     previous_Close  = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[1][3]) + float(klines[2][4])) / 4), config.round_decimal)
     previous_High   = max(float(klines[2][2]), previous_Open, previous_Close)
@@ -57,5 +59,25 @@ def pattern_broken(INTERVAL):
     current_High    = max(float(klines[3][2]), current_Open, current_Close)
     current_Low     = min(float(klines[3][3]), current_Open, current_Close)
 
-    pattern = "BROKEN"
-    return pattern
+    if (first_Open == first_Low): first = "GREEN"
+    elif (first_Open == first_High): first = "RED"
+    else: first = "INDECISIVE"
+
+    if (previous_Open == previous_Low): previous = "GREEN"
+    elif (previous_Open == previous_High): previous = "RED"
+    else: previous = "INDECISIVE"
+
+    if (current_Open == current_Low): current = "GREEN"
+    elif (current_Open == current_High): current = "RED"
+    else: current = "INDECISIVE"
+
+    print(first)
+    print(previous)
+    print(current)
+
+    if ((first == "INDECISIVE") and (previous == "INDECISIVE") and (current == "INDECISIVE")) or \
+       ((first == "GREEN") and (previous == "GREEN") and (current == "INDECISIVE")) or \
+       ((first == "RED") and (previous == "RED") and (current == "INDECISIVE")): return "BROKEN"
+    else: return "NOT_BROKEN"
+
+pattern_broken("1HOUR")
