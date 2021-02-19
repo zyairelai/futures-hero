@@ -1,27 +1,28 @@
 import config
 import binance_futures
+from heikin_ashi import silent_candle
 
 def calculate_trade_amount():
-    klines = binance_futures.KLINE_INTERVAL_6HOUR()
+    six_hour = binance_futures.KLINE_INTERVAL_6HOUR()
 
-    first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
-    first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
+    first_run_Open  = round(((float(six_hour[0][1]) + float(six_hour[0][4])) / 2), config.round_decimal)
+    first_run_Close = round(((float(six_hour[0][1]) + float(six_hour[0][2]) + float(six_hour[0][3]) + float(six_hour[0][4])) / 4), config.round_decimal)
     first_Open      = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
-    first_Close     = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
+    first_Close     = round(((float(six_hour[1][1]) + float(six_hour[1][2]) + float(six_hour[1][3]) + float(six_hour[1][4])) / 4), config.round_decimal)
 
     previous_Open   = round(((first_Open + first_Close) / 2), config.round_decimal)
-    previous_Close  = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[1][3]) + float(klines[2][4])) / 4), config.round_decimal)
-    previous_High   = max(float(klines[2][2]), previous_Open, previous_Close)
-    previous_Low    = min(float(klines[2][3]), previous_Open, previous_Close)
+    previous_Close  = round(((float(six_hour[2][1]) + float(six_hour[2][2]) + float(six_hour[1][3]) + float(six_hour[2][4])) / 4), config.round_decimal)
+    previous_High   = max(float(six_hour[2][2]), previous_Open, previous_Close)
+    previous_Low    = min(float(six_hour[2][3]), previous_Open, previous_Close)
 
     if (previous_Open == previous_Low): previous_direction = "GREEN"
     elif (previous_Open == previous_High): previous_direction = "RED"
     else: previous_direction = "INDECISIVE"
 
     current_Open    = round(((previous_Open + previous_Close) / 2), config.round_decimal)
-    current_Close   = round(((float(klines[3][1]) + float(klines[3][2]) + float(klines[3][3]) + float(klines[3][4])) / 4), config.round_decimal)
-    current_High    = max(float(klines[3][2]), current_Open, current_Close)
-    current_Low     = min(float(klines[3][3]), current_Open, current_Close)
+    current_Close   = round(((float(six_hour[3][1]) + float(six_hour[3][2]) + float(six_hour[3][3]) + float(six_hour[3][4])) / 4), config.round_decimal)
+    current_High    = max(float(six_hour[3][2]), current_Open, current_Close)
+    current_Low     = min(float(six_hour[3][3]), current_Open, current_Close)
 
     if (current_Open == current_Low): current_direction = "GREEN"
     elif (current_Open == current_High): current_direction = "RED"

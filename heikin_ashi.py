@@ -9,8 +9,11 @@ def get_clear_direction(): # return RED // GREEN // INDECISIVE
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
+
     first_Open      = round(((first_run_Open + first_run_Close) / 2), config.round_decimal)
     first_Close     = round(((float(klines[1][1]) + float(klines[1][2]) + float(klines[1][3]) + float(klines[1][4])) / 4), config.round_decimal)
+    first_High      = max(float(klines[1][2]), first_Open, first_Close)
+    first_Low       = min(float(klines[1][3]), first_Open, first_Close)
 
     previous_Open   = round(((first_Open + first_Close) / 2), config.round_decimal)
     previous_Close  = round(((float(klines[2][1]) + float(klines[2][2]) + float(klines[1][3]) + float(klines[2][4])) / 4), config.round_decimal)
@@ -28,35 +31,58 @@ def get_clear_direction(): # return RED // GREEN // INDECISIVE
         print("The previous_High is  :   " + str(previous_High))
         print("The previous_Low is   :   " + str(previous_Low))
 
+    title = "PREVIOUS 6 HOUR  :   "
+    if (previous_Open == previous_Low):
+        previous = "GREEN"
+        print(colored(title + previous, "green"))
+
+    elif (previous_Close > previous_Open):
+        previous = "GREEN_INDECISIVE"
+        print(colored(title + previous, "green"))
+
+    elif (previous_Open == previous_High):
+        previous = "RED"
+        print(colored(title + previous, "red"))
+
+    elif (previous_Open > previous_Close):
+        previous = "RED_INDECISIVE"
+        print(colored(title + previous, "yellow"))
+
+    else:
+        previous = "NO_MOVEMENT"
+        print(colored(title + previous, "yellow"))
+
+    if troubleshooting:
         print("The current_Open is  :   " + str(current_Open))
         print("The current_Close is :   " + str(current_Close))
         print("The current_High is  :   " + str(current_High))
         print("The current_Low is   :   " + str(current_Low))
 
-    title = "PREVIOUS 6 HOUR  :   "
-    if (previous_Open == previous_Low):
-        previous = "GREEN"
-        print(colored(title + previous, "green"))
-    elif (previous_Open == previous_High):
-        previous = "RED"
-        print(colored(title + previous, "red"))
-    else:
-        previous = "INDECISIVE"
-        print(colored(title + previous, "yellow"))
-
     title = "CURRENT 6 HOUR   :   "
     if (current_Open == current_Low):
         current = "GREEN"
         print(colored(title + current, "green"))
+
+    elif (current_Close > current_Open):
+        current = "GREEN_INDECISIVE"
+        print(colored(title + current, "yellow"))
+
     elif (current_Open == current_High):
         current = "RED"
         print(colored(title + current, "red"))
+
+    elif (current_Open > current_Close):
+        current = "RED_INDECISIVE"
+        print(colored(title + current, "yellow"))
+
     else:
-        current = "INDECISIVE"
+        current = "NO_MOVEMENT"
         print(colored(title + current, "yellow"))
 
     if (previous == "GREEN") and (current == "GREEN"): trend = "GREEN"
+    elif ((previous == "GREEN_INDECISIVE") and (previous_High > first_High)) and (current == "GREEN"): trend = "GREEN"
     elif (previous == "RED") and (current == "RED"): trend = "RED"
+    elif ((previous == "RED_INDECISIVE") and (previous_Low < first_Low)) and (current == "RED"): trend = "RED"
     else: trend = "INDECISIVE"
     return trend
 
