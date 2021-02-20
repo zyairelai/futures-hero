@@ -67,17 +67,17 @@ def ultra_safe_mode():
 
     else:
         klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
-        first_six    = trade_amount.first_candle(klines)
-        previous_six = trade_amount.previous_candle(klines)
-        current_six  = trade_amount.current_candle(klines)
+        first_six    = heikin_ashi.first_candle(klines)
+        previous_six = heikin_ashi.previous_candle(klines)
+        current_six  = heikin_ashi.current_candle(klines)
         if (first_six != "GREEN") and (previous_six == "GREEN") and (current_six == "GREEN"): six_hour = "SAFE"
         elif (first_six != "RED") and (previous_six == "RED") and (current_six == "RED"): six_hour = "SAFE"
         else: six_hour = "NOT_SURE"
 
         klines = binance_futures.KLINE_INTERVAL_1HOUR(4)
-        first_one    = trade_amount.first_candle(klines)
-        previous_one = trade_amount.previous_candle(klines)
-        current_one  = trade_amount.current_candle(klines)
+        first_one    = heikin_ashi.first_candle(klines)
+        previous_one = heikin_ashi.previous_candle(klines)
+        current_one  = heikin_ashi.current_candle(klines)
         if (first_one != "GREEN") and (previous_one == "GREEN") and (current_one == "GREEN"): one_hour = "SAFE"
         elif (first_one != "RED") and (previous_one == "RED") and (current_one == "RED"): one_hour = "SAFE"
         else: one_hour = "NOT_SURE"
