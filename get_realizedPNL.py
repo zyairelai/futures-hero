@@ -6,9 +6,11 @@ import binance_futures
 from termcolor import colored
 
 i, overall_PNL = 0, 0
-trades_list = binance_futures.account_trades(check_how_many_trades)
-markPrice = float(binance_futures.position_information()[0].get('markPrice'))
-fees_in_USDT = round(((markPrice * config.quantity * 0.08) / 100), 2)
+trades_list    = binance_futures.account_trades(check_how_many_trades)
+position_info  = binance_futures.position_information()[0]
+markPrice      = float(position_info.get('markPrice'))
+positionAmt    = abs(float(position_info.get('positionAmt')))
+fees_in_USDT   = round(((markPrice * positionAmt * 0.08) / 100), 2)
 
 for trade in trades_list:
     overall_PNL = overall_PNL + float(trade.get('realizedPnl')) - fees_in_USDT

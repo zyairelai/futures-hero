@@ -11,7 +11,9 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    def added_to_job(): strategy.dead_or_alive()
+    def added_to_job(): 
+        if config.pair == "BTCUSDT": strategy.dead_or_alive()
+        else: strategy.ultra_safe_mode()
 
     while True:
         try:

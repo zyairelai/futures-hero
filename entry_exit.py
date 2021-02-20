@@ -1,10 +1,9 @@
 import config
 import binance_futures
 from heikin_ashi import silent_candle
+from heikin_ashi import pattern_broken
 from heikin_ashi import entry_test
 from heikin_ashi import one_minute_exit_test
-from heikin_ashi import check_previous
-from heikin_ashi import pattern_broken
 
 def GO_LONG(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
@@ -26,10 +25,10 @@ def CLOSE_SHORT():
 
 def DIRECTION_CHANGE_EXIT_LONG(one_hour):
     if ((one_hour == "RED") and (entry_test("RED", "1MINUTE") == "PASS")) or \
-       ((silent_candle("30MINUTE") == "RED") and (entry_test("RED", "30MINUTE") == "PASS")) or \
-       ((one_hour == "RED_INDECISIVE") and (check_previous("1HOUR") == "GREEN")) and (entry_test("RED", "1MINUTE") == "PASS"): return True
+       ((silent_candle("30MINUTE", "CURRENT") == "RED") and (entry_test("RED", "30MINUTE") == "PASS")) or \
+       ((one_hour == "RED_INDECISIVE") and (silent_candle("1HOUR", "PREVIOUS") == "GREEN")) and (entry_test("RED", "1MINUTE") == "PASS"): return True
 
 def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
     if ((one_hour == "GREEN") and (entry_test("GREEN", "1MINUTE") == "PASS")) or \
-       ((silent_candle("30MINUTE") == "GREEN") and (entry_test("GREEN", "30MINUTE") == "PASS")) or \
-       ((one_hour == "GREEN_INDECISIVE") and (check_previous("1HOUR") == "RED") and (entry_test("GREEN", "1MINUTE") == "PASS")): return True
+       ((silent_candle("30MINUTE", "CURRENT") == "GREEN") and (entry_test("GREEN", "30MINUTE") == "PASS")) or \
+       ((one_hour == "GREEN_INDECISIVE") and (silent_candle("1HOUR", "PREVIOUS") == "RED") and (entry_test("GREEN", "1MINUTE") == "PASS")): return True

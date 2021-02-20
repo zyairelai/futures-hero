@@ -22,7 +22,7 @@ def current_Close(klines): return round(((float(klines[-1][1]) + float(klines[-1
 def current_High(klines): return max(float(klines[-1][2]), current_Open(klines), current_Close(klines))
 def current_Low(klines): return min(float(klines[-1][3]), current_Open(klines), current_Close(klines))
 
-def silent_candle(INTERVAL):
+def silent_candle(INTERVAL, TIME_TRAVEL): # return RED // GREEN // RED_INDECISIVE // GREEN_INDECISIVE // NO_MOVEMENT
     if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
     elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE(4)
     elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE(4)
@@ -33,11 +33,26 @@ def silent_candle(INTERVAL):
     elif INTERVAL == "4HOUR": klines = binance_futures.KLINE_INTERVAL_4HOUR(4)
     elif INTERVAL == "6HOUR": klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
 
-    if (current_Open(klines) == current_High(klines)): return "RED"
-    elif (current_Open(klines) == current_Low(klines)): return "GREEN"
-    elif (current_Open(klines) > current_Close(klines)): return "RED_INDECISIVE"
-    elif (current_Close(klines) > current_Open(klines)): return "GREEN_INDECISIVE"
-    else: return "NO_MOVEMENT"
+    if TIME_TRAVEL == "FIRST":
+        if (first_Open(klines) == first_High(klines)): return "RED"
+        elif (first_Open(klines) == first_Low(klines)): return "GREEN"
+        elif (first_Open(klines) > first_Close(klines)): return "RED_INDECISIVE"
+        elif (first_Close(klines) > first_Open(klines)): return "GREEN_INDECISIVE"
+        else: return "NO_MOVEMENT"
+
+    elif TIME_TRAVEL == "PREVIOUS":
+        if (previous_Open(klines) == previous_High(klines)): return "RED"
+        elif (previous_Open(klines) == previous_Low(klines)): return "GREEN"
+        elif (previous_Open(klines) > previous_Close(klines)): return "RED_INDECISIVE"
+        elif (previous_Close(klines) > previous_Open(klines)): return "GREEN_INDECISIVE"
+        else: return "NO_MOVEMENT"
+
+    else:
+        if (current_Open(klines) == current_High(klines)): return "RED"
+        elif (current_Open(klines) == current_Low(klines)): return "GREEN"
+        elif (current_Open(klines) > current_Close(klines)): return "RED_INDECISIVE"
+        elif (current_Close(klines) > current_Open(klines)): return "GREEN_INDECISIVE"
+        else: return "NO_MOVEMENT"
 
 def get_clear_direction(): # return RED // GREEN // INDECISIVE
     six_hour = binance_futures.KLINE_INTERVAL_6HOUR(4)
@@ -173,24 +188,7 @@ def get_current_minute(minute): # return RED // GREEN // RED_INDECISIVE // GREEN
 
     return minute_candle
 
-def check_previous(INTERVAL):
-    if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
-    elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE(4)
-    elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE(4)
-    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE(4)
-    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE(4)
-    elif INTERVAL == "1HOUR": klines = binance_futures.KLINE_INTERVAL_1HOUR(4)
-    elif INTERVAL == "2HOUR": klines = binance_futures.KLINE_INTERVAL_2HOUR(4)
-    elif INTERVAL == "4HOUR": klines = binance_futures.KLINE_INTERVAL_4HOUR(4)
-    elif INTERVAL == "6HOUR": klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
-
-    if (previous_Open(klines) == previous_Low(klines)): return "GREEN"
-    elif (previous_Open(klines) == previous_High(klines)): return "RED"
-    elif (previous_Open(klines) > previous_Close(klines)): return "RED_INDECISIVE"
-    elif (previous_Close(klines) > previous_Open(klines)): return "GREEN_INDECISIVE"
-    else: return "NO_MOVEMENT"
-
-def entry_test(CANDLE, INTERVAL):
+def entry_test(CANDLE, INTERVAL): # return "PASS" // "FAIL"
     if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
     elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE(4)
     elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE(4)
@@ -208,7 +206,7 @@ def entry_test(CANDLE, INTERVAL):
         if (current_Low(klines) < previous_Low(klines)): return "PASS"
         else: return "FAIL"
 
-def one_minute_exit_test(CANDLE):
+def one_minute_exit_test(CANDLE): # return "PASS" // "FAIL"
     klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
 
@@ -221,7 +219,7 @@ def one_minute_exit_test(CANDLE):
         elif current_High(klines) > previous_High(klines): return "PASS"
         else: return "FAIL"
 
-def pattern_broken(INTERVAL):
+def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
     elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE(4)
     elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE(4)
