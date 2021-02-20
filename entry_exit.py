@@ -1,10 +1,10 @@
 import config
 import binance_futures
 from heikin_ashi import silent_candle
-from pencil_wick import entry_test
-from pencil_wick import one_minute_exit_test
-from time_travel import check_previous
-from time_travel import pattern_broken
+from heikin_ashi import entry_test
+from heikin_ashi import one_minute_exit_test
+from heikin_ashi import check_previous
+from heikin_ashi import pattern_broken
 
 def GO_LONG(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
