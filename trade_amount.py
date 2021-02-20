@@ -1,6 +1,34 @@
 import config
+import heikin_ashi
 import binance_futures
-from heikin_ashi import silent_candle
+
+def calculate_trade_amount():
+    klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
+    first_six    = heikin_ashi.first_candle(klines)
+    previous_six = heikin_ashi.previous_candle(klines)
+    current_six  = heikin_ashi.current_candle(klines)
+    
+    if (first_six != "GREEN") and (previous_six == "GREEN") and (current_six == "GREEN"): six_hour = "SAFE"
+    elif (first_six != "RED") and (previous_six == "RED") and (current_six == "RED"): six_hour = "SAFE"
+    else: six_hour = "NOT_SURE"
+
+    klines = binance_futures.KLINE_INTERVAL_1HOUR(4)
+    first_one    = heikin_ashi.first_candle(klines)
+    previous_one = heikin_ashi.previous_candle(klines)
+    current_one  = heikin_ashi.current_candle(klines)
+
+    if (first_one != "GREEN") and (previous_one == "GREEN") and (current_one == "GREEN"): one_hour = "SAFE"
+    elif (first_one != "RED") and (previous_one == "RED") and (current_one == "RED"): one_hour = "SAFE"
+    else: one_hour = "NOT_SURE"
+
+    if six_hour == "SAFE" and one_hour == "SAFE": mode = "SAFE"
+    elif six_hour == "SAFE" and one_hour == "NOT_SURE": mode = "MODERATE"
+    else: mode = "NOT_SURE"
+
+    if mode == "SAFE": trade_amount = config.quantity * 3
+    elif mode == "MODERATE": trade_amount = config.quantity * 2
+    else: trade_amount = config.quantity
+    return trade_amount
 
 def initial_Open(klines): return round(((float(klines[-4][1]) + float(klines[-4][4])) / 2), config.round_decimal)
 def initial_Close(klines): return round(((float(klines[-4][1]) + float(klines[-4][2]) + float(klines[-4][3]) + float(klines[-4][4])) / 4), config.round_decimal)
@@ -19,30 +47,6 @@ def current_Open(klines): return round(((previous_Open(klines) + previous_Close(
 def current_Close(klines): return round(((float(klines[-1][1]) + float(klines[-1][2]) + float(klines[-1][3]) + float(klines[-1][4])) / 4), config.round_decimal)
 def current_High(klines): return max(float(klines[-1][2]), current_Open(klines), current_Close(klines))
 def current_Low(klines): return min(float(klines[-1][3]), current_Open(klines), current_Close(klines))
-
-def calculate_trade_amount():
-    first_six    = silent_candle("6HOUR", "FIRST")
-    previous_six = silent_candle("6HOUR", "PREVIOUS")
-    current_six  = silent_candle("6HOUR", "CURRENT")
-    if (first_six != "GREEN") and (previous_six == "GREEN") and (current_six == "GREEN"): six_hour = "SAFE"
-    elif (first_six != "RED") and (previous_six == "RED") and (current_six == "RED"): six_hour = "SAFE"
-    else: six_hour = "NOT_SURE"
-
-    first_one    = silent_candle("1HOUR", "FIRST")
-    previous_one = silent_candle("1HOUR", "PREVIOUS")
-    current_one  = silent_candle("1HOUR", "CURRENT")
-    if (first_one != "GREEN") and (previous_one == "GREEN") and (current_one == "GREEN"): one_hour = "SAFE"
-    elif (first_one != "RED") and (previous_one == "RED") and (current_one == "RED"): one_hour = "SAFE"
-    else: one_hour = "NOT_SURE"
-
-    if six_hour == "SAFE" and one_hour == "SAFE": mode = "SAFE"
-    elif six_hour == "SAFE" and one_hour == "NOT_SURE": mode = "MODERATE"
-    else: mode = "NOT_SURE"
-
-    if mode == "SAFE": trade_amount = config.quantity * 3
-    elif mode == "MODERATE": trade_amount = config.quantity * 2
-    else: trade_amount = config.quantity
-    return trade_amount
 
 def old_trade_amount():
     six_hour = binance_futures.KLINE_INTERVAL_6HOUR(4)
