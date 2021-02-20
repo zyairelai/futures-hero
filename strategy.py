@@ -9,7 +9,7 @@ from termcolor import colored
 
 def dead_or_alive():
     position_info = get_position.get_position_info()
-    if config.clear_direction: direction = heikin_ashi.get_clear_direction()
+    if config.clear_direction: direction = heikin_ashi.get_clear_direction(6)
     else: direction = heikin_ashi.get_hour(6)
     one_hour     = heikin_ashi.get_hour(1)
     five_minute  = heikin_ashi.get_current_minute(5)
@@ -48,7 +48,7 @@ def dead_or_alive():
 
 def ultra_safe_mode():
     position_info = get_position.get_position_info()
-    direction    = heikin_ashi.get_clear_direction()
+    direction    = heikin_ashi.get_clear_direction(6)
     one_hour     = heikin_ashi.get_hour(1)
     five_minute  = heikin_ashi.get_current_minute(5)
     one_minute   = heikin_ashi.get_current_minute(1)
@@ -66,7 +66,7 @@ def ultra_safe_mode():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
+        klines = binance_futures.KLINE_INTERVAL_6HOUR()
         first_six    = heikin_ashi.first_candle(klines)
         previous_six = heikin_ashi.previous_candle(klines)
         current_six  = heikin_ashi.current_candle(klines)
@@ -74,7 +74,7 @@ def ultra_safe_mode():
         elif (first_six != "RED") and (previous_six == "RED") and (current_six == "RED"): six_hour = "SAFE"
         else: six_hour = "NOT_SURE"
 
-        klines = binance_futures.KLINE_INTERVAL_1HOUR(4)
+        klines = binance_futures.KLINE_INTERVAL_1HOUR()
         first_one    = heikin_ashi.first_candle(klines)
         previous_one = heikin_ashi.previous_candle(klines)
         current_one  = heikin_ashi.current_candle(klines)

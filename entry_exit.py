@@ -25,11 +25,11 @@ def CLOSE_SHORT():
     if (one_minute_exit_test("RED") == "PASS"): return True
 
 def DIRECTION_CHANGE_EXIT_LONG(one_hour):
-    if ((one_hour == "RED") and (entry_test("RED", "1MINUTE") == "PASS")) or \
-       ((current_candle(binance_futures.KLINE_INTERVAL_30MINUTE(4)) == "RED") and (entry_test("RED", "30MINUTE") == "PASS")) or \
-       ((one_hour == "RED_INDECISIVE") and (previous_candle(binance_futures.KLINE_INTERVAL_1HOUR(4)) == "GREEN") and (entry_test("RED", "1MINUTE") == "PASS")): return True
+    if ((one_hour == "RED") and (entry_test("RED", "1HOUR") == "PASS")) or \
+       ((current_candle(binance_futures.KLINE_INTERVAL_30MINUTE()) == "RED") and (entry_test("RED", "30MINUTE") == "PASS")) or \
+       ((one_hour == "RED_INDECISIVE") and (previous_candle(binance_futures.KLINE_INTERVAL_1HOUR()) == "GREEN") and (entry_test("RED", "1MINUTE") == "PASS")): return True
 
 def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
-    if ((one_hour == "GREEN") and (entry_test("GREEN", "1MINUTE") == "PASS")) or \
-       ((current_candle(binance_futures.KLINE_INTERVAL_30MINUTE(4)) == "GREEN") and (entry_test("GREEN", "30MINUTE") == "PASS")) or \
-       ((one_hour == "GREEN_INDECISIVE") and (previous_candle(binance_futures.KLINE_INTERVAL_1HOUR(4)) == "RED") and (entry_test("GREEN", "1MINUTE") == "PASS")): return True
+    if ((one_hour == "GREEN") and (entry_test("GREEN", "1HOUR") == "PASS")) or \
+       ((current_candle(binance_futures.KLINE_INTERVAL_30MINUTE()) == "GREEN") and (entry_test("GREEN", "30MINUTE") == "PASS")) or \
+       ((one_hour == "GREEN_INDECISIVE") and (previous_candle(binance_futures.KLINE_INTERVAL_1HOUR()) == "RED") and (entry_test("GREEN", "1MINUTE") == "PASS")): return True
