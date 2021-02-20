@@ -10,13 +10,13 @@ def GO_LONG(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
        ((one_minute == "GREEN") and (entry_test("GREEN", "1MINUTE") == "PASS")) and \
        (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (entry_test("GREEN", "5MINUTE") == "PASS")) and \
-       ((one_hour != "RED" or one_hour != "RED_INDECISIVE") and (entry_test("RED", "1HOUR") == "FAIL")): return True
+       ((one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and (entry_test("RED", "1HOUR") == "FAIL")): return True
 
 def GO_SHORT(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
        ((one_minute == "RED") and (entry_test("RED", "1MINUTE") == "PASS")) and \
        (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (entry_test("RED", "5MINUTE") == "PASS")) and \
-       (((one_hour != "GREEN") or (one_hour != "GREEN_INDECISIVE")) and (entry_test("GREEN", "1HOUR") == "FAIL")): return True
+       (((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and (entry_test("GREEN", "1HOUR") == "FAIL")): return True
 
 def CLOSE_LONG():
     if (one_minute_exit_test("GREEN") == "PASS"): return True
