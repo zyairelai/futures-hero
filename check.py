@@ -14,7 +14,8 @@ def check():
         heikin_ashi.get_hour(1)
         heikin_ashi.get_hour(2)
         heikin_ashi.get_hour(4)
-        heikin_ashi.get_clear_direction(6)
+        trend = heikin_ashi.get_clear_direction(6)
+        print("The current trend is : " + trend)
         print(f"Time Taken: {time.time() - start} seconds\n")
 
     if (input_num == '2'):

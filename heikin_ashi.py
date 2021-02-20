@@ -151,11 +151,11 @@ def one_minute_exit_test(CANDLE): # return "PASS" // "FAIL"
 
     if CANDLE == "GREEN":
         if (previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold)): return "PASS"
-        elif current_Low(klines) < previous_Low(klines): return "PASS"
+        elif current_Low(klines) < previous_Low(klines): return "PASS" # something is wrong here
         else: return "FAIL"
     elif CANDLE == "RED":
         if (current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold)): return "PASS"
-        elif current_High(klines) > previous_High(klines): return "PASS"
+        elif current_High(klines) > previous_High(klines): return "PASS" # something is wrong here
         else: return "FAIL"
 
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
@@ -185,3 +185,5 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
        ((first == "GREEN")      and (previous == "GREEN")      and (current == "INDECISIVE")) or \
        ((first == "RED")        and (previous == "RED")        and (current == "INDECISIVE")): return "BROKEN"
     else: return "NOT_BROKEN"
+
+# first one hour > previous one hour > current one hour
