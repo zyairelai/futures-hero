@@ -79,4 +79,5 @@ def old_trade_amount():
             if markPrice < current_Close(six_hour): trade_amount = config.quantity * 2    # Moderate Trade Amount
             else: trade_amount = config.quantity * 1                            # Minimum Trade Amount
 
+    else: trade_amount = config.quantity * 1
     return trade_amount

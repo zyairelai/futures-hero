@@ -66,23 +66,23 @@ def ultra_safe_mode():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        klines = binance_futures.KLINE_INTERVAL_6HOUR()
+        klines       = binance_futures.KLINE_INTERVAL_6HOUR()
         first_six    = heikin_ashi.first_candle(klines)
         previous_six = heikin_ashi.previous_candle(klines)
         current_six  = heikin_ashi.current_candle(klines)
         if (first_six != "GREEN") and (previous_six == "GREEN") and (current_six == "GREEN"): six_hour = "SAFE"
-        elif (first_six != "RED") and (previous_six == "RED") and (current_six == "RED"): six_hour = "SAFE"
+        elif (first_six != "RED") and (previous_six == "RED")   and (current_six == "RED")  : six_hour = "SAFE"
         else: six_hour = "NOT_SURE"
 
-        klines = binance_futures.KLINE_INTERVAL_1HOUR()
+        klines       = binance_futures.KLINE_INTERVAL_1HOUR()
         first_one    = heikin_ashi.first_candle(klines)
         previous_one = heikin_ashi.previous_candle(klines)
         current_one  = heikin_ashi.current_candle(klines)
         if (first_one != "GREEN") and (previous_one == "GREEN") and (current_one == "GREEN"): one_hour = "SAFE"
-        elif (first_one != "RED") and (previous_one == "RED") and (current_one == "RED"): one_hour = "SAFE"
+        elif (first_one != "RED") and (previous_one == "RED")   and (current_one == "RED")  : one_hour = "SAFE"
         else: one_hour = "NOT_SURE"
 
-        if six_hour == "SAFE" and one_hour == "SAFE": mode = "SAFE"
+        if   six_hour == "SAFE" and one_hour == "SAFE"    : mode = "SAFE"
         elif six_hour == "SAFE" and one_hour == "NOT_SURE": mode = "MODERATE"
         else: mode = "NOT_SURE"
 
