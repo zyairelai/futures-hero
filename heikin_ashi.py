@@ -5,7 +5,7 @@ from termcolor import colored
 troubleshooting = config.troubleshooting
 
 def get_clear_direction(): # return RED // GREEN // INDECISIVE
-    klines = binance_futures.KLINE_INTERVAL_6HOUR()
+    klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -46,7 +46,7 @@ def get_clear_direction(): # return RED // GREEN // INDECISIVE
 
     elif (previous_Open > previous_Close):
         previous = "RED_INDECISIVE"
-        print(colored(title + previous, "yellow"))
+        print(colored(title + previous, "red"))
 
     else:
         previous = "NO_MOVEMENT"
@@ -65,7 +65,7 @@ def get_clear_direction(): # return RED // GREEN // INDECISIVE
 
     elif (current_Close > current_Open):
         current = "GREEN_INDECISIVE"
-        print(colored(title + current, "yellow"))
+        print(colored(title + current, "green"))
 
     elif (current_Open == current_High):
         current = "RED"
@@ -73,7 +73,7 @@ def get_clear_direction(): # return RED // GREEN // INDECISIVE
 
     elif (current_Open > current_Close):
         current = "RED_INDECISIVE"
-        print(colored(title + current, "yellow"))
+        print(colored(title + current, "red"))
 
     else:
         current = "NO_MOVEMENT"
@@ -88,10 +88,10 @@ def get_clear_direction(): # return RED // GREEN // INDECISIVE
 
 def get_hour(hour): # return RED // GREEN // INDECISIVE
     title = str(hour) + " HOUR DIRECTION :   "
-    if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    elif hour == 6: klines = binance_futures.KLINE_INTERVAL_6HOUR()
+    if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR(4)
+    elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR(4)
+    elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR(4)
+    elif hour == 6: klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -134,11 +134,11 @@ def get_hour(hour): # return RED // GREEN // INDECISIVE
     return current
 
 def get_current_minute(minute): # return RED // GREEN // RED_INDECISIVE // GREEN_INDECISIVE // NO_MOVEMENT
-    if minute == 1: klines = klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif minute == 3: klines = klines = binance_futures.KLINE_INTERVAL_3MINUTE()
-    elif minute == 5: klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE()
-    elif minute == 15: klines = binance_futures.KLINE_INTERVAL_15MINUTE()
-    elif minute == 30: klines = binance_futures.KLINE_INTERVAL_30MINUTE()
+    if minute == 1: klines = klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
+    elif minute == 3: klines = klines = binance_futures.KLINE_INTERVAL_3MINUTE(4)
+    elif minute == 5: klines = klines = binance_futures.KLINE_INTERVAL_5MINUTE(4)
+    elif minute == 15: klines = binance_futures.KLINE_INTERVAL_15MINUTE(4)
+    elif minute == 30: klines = binance_futures.KLINE_INTERVAL_30MINUTE(4)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -180,15 +180,15 @@ def get_current_minute(minute): # return RED // GREEN // RED_INDECISIVE // GREEN
     return minute_candle
 
 def silent_candle(INTERVAL):
-    if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE()
-    elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE()
-    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE()
-    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE()
-    elif INTERVAL == "1HOUR": klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif INTERVAL == "2HOUR": klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif INTERVAL == "4HOUR": klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    elif INTERVAL == "6HOUR": klines = binance_futures.KLINE_INTERVAL_6HOUR()
+    if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
+    elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE(4)
+    elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE(4)
+    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE(4)
+    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE(4)
+    elif INTERVAL == "1HOUR": klines = binance_futures.KLINE_INTERVAL_1HOUR(4)
+    elif INTERVAL == "2HOUR": klines = binance_futures.KLINE_INTERVAL_2HOUR(4)
+    elif INTERVAL == "4HOUR": klines = binance_futures.KLINE_INTERVAL_4HOUR(4)
+    elif INTERVAL == "6HOUR": klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)

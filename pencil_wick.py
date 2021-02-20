@@ -3,15 +3,15 @@ import binance_futures
 from termcolor import colored
 
 def entry_test(CANDLE, INTERVAL):
-    if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE()
-    elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE()
-    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE()
-    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE()
-    elif INTERVAL == "1HOUR": klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif INTERVAL == "2HOUR": klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif INTERVAL == "4HOUR": klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    elif INTERVAL == "6HOUR": klines = binance_futures.KLINE_INTERVAL_6HOUR()
+    if INTERVAL == "1MINUTE": klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
+    elif INTERVAL == "3MINUTE": klines = binance_futures.KLINE_INTERVAL_3MINUTE(4)
+    elif INTERVAL == "5MINUTE": klines = binance_futures.KLINE_INTERVAL_5MINUTE(4)
+    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE(4)
+    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE(4)
+    elif INTERVAL == "1HOUR": klines = binance_futures.KLINE_INTERVAL_1HOUR(4)
+    elif INTERVAL == "2HOUR": klines = binance_futures.KLINE_INTERVAL_2HOUR(4)
+    elif INTERVAL == "4HOUR": klines = binance_futures.KLINE_INTERVAL_4HOUR(4)
+    elif INTERVAL == "6HOUR": klines = binance_futures.KLINE_INTERVAL_6HOUR(4)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)
@@ -36,7 +36,7 @@ def entry_test(CANDLE, INTERVAL):
         else: return "FAIL"
 
 def one_minute_exit_test(CANDLE):
-    klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+    klines = binance_futures.KLINE_INTERVAL_1MINUTE(4)
 
     first_run_Open  = round(((float(klines[0][1]) + float(klines[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(klines[0][1]) + float(klines[0][2]) + float(klines[0][3]) + float(klines[0][4])) / 4), config.round_decimal)

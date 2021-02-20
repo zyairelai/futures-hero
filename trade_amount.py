@@ -3,7 +3,7 @@ import binance_futures
 from heikin_ashi import silent_candle
 
 def calculate_trade_amount():
-    six_hour = binance_futures.KLINE_INTERVAL_6HOUR()
+    six_hour = binance_futures.KLINE_INTERVAL_6HOUR(4)
 
     first_run_Open  = round(((float(six_hour[0][1]) + float(six_hour[0][4])) / 2), config.round_decimal)
     first_run_Close = round(((float(six_hour[0][1]) + float(six_hour[0][2]) + float(six_hour[0][3]) + float(six_hour[0][4])) / 4), config.round_decimal)
