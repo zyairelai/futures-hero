@@ -127,7 +127,7 @@ def get_current_minute(minute): # return RED // GREEN // RED_INDECISIVE // GREEN
     else                                     :   print(colored(title + minute_candle, "yellow"))
     return minute_candle
 
-def entry_test(CANDLE, INTERVAL): # return "PASS" // "FAIL"
+def pencil_wick_test(CANDLE, INTERVAL): # return "PASS" // "FAIL"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     elif INTERVAL == "3MINUTE" : klines = binance_futures.KLINE_INTERVAL_3MINUTE()
     elif INTERVAL == "5MINUTE" : klines = binance_futures.KLINE_INTERVAL_5MINUTE()
@@ -151,11 +151,11 @@ def one_minute_exit_test(CANDLE): # return "PASS" // "FAIL"
 
     if CANDLE == "GREEN":
         if (previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold)): return "PASS"
-        elif current_Low(klines) < previous_Low(klines): return "PASS" # something is wrong here
+        # elif current_Low(klines) < previous_Low(klines): return "PASS" # something is wrong here
         else: return "FAIL"
     elif CANDLE == "RED":
         if (current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold)): return "PASS"
-        elif current_High(klines) > previous_High(klines): return "PASS" # something is wrong here
+        # elif current_High(klines) > previous_High(klines): return "PASS" # something is wrong here
         else: return "FAIL"
 
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"

@@ -1,4 +1,5 @@
 import time
+from termcolor import colored
 
 def check():
     print("What do you want to check? ")
@@ -39,7 +40,8 @@ def check():
         print("\nThe <get_position.py> return value is : " + get_position_info())
         print(f"Time Taken: {time.time() - start} seconds\n")
 
-    else: import get_realizedPNL
+    elif (input_num == '4'): import get_realizedPNL
+    else: print(colored("\nINVALID INPUT!\n", "red"))
 
 try: check()
 except KeyboardInterrupt: print("\n\nAborted.\n")
