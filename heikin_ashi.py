@@ -77,10 +77,10 @@ def get_clear_direction(hour): # return RED // GREEN // RED_INDECISIVE // GREEN_
 
     if    (previous == "GREEN") and (current == "GREEN") : trend = "GREEN"
     elif  (previous == "RED")   and (current == "RED")   : trend = "RED"
-    elif ((previous == "GREEN_INDECISIVE") and (previous_High(klines) > first_High(klines))) and (current == "GREEN"): trend = "GREEN"
-    elif ((previous == "RED_INDECISIVE")   and (previous_Low(klines) < first_Low(klines)))   and (current == "RED")  : trend = "RED"
-    elif (first_candle(klines) == "GREEN") and (previous == "GREEN_INDECISIVE") and (current == "GREEN"): trend = "GREEN"
-    elif (first_candle(klines) == "RED")   and (previous == "RED_INDECISIVE")   and (current == "RED")  : trend = "RED"
+    # elif ((previous == "GREEN_INDECISIVE") and (previous_High(klines) > first_High(klines))) and (current == "GREEN"): trend = "GREEN"
+    # elif ((previous == "RED_INDECISIVE")   and (previous_Low(klines) < first_Low(klines)))   and (current == "RED")  : trend = "RED"
+    # elif (first_candle(klines) == "GREEN") and (previous == "GREEN_INDECISIVE") and (current == "GREEN"): trend = "GREEN"
+    # elif (first_candle(klines) == "RED")   and (previous == "RED_INDECISIVE")   and (current == "RED")  : trend = "RED"
     else: trend = "INDECISIVE"
     return trend
 
