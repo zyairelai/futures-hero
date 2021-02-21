@@ -43,7 +43,7 @@ def current_candle(klines):
     elif (current_Close(klines) > current_Open(klines)): return "GREEN_INDECISIVE"
     else: return "NO_MOVEMENT"
 
-def get_clear_direction(hour): # return RED // GREEN // RED_INDECISIVE // GREEN_INDECISIVE // NO_MOVEMENT
+def get_clear_direction(hour): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     if hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
     else        : klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
@@ -56,10 +56,10 @@ def get_clear_direction(hour): # return RED // GREEN // RED_INDECISIVE // GREEN_
     title = "PREVIOUS " + str(hour) + " HOUR  :   "
     previous = previous_candle(klines)
     if   previous == "GREEN"            : print(colored(title + previous, "green"))
-    elif previous == "GREEN_INDECISIVE" : print(colored(title + previous, "green"))
     elif previous == "RED"              : print(colored(title + previous, "red"))
-    elif previous == "RED_INDECISIVE"   : print(colored(title + previous, "red"))
-    else: print(colored(title + previous_candle(klines), "yellow"))
+    elif previous == "GREEN_INDECISIVE" : print(colored(title + previous, "yellow"))
+    elif previous == "RED_INDECISIVE"   : print(colored(title + previous, "yellow"))
+    else                                : print(colored(title + previous, "yellow"))
 
     if troubleshooting:
         print("The current_Open is  :   " + str(current_Open(klines)))
@@ -70,21 +70,17 @@ def get_clear_direction(hour): # return RED // GREEN // RED_INDECISIVE // GREEN_
     title = "CURRENT  " + str(hour) + " HOUR  :   "
     current = current_candle(klines)
     if   current == "GREEN"             : print(colored(title + current, "green"))
-    elif current == "GREEN_INDECISIVE"  : print(colored(title + current, "green"))
     elif current == "RED"               : print(colored(title + current, "red"))
-    elif current == "RED_INDECISIVE"    : print(colored(title + current, "red"))
-    else: print(colored(title + current, "yellow"))
+    elif current == "GREEN_INDECISIVE"  : print(colored(title + current, "yellow"))
+    elif current == "RED_INDECISIVE"    : print(colored(title + current, "yellow"))
+    else                                : print(colored(title + current, "yellow"))
 
     if    (previous == "GREEN") and (current == "GREEN") : trend = "GREEN"
     elif  (previous == "RED")   and (current == "RED")   : trend = "RED"
-    # elif ((previous == "GREEN_INDECISIVE") and (previous_High(klines) > first_High(klines))) and (current == "GREEN"): trend = "GREEN"
-    # elif ((previous == "RED_INDECISIVE")   and (previous_Low(klines) < first_Low(klines)))   and (current == "RED")  : trend = "RED"
-    # elif (first_candle(klines) == "GREEN") and (previous == "GREEN_INDECISIVE") and (current == "GREEN"): trend = "GREEN"
-    # elif (first_candle(klines) == "RED")   and (previous == "RED_INDECISIVE")   and (current == "RED")  : trend = "RED"
     else: trend = "INDECISIVE"
     return trend
 
-def get_hour(hour): # return RED // GREEN // RED_INDECISIVE // GREEN_INDECISIVE // NO_MOVEMENT
+def get_hour(hour): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     title = str(hour) + " HOUR DIRECTION :   "
     if   hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
     elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
@@ -102,10 +98,10 @@ def get_hour(hour): # return RED // GREEN // RED_INDECISIVE // GREEN_INDECISIVE 
     elif current == "GREEN_INDECISIVE"  : print(colored(title + current, "green"))
     elif current == "RED"               : print(colored(title + current, "red"))
     elif current == "RED_INDECISIVE"    : print(colored(title + current, "red"))
-    else: print(colored(title + current, "yellow"))
+    else                                : print(colored(title + current, "yellow"))
     return current
 
-def get_current_minute(minute): # return RED // GREEN // RED_INDECISIVE // GREEN_INDECISIVE // NO_MOVEMENT
+def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     title = "RECENT " + str(minute) + " MINUTE  :   "
     if   minute == 1: klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     elif minute == 3: klines  = binance_futures.KLINE_INTERVAL_3MINUTE()
@@ -150,13 +146,13 @@ def one_minute_exit_test(CANDLE): # return "PASS" // "FAIL"
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
 
     if CANDLE == "GREEN":
-        if (previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold)): return "PASS"
-        # elif current_Low(klines) < previous_Low(klines): return "PASS" # something is wrong here
-        else: return "FAIL"
+        if (previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold)): return True
+        # elif current_Low(klines) < previous_Low(klines): return 
+        else: return False
     elif CANDLE == "RED":
-        if (current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold)): return "PASS"
-        # elif current_High(klines) > previous_High(klines): return "PASS" # something is wrong here
-        else: return "FAIL"
+        if (current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold)): return True
+        # elif current_High(klines) > previous_High(klines): return 
+        else: return False
 
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
@@ -183,7 +179,9 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
 
     if ((first == "INDECISIVE") and (previous == "INDECISIVE") and (current == "INDECISIVE")) or \
        ((first == "GREEN")      and (previous == "GREEN")      and (current == "INDECISIVE")) or \
-       ((first == "RED")        and (previous == "RED")        and (current == "INDECISIVE")): return "BROKEN"
+       ((first == "RED")        and (previous == "RED")        and (current == "INDECISIVE")) or \
+       ((current == "GREEN")    and (first_High(klines) > previous_High(klines))) or \
+       ((current == "RED")      and (first_Low(klines)  < previous_Low(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
 # first one hour > previous one hour > current one hour
