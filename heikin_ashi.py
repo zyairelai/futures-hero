@@ -147,12 +147,8 @@ def one_minute_exit_test(CANDLE): # return "PASS" // "FAIL"
 
     if CANDLE == "GREEN":
         if (previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold)): return True
-        # elif current_Low(klines) < previous_Low(klines): return 
-        else: return False
     elif CANDLE == "RED":
         if (current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold)): return True
-        # elif current_High(klines) > previous_High(klines): return 
-        else: return False
 
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
@@ -181,7 +177,7 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
        ((first == "GREEN")      and (previous == "GREEN")      and (current == "INDECISIVE")) or \
        ((first == "RED")        and (previous == "RED")        and (current == "INDECISIVE")) or \
        ((current == "GREEN")    and (first_High(klines) > previous_High(klines))) or \
-       ((current == "RED")      and (first_Low(klines)  < previous_Low(klines))): return "BROKEN"
+       ((current == "RED")      and (first_Low(klines) < previous_Low(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
 # first one hour > previous one hour > current one hour
