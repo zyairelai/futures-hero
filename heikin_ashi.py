@@ -176,8 +176,6 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if ((first == "INDECISIVE") and (previous == "INDECISIVE") and (current == "INDECISIVE")) or \
        ((first == "GREEN")      and (previous == "GREEN")      and (current == "INDECISIVE")) or \
        ((first == "RED")        and (previous == "RED")        and (current == "INDECISIVE")) or \
-       ((current == "GREEN")    and (first_High(klines) > previous_High(klines))) or \
-       ((current == "RED")      and (first_Low(klines) < previous_Low(klines))): return "BROKEN"
+       ((current == "GREEN")    and (first_High(klines) > previous_High(klines)) and (previous_High(klines) < current_Close(klines))) or \
+       ((current == "RED")      and (first_Low(klines) < previous_Low(klines))   and (previous_Low(klines) > current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
-
-# first one hour > previous one hour > current one hour
