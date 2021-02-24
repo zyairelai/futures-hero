@@ -11,7 +11,9 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    def added_to_job(): strategy.dead_or_alive()
+    def added_to_job(): 
+        # strategy.dead_or_alive()
+        strategy.one_shot_one_kill()
 
     while True:
         try:

@@ -27,7 +27,8 @@ def KLINE_INTERVAL_4HOUR()      : return client.futures_klines(symbol=config.pai
 def KLINE_INTERVAL_6HOUR()      : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_6HOUR)
 
 def get_volume(TIME_TRAVEL, INTERVAL):
-    if   TIME_TRAVEL == "PREVIOUS" : which = -2
+    if   TIME_TRAVEL == "FIRSTRUN" : which = -3
+    elif TIME_TRAVEL == "PREVIOUS" : which = -2
     elif TIME_TRAVEL == "CURRENT"  : which = -1
     if   INTERVAL == "1MINUTE"  : volume = KLINE_INTERVAL_1MINUTE()[which][5]
     elif INTERVAL == "3MINUTE"  : volume = KLINE_INTERVAL_3MINUTE()[which][5]
