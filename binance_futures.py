@@ -16,15 +16,16 @@ def cancel_all_open_orders()    : return client.futures_cancel_all_open_orders(s
 def get_open_orders()           : return client.futures_get_open_orders(symbol=config.pair, timestamp=get_timestamp())
 def position_information()      : return client.futures_position_information(symbol=config.pair, timestamp=get_timestamp())
 
-def KLINE_INTERVAL_1MINUTE()    : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_1MINUTE)
-def KLINE_INTERVAL_3MINUTE()    : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_3MINUTE)
-def KLINE_INTERVAL_5MINUTE()    : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_5MINUTE)
-def KLINE_INTERVAL_15MINUTE()   : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_15MINUTE)
-def KLINE_INTERVAL_30MINUTE()   : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_30MINUTE)
-def KLINE_INTERVAL_1HOUR()      : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_1HOUR)
-def KLINE_INTERVAL_2HOUR()      : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_2HOUR)
-def KLINE_INTERVAL_4HOUR()      : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_4HOUR)
-def KLINE_INTERVAL_6HOUR()      : return client.futures_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_6HOUR)
+query = 4
+def KLINE_INTERVAL_1MINUTE()    : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_1MINUTE)
+def KLINE_INTERVAL_3MINUTE()    : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_3MINUTE)
+def KLINE_INTERVAL_5MINUTE()    : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_5MINUTE)
+def KLINE_INTERVAL_15MINUTE()   : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_15MINUTE)
+def KLINE_INTERVAL_30MINUTE()   : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_30MINUTE)
+def KLINE_INTERVAL_1HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_1HOUR)
+def KLINE_INTERVAL_2HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_2HOUR)
+def KLINE_INTERVAL_4HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_4HOUR)
+def KLINE_INTERVAL_6HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_6HOUR)
 
 def get_volume(TIME_TRAVEL, INTERVAL):
     if   TIME_TRAVEL == "FIRSTRUN" : which = -3
