@@ -1,5 +1,4 @@
 live_trade      = True      # False to see the output & verify your API key is working
-clear_direction = False     # True to minimize lose, False to maximize profit
 troubleshooting = False
 
 while True:
