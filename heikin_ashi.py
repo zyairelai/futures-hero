@@ -77,6 +77,8 @@ def get_clear_direction(hour): # return GREEN // GREEN_INDECISIVE // RED // RED_
 
     if    (previous == "GREEN") and (current == "GREEN") : trend = "GREEN"
     elif  (previous == "RED")   and (current == "RED")   : trend = "RED"
+    # elif  (previous == "GREEN_INDECISIVE" and previous_Low(klines) > first_Low(klines) and previous_High(klines) > first_High(klines)) and (current == "GREEN") : trend = "GREEN"
+    # elif  (previous == "RED_INDECISIVE"   and previous_Low(klines) < first_Low(klines) and previous_High(klines) < first_High(klines)) and (current == "RED") : trend = "RED"
     else: trend = "INDECISIVE"
     return trend
 
