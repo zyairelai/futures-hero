@@ -40,13 +40,13 @@ def dead_or_alive():
             if current_volume > previous_volume: trade_amount = config.quantity * 2
             else: trade_amount = config.quantity * 1
 
-        if direction == "GREEN" and ((previous_volume / volume_prefix) > current_volume):
+        if direction == "GREEN" and ((previous_volume / volume_prefix) < current_volume):
             if entry_exit.GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", trade_amount)
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif direction == "RED" and ((previous_volume / volume_prefix) > current_volume):
+        elif direction == "RED" and ((previous_volume / volume_prefix) < current_volume):
             if entry_exit.GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", trade_amount)
@@ -80,13 +80,13 @@ def one_shot_one_kill():
         previous_volume = binance_futures.get_volume("PREVIOUS", "6HOUR")
         current_volume  = binance_futures.get_volume("CURRENT", "6HOUR")
 
-        if direction == "GREEN" and ((previous_volume / volume_prefix) > current_volume):
+        if direction == "GREEN" and ((previous_volume / volume_prefix) < current_volume):
             if entry_exit.GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", config.quantity)
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif direction == "RED" and ((previous_volume / volume_prefix) > current_volume):
+        elif direction == "RED" and ((previous_volume / volume_prefix) < current_volume):
             if entry_exit.GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
