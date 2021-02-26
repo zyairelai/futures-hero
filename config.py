@@ -18,7 +18,7 @@ if user_input == '2':
 else:
     coin            = "BTC"
     quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount
-    leverage        = 9         # Maximum 125 // Recommended 30-40
+    leverage        = 50        # Maximum 125 // Recommended 30-40
     round_decimal   = 2         # Some crypto pairs like chainlink read up to 3 decimal place of USDT
 
 pair = coin + "USDT"
