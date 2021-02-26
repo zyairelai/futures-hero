@@ -9,7 +9,8 @@ from termcolor import colored
 
 def dead_or_alive():
     position_info = get_position.get_position_info()
-    direction    = heikin_ashi.get_clear_direction(6)
+    if config.clear_direction: direction = heikin_ashi.get_clear_direction(6)
+    else: direction = heikin_ashi.get_hour(6)
     one_hour     = heikin_ashi.get_hour(1)
     five_minute  = heikin_ashi.get_current_minute(5)
     one_minute   = heikin_ashi.get_current_minute(1)
@@ -59,8 +60,8 @@ def dead_or_alive():
 
 def one_shot_one_kill():
     position_info = get_position.get_position_info()
-    # direction    = heikin_ashi.get_clear_direction(6)
-    direction    = heikin_ashi.get_hour(6)
+    if config.clear_direction: direction = heikin_ashi.get_clear_direction(6)
+    else: direction = heikin_ashi.get_hour(6)
     one_hour     = heikin_ashi.get_hour(1)
     five_minute  = heikin_ashi.get_current_minute(5)
     one_minute   = heikin_ashi.get_current_minute(1)
