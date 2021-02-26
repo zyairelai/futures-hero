@@ -137,9 +137,11 @@ def pencil_wick_test(CANDLE, INTERVAL): # return "PASS" // "FAIL"
     elif INTERVAL == "6HOUR"   : klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
     if CANDLE == "GREEN":
-        if (current_High(klines) > previous_High(klines)): return "PASS"
+        # if (current_Close(klines) > previous_Close(klines)): return "PASS"
+        if (current_Close(klines) > previous_High(klines)): return "PASS"
         else: return "FAIL"
     elif CANDLE == "RED":
+        # if (current_Close(klines) < previous_Close(klines)): return "PASS"
         if (current_Low(klines) < previous_Low(klines)): return "PASS"
         else: return "FAIL"
 
@@ -179,5 +181,7 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
        ((first == "GREEN")      and (previous == "GREEN")      and (current == "INDECISIVE")) or \
        ((first == "RED")        and (previous == "RED")        and (current == "INDECISIVE")) or \
        ((current == "GREEN")    and (first_High(klines) > previous_High(klines)) and (previous_High(klines) < current_Close(klines))) or \
-       ((current == "RED")      and (first_Low(klines) < previous_Low(klines))   and (previous_Low(klines) > current_Close(klines))): return "BROKEN"
+       ((current == "RED")      and (first_Low(klines) < previous_Low(klines))   and (previous_Low(klines) > current_Close(klines))) or \
+       ((current == "GREEN")    and (current_Close(klines) > previous_Close(klines))) or \
+       ((current == "RED")      and (current_Close(klines) < previous_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
