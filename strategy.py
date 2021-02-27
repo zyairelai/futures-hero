@@ -1,7 +1,6 @@
 import config
 import heikin_ashi
 import get_position
-import trade_amount
 import binance_futures
 from datetime import datetime
 from termcolor import colored
