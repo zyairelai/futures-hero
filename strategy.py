@@ -26,40 +26,27 @@ def dead_or_alive():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        binance_futures.cancel_all_open_orders()
-        firstrun_volume = binance_futures.get_volume("FIRSTRUN", "6HOUR")
-        previous_volume = binance_futures.get_volume("PREVIOUS", "6HOUR")
-        current_volume  = binance_futures.get_volume("CURRENT", "6HOUR")
+        previous_volume = binance_futures.get_volume("PREVIOUS", "1HOUR")
+        current_volume = binance_futures.get_volume("CURRENT", "1HOUR")
 
-        if   (firstrun_volume < previous_volume) and (previous_volume < current_volume): trade_amount = config.quantity * 3
-        elif (firstrun_volume > previous_volume) and (previous_volume > current_volume): trade_amount = config.quantity * 1
-        else:
-            if current_volume > previous_volume: trade_amount = config.quantity * 2
-            else: trade_amount = config.quantity * 1
-
-        pvolume_1hour = binance_futures.get_volume("PREVIOUS", "1HOUR")
-        cvolume_1hour = binance_futures.get_volume("CURRENT", "1HOUR")
-
-        if direction == "GREEN" and volume_confirmation(pvolume_1hour, cvolume_1hour):
+        if direction == "GREEN" and volume_confirmation(previous_volume, current_volume):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-                if config.live_trade: binance_futures.open_position("LONG", trade_amount)
+                if config.live_trade: binance_futures.open_position("LONG", trade_amount())
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif direction == "RED" and volume_confirmation(pvolume_1hour, cvolume_1hour):
+        elif direction == "RED" and volume_confirmation(previous_volume, current_volume):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-                if config.live_trade: binance_futures.open_position("SHORT", trade_amount)
+                if config.live_trade: binance_futures.open_position("SHORT", trade_amount())
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-def one_shot_one_kill():
+def fomo_strifing():
     position_info = get_position.get_position_info()
-    if config.clear_direction: direction = heikin_ashi.get_clear_direction(6)
-    else: direction = heikin_ashi.get_hour(6)
     one_hour     = heikin_ashi.get_hour(1)
     five_minute  = heikin_ashi.get_current_minute(5)
     one_minute   = heikin_ashi.get_current_minute(1)
@@ -77,20 +64,16 @@ def one_shot_one_kill():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        # firstrun_volume = binance_futures.get_volume("FIRSTRUN", "6HOUR")
-        # pvolume_6hour = binance_futures.get_volume("PREVIOUS", "6HOUR")
-        # cvolume_6hour = binance_futures.get_volume("CURRENT", "6HOUR")
+        previous_volume = binance_futures.get_volume("PREVIOUS", "1HOUR")
+        current_volume = binance_futures.get_volume("CURRENT", "1HOUR")
 
-        pvolume_1hour = binance_futures.get_volume("PREVIOUS", "1HOUR")
-        cvolume_1hour = binance_futures.get_volume("CURRENT", "1HOUR")
-
-        if direction == "GREEN" and volume_confirmation(pvolume_1hour, cvolume_1hour):
+        if one_hour == "GREEN" and volume_confirmation(previous_volume, current_volume):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", config.quantity)
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif direction == "RED" and volume_confirmation(pvolume_1hour, cvolume_1hour):
+        elif one_hour == "RED" and volume_confirmation(previous_volume, current_volume):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
@@ -133,3 +116,17 @@ def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
 
 def volume_confirmation(previous_volume, current_volume):
     return (previous_volume / 5) < current_volume
+
+def trade_amount():
+    firstrun_volume = binance_futures.get_volume("FIRSTRUN", "6HOUR")
+    previous_volume = binance_futures.get_volume("PREVIOUS", "6HOUR")
+    current_volume  = binance_futures.get_volume("CURRENT", "6HOUR")
+
+    if   (firstrun_volume < previous_volume) and (previous_volume < current_volume): trade_amount = config.quantity * 3
+    elif (firstrun_volume > previous_volume) and (previous_volume > current_volume): trade_amount = config.quantity * 1
+    else:
+        if current_volume > previous_volume: trade_amount = config.quantity * 2
+        else: trade_amount = config.quantity * 1
+
+    return trade_amount
+    # return config.quantity

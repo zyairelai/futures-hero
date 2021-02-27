@@ -2,16 +2,15 @@ live_trade      = True      # False to see the output & verify your API key is w
 clear_direction = False     # True to minimize loss, False to maximize profit
 troubleshooting = False     # Troubleshooting mode for @zyairelai
 
-# print("Which pair do you want to trade?")
-# print("1. BTC_USDT")
-# print("2. ETH_USDT")
-# user_input = input("\nEnter a number   :   ") or '1'
+print("Which pair do you want to trade?")
+print("1. BTC_USDT")
+print("2. ETH_USDT")
+user_input = input("\nEnter a number   :   ") or '1'
 
 # Asset Configuration
-user_input = 1
 if user_input == '2':
     coin            = "ETH"
-    quantity        = 0.1
+    quantity        = 0.01
     leverage        = 40
     round_decimal   = 2
 
