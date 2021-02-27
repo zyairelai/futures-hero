@@ -4,21 +4,21 @@ from datetime import datetime
 from termcolor import colored
 troubleshooting = config.troubleshooting
 
-def initial_Open(klines)  : return round(((float(klines[-4][1]) + float(klines[-4][4])) / 2), config.round_decimal)
-def initial_Close(klines) : return round(((float(klines[-4][1]) + float(klines[-4][2]) + float(klines[-4][3]) + float(klines[-4][4])) / 4), config.round_decimal)
+def initial_Open(klines)  : return (float(klines[-4][1]) + float(klines[-4][4])) / 2
+def initial_Close(klines) : return (float(klines[-4][1]) + float(klines[-4][2]) + float(klines[-4][3]) + float(klines[-4][4])) / 4
 
-def first_Open(klines)    : return round(((initial_Open(klines) + initial_Close(klines)) / 2), config.round_decimal)
-def first_Close(klines)   : return round(((float(klines[-3][1]) + float(klines[-3][2]) + float(klines[-3][3]) + float(klines[-3][4])) / 4), config.round_decimal)
+def first_Open(klines)    : return (initial_Open(klines) + initial_Close(klines)) / 2
+def first_Close(klines)   : return (float(klines[-3][1]) + float(klines[-3][2]) + float(klines[-3][3]) + float(klines[-3][4])) / 4
 def first_High(klines)    : return max(float(klines[-3][2]), first_Open(klines), first_Close(klines))
 def first_Low(klines)     : return min(float(klines[-3][3]), first_Open(klines), first_Close(klines))
 
-def previous_Open(klines) : return round(((first_Open(klines) + first_Close(klines)) / 2), config.round_decimal)
-def previous_Close(klines): return round(((float(klines[-2][1]) + float(klines[-2][2]) + float(klines[-2][3]) + float(klines[-2][4])) / 4), config.round_decimal)
+def previous_Open(klines) : return (first_Open(klines) + first_Close(klines)) / 2
+def previous_Close(klines): return (float(klines[-2][1]) + float(klines[-2][2]) + float(klines[-2][3]) + float(klines[-2][4])) / 4
 def previous_High(klines) : return max(float(klines[-2][2]), previous_Open(klines), previous_Close(klines))
 def previous_Low(klines)  : return min(float(klines[-2][3]), previous_Open(klines), previous_Close(klines))
 
-def current_Open(klines)  : return round(((previous_Open(klines) + previous_Close(klines)) / 2), config.round_decimal)
-def current_Close(klines) : return round(((float(klines[-1][1]) + float(klines[-1][2]) + float(klines[-1][3]) + float(klines[-1][4])) / 4), config.round_decimal)
+def current_Open(klines)  : return (previous_Open(klines) + previous_Close(klines)) / 2
+def current_Close(klines) : return (float(klines[-1][1]) + float(klines[-1][2]) + float(klines[-1][3]) + float(klines[-1][4])) / 4
 def current_High(klines)  : return max(float(klines[-1][2]), current_Open(klines), current_Close(klines))
 def current_Low(klines)   : return min(float(klines[-1][3]), current_Open(klines), current_Close(klines))
 

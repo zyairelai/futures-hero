@@ -30,7 +30,7 @@ def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
 
 def get_unRealizedProfit():
     response         = binance_futures.position_information()[0]
-    markPrice        = round(float(response.get('markPrice')), config.round_decimal)
+    markPrice        = float(response.get('markPrice'))
     positionAmt      = abs(float(response.get('positionAmt')))
     unRealizedProfit = round(float(response.get('unRealizedProfit')), 2)
     taker_maker_fees = 0.15 # One transaction is 0.04, buy and sell means 0.04 * 2 = 0.08 // But always 15% to get a happy ending!

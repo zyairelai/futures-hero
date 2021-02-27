@@ -33,7 +33,7 @@ pip3 install termcolor==1.1.0
 ```
 
 ## 3. Before Running......
-Due to the [new policy](https://www.binance.com/en/support/announcement/1d762daf60dd417f9d8a05d44b06a25c) of Binance Futures, the current minimum trade amount is 5 USDT
+Due to the [new policy](https://www.binance.com/en/support/announcement/1d762daf60dd417f9d8a05d44b06a25c) of Binance Futures, the current minimum trade amount is 5 USDT.  
 Make sure you go to `config.py`, read the comments and adjust your risk level!  
 The script is mainly focusing on `BTC/USDT` and `ETH/USDT` movement pattern.  
 If you'd like to test with other pairs, you can renamed `backup_config.py` to `config.py`
