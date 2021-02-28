@@ -11,12 +11,12 @@ user_input = input("\nEnter a number   :   ") or '1'
 if user_input == '2':
     coin            = "ETH"
     quantity        = 0.01
-    leverage        = 40
+    leverage        = 30
 
 else:
     coin            = "BTC"
     quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount
-    leverage        = 50        # Maximum 125 // Recommended 30-40
+    leverage        = 40        # Maximum 125 // Recommended 30-40
 
 pair = coin + "USDT"
 print("Pair Name        :   " + str(pair))
