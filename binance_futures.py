@@ -26,6 +26,7 @@ def KLINE_INTERVAL_1HOUR()      : return client.futures_klines(symbol=config.pai
 def KLINE_INTERVAL_2HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_2HOUR)
 def KLINE_INTERVAL_4HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_4HOUR)
 def KLINE_INTERVAL_6HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_6HOUR)
+def KLINE_INTERVAL_12HOUR()     : return client.get_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_12HOUR)
 
 def get_volume(TIME_TRAVEL, INTERVAL):
     if   TIME_TRAVEL == "FIRSTRUN" : which = -3

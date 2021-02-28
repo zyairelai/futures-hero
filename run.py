@@ -24,7 +24,7 @@ try:
             # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
             # scheduler.start()
 
-        except (KeyError,
+        except (OSError, KeyError,
                 socket.timeout,
                 BinanceAPIException,
                 ConnectionResetError,

@@ -101,12 +101,10 @@ def GO_SHORT(one_minute, five_minute, one_hour):
        (((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
 
 def CLOSE_LONG():
-    if (one_minute_exit_test("GREEN")): 
-        return True
+    if (one_minute_exit_test("GREEN")): return True
 
 def CLOSE_SHORT():
-    if (one_minute_exit_test("RED")): 
-        return True
+    if (one_minute_exit_test("RED")): return True
 
 def DIRECTION_CHANGE_EXIT_LONG(one_hour):
     if ((one_hour == "RED") and (pencil_wick_test("RED", "1HOUR") == "PASS")): return True
@@ -115,7 +113,7 @@ def DIRECTION_CHANGE_EXIT_SHORT(one_hour):
     if ((one_hour == "GREEN") and (pencil_wick_test("GREEN", "1HOUR") == "PASS")): return True
 
 def volume_confirmation(previous_volume, current_volume):
-    return (previous_volume / 5) < current_volume
+    return current_volume > (previous_volume / 5)
 
 def trade_amount():
     firstrun_volume = binance_futures.get_volume("FIRSTRUN", "6HOUR")

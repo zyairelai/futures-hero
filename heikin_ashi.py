@@ -130,9 +130,11 @@ def one_minute_exit_test(CANDLE): # return "PASS" // "FAIL"
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
 
     if CANDLE == "GREEN":
-        if (previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold)): return True
+        if (previous_Close(klines) > current_High(klines)) or \
+          ((previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold))): return True
     elif CANDLE == "RED":
-        if (current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold)): return True
+        if (previous_Close(klines) < current_Low(klines)) or \
+          ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
 
 def pencil_wick_test(CANDLE, INTERVAL): # return "PASS" // "FAIL"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
