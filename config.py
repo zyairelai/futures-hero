@@ -11,12 +11,12 @@ user_input = input("\nEnter a number   :   ")
 if user_input == '2':
     coin            = "ETH"
     quantity        = 0.01      # 0.1 @1520 == $5.64
-    leverage        = 30
+    leverage        = 30        # MAX 100x
 
 elif user_input == '3':
     coin            = "BNB"
     quantity        = 0.1       # 1 @252 == $10.08
-    leverage        = 25
+    leverage        = 20        # MAX 75x
 
 else:
     coin            = "BTC"
