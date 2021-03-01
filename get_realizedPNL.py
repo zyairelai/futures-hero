@@ -22,6 +22,6 @@ for trade in trades_list:
         print(str(i) + ". " + trade.get('realizedPnl') + " LOSER TRADE")
     else: continue
 
-if overall_PNL > 0 : print(colored("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT\n", "green"))
-elif overall_PNL < 0 : print(colored("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT\n", "red"))
-else: print("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT\n")
+if overall_PNL > 0 : print(colored("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT", "green"))
+elif overall_PNL < 0 : print(colored("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT", "red"))
+else: print("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT")

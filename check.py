@@ -17,7 +17,7 @@ def check():
         heikin_ashi.get_hour(2)
         heikin_ashi.get_hour(4)
         heikin_ashi.get_hour(6)
-        print(f"Time Taken: {time.time() - start} seconds\n")
+        print(f"Time Taken: {time.time() - start} seconds")
 
     elif (input_num == '2'):
         import heikin_ashi
@@ -32,7 +32,7 @@ def check():
             start = time.time()
             heikin_ashi.get_current_minute(1)
             heikin_ashi.get_current_minute(5)
-            print(f"Time Taken: {time.time() - start} seconds\n")
+            print(f"Time Taken: {time.time() - start} seconds")
 
     elif (input_num == '3'): 
         from heikin_ashi import pattern_broken
@@ -50,11 +50,11 @@ def check():
         start = time.time()
         from get_position import get_position_info
         print("\nThe <get_position.py> return value is : " + get_position_info())
-        print(f"Time Taken: {time.time() - start} seconds\n")
+        print(f"Time Taken: {time.time() - start} seconds")
 
     elif (input_num == '5'): import get_realizedPNL
 
-    else: print(colored("\nINVALID INPUT!\n", "red"))
-
+    else: print(colored("\nINVALID INPUT!", "red"))
+    print()
 try: check()
 except KeyboardInterrupt: print("\n\nAborted.\n")

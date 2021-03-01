@@ -24,15 +24,14 @@ try:
             # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
             # scheduler.start()
 
-        except (OSError, KeyError,
-                socket.timeout,
+        except (socket.timeout,
                 BinanceAPIException,
-                ConnectionResetError,
                 urllib3.exceptions.ProtocolError,
                 urllib3.exceptions.ReadTimeoutError,
                 requests.exceptions.ConnectionError,
                 requests.exceptions.ConnectTimeout,
-                requests.exceptions.ReadTimeout) as e:
+                requests.exceptions.ReadTimeout,
+                ConnectionResetError, KeyError, OSError) as e:
 
             if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
             with open((os.path.join("Error_Message", config.pair + ".txt")), "a", encoding="utf-8") as error_message:
