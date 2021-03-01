@@ -4,8 +4,8 @@ troubleshooting = False     # Troubleshooting mode for @zyairelai
 print("Which pair do you want to trade?")
 print("1. BTC_USDT")
 print("2. ETH_USDT")
-print("2. BNB_USDT")
-user_input = input("\nEnter a number   :   ") or '1'
+print("3. BNB_USDT")
+user_input = input("\nEnter a number   :   ")
 
 # Asset Configuration
 if user_input == '2':
@@ -13,7 +13,7 @@ if user_input == '2':
     quantity        = 0.01      # 0.1 @1520 == $5.64
     leverage        = 30
 
-if user_input == '3':
+elif user_input == '3':
     coin            = "BNB"
     quantity        = 0.1       # 1 @252 == $10.08
     leverage        = 25
