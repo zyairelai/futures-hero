@@ -110,14 +110,14 @@ def DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
 def DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
     if ((one_hour == "GREEN") and volume_confirmation(previous_volume, current_volume)): return True
 
-def volume_confirmation(previous_volume, current_volume): return current_volume > (previous_volume / 5)
+def volume_confirmation(previous_volume, current_volume): return (current_volume > (previous_volume / 5))
 
 def trade_amount(direction, one_hour):
     if (direction == "GREEN" and one_hour == "GREEN") or (direction == "RED" and one_hour == "RED"): mode = "SAFE"
     elif (direction == "GREEN" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) or \
          (direction == "RED" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) or \
-         (direction == "INDECISIVE"): mode == "DANGER"
-    else: mode == "MODERATE"
+         (direction == "INDECISIVE"): mode = "DANGER"
+    else: mode = "MODERATE"
 
     firstrun_volume = binance_futures.get_volume("FIRSTRUN", "1HOUR")
     previous_volume = binance_futures.get_volume("PREVIOUS", "1HOUR")
