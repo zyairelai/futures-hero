@@ -7,7 +7,7 @@ from termcolor import colored
 
 def dead_or_alive():
     position_info = get_position.get_position_info()
-    direction    = heikin_ashi.get_hour(6)
+    six_hour    = heikin_ashi.get_hour(6)
     one_hour     = heikin_ashi.get_hour(1)
     five_minute  = heikin_ashi.get_current_minute(5)
     one_minute   = heikin_ashi.get_current_minute(1)
@@ -27,16 +27,16 @@ def dead_or_alive():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if direction == "GREEN" and volume_confirmation(previous_volume, current_volume):
+        if six_hour == "GREEN" and volume_confirmation(previous_volume, current_volume):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-                if config.live_trade: binance_futures.open_position("LONG", trade_amount(direction, one_hour))
+                if config.live_trade: binance_futures.open_position("LONG", trade_amount(six_hour, one_hour))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif direction == "RED" and volume_confirmation(previous_volume, current_volume):
+        elif six_hour == "RED" and volume_confirmation(previous_volume, current_volume):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-                if config.live_trade: binance_futures.open_position("SHORT", trade_amount(direction, one_hour))
+                if config.live_trade: binance_futures.open_position("SHORT", trade_amount(six_hour, one_hour))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -45,7 +45,7 @@ def dead_or_alive():
 
 def fomo_strifing():
     position_info = get_position.get_position_info()
-    direction    = heikin_ashi.get_hour(6)
+    six_hour     = heikin_ashi.get_hour(6)
     one_hour     = heikin_ashi.get_hour(1)
     five_minute  = heikin_ashi.get_current_minute(5)
     one_minute   = heikin_ashi.get_current_minute(1)
@@ -68,13 +68,13 @@ def fomo_strifing():
         if one_hour == "GREEN" and volume_confirmation(previous_volume, current_volume):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-                if config.live_trade: binance_futures.open_position("LONG", trade_amount(direction, one_hour))
+                if config.live_trade: binance_futures.open_position("LONG", trade_amount(six_hour, one_hour))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif one_hour == "RED" and volume_confirmation(previous_volume, current_volume):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-                if config.live_trade: binance_futures.open_position("SHORT", trade_amount(direction, one_hour))
+                if config.live_trade: binance_futures.open_position("SHORT", trade_amount(six_hour, one_hour))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -105,18 +105,18 @@ def CLOSE_SHORT():
     if (one_minute_exit_test("RED")): return True
 
 def DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
-    if ((one_hour == "RED") and volume_confirmation(previous_volume, current_volume)): return True
+    if (((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and volume_confirmation(previous_volume, current_volume)): return True
 
 def DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
-    if ((one_hour == "GREEN") and volume_confirmation(previous_volume, current_volume)): return True
+    if (((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE")) and volume_confirmation(previous_volume, current_volume)): return True
 
 def volume_confirmation(previous_volume, current_volume): return (current_volume > (previous_volume / 5))
 
-def trade_amount(direction, one_hour):
-    if (direction == "GREEN" and one_hour == "GREEN") or (direction == "RED" and one_hour == "RED"): mode = "SAFE"
-    elif (direction == "GREEN" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) or \
-         (direction == "RED" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) or \
-         (direction == "INDECISIVE"): mode = "DANGER"
+def trade_amount(six_hour, one_hour):
+    if (six_hour == "GREEN" and one_hour == "GREEN") or (six_hour == "RED" and one_hour == "RED"): mode = "SAFE"
+    elif (six_hour == "GREEN" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) or \
+         (six_hour == "RED" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) or \
+         (six_hour == "INDECISIVE"): mode = "DANGER"
     else: mode = "MODERATE"
 
     firstrun_volume = binance_futures.get_volume("FIRSTRUN", "1HOUR")
