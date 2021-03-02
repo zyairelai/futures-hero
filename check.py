@@ -20,14 +20,14 @@ def check():
         from binance_futures import get_volume
         previous_volume = get_volume("PREVIOUS", "1HOUR")
         current_volume  = get_volume("CURRENT", "1HOUR")
-        print("Previous Volume  :   " + str(previous_volume))
-        print("Current  Volume  :   " + str(current_volume))
+        print("PREVIOUS VOLUME  :   " + str(previous_volume))
+        print("CURRENT  VOLUME  :   " + str(current_volume))
         
         if (previous_volume / 5) < current_volume: 
-            print(colored("Volume Entry     :   YES", "green"))
-        else: print(colored("Volume Entry     :   NO", "red"))
-        if heikin_ashi.pattern_broken("5MINUTE") == "BROKEN": print(colored("5 min  Volume    :   BROKEN", "red"))
-        if heikin_ashi.pattern_broken("1HOUR") == "BROKEN": print(colored("1 hour Volume    :   BROKEN", "red"))
+            print(colored("VOLUME ENTRY     :   YES", "green"))
+        else: print(colored("VOLUME ENTRY     :   NO", "red"))
+        if heikin_ashi.pattern_broken("5MINUTE") == "BROKEN": print(colored("5 MIN  PATTERN   :   BROKEN", "red"))
+        if heikin_ashi.pattern_broken("1HOUR") == "BROKEN": print(colored("1 HOUR PATTERN   :   BROKEN", "red"))
 
         print(f"Time Taken: {time.time() - start} seconds")
 
@@ -52,9 +52,7 @@ def check():
         print("\nThe <get_position.py> return value is : " + get_position_info())
         print(f"Time Taken: {time.time() - start} seconds")
 
-    elif (input_num == '4'): import get_realizedPNL
-
-    else: print(colored("\nINVALID INPUT!", "red"))
+    else: import get_realizedPNL
     print()
 try: check()
 except KeyboardInterrupt: print("\n\nAborted.\n")

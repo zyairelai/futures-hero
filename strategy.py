@@ -71,14 +71,14 @@ def fomo_strifing():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if  ((six_hour != "GREEN_INDECISIVE") or (six_hour != "RED_INDECISIVE")) and \
+        if  ((six_hour != "GREEN_INDECISIVE") and (six_hour != "RED_INDECISIVE")) and \
             ((one_hour == "GREEN") and (volume_confirmation(previous_volume, current_volume))):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", trade_amount(six_hour, one_hour))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif ((six_hour != "GREEN_INDECISIVE") or (six_hour != "RED_INDECISIVE")) and \
+        elif ((six_hour != "GREEN_INDECISIVE") and (six_hour != "RED_INDECISIVE")) and \
              ((one_hour == "RED") and (volume_confirmation(previous_volume, current_volume))):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
