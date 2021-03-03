@@ -69,13 +69,13 @@ def fomo_strifing():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if ((one_hour == "GREEN") and (volume_confirmation(previous_volume, current_volume))) and ((six_hour == "GREEN") or (six_hour == "RED")):
+        if ((one_hour == "GREEN") and (volume_confirmation(previous_volume, current_volume))): # and ((six_hour == "GREEN") or (six_hour == "RED")):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", trade_amount(six_hour, one_hour))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif ((one_hour == "RED") and (volume_confirmation(previous_volume, current_volume))) and ((six_hour == "GREEN") or (six_hour == "RED")):
+        elif ((one_hour == "RED") and (volume_confirmation(previous_volume, current_volume))): # and ((six_hour == "GREEN") or (six_hour == "RED")):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", trade_amount(six_hour, one_hour))
@@ -94,13 +94,15 @@ def GO_LONG(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
        ((one_minute == "GREEN") and (pencil_wick_test("GREEN", "1MINUTE") == "PASS")) and \
        (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (pencil_wick_test("GREEN", "5MINUTE") == "PASS")) and \
-       ((one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and (pencil_wick_test("RED", "1HOUR") == "FAIL")): return True
+       ((one_hour == "GREEN") and (pencil_wick_test("RED", "1HOUR") == "FAIL")): return True
+    #    ((one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and (pencil_wick_test("RED", "1HOUR") == "FAIL")): return True
 
 def GO_SHORT(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
        ((one_minute == "RED") and (pencil_wick_test("RED", "1MINUTE") == "PASS")) and \
        (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (pencil_wick_test("RED", "5MINUTE") == "PASS")) and \
-       (((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
+       ((one_hour == "RED") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
+    #    ((one_hour == "RED" or one_hour == "RED_INDECISIVE") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
 
 def CLOSE_LONG():
     if (one_minute_exit_test("GREEN")): return True
