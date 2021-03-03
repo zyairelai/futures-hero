@@ -57,29 +57,25 @@ def fomo_strifing():
     current_volume = binance_futures.get_volume("CURRENT", "1HOUR")
 
     if position_info == "LONGING":
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and CLOSE_LONG()) or \
-            DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
+        if ((get_position.get_unRealizedProfit() == "PROFIT") and CLOSE_LONG()) or DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if ((get_position.get_unRealizedProfit() == "PROFIT") and CLOSE_SHORT()) or \
-            DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
+        if ((get_position.get_unRealizedProfit() == "PROFIT") and CLOSE_SHORT()) or DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if  ((six_hour != "GREEN_INDECISIVE") and (six_hour != "RED_INDECISIVE")) and \
-            ((one_hour == "GREEN") and (volume_confirmation(previous_volume, current_volume))):
+        if ((one_hour == "GREEN") and (volume_confirmation(previous_volume, current_volume))) and ((six_hour == "GREEN") or (six_hour == "RED")):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade: binance_futures.open_position("LONG", trade_amount(six_hour, one_hour))
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif ((six_hour != "GREEN_INDECISIVE") and (six_hour != "RED_INDECISIVE")) and \
-             ((one_hour == "RED") and (volume_confirmation(previous_volume, current_volume))):
+        elif ((one_hour == "RED") and (volume_confirmation(previous_volume, current_volume))) and ((six_hour == "GREEN") or (six_hour == "RED")):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade: binance_futures.open_position("SHORT", trade_amount(six_hour, one_hour))
