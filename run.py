@@ -11,18 +11,17 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    def added_to_job():
-        strategy.dead_or_alive()
-        # strategy.fomo_strifing()
+    def added_to_job(): 
+        strategy.lets_make_some_money()
 
     while True:
         try:
-            added_to_job()
-            time.sleep(5)
+            # added_to_job()
+            # time.sleep(5)
 
-            # scheduler = BlockingScheduler()
-            # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
-            # scheduler.start()
+            scheduler = BlockingScheduler()
+            scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
+            scheduler.start()
 
         except (socket.timeout,
                 BinanceAPIException,

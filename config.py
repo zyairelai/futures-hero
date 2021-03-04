@@ -7,6 +7,7 @@ print("2. ETH_USDT")
 print("3. BNB_USDT")
 user_input = input("\nEnter a number   :   ")
 
+# Recommended Leverage == (MAX_LEVEARGE/5 * 2) - 10
 # Asset Configuration
 if user_input == '2':
     coin            = "ETH"
@@ -20,8 +21,8 @@ elif user_input == '3':
 
 else:
     coin            = "BTC"
-    quantity        = 0.001     # Minimum 0.001, if good trending it will raise up to 3x of this amount // 0.01 @47500 == $12
-    leverage        = 40        # Maximum 125 // Recommended 30-40
+    quantity        = 0.001     # Minimum 0.001
+    leverage        = 40        # MAX 125x
 
 pair = coin + "USDT"
 print("Pair Name        :   " + str(pair))

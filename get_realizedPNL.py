@@ -1,12 +1,15 @@
-check_how_many_trades = 30
-
 import time
 import config
 import binance_futures
 from termcolor import colored
+from datetime import datetime
+
+now = datetime.utcnow()
+midnight = now.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+midnight_timestamp = int(datetime.timestamp(midnight) * 1000)
 
 i, overall_PNL = 0, 0
-trades_list    = binance_futures.account_trades(check_how_many_trades)
+trades_list    = binance_futures.account_trades(midnight_timestamp)
 position_info  = binance_futures.position_information()[0]
 markPrice      = float(position_info.get('markPrice'))
 positionAmt    = abs(float(position_info.get('positionAmt')))
@@ -22,6 +25,6 @@ for trade in trades_list:
         print(str(i) + ". " + trade.get('realizedPnl') + " LOSER TRADE")
     else: continue
 
-if overall_PNL > 0 : print(colored("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT", "green"))
-elif overall_PNL < 0 : print(colored("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT", "red"))
-else: print("\nOverall PNL over the last " + str(check_how_many_trades) + " trades: " + str(round(overall_PNL, 2)) + " USDT")
+if overall_PNL > 0 : print(colored("\nOverall PNL for today : " + str(round(overall_PNL, 2)) + " USDT", "green"))
+elif overall_PNL < 0 : print(colored("\nOverall PNL for today : " + str(round(overall_PNL, 2)) + " USDT", "red"))
+else: print("\nOverall PNL for today : " + str(round(overall_PNL, 2)) + " USDT")
