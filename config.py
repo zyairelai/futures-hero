@@ -1,4 +1,4 @@
-live_trade      = True      # False to see the output & verify your API key is working
+live_trade      = False      # False to see the output & verify your API key is working
 troubleshooting = False     # Troubleshooting mode for @zyairelai
 
 # ====================================================
@@ -21,7 +21,7 @@ user_input = input("\nEnter a number   :   ")
 # Asset Configuration
 # ====================================================
 if user_input == '0':
-    coin = input("Enter COIN SYMBOL:   ").upper()
+    coin = input("Enter COIN_SYMBOL:   ").upper()
     quantity = input("Enter Trade Qty  :   ")
 
 elif user_input == '2':
