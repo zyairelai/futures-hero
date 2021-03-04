@@ -37,27 +37,27 @@ elif user_input == '3':
 # ====================================================
 elif user_input == '4':
     coin        = "LTC"
-    quantity    = 1 
+    quantity    = 1.5
 
 elif user_input == '5':
     coin        = "ADA"
-    quantity    = 150
+    quantity    = 200
 
 elif user_input == '6':
     coin        = "BCH"
-    quantity    = 0.4
+    quantity    = 0.5
 
 elif user_input == '7':
     coin        = "DOT"
-    quantity    = 5
+    quantity    = 10
 
 elif user_input == '8':
     coin        = "EOS"
-    quantity    = 50
+    quantity    = 100
 
 elif user_input == '9':
     coin        = "LINK"
-    quantity    = 7
+    quantity    = 10
 
 else:
     coin        = "BTC"
