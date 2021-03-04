@@ -15,13 +15,13 @@ def lets_make_some_money():
     current_volume  = binance_futures.get_volume("CURRENT", "1HOUR")
 
     if position_info == "LONGING":
-        if  ((six_hour == "RED") or (six_hour == "RED_INDECISIVE")) or DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
+        if six_hour != "GREEN" or DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if  ((six_hour == "GREEN") or (six_hour == "GREEN_INDECISIVE")) or DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
+        if  six_hour != "RED" or DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
