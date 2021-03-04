@@ -42,11 +42,8 @@ def lets_make_some_money():
         else: print("ACTION           :   🐺 WAIT 🐺")
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-from heikin_ashi import current_candle
-from heikin_ashi import previous_candle
 from heikin_ashi import pattern_broken
 from heikin_ashi import pencil_wick_test
-from heikin_ashi import one_minute_exit_test
 
 def GO_LONG(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
