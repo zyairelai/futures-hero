@@ -1,6 +1,6 @@
 try:
     import os, time, requests, socket, urllib3
-    import config, binance_futures, strategy, play_with_fire
+    import config, binance_futures, play_safe, play_with_fire
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -17,16 +17,16 @@ try:
 
     def added_to_job():
         if config.pair == "BNBUSDT": play_with_fire.lets_make_some_money()
-        else: strategy.lets_make_some_money()
+        else: play_safe.lets_make_some_money()
 
     while True:
         try:
-            # added_to_job()
-            # time.sleep(5)
+            added_to_job()
+            time.sleep(5)
 
-            scheduler = BlockingScheduler()
-            scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
-            scheduler.start()
+            # scheduler = BlockingScheduler()
+            # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
+            # scheduler.start()
 
         except (socket.timeout,
                 BinanceAPIException,

@@ -18,25 +18,25 @@ def lets_make_some_money():
 
     if position_info == "LONGING":
         if DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
-            if get_position.get_unRealizedProfit() == "PROFIT":
+            if get_position.get_unRealizedProfit() == "PROFIT" or (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "RED" or four_hour == "RED")):
                 print("ACTION           :   💰 CLOSE_LONG 💰")
                 binance_futures.close_position("LONG")
-            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(one_hour):
+            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR()):
                 print("ACTION           :   🔥 THROTTLE 🔥")
                 binance_futures.throttle("LONG")
-                record_timestamp(one_hour)
+                record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
             else: print(colored("ACTION           :   HOLDING_LONG", "green"))
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
-            if get_position.get_unRealizedProfit() == "PROFIT":
+            if get_position.get_unRealizedProfit() == "PROFIT" or (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "GREEN" or four_hour == "GREEN")):
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
                 binance_futures.close_position("SHORT")
-            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(one_hour):
+            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR()):
                 print("ACTION           :   🔥 THROTTLE 🔥")
                 binance_futures.throttle("SHORT")
-                record_timestamp(one_hour)
+                record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
@@ -46,7 +46,7 @@ def lets_make_some_money():
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade:
                     binance_futures.open_position("LONG", config.quantity)
-                    record_timestamp(one_hour)
+                    record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif (six_hour == "RED" or four_hour == "RED") and volume_confirmation(previous_volume, current_volume):
@@ -54,7 +54,7 @@ def lets_make_some_money():
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade:
                     binance_futures.open_position("SHORT", config.quantity)
-                    record_timestamp(one_hour)
+                    record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
