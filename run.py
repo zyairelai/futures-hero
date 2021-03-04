@@ -7,7 +7,7 @@ try:
     from apscheduler.schedulers.blocking import BlockingScheduler
 
     # if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
-    if binance_futures.position_information()[0].get('marginType') != "cross": binance_futures.change_margin_to_CROSS()
+    if binance_futures.position_information()[0].get('marginType') != "cross": binance_futures.change_margin_to_CROSSED()
     if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
