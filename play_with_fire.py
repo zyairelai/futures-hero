@@ -18,7 +18,8 @@ def lets_make_some_money():
 
     if position_info == "LONGING":
         if DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
-            if get_position.get_unRealizedProfit() == "PROFIT" or (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "RED" or four_hour == "RED")):
+            if  (get_position.get_unRealizedProfit() == "PROFIT" and heikin_ashi.one_hour_exit_test("GREEN")) or \
+                (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "RED" and volume_confirmation(previous_volume, current_volume))):
                 print("ACTION           :   💰 CLOSE_LONG 💰")
                 binance_futures.close_position("LONG")
             elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR()):
@@ -30,7 +31,8 @@ def lets_make_some_money():
 
     elif position_info == "SHORTING":
         if DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
-            if get_position.get_unRealizedProfit() == "PROFIT" or (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "GREEN" or four_hour == "GREEN")):
+            if  (get_position.get_unRealizedProfit() == "PROFIT" and heikin_ashi.one_hour_exit_test("RED")) or \
+                (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "GREEN" and volume_confirmation(previous_volume, current_volume))):
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
                 binance_futures.close_position("SHORT")
             elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR()):
@@ -67,13 +69,13 @@ def GO_LONG(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
        ((one_minute == "GREEN") and (pencil_wick_test("GREEN", "1MINUTE") == "PASS")) and \
        (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (pencil_wick_test("GREEN", "5MINUTE") == "PASS")) and \
-       ((one_hour == "GREEN") and (pencil_wick_test("RED", "1HOUR") == "FAIL")): return True
+       ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE") and (pencil_wick_test("RED", "1HOUR") == "FAIL")): return True
 
 def GO_SHORT(one_minute, five_minute, one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
        ((one_minute == "RED") and (pencil_wick_test("RED", "1MINUTE") == "PASS")) and \
        (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (pencil_wick_test("RED", "5MINUTE") == "PASS")) and \
-       ((one_hour == "RED") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
+       ((one_hour == "RED") or (one_hour == "RED_INDECISIVE") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
 
 def DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
     if ((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and volume_confirmation(previous_volume, current_volume): return True
@@ -96,3 +98,4 @@ def retrieve_timestamp():
 
 def current_kline_timestamp(kline):
     return kline[-1][0] # This will return <int> type of timestamp
+

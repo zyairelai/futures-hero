@@ -15,9 +15,7 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    def added_to_job():
-        if config.pair == "BNBUSDT": play_with_fire.lets_make_some_money()
-        else: play_safe.lets_make_some_money()
+    def added_to_job(): play_with_fire.lets_make_some_money()
 
     while True:
         try:
