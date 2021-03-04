@@ -66,5 +66,5 @@ def DIRECTION_CHANGE_EXIT_LONG(one_hour, two_hour, previous_volume, current_volu
 def DIRECTION_CHANGE_EXIT_SHORT(one_hour, two_hour, previous_volume, current_volume):
     if ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE") or (two_hour == "GREEN") or (two_hour == "GREEN_INDECISIVE")) and volume_confirmation(previous_volume, current_volume): return True
 
-def volume_confirmation(previous_volume, current_volume): 
+def volume_confirmation(previous_volume, current_volume):
     return (current_volume > (previous_volume / 5))

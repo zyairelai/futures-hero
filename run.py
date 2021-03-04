@@ -1,10 +1,13 @@
 try:
     import os, time, requests, socket, urllib3
-    import config, binance_futures, strategy
+    import config, binance_futures, strategy, play_with_fire
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
     from apscheduler.schedulers.blocking import BlockingScheduler
+
+    if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
+    else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
 
     # if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
     if binance_futures.position_information()[0].get('marginType') != "cross": binance_futures.change_margin_to_CROSSED()
@@ -12,8 +15,9 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    def added_to_job(): 
-        strategy.lets_make_some_money()
+    def added_to_job():
+        if config.pair == "BNBUSDT": play_with_fire.lets_make_some_money()
+        else: strategy.lets_make_some_money()
 
     while True:
         try:

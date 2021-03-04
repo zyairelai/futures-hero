@@ -22,8 +22,8 @@ def check():
         current_volume  = get_volume("CURRENT", "1HOUR")
         print("PREVIOUS VOLUME  :   " + str(previous_volume))
         print("CURRENT  VOLUME  :   " + str(current_volume))
-        
-        if (previous_volume / 5) < current_volume: 
+
+        if (previous_volume / 5) < current_volume:
             print(colored("VOLUME ENTRY     :   YES", "green"))
         else: print(colored("VOLUME ENTRY     :   NO", "red"))
         if heikin_ashi.pattern_broken("5MINUTE") == "BROKEN": print(colored("5 MIN  PATTERN   :   BROKEN", "red"))
@@ -46,7 +46,7 @@ def check():
             heikin_ashi.get_current_minute(5)
             print(f"Time Taken: {time.time() - start} seconds")
 
-    elif (input_num == '3'): 
+    elif (input_num == '3'):
         start = time.time()
         from get_position import get_position_info
         print("\nThe <get_position.py> return value is : " + get_position_info())

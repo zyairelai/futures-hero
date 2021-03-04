@@ -1,3 +1,4 @@
+import os
 import config
 import heikin_ashi
 import get_position
@@ -16,28 +17,44 @@ def lets_make_some_money():
     current_volume  = binance_futures.get_volume("CURRENT", "1HOUR")
 
     if position_info == "LONGING":
-        if  DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
-            print("ACTION           :   💰 CLOSE_LONG 💰")
-            binance_futures.close_position("LONG")
+        if DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
+            if get_position.get_unRealizedProfit() == "PROFIT":
+                print("ACTION           :   💰 CLOSE_LONG 💰")
+                binance_futures.close_position("LONG")
+            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(one_hour):
+                print("ACTION           :   🔥 THROTTLE 🔥")
+                binance_futures.throttle("LONG")
+                record_timestamp(one_hour)
+            else: print(colored("ACTION           :   HOLDING_LONG", "green"))
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if  DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
-            print("ACTION           :   💰 CLOSE_SHORT 💰")
-            binance_futures.close_position("SHORT")
+        if DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
+            if get_position.get_unRealizedProfit() == "PROFIT":
+                print("ACTION           :   💰 CLOSE_SHORT 💰")
+                binance_futures.close_position("SHORT")
+            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(one_hour):
+                print("ACTION           :   🔥 THROTTLE 🔥")
+                binance_futures.throttle("SHORT")
+                record_timestamp(one_hour)
+            else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
         if (six_hour == "GREEN" or four_hour == "GREEN") and volume_confirmation(previous_volume, current_volume):
             if GO_LONG(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-                if config.live_trade: binance_futures.open_position("LONG", config.quantity)
+                if config.live_trade:
+                    binance_futures.open_position("LONG", config.quantity)
+                    record_timestamp(one_hour)
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif (six_hour == "RED" or four_hour == "RED") and volume_confirmation(previous_volume, current_volume):
             if GO_SHORT(one_minute, five_minute, one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-                if config.live_trade: binance_futures.open_position("SHORT", config.quantity)
+                if config.live_trade:
+                    binance_futures.open_position("SHORT", config.quantity)
+                    record_timestamp(one_hour)
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -66,3 +83,16 @@ def DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
 
 def volume_confirmation(previous_volume, current_volume):
     return (current_volume > (previous_volume / 5))
+
+def record_timestamp(kline):
+    current_timestamp = current_kline_timestamp(kline)
+    if not os.path.exists("Timestamp_Record"): os.makedirs("Timestamp_Record")
+    with open((os.path.join("Timestamp_Record", config.pair + ".txt")), "w", encoding="utf-8") as timestamp_record:
+        timestamp_record.write(str(current_timestamp))
+
+def retrieve_timestamp():
+    with open((os.path.join("Timestamp_Record", config.pair + ".txt")), "r", encoding="utf-8") as timestamp_record:
+        return int(timestamp_record.read())
+
+def current_kline_timestamp(kline):
+    return kline[-1][0] # This will return <int> type of timestamp
