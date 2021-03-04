@@ -4,7 +4,7 @@ import binance_futures
 from termcolor import colored
 
 def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
-    title = "CURRENT POSITION :   "
+    title = "CURRENT POSITION FOR "+config.pair+":   "
 
     response = binance_futures.position_information()[0]
     positionAmt = float(response.get('positionAmt'))
