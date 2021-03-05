@@ -17,29 +17,27 @@ def lets_make_some_money():
     current_volume  = binance_futures.get_volume("CURRENT", "1HOUR")
 
     if position_info == "LONGING":
-        if DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
-            if  (get_position.get_unRealizedProfit() == "PROFIT" and heikin_ashi.one_hour_exit_test("GREEN")) or \
-                (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "RED" and volume_confirmation(previous_volume, current_volume))):
-                print("ACTION           :   💰 CLOSE_LONG 💰")
-                binance_futures.close_position("LONG")
-            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR()):
-                print("ACTION           :   🔥 THROTTLE 🔥")
-                binance_futures.throttle("LONG")
-                record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
-            else: print(colored("ACTION           :   HOLDING_LONG", "green"))
+        if CONDITION_EXIT_LONG(six_hour, previous_volume, current_volume):
+            print("ACTION           :   💰 CLOSE_LONG 💰")
+            binance_futures.close_position("LONG")
+            
+        elif THROTTLE_LONG(six_hour, previous_volume, current_volume):
+            print("ACTION           :   🔥 THROTTLE 🔥")
+            binance_futures.throttle("LONG")
+            record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
+
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
-            if  (get_position.get_unRealizedProfit() == "PROFIT" and heikin_ashi.one_hour_exit_test("RED")) or \
-                (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "GREEN" and volume_confirmation(previous_volume, current_volume))):
-                print("ACTION           :   💰 CLOSE_SHORT 💰")
-                binance_futures.close_position("SHORT")
-            elif get_position.get_unRealizedProfit() == "LOSS" and retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR()):
-                print("ACTION           :   🔥 THROTTLE 🔥")
-                binance_futures.throttle("SHORT")
-                record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
-            else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
+        if CONDITION_EXIT_SHORT(six_hour, previous_volume, current_volume):
+            print("ACTION           :   💰 CLOSE_SHORT 💰")
+            binance_futures.close_position("SHORT")
+
+        elif THROTTLE_SHORT(six_hour, previous_volume, current_volume):
+            print("ACTION           :   🔥 THROTTLE 🔥")
+            binance_futures.throttle("SHORT")
+            record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
+
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
@@ -77,11 +75,27 @@ def GO_SHORT(one_minute, five_minute, one_hour):
        (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (pencil_wick_test("RED", "5MINUTE") == "PASS")) and \
        ((one_hour == "RED") or (one_hour == "RED_INDECISIVE") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
 
-def DIRECTION_CHANGE_EXIT_LONG(one_hour, previous_volume, current_volume):
-    if ((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and volume_confirmation(previous_volume, current_volume): return True
+def CONDITION_EXIT_LONG(six_hour, previous_volume, current_volume):
+    if  (get_position.get_unRealizedProfit() == "PROFIT" and heikin_ashi.one_hour_exit_test("GREEN")) or \
+        (get_position.get_unRealizedProfit() == "LOSS"   and (six_hour == "RED" and volume_confirmation(previous_volume, current_volume))):
+        return True
 
-def DIRECTION_CHANGE_EXIT_SHORT(one_hour, previous_volume, current_volume):
-    if ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE")) and volume_confirmation(previous_volume, current_volume): return True
+def THROTTLE_LONG(six_hour, previous_volume, current_volume):
+    if  (get_position.get_unRealizedProfit() == "LOSS") and \
+        (six_hour != "RED" and volume_confirmation(previous_volume, current_volume)) and \
+        (retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())):
+        return True
+
+def CONDITION_EXIT_SHORT(six_hour, previous_volume, current_volume):
+    if  (get_position.get_unRealizedProfit() == "PROFIT" and heikin_ashi.one_hour_exit_test("RED")) or \
+        (get_position.get_unRealizedProfit() == "LOSS"   and (six_hour == "GREEN" and volume_confirmation(previous_volume, current_volume))):
+        return True
+
+def THROTTLE_SHORT(six_hour, previous_volume, current_volume):
+    if  (get_position.get_unRealizedProfit() == "LOSS") and \
+        (six_hour != "GREEN" and volume_confirmation(previous_volume, current_volume)) and \
+        (retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())):
+        return True
 
 def volume_confirmation(previous_volume, current_volume):
     return (current_volume > (previous_volume / 5))
