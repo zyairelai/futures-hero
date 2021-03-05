@@ -4,7 +4,6 @@ try:
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
-    from apscheduler.schedulers.blocking import BlockingScheduler
 
     if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
@@ -21,10 +20,6 @@ try:
         try:
             added_to_job()
             time.sleep(5)
-
-            # scheduler = BlockingScheduler()
-            # scheduler.add_job(added_to_job, 'cron', second='0,10,20,30,40,50')
-            # scheduler.start()
 
         except (socket.timeout,
                 BinanceAPIException,
