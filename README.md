@@ -9,15 +9,18 @@ Anybody may copy, redistribute, modify of the software. However, limited to NON-
 LEVERAGE TRADING IS A HIGH RISK GAME. PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.
 
 # WALLET MANAGEMENT TUTORIAL
-This is a very simple, yet, ridiculously high risk with high return. Hence, wallet management is the priority of this project.  
+This is a very simple, yet, ridiculously high risk with high return.  
+Hence, wallet management is the priority of this project.  
 The recommendation trade amount in this project is 5% of your Futures Wallet for 1 position.  
 ```
 For Example, I trade only BTCUSDT.
-I have 10 USDT in my Futures Wallet. I will place maximum only 0.5 USDT for one trade.
+I have 10 USDT in my Futures Wallet. The maximum amount that I will place for one position is 0.5 USDT.
 
-If I want to trade both BTCUSDT and ETHUSDT at the same time, and I want to place 0.5 USDT for one single position.
+If I want to trade both BTCUSDT and ETHUSDT at the same time, and I want to place 0.5 USDT for each position.
 This will require my futures wallet to have at least 20 USDT to do so. 
 So I can place 0.5 USDT for BTCUSDT position and 0.5 USDT for ETHUSDT position.
+The total trade amount in this case will be 1 USDT, which is 5% of 20 USDT in your whole Futures Wallet.
+
 REMEMBER 5% IS THE KEY
 ```
 
