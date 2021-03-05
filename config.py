@@ -20,11 +20,11 @@ if user_input == '0':
 
 elif user_input == '2':
     coin     = "ETH"
-    quantity = 0.01
+    quantity = 0.005
 
 elif user_input == '3':
     coin     = "BNB"
-    quantity = 0.03
+    quantity = 0.05
 
 else:
     coin     = "BTC"
