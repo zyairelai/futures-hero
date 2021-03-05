@@ -86,8 +86,19 @@ def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED
     else                                     :   print(colored(title + minute_candle, "yellow"))
     return minute_candle
 
-def one_minute_exit_test(CANDLE): # return "PASS" // "FAIL"
+def one_minute_exit_test(CANDLE):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+    threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
+
+    if CANDLE == "GREEN":
+        if (previous_Close(klines) > current_High(klines)) or \
+          ((previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold))): return True
+    elif CANDLE == "RED":
+        if (previous_Close(klines) < current_Low(klines)) or \
+          ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
+
+def one_hour_exit_test(CANDLE):
+    klines = binance_futures.KLINE_INTERVAL_1HOUR()
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
 
     if CANDLE == "GREEN":
@@ -148,14 +159,3 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
        ((current == "GREEN")    and (current_Close(klines) < previous_Close(klines))) or \
        ((current == "RED")      and (current_Close(klines) > previous_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
-
-def one_hour_exit_test(CANDLE): # return "PASS" // "FAIL"
-    klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
-
-    if CANDLE == "GREEN":
-        if (previous_Close(klines) > current_High(klines)) or \
-          ((previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold))): return True
-    elif CANDLE == "RED":
-        if (previous_Close(klines) < current_Low(klines)) or \
-          ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
