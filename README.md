@@ -2,12 +2,24 @@
 Leverage Trading Automation on Binance Futures.
 
 # DISCLAIMER
-
 This automation software is purely handcoded by [@zyairelai](https://github.com/zyairelai) from scratch with my personal manual trading strategy.  
 Kindly provide feedback through my email `zyairelai@gmail.com` if you are using my repository.  
 If you had modified or improved my code feel free to share with me and we may have futher discussion on this project!  
 Anybody may copy, redistribute, modify of the software. However, limited to NON-COMMERCIAL USED only.  
 LEVERAGE TRADING IS A HIGH RISK GAME. PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.
+
+# WALLET MANAGEMENT TUTORIAL
+This is a very simple, yet, ridiculously high risk with high return. Hence, wallet management is the priority of this project.  
+The recommendation trade amount in this project is 5% of your Futures Wallet for 1 position.  
+```
+For Example, I trade only BTCUSDT.
+I have 10 USDT in my Futures Wallet. I will place maximum only 0.5 USDT for one trade.
+
+If I want to trade both BTCUSDT and ETHUSDT at the same time, and I want to place 0.5 USDT for one single position.
+This will require my futures wallet to have at least 20 USDT to do so. 
+So I can place 0.5 USDT for BTCUSDT position and 0.5 USDT for ETHUSDT position.
+REMEMBER 5% IS THE KEY
+```
 
 ## 1. Environment Setup
 Paste the following into your Default Shell
