@@ -11,11 +11,9 @@ def lets_make_some_money():
     six_hour      = heikin_ashi.get_hour(6)
     four_hour     = heikin_ashi.get_hour(4)
     one_hour      = heikin_ashi.get_hour(1)
-    five_minute   = heikin_ashi.get_current_minute(5)
-    one_minute    = heikin_ashi.get_current_minute(1)
 
     if position_info == "LONGING":
-        if CONDITION_EXIT_LONG(six_hour, one_hour):
+        if CONDITION_EXIT_LONG(six_hour, four_hour, one_hour):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             binance_futures.close_position("LONG")
 
@@ -27,7 +25,7 @@ def lets_make_some_money():
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if CONDITION_EXIT_SHORT(six_hour, one_hour):
+        if CONDITION_EXIT_SHORT(six_hour, four_hour, one_hour):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             binance_futures.close_position("SHORT")
 
@@ -40,7 +38,7 @@ def lets_make_some_money():
 
     else:
         if (six_hour == "GREEN" or four_hour == "GREEN") and volume_confirmation("1HOUR"):
-            if GO_LONG(one_minute, five_minute, one_hour):
+            if GO_LONG(one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade:
                     binance_futures.open_position("LONG", config.quantity)
@@ -48,7 +46,7 @@ def lets_make_some_money():
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         elif (six_hour == "RED" or four_hour == "RED") and volume_confirmation("1HOUR"):
-            if GO_SHORT(one_minute, five_minute, one_hour):
+            if GO_SHORT(one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade:
                     binance_futures.open_position("SHORT", config.quantity)
@@ -63,28 +61,24 @@ from heikin_ashi import pencil_wick_test
 from heikin_ashi import one_hour_exit_test
 from heikin_ashi import one_minute_exit_test
 
-def GO_LONG(one_minute, five_minute, one_hour):
+def GO_LONG(one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
-       ((one_minute == "GREEN") and (pencil_wick_test("GREEN", "1MINUTE") == "PASS")) and \
-       (((five_minute == "GREEN") or (five_minute == "GREEN_INDECISIVE")) and (pencil_wick_test("GREEN", "5MINUTE") == "PASS")) and \
        ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE") and (pencil_wick_test("RED", "1HOUR") == "FAIL")): return True
 
-def GO_SHORT(one_minute, five_minute, one_hour):
+def GO_SHORT(one_hour):
     if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
-       ((one_minute == "RED") and (pencil_wick_test("RED", "1MINUTE") == "PASS")) and \
-       (((five_minute == "RED") or (five_minute == "RED_INDECISIVE")) and (pencil_wick_test("RED", "5MINUTE") == "PASS")) and \
        ((one_hour == "RED") or (one_hour == "RED_INDECISIVE") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
 
-def CONDITION_EXIT_LONG(six_hour, one_hour):
+def CONDITION_EXIT_LONG(six_hour, four_hour, one_hour):
     if  (get_position.get_unRealizedProfit() == "PROFIT" and (one_hour == "RED" or one_hour == "RED_INDECISIVE" or six_hour != "GREEN")) or \
-        (get_position.get_unRealizedProfit() == "PROFIT" and one_hour_exit_test("GREEN") and one_minute_exit_test("GREEN")) or \
-        (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "RED" and volume_confirmation("6HOUR"))):
+        (get_position.get_unRealizedProfit() == "PROFIT" and one_hour_exit_test("GREEN") and one_minute_exit_test("GREEN") and volume_confirmation("1HOUR")) or \
+        (get_position.get_unRealizedProfit() == "LOSS" and ((six_hour == "RED" or four_hour == "RED") and volume_confirmation("1HOUR"))):
         return True
 
-def CONDITION_EXIT_SHORT(six_hour, one_hour):
+def CONDITION_EXIT_SHORT(six_hour, four_hour, one_hour):
     if  (get_position.get_unRealizedProfit() == "PROFIT" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE" or six_hour != "RED")) or \
-        (get_position.get_unRealizedProfit() == "PROFIT" and one_hour_exit_test("RED") and one_minute_exit_test("RED")) or \
-        (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "GREEN" and volume_confirmation("6HOUR"))):
+        (get_position.get_unRealizedProfit() == "PROFIT" and one_hour_exit_test("RED") and one_minute_exit_test("RED") and volume_confirmation("1HOUR")) or \
+        (get_position.get_unRealizedProfit() == "LOSS" and ((six_hour == "GREEN" or four_hour == "GREEN") and volume_confirmation("1HOUR"))):
         return True
 
 def THROTTLE_LONG(six_hour):
