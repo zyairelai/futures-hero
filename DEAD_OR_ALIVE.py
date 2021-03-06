@@ -37,7 +37,7 @@ def lets_make_some_money():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if (six_hour == "GREEN" or four_hour == "GREEN") and volume_confirmation("1HOUR"):
+        if (six_hour == "GREEN" or four_hour == "GREEN"):
             if GO_LONG(one_hour):
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
                 if config.live_trade:
@@ -45,7 +45,7 @@ def lets_make_some_money():
                     record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
             else: print("ACTION           :   🐺 WAIT 🐺")
 
-        elif (six_hour == "RED" or four_hour == "RED") and volume_confirmation("1HOUR"):
+        elif (six_hour == "RED" or four_hour == "RED"):
             if GO_SHORT(one_hour):
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
                 if config.live_trade:
@@ -57,17 +57,16 @@ def lets_make_some_money():
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
 from heikin_ashi import pattern_broken
-from heikin_ashi import pencil_wick_test
 from heikin_ashi import one_hour_exit_test
 from heikin_ashi import one_minute_exit_test
 
 def GO_LONG(one_hour):
-    if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
-       ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE") and (pencil_wick_test("RED", "1HOUR") == "FAIL")): return True
+    if  (pattern_broken("1HOUR") == "NOT_BROKEN") and \
+        ((one_hour == "GREEN") or (one_hour == "GREEN_INDECISIVE")) and volume_confirmation("1HOUR"): return True
 
 def GO_SHORT(one_hour):
-    if ((pattern_broken("5MINUTE") == "NOT_BROKEN") and (pattern_broken("1HOUR") == "NOT_BROKEN")) and \
-       ((one_hour == "RED") or (one_hour == "RED_INDECISIVE") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
+    if  (pattern_broken("1HOUR") == "NOT_BROKEN") and \
+        ((one_hour == "RED") or (one_hour == "RED_INDECISIVE")) and volume_confirmation("1HOUR"): return True
 
 def CONDITION_EXIT_LONG(six_hour, four_hour, one_hour):
     if  (get_position.get_unRealizedProfit() == "PROFIT" and (one_hour == "RED" or one_hour == "RED_INDECISIVE" or six_hour != "GREEN")) or \

@@ -108,26 +108,6 @@ def one_hour_exit_test(CANDLE):
         if (previous_Close(klines) < current_Low(klines)) or \
           ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
 
-def pencil_wick_test(CANDLE, INTERVAL): # return "PASS" // "FAIL"
-    if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif INTERVAL == "3MINUTE" : klines = binance_futures.KLINE_INTERVAL_3MINUTE()
-    elif INTERVAL == "5MINUTE" : klines = binance_futures.KLINE_INTERVAL_5MINUTE()
-    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE()
-    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE()
-    elif INTERVAL == "1HOUR"   : klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif INTERVAL == "2HOUR"   : klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif INTERVAL == "4HOUR"   : klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    elif INTERVAL == "6HOUR"   : klines = binance_futures.KLINE_INTERVAL_6HOUR()
-
-    if CANDLE == "GREEN":
-        # if (current_Close(klines) > previous_Close(klines)): return "PASS"
-        if (current_Close(klines) > previous_High(klines)): return "PASS"
-        else: return "FAIL"
-    elif CANDLE == "RED":
-        # if (current_Close(klines) < previous_Close(klines)): return "PASS"
-        if (current_Low(klines) < previous_Low(klines)): return "PASS"
-        else: return "FAIL"
-
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     elif INTERVAL == "3MINUTE" : klines = binance_futures.KLINE_INTERVAL_3MINUTE()
@@ -139,23 +119,10 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     elif INTERVAL == "4HOUR"   : klines = binance_futures.KLINE_INTERVAL_4HOUR()
     elif INTERVAL == "6HOUR"   : klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
-    if   (first_Open(klines) == first_Low(klines)) : first = "GREEN"
-    elif (first_Open(klines) == first_High(klines)): first = "RED"
-    else: first = "INDECISIVE"
+    current  = current_candle(klines)
 
-    if   (previous_Open(klines) == previous_Low(klines)) : previous = "GREEN"
-    elif (previous_Open(klines) == previous_High(klines)): previous = "RED"
-    else: previous = "INDECISIVE"
-
-    if   (current_Open(klines) == current_Low(klines)) : current = "GREEN"
-    elif (current_Open(klines) == current_High(klines)): current = "RED"
-    else: current = "INDECISIVE"
-
-    if ((first == "INDECISIVE") and (previous == "INDECISIVE") and (current == "INDECISIVE") and (current_Close(klines) >= previous_Low(klines))) or \
-       ((first == "GREEN")      and (previous == "GREEN")      and (current == "INDECISIVE") and (current_Close(klines) <= previous_High(klines))) or \
-       ((first == "RED")        and (previous == "RED")        and (current == "INDECISIVE")) or \
-       ((current == "GREEN")    and (first_High(klines) > previous_High(klines)) and (previous_High(klines) < current_Close(klines))) or \
-       ((current == "RED")      and (first_Low(klines) < previous_Low(klines))   and (previous_Low(klines) > current_Close(klines))) or \
-       ((current == "GREEN")    and (current_Close(klines) < previous_Close(klines))) or \
-       ((current == "RED")      and (current_Close(klines) > previous_Close(klines))): return "BROKEN"
+    if ((current == "GREEN" or current == "GREEN_INDECISIVE") and (first_High(klines) > previous_High(klines)) and (previous_High(klines) < current_Close(klines))) or \
+       ((current == "RED"   or current == "RED_INDECISIVE")   and (first_Low(klines)  < previous_Low(klines))  and (previous_Low(klines)  > current_Close(klines))) or \
+       ((current == "GREEN" or current == "GREEN_INDECISIVE") and (current_Close(klines) < previous_Close(klines))) or \
+       ((current == "RED"   or current == "RED_INDECISIVE")   and (current_Close(klines) > previous_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
