@@ -47,7 +47,7 @@ client      = Client(api_key, api_secret)
 You need to have these libraries installed:
 ```
 pip3 install cryptography==3.2 
-pip3 install python-binance==0.7.5
+pip3 install python-binance==0.7.9
 pip3 install termcolor==1.1.0
 ```
 

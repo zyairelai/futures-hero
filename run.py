@@ -1,6 +1,6 @@
 try:
     import os, time, requests, socket, urllib3
-    import config, binance_futures, play_safe, play_with_fire
+    import config, binance_futures, DEAD_OR_ALIVE
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -14,7 +14,7 @@ try:
         binance_futures.change_leverage(config.leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
-    def added_to_job(): play_with_fire.lets_make_some_money()
+    def added_to_job(): DEAD_OR_ALIVE.lets_make_some_money()
 
     while True:
         try:
