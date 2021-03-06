@@ -76,13 +76,13 @@ def GO_SHORT(one_minute, five_minute, one_hour):
        ((one_hour == "RED") or (one_hour == "RED_INDECISIVE") and (pencil_wick_test("GREEN", "1HOUR") == "FAIL")): return True
 
 def CONDITION_EXIT_LONG(six_hour, one_hour):
-    if  (get_position.get_unRealizedProfit() == "PROFIT" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) or \
+    if  (get_position.get_unRealizedProfit() == "PROFIT" and (one_hour == "RED" or one_hour == "RED_INDECISIVE" or six_hour != "GREEN")) or \
         (get_position.get_unRealizedProfit() == "PROFIT" and one_hour_exit_test("GREEN") and one_minute_exit_test("GREEN")) or \
         (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "RED" and volume_confirmation("6HOUR"))):
         return True
 
 def CONDITION_EXIT_SHORT(six_hour, one_hour):
-    if  (get_position.get_unRealizedProfit() == "PROFIT" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) or \
+    if  (get_position.get_unRealizedProfit() == "PROFIT" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE" or six_hour != "RED")) or \
         (get_position.get_unRealizedProfit() == "PROFIT" and one_hour_exit_test("RED") and one_minute_exit_test("RED")) or \
         (get_position.get_unRealizedProfit() == "LOSS" and (six_hour == "GREEN" and volume_confirmation("6HOUR"))):
         return True

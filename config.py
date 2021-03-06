@@ -22,7 +22,7 @@ if user_input == '0':
 
 elif user_input == '2':
     coin     = "ETH"
-    quantity = 0.0          # This cost around 0.15 USDT with 100x @1535
+    quantity = 0.01         # This cost around 0.15 USDT with 100x @1535
 
 elif user_input == '3':
     coin     = "BNB"
