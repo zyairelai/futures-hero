@@ -18,15 +18,15 @@ def get_open_orders()           : return client.futures_coin_get_open_orders(sym
 def position_information()      : return client.futures_coin_position_information(symbol=config.pair, timestamp=get_timestamp())
 
 query = 4
-def KLINE_INTERVAL_1MINUTE()    : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_1MINUTE)
-def KLINE_INTERVAL_3MINUTE()    : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_3MINUTE)
-def KLINE_INTERVAL_5MINUTE()    : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_5MINUTE)
-def KLINE_INTERVAL_15MINUTE()   : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_15MINUTE)
-def KLINE_INTERVAL_30MINUTE()   : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_30MINUTE)
-def KLINE_INTERVAL_1HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_1HOUR)
-def KLINE_INTERVAL_2HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_2HOUR)
-def KLINE_INTERVAL_4HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_4HOUR)
-def KLINE_INTERVAL_6HOUR()      : return client.futures_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_6HOUR)
+def KLINE_INTERVAL_1MINUTE()    : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_1MINUTE)
+def KLINE_INTERVAL_3MINUTE()    : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_3MINUTE)
+def KLINE_INTERVAL_5MINUTE()    : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_5MINUTE)
+def KLINE_INTERVAL_15MINUTE()   : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_15MINUTE)
+def KLINE_INTERVAL_30MINUTE()   : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_30MINUTE)
+def KLINE_INTERVAL_1HOUR()      : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_1HOUR)
+def KLINE_INTERVAL_2HOUR()      : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_2HOUR)
+def KLINE_INTERVAL_4HOUR()      : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_4HOUR)
+def KLINE_INTERVAL_6HOUR()      : return client.futures_coin_klines(symbol=config.pair, limit=query, interval=Client.KLINE_INTERVAL_6HOUR)
 def KLINE_INTERVAL_12HOUR()     : return client.get_klines(symbol=config.pair, limit=4, interval=Client.KLINE_INTERVAL_12HOUR)
 
 def get_volume(TIME_TRAVEL, INTERVAL):

@@ -1,5 +1,5 @@
 # futures-omax
-Leverage Trading Automation on Binance Futures.
+Leverage Trading Automation on Binance Futures.  
 This is a `Set and Forget` script, means you need to keep it running 24/7 and forget about it.  
 Usually you will see a significant result within 1 week.
 
@@ -52,7 +52,7 @@ pip3 install termcolor==1.1.0
 ```
 
 ## 3. Before Running......
-Make sure you go to `config.py`, read the comments and adjust your risk level!  
+Make sure you go to `config.py`, read the comments and adjust your `RISK LEVEL` !  
 The script is mainly focusing on `BTC/USDT` and `ETH/USDT` movement pattern.  
 If you'd like to test with other pairs, you can tweak around with `config.py`.
 
