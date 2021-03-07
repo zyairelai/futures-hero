@@ -11,24 +11,27 @@ def check():
 
     if (input_num == '1'):
         start = time.time()
+
         import heikin_ashi
+        print("DIRECTION")
         heikin_ashi.get_hour(6)
         heikin_ashi.get_hour(4)
-        heikin_ashi.get_hour(2)
         heikin_ashi.get_hour(1)
+        print()
+        print("STRENGTH OF CANDLE")
+        heikin_ashi.strength_of("6HOUR")
+        heikin_ashi.strength_of("4HOUR")
+        heikin_ashi.strength_of("1HOUR")
+        print()
 
         from binance_futures import get_volume
         previous_volume = get_volume("PREVIOUS", "1HOUR")
         current_volume  = get_volume("CURRENT", "1HOUR")
-        print("PREVIOUS VOLUME  :   " + str(previous_volume))
-        print("CURRENT  VOLUME  :   " + str(current_volume))
-
         if (previous_volume / 5) < current_volume:
             print(colored("VOLUME ENTRY     :   YES", "green"))
         else: print(colored("VOLUME ENTRY     :   NO", "red"))
         if heikin_ashi.pattern_broken("5MINUTE") == "BROKEN": print(colored("5 MIN  PATTERN   :   BROKEN", "red"))
         if heikin_ashi.pattern_broken("1HOUR") == "BROKEN": print(colored("1 HOUR PATTERN   :   BROKEN", "red"))
-
         print(f"Time Taken: {time.time() - start} seconds")
 
     elif (input_num == '2'):

@@ -4,15 +4,15 @@ troubleshooting = False     # Troubleshooting mode for @zyairelai
 # ====================================================
 #                  Prompt User Input
 # ====================================================
-print("Which pair do you want to trade?")
-print("1. BTC_USDT")
-print("2. ETH_USDT")
-print("3. BNB_USDT")
-# Add More Cons Here
+# print("Which pair do you want to trade?")
+# print("1. BTC_USDT")
+# print("2. ETH_USDT")
+# print("3. BNB_USDT")
+# Add More Coins Here
 
 # print("0. Others")
-user_input = input("\nEnter a number   :   ")
-
+# user_input = input("\nEnter a number   :   ")
+user_input = "BTC"
 # ====================================================
 #                 Asset Configuration
 # ====================================================
@@ -35,7 +35,7 @@ else:
     quantity = 0.001        # This cost around 0.5 USDT with 125x @48800
 
 # ====================================================
-#               Adjust Optimal Leverage
+#          These are the Optimal Leverage
 # ====================================================
 if   coin == "BTC": leverage = 125
 elif coin == "ETH": leverage = 100
@@ -47,5 +47,4 @@ else: leverage = 75
 pair = coin + "USDT"
 print("Pair Name        :   " + str(pair))
 print("Trade Quantity   :   " + str(quantity) + " " + str(coin))
-print("Set Levarage     :   " + str(leverage))
 print()

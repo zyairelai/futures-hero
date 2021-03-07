@@ -146,25 +146,36 @@ def strength_of(INTERVAL):
     low   = current_Low(klines)
 
     if current == "GREEN": 
-        if (high - close) > (close - open): strength = "WEAK"
+        upper_wick = high - close
+        candlebody = close - open
+        if upper_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
 
     elif current == "RED":
-        if (close - low) > (open - close): strength = "WEAK"
+        lower_wick = close - low
+        candlebody = open - close
+        if lower_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
     
     elif current == "GREEN_INDECISIVE":
-        if (high - close) > (close - open) and (close - open) > (close - low):
+        upper_wick = high - close
+        lower_wick = open - low
+        candlebody = close - open
+        if candlebody > lower_wick:
             if previous == "GREEN": strength = "WEAK"
-            elif previous == "RED": strength = "STRONG"
+            else: strength = "STRONG"
         else: strength = "WEAK"
 
     elif current == "RED_INDECISIVE":
-        if (close - low) > (open - close) and (open - close) > (high - close):
-            if previous == "GREEN": strength = "STRONG"
-            elif previous == "RED": strength = "WEAK"
+        upper_wick = high - open
+        lower_wick = close - low
+        candlebody = open - close
+        if candlebody > upper_wick:
+            if previous == "RED": strength = "WEAK"
+            else: strength = "STRONG"
         else: strength = "WEAK"
 
-    print("CURRENT " + INTERVAL + "    :   " + strength)
+    if strength == "STRONG": print(colored("CURRENT " + INTERVAL + "    :   " + strength, "green"))
+    else: print(colored("CURRENT " + INTERVAL + "    :   " + strength, "red"))
     return strength
 
