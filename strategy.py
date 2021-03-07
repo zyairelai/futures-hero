@@ -121,13 +121,13 @@ def GO_SHORT(one_hour):
 
 def EXIT_LONG_TAKE_PROFIT(one_hour, four_hour, six_hour):
     if  (((one_hour_exit_test("LONG") or one_hour == "RED" or one_hour == "RED_INDECISIVE") and volume_confirmation("1HOUR")) or \
-        (six_hour  == "GREEN" or six_hour  == "GREEN_INDECISIVE" and strength_of("6HOUR") == "WEAK") or \
-        (four_hour == "GREEN" or four_hour == "GREEN_INDECISIVE" and strength_of("4HOUR") == "WEAK")): return True
+        ((six_hour  == "GREEN" or six_hour  == "GREEN_INDECISIVE") and strength_of("6HOUR") == "WEAK") or \
+        ((four_hour == "GREEN" or four_hour == "GREEN_INDECISIVE") and strength_of("4HOUR") == "WEAK")): return True
 
 def EXIT_SHORT_TAKE_PROFIT(one_hour, four_hour, six_hour):
     if  (((one_hour_exit_test("SHORT") or one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and volume_confirmation("1HOUR")) or \
-        (six_hour == "RED" or six_hour  == "RED_INDECISIVE" and strength_of("6HOUR") == "WEAK") or \
-        (four_hour == "RED" or four_hour == "RED_INDECISIVE" and strength_of("4HOUR") == "WEAK")): return True
+        ((six_hour  == "RED" or six_hour  == "RED_INDECISIVE") and strength_of("6HOUR") == "WEAK") or \
+        ((four_hour == "RED" or four_hour == "RED_INDECISIVE") and strength_of("4HOUR") == "WEAK")): return True
 
 def TAKE_LOSS(POSITION, four_hour, six_hour):
     if POSITION == "LONG":
