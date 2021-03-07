@@ -86,25 +86,25 @@ def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED
     else: print(colored(title + minute_candle, "yellow"))
     return minute_candle
 
-def one_minute_exit_test(CANDLE):
+def one_minute_exit_test(POSITION):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
 
-    if CANDLE == "GREEN":
+    if POSITION == "LONG":
         if (previous_Close(klines) > current_High(klines)) or \
           ((previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold))): return True
-    elif CANDLE == "RED":
+    elif POSITION == "SHORT":
         if (previous_Close(klines) < current_Low(klines)) or \
           ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
 
-def one_hour_exit_test(CANDLE):
+def one_hour_exit_test(POSITION):
     klines = binance_futures.KLINE_INTERVAL_1HOUR()
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
 
-    if CANDLE == "GREEN":
+    if POSITION == "LONG":
         if (previous_Close(klines) > current_High(klines)) or \
           ((previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold))): return True
-    elif CANDLE == "RED":
+    elif POSITION == "SHORT":
         if (previous_Close(klines) < current_Low(klines)) or \
           ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
 
@@ -120,11 +120,10 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     elif INTERVAL == "6HOUR"   : klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
     current  = current_candle(klines)
-
     if ((current == "GREEN" or current == "GREEN_INDECISIVE") and (first_High(klines) > previous_High(klines)) and (previous_High(klines) > current_High(klines))) or \
        ((current == "RED"   or current == "RED_INDECISIVE")   and (first_Low(klines)  < previous_Low(klines))  and (previous_Low(klines)  < current_Low(klines))) or \
-       ((current == "GREEN" or current == "GREEN_INDECISIVE") and (current_Close(klines) < previous_Close(klines))) or \
-       ((current == "RED"   or current == "RED_INDECISIVE")   and (current_Close(klines) > previous_Close(klines))): return "BROKEN"
+       ((current == "GREEN" or current == "GREEN_INDECISIVE") and (previous_Close(klines) > current_Close(klines))) or \
+       ((current == "RED"   or current == "RED_INDECISIVE")   and (previous_Close(klines) < current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
 def strength_of(INTERVAL):
@@ -166,5 +165,6 @@ def strength_of(INTERVAL):
             elif previous == "RED": strength = "WEAK"
         else: strength = "WEAK"
 
+    print("CURRENT " + INTERVAL + "    :   " + strength)
     return strength
 
