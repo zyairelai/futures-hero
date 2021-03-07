@@ -175,7 +175,4 @@ def strength_of(INTERVAL):
             else: strength = "STRONG"
         else: strength = "WEAK"
 
-    if strength == "STRONG": print(colored("CURRENT " + INTERVAL + "    :   " + strength, "green"))
-    else: print(colored("CURRENT " + INTERVAL + "    :   " + strength, "red"))
     return strength
-

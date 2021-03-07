@@ -66,7 +66,6 @@ def DEAD_OR_ALIVE():
         else: print("ACTION           :   🐺 WAIT 🐺")
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
-
 def JACK_RABBIT():
     position_info = get_position.get_position_info()
     six_hour      = heikin_ashi.get_hour(6)
