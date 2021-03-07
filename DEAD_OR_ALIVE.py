@@ -25,7 +25,7 @@ def lets_make_some_money():
                 print("ACTION           :   🔥 THROTTLE 🔥")
                 record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
                 if live_trade: binance_futures.throttle("LONG")
-            elif TAKE_LOSS_FOR_LONGING(four_hour, six_hour):
+            elif TAKE_LOSS("LONG", four_hour, six_hour):
                 print("ACTION           :   😭 CLOSE_LONG 😭")
                 if live_trade: binance_futures.close_position("LONG")
             else: print(colored("ACTION           :   HOLDING_LONG", "green"))
@@ -42,7 +42,7 @@ def lets_make_some_money():
                 print("ACTION           :   🔥 THROTTLE 🔥")
                 record_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())
                 if live_trade: binance_futures.throttle("SHORT")
-            elif TAKE_LOSS_FOR_SHORTING(four_hour, six_hour):
+            elif TAKE_LOSS("SHORT", four_hour, six_hour):
                 print("ACTION           :   😭 CLOSE_SHORT 😭")
                 if live_trade: binance_futures.close_position("SHORT")
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -91,6 +91,15 @@ def EXIT_SHORT_TAKE_PROFIT(one_hour, four_hour, six_hour):
         (six_hour == "RED" or six_hour  == "RED_INDECISIVE" and strength_of("6HOUR") == "WEAK") or \
         (four_hour == "RED" or four_hour == "RED_INDECISIVE" and strength_of("4HOUR") == "WEAK")): return True
 
+def TAKE_LOSS(POSITION, four_hour, six_hour):
+    if POSITION == "LONG":
+        if  ((four_hour == "RED" or four_hour == "RED_INDECISIVE") and strength_of("4HOUR") == "STRONG") or \
+            ((six_hour == "RED" or six_hour  == "RED_INDECISIVE") and strength_of("6HOUR") == "STRONG"): return True
+
+    elif POSITION == "SHORT":
+        if  ((six_hour == "GREEN" or six_hour  == "GREEN_INDECISIVE") and strength_of("6HOUR") == "STRONG") or \
+            ((four_hour == "GREEN" or four_hour == "GREEN_INDECISIVE") and strength_of("4HOUR") == "STRONG"): return True
+
 def THROTTLE_LONG(four_hour, six_hour):
     if  ((four_hour != "RED" or six_hour != "RED") and volume_confirmation("1HOUR")) and \
         (retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())):
@@ -100,14 +109,6 @@ def THROTTLE_SHORT(four_hour, six_hour):
     if  ((four_hour != "RED" or six_hour != "GREEN") and volume_confirmation("1HOUR")) and \
         (retrieve_timestamp() != current_kline_timestamp(binance_futures.KLINE_INTERVAL_2HOUR())):
         return True
-
-def TAKE_LOSS_FOR_LONGING(four_hour, six_hour):
-    if  ((four_hour == "RED" or four_hour == "RED_INDECISIVE") and strength_of("4HOUR") == "STRONG") or \
-        ((six_hour == "RED" or six_hour  == "RED_INDECISIVE") and strength_of("6HOUR") == "STRONG"): return True
-
-def TAKE_LOSS_FOR_SHORTING(four_hour, six_hour):
-    if  ((six_hour == "GREEN" or six_hour  == "GREEN_INDECISIVE") and strength_of("6HOUR") == "STRONG") or \
-        ((four_hour == "GREEN" or four_hour == "GREEN_INDECISIVE") and strength_of("4HOUR") == "STRONG"): return True
 
 def volume_confirmation(INTERVAL):
     previous_volume = binance_futures.get_volume("PREVIOUS", INTERVAL)

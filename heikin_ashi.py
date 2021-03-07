@@ -103,10 +103,10 @@ def one_hour_exit_test(POSITION):
 
     if POSITION == "LONG":
         if (previous_Close(klines) > current_High(klines)) or \
-          ((previous_High(klines) > current_High(klines)) and (current_Low(klines) < (previous_Low(klines) + threshold))): return True
+          ((previous_High(klines) > current_High(klines)) and ((previous_Low(klines) + threshold) > current_Low(klines))): return True
     elif POSITION == "SHORT":
         if (previous_Close(klines) < current_Low(klines)) or \
-          ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
+          ((current_Low(klines) > previous_Low(klines)) and ((previous_High(klines) - threshold) < current_High(klines))): return True
 
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
