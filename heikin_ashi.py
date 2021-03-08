@@ -86,6 +86,18 @@ def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED
     else: print(colored(title + minute_candle, "yellow"))
     return minute_candle
 
+def pencil_wick_test(CANDLE):
+    klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+    previous_volume = binance_futures.get_volume("PREVIOUS", "1MINUTE")
+    current_volume  = binance_futures.get_volume("CURRENT" , "1MINUTE")
+    volume_confirmation = current_volume > (previous_volume / 2)
+
+    if CANDLE == "GREEN":
+        if current_High(klines) > previous_High(klines) and volume_confirmation: return True
+
+    elif CANDLE == "RED":
+        if current_Low(klines) < previous_Low(klines) and volume_confirmation: return True
+
 def one_minute_exit_test(POSITION):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
@@ -96,17 +108,6 @@ def one_minute_exit_test(POSITION):
     elif POSITION == "SHORT":
         if (previous_Close(klines) < current_Low(klines)) or \
           ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
-
-def one_hour_exit_test(POSITION):
-    klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
-
-    if POSITION == "LONG":
-        if (previous_Close(klines) > current_High(klines)) or \
-          ((previous_High(klines) > current_High(klines)) and ((previous_Low(klines) + threshold) > current_Low(klines))): return True
-    elif POSITION == "SHORT":
-        if (previous_Close(klines) < current_Low(klines)) or \
-          ((current_Low(klines) > previous_Low(klines)) and ((previous_High(klines) - threshold) < current_High(klines))): return True
 
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()

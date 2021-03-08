@@ -4,15 +4,15 @@ troubleshooting = False   # Troubleshooting mode for @zyairelai
 # ====================================================
 #                  Prompt User Input
 # ====================================================
-print("Which pair do you want to trade?")
-print("1. BTC_USDT")
-print("2. ETH_USDT")
-print("3. BNB_USDT")
+# print("Which pair do you want to trade?")
+# print("1. BTC_USDT")
+# print("2. ETH_USDT")
+# print("3. BNB_USDT")
 # Add More Coins Here
 
 # print("0. Others")
-user_input = input("\nEnter a number   :   ")
-
+# user_input = input("\nEnter a number   :   ")
+user_input = "BTC"
 # ====================================================
 #                 Asset Configuration
 # ====================================================
