@@ -53,13 +53,13 @@ def JACK_RABBIT():
 def GO_LONG(one_hour, one_minute):
     if  strength_of("6HOUR") == "STRONG" and one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE" and \
         strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN" and \
-        one_minute == "GREEN" and pencil_wick_test("GREEN") and \
+        strength_of("1MINUTE") == "STRONG" and one_minute == "GREEN" and pencil_wick_test("GREEN") and \
         volume_confirmation("1HOUR"): return True
 
 def GO_SHORT(one_hour, one_minute):
     if  strength_of("6HOUR") == "STRONG" and one_hour == "RED" or one_hour == "RED_INDECISIVE" and \
         strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN" and \
-        one_minute == "GREEN" and pencil_wick_test("RED") and \
+        strength_of("1MINUTE") == "STRONG" and one_minute == "RED" and pencil_wick_test("RED") and \
         volume_confirmation("1HOUR"): return True
 
 def EXIT_LONG():

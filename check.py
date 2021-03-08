@@ -5,15 +5,12 @@ def entry_condition():
     import heikin_ashi
     print("DIRECTION")
     heikin_ashi.get_hour(6)
-    heikin_ashi.get_hour(4)
     heikin_ashi.get_hour(1)
     print()
     print("STRENGTH OF CANDLE")
 
     if heikin_ashi.strength_of("6HOUR") == "STRONG": print(colored("CURRENT 6 HOUR   :   STRONG", "green"))
     else: print(colored("CURRENT 6 HOUR  :   STRONG", "red"))
-    if heikin_ashi.strength_of("4HOUR") == "STRONG": print(colored("CURRENT 4 HOUR   :   STRONG", "green"))
-    else: print(colored("CURRENT 4 HOUR  :   STRONG", "red"))
     if heikin_ashi.strength_of("1HOUR") == "STRONG": print(colored("CURRENT 1 HOUR   :   STRONG", "green"))
     else: print(colored("CURRENT 1 HOUR  :   STRONG", "red"))
 
@@ -23,7 +20,6 @@ def entry_condition():
     if (previous_volume / 5) < current_volume:
         print(colored("VOLUME ENTRY     :   YES", "green"))
     else: print(colored("VOLUME ENTRY     :   NO", "red"))
-    if heikin_ashi.pattern_broken("5MINUTE") == "BROKEN": print(colored("5 MIN  PATTERN   :   BROKEN", "red"))
     if heikin_ashi.pattern_broken("1HOUR") == "BROKEN": print(colored("1 HOUR PATTERN   :   BROKEN", "red"))
 
 def check():
@@ -45,13 +41,11 @@ def check():
         if loop == 'Y':
             while True:
                 heikin_ashi.get_current_minute(1)
-                heikin_ashi.get_current_minute(5)
                 print()
                 time.sleep(3)
         else:
             start = time.time()
             heikin_ashi.get_current_minute(1)
-            heikin_ashi.get_current_minute(5)
             print(f"Time Taken: {time.time() - start} seconds")
 
     elif (input_num == '3'):
