@@ -105,13 +105,13 @@ from heikin_ashi import pattern_broken
 from heikin_ashi import one_hour_exit_test
 
 def GO_LONG(one_hour):
-    if  (strength_of("4HOUR") == "STRONG" or strength_of("6HOUR") == "STRONG") and \
+    if  (strength_of("6HOUR") == "STRONG") and \
         (strength_of("1HOUR") == "STRONG") and pattern_broken("1HOUR") == "NOT_BROKEN" and \
         (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and \
         volume_confirmation("1HOUR"): return True
 
 def GO_SHORT(one_hour):
-    if  (strength_of("4HOUR") == "STRONG" or strength_of("6HOUR") == "STRONG") and \
+    if  (strength_of("6HOUR") == "STRONG") and \
         (strength_of("1HOUR") == "STRONG") and pattern_broken("1HOUR") == "NOT_BROKEN" and \
         (one_hour == "RED" or one_hour == "RED_INDECISIVE") and \
         volume_confirmation("1HOUR"): return True
