@@ -1,7 +1,8 @@
-# futures-omax
+# Currently this bot is on high risk testing phase, you might get liquidated few times before a big win. Check Wallet Management Tutorial Below.
+
+# futures-jackrabbit
 Leverage Trading Automation on Binance Futures.  
 This is a `Set and Forget` script, means you need to keep it running 24/7 and forget about it.  
-Usually you will see a significant result within 1 week.
 
 # DISCLAIMER
 This automation software is purely handcoded by [@zyairelai](https://github.com/zyairelai) from scratch with my personal manual trading strategy.  
@@ -28,6 +29,7 @@ The total trade amount in this case will be 1 USDT, which is 5% of 20 USDT in my
 
 REMEMBER 5% IS THE KEY
 ```
+
 
 ## 1. Environment Setup
 Paste the following into your Default Shell
