@@ -4,6 +4,9 @@ from datetime import datetime
 from termcolor import colored
 troubleshooting = config.troubleshooting
 
+# ==========================================================================================================================================================================
+#                                                            Heikin Ashi Calculations & Candle Types
+# ==========================================================================================================================================================================
 def initial_Open(klines)  : return (float(klines[-4][1]) + float(klines[-4][4])) / 2
 def initial_Close(klines) : return (float(klines[-4][1]) + float(klines[-4][2]) + float(klines[-4][3]) + float(klines[-4][4])) / 4
 
@@ -42,7 +45,9 @@ def current_candle(klines):
     elif (current_Open(klines) > current_Close(klines)): return "RED_INDECISIVE"
     elif (current_Close(klines) > current_Open(klines)): return "GREEN_INDECISIVE"
     else: return "NO_MOVEMENT"
-
+# ==========================================================================================================================================================================
+#                                                                     Retrieve HOUR and MINUTE
+# ==========================================================================================================================================================================
 def get_hour(hour): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     title = str(hour) + " HOUR DIRECTION :   "
     if   hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
@@ -85,7 +90,9 @@ def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED
     elif minute_candle == "RED_INDECISIVE"   :   print(colored(title + minute_candle, "red"))
     else: print(colored(title + minute_candle, "yellow"))
     return minute_candle
-
+# ==========================================================================================================================================================================
+#                                                                          WAR FORMATION
+# ==========================================================================================================================================================================
 def pencil_wick_test(CANDLE):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     previous_volume = binance_futures.get_volume("PREVIOUS", "1MINUTE")
@@ -108,7 +115,9 @@ def one_minute_exit_test(POSITION):
     elif POSITION == "SHORT":
         if (previous_Close(klines) < current_Low(klines)) or \
           ((current_Low(klines) > previous_Low(klines)) and (current_High(klines) > (previous_High(klines) - threshold))): return True
-
+# ==========================================================================================================================================================================
+#                                                                       IDENTIFY STRENGTH
+# ==========================================================================================================================================================================
 def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     elif INTERVAL == "3MINUTE" : klines = binance_futures.KLINE_INTERVAL_3MINUTE()
