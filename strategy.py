@@ -13,7 +13,7 @@ from get_position import get_unRealizedProfit
 
 live_trade = config.live_trade
 # ==========================================================================================================================================================================
-#                                       JACK_RABBIT - IN AND OUT QUICK, CONSTANT GET YOU LIQUIDATED BUT YOU WILL NEVER GET WIPED OUT
+#                               JACK_RABBIT - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
 # ==========================================================================================================================================================================
 def JACK_RABBIT():
     position_info = get_position.get_position_info()
@@ -51,16 +51,16 @@ def JACK_RABBIT():
 #                                                                     ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 def GO_LONG(one_hour, one_minute):
-    if  strength_of("6HOUR") == "STRONG" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and \
-        strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN" and \
-        strength_of("1MINUTE") == "STRONG" and one_minute == "GREEN" and pencil_wick_test("GREEN") and \
-        volume_confirmation("1HOUR"): return True
+    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) and \
+        (strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
+        (strength_of("1MINUTE") == "STRONG" and one_minute == "GREEN" and pencil_wick_test("GREEN")) and \
+        volume_confirmation("1HOUR") and volume_confirmation("1MINUTE"): return True
 
 def GO_SHORT(one_hour, one_minute):
-    if  strength_of("6HOUR") == "STRONG" and (one_hour == "RED" or one_hour == "RED_INDECISIVE") and \
-        strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN" and \
-        strength_of("1MINUTE") == "STRONG" and one_minute == "RED" and pencil_wick_test("RED") and \
-        volume_confirmation("1HOUR"): return True
+    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) and \
+        (strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
+        (strength_of("1MINUTE") == "STRONG" and one_minute == "RED" and pencil_wick_test("RED")) and \
+        volume_confirmation("1HOUR") and volume_confirmation("1MINUTE"): return True
 
 def EXIT_LONG():
     if one_minute_exit_test("LONG") and volume_confirmation("1MINUTE"): return True

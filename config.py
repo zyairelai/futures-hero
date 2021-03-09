@@ -28,7 +28,7 @@ elif user_input == '3':
     coin     = "BNB"
     quantity = 0.05         # This cost around 0.15 USDT with 75x @225 
 
-# Add More Coins Here
+# You can add more coins here
 
 else:
     coin     = "BTC"
@@ -37,10 +37,9 @@ else:
 # ====================================================
 #          These are the Optimal Leverage
 # ====================================================
-if   coin == "BTC": leverage = 125
-elif coin == "ETH": leverage = 100
-else: leverage = 75
-
+if   coin == "BTC": leverage = 50           # MAX 125
+elif coin == "ETH": leverage = 40           # MAX 100
+else: leverage = 30                         # MAX 75
 # ====================================================
 #               Output Settings Status
 # ====================================================

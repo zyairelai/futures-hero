@@ -95,18 +95,20 @@ def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED
 # ==========================================================================================================================================================================
 def pencil_wick_test(CANDLE):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    previous_volume = binance_futures.get_volume("PREVIOUS", "1MINUTE")
-    current_volume  = binance_futures.get_volume("CURRENT" , "1MINUTE")
-    volume_confirmation = current_volume > (previous_volume / 2)
-
     if CANDLE == "GREEN":
-        if current_High(klines) > previous_High(klines) and volume_confirmation: return True
-
+        if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines): return True
     elif CANDLE == "RED":
-        if current_Low(klines) < previous_Low(klines) and volume_confirmation: return True
+        if current_Low(klines) < previous_Low(klines) and current_Close(klines) < previous_Close(klines): return True
 
 def one_minute_exit_test(POSITION):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+    if POSITION == "LONG":
+        if (previous_Close(klines) > current_High(klines)) or current_candle(klines) == "RED": return True
+    elif POSITION == "SHORT":
+        if (previous_Close(klines) < current_Low(klines)) or current_candle(klines) == "GREEN": return True
+
+def three_minute_exit_test(POSITION):
+    klines = binance_futures.KLINE_INTERVAL_3MINUTE()
     threshold = abs((previous_Open(klines) - previous_Close(klines)) / 4)
 
     if POSITION == "LONG":
@@ -138,13 +140,7 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
 
 def strength_of(INTERVAL):
     if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif INTERVAL == "3MINUTE" : klines = binance_futures.KLINE_INTERVAL_3MINUTE()
-    elif INTERVAL == "5MINUTE" : klines = binance_futures.KLINE_INTERVAL_5MINUTE()
-    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE()
-    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE()
     elif INTERVAL == "1HOUR"   : klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif INTERVAL == "2HOUR"   : klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif INTERVAL == "4HOUR"   : klines = binance_futures.KLINE_INTERVAL_4HOUR()
     elif INTERVAL == "6HOUR"   : klines = binance_futures.KLINE_INTERVAL_6HOUR()
 
     previous = previous_candle(klines)
@@ -174,7 +170,12 @@ def strength_of(INTERVAL):
         if candlebody > lower_wick:
             if previous == "GREEN": strength = "WEAK"
             else: strength = "STRONG"
-        else: strength = "WEAK"
+        else:
+            if  high  > previous_High(klines)  and \
+                close > previous_Close(klines) and \
+                open  > previous_Open(klines)  and \
+                low   > previous_Low(klines): strength = "STRONG"
+            else: strength = "WEAK"
 
     elif current == "RED_INDECISIVE":
         upper_wick = high - open
@@ -183,6 +184,10 @@ def strength_of(INTERVAL):
         if candlebody > upper_wick:
             if previous == "RED": strength = "WEAK"
             else: strength = "STRONG"
-        else: strength = "WEAK"
-
+        else:
+            if  high  < previous_High(klines)  and \
+                close < previous_Close(klines) and \
+                open  < previous_Open(klines)  and \
+                low   < previous_Low(klines): strength = "STRONG"
+            else: strength = "WEAK"
     return strength
