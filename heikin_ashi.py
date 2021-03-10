@@ -49,7 +49,7 @@ def current_candle(klines):
 #                                                        Retrieve HOUR and MINUTE
 # ==========================================================================================================================================================================
 def get_hour(hour): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
-    title = str(hour) + " HOUR DIRECTION :   "
+    title =  "RECENT " + str(hour) + " HOUR    :   "
     if   hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
     elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
     elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
@@ -90,6 +90,33 @@ def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED
     elif minute_candle == "RED_INDECISIVE"   :   print(colored(title + minute_candle, "red"))
     else: print(colored(title + minute_candle, "yellow"))
     return minute_candle
+
+def get_clear_direction(hour):
+    if   hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
+    elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
+    elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
+    elif hour == 6: klines = binance_futures.KLINE_INTERVAL_6HOUR()
+
+    title = "PREVIOUS " + str(hour) + " HOUR  :   "
+    previous = previous_candle(klines)
+    if   previous == "GREEN"             : print(colored(title + previous, "green"))
+    elif previous == "GREEN_INDECISIVE"  : print(colored(title + previous, "green"))
+    elif previous == "RED"               : print(colored(title + previous, "red"))
+    elif previous == "RED_INDECISIVE"    : print(colored(title + previous, "red"))
+    else: print(colored(title + previous, "yellow"))
+
+    title = "CURRENT  " + str(hour) + " HOUR  :   "
+    current = current_candle(klines)
+    if   current == "GREEN"             : print(colored(title + current, "green"))
+    elif current == "GREEN_INDECISIVE"  : print(colored(title + current, "green"))
+    elif current == "RED"               : print(colored(title + current, "red"))
+    elif current == "RED_INDECISIVE"    : print(colored(title + current, "red"))
+    else: print(colored(title + current, "yellow"))
+
+    if (previous == "GREEN") and (current == "GREEN"): trend = "GREEN"
+    elif (previous == "RED") and (current == "RED"): trend = "RED"
+    else: trend = "NO_TRADE_ZONE"
+    return trend
 # ==========================================================================================================================================================================
 #                                                             WAR FORMATION
 # ==========================================================================================================================================================================

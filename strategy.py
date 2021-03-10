@@ -17,7 +17,8 @@ live_trade = config.live_trade
 # ==========================================================================================================================================================================
 def JACK_RABBIT():
     position_info = get_position.get_position_info()
-    six_hour      = heikin_ashi.get_hour(6)
+    # direction     = heikin_ashi.get_clear_direction()
+    direction       = heikin_ashi.get_hour(6)
     one_hour      = heikin_ashi.get_hour(1)
     one_minute    = heikin_ashi.get_current_minute(1)
 
@@ -34,11 +35,11 @@ def JACK_RABBIT():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if (six_hour == "GREEN") and strength_of("6HOUR") == "STRONG" and GO_LONG(one_hour, one_minute):
+        if (direction == "GREEN") and strength_of("6HOUR") == "STRONG" and GO_LONG(one_hour, one_minute):
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
             if live_trade: binance_futures.open_position("LONG", trade_amount())
 
-        elif (six_hour == "RED") and strength_of("6HOUR") == "STRONG" and GO_SHORT(one_hour, one_minute):
+        elif (direction == "RED") and strength_of("6HOUR") == "STRONG" and GO_SHORT(one_hour, one_minute):
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
             if live_trade: binance_futures.open_position("SHORT", trade_amount())
             else: print("ACTION           :   🐺 WAIT 🐺")
@@ -110,4 +111,21 @@ def slipping_back():
 #                                                     Auto Adjusting Trade Amount
 # ==========================================================================================================================================================================
 def trade_amount():
-    return config.quantity
+    six = heikin_ashi.get_clear_direction(6)
+    clear_six = (six == "GREEN" or six == "RED")
+
+    one = heikin_ashi.get_clear_direction(1)
+    clear_one = (one == "GREEN" or one == "RED")
+
+    previous_six = binance_futures.get_volume("PREVIOUS", "6HOUR")
+    current_six  = binance_futures.get_volume("CURRENT",  "6HOUR")
+    middle_finger_six = current_six > previous_six
+
+    previous_one = binance_futures.get_volume("PREVIOUS", "1HOUR")
+    current_one  = binance_futures.get_volume("CURRENT",  "1HOUR")
+    middle_finger_one = current_one > previous_one
+
+    if clear_six and clear_one and middle_finger_six and middle_finger_one: trade_amount = config.quantity * 3
+    else: trade_amount = config.quantity * 1
+
+    return trade_amount

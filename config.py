@@ -36,9 +36,9 @@ else:
 # ====================================================
 #          These are the Optimal Leverage
 # ====================================================
-if   coin == "BTC": leverage = 125
-elif coin == "ETH": leverage = 100
-else: leverage = 75
+if   coin == "BTC": leverage = 30
+elif coin == "ETH": leverage = 20
+else: leverage = 15
 # ====================================================
 #               Output Settings Status
 # ====================================================
