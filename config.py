@@ -11,8 +11,7 @@ print("2. ETH_USDT")
 # Add More Coins Here
 
 # print("0. Others")
-# user_input = input("\nEnter a number   :   ")
-user_input = "BTC"
+user_input = input("\nEnter a number   :   ")
 # ====================================================
 #                 Asset Configuration
 # ====================================================
