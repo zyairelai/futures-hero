@@ -13,7 +13,7 @@ from get_position import get_unRealizedProfit
 
 live_trade = config.live_trade
 # ==========================================================================================================================================================================
-#                               JACK_RABBIT - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
+#                    JACK_RABBIT - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
 # ==========================================================================================================================================================================
 def JACK_RABBIT():
     position_info = get_position.get_position_info()
@@ -36,11 +36,11 @@ def JACK_RABBIT():
     else:
         if (six_hour == "GREEN") and GO_LONG(one_hour, one_minute):
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
-            if live_trade: binance_futures.open_position("LONG", config.quantity)
+            if live_trade: binance_futures.open_position("LONG", trade_amount())
 
         elif (six_hour == "RED") and GO_SHORT(one_hour, one_minute):
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
-            if live_trade: binance_futures.open_position("SHORT", config.quantity)
+            if live_trade: binance_futures.open_position("SHORT", trade_amount())
             else: print("ACTION           :   🐺 WAIT 🐺")
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -48,27 +48,33 @@ def JACK_RABBIT():
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
 # ==========================================================================================================================================================================
-#                                                                     ENTRY_EXIT CONDITIONS
+#                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 def GO_LONG(one_hour, one_minute):
-    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) and \
+    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) and volume_confirmation("1HOUR") and \
         (strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
-        (strength_of("1MINUTE") == "STRONG" and one_minute == "GREEN" and pencil_wick_test("GREEN")) and \
-        volume_confirmation("1HOUR") and volume_confirmation("1MINUTE"): return True
+        (strength_of("1MINUTE") == "STRONG" and one_minute == "GREEN" and pencil_wick_test("GREEN")): return True
 
 def GO_SHORT(one_hour, one_minute):
-    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) and \
+    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) and volume_confirmation("1HOUR") and \
         (strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
-        (strength_of("1MINUTE") == "STRONG" and one_minute == "RED" and pencil_wick_test("RED")) and \
-        volume_confirmation("1HOUR") and volume_confirmation("1MINUTE"): return True
+        (strength_of("1MINUTE") == "STRONG" and one_minute == "RED" and pencil_wick_test("RED")): return True
 
 def EXIT_LONG():
-    if one_minute_exit_test("LONG") and volume_confirmation("1MINUTE"): return True
+    if one_minute_exit_test("LONG"): return True
 
 def EXIT_SHORT():
-    if  one_minute_exit_test("SHORT") and volume_confirmation("1MINUTE"): return True
+    if  one_minute_exit_test("SHORT"): return True
 
 def volume_confirmation(INTERVAL):
     previous_volume = binance_futures.get_volume("PREVIOUS", INTERVAL)
     current_volume = binance_futures.get_volume("CURRENT", INTERVAL)
     return (current_volume > (previous_volume / 5))
+
+def slipping_back():
+    return "Work in Progress"
+# ==========================================================================================================================================================================
+#                                                    Auto Adjusting Trade Amount
+# ==========================================================================================================================================================================
+def trade_amount():
+    return config.quantity
