@@ -14,7 +14,8 @@ try:
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():
-        strategy.JACK_RABBIT()
+        if config.pair == "ETHUSDT": strategy.STRIFING()
+        else: strategy.JACK_RABBIT()
 
     while True:
         try:

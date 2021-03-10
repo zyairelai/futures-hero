@@ -4,9 +4,9 @@ troubleshooting = False   # Troubleshooting mode for @zyairelai
 # ====================================================
 #                  Prompt User Input
 # ====================================================
-# print("Which pair do you want to trade?")
-# print("1. BTC_USDT")
-# print("2. ETH_USDT")
+print("Which pair do you want to trade?")
+print("1. BTC_USDT")
+print("2. ETH_USDT")
 # print("3. BNB_USDT")
 # Add More Coins Here
 
@@ -37,9 +37,9 @@ else:
 # ====================================================
 #          These are the Optimal Leverage
 # ====================================================
-if   coin == "BTC": leverage = 50           # MAX 125
-elif coin == "ETH": leverage = 40           # MAX 100
-else: leverage = 30                         # MAX 75
+if   coin == "BTC": leverage = 125
+elif coin == "ETH": leverage = 100
+else: leverage = 75
 # ====================================================
 #               Output Settings Status
 # ====================================================

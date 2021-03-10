@@ -96,16 +96,16 @@ def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED
 def pencil_wick_test(CANDLE):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     previous_volume = binance_futures.get_volume("PREVIOUS", "1MINUTE")
-    current_volume = binance_futures.get_volume("CURRENT", "1MINUTE")
+    current_volume  = binance_futures.get_volume("CURRENT",  "1MINUTE")
     volume_confirmation = (current_volume > (previous_volume / 2))
 
     if CANDLE == "GREEN":
-        if  current_High(klines) > previous_High(klines) and \
+        if  current_High(klines)  > previous_High(klines)  and \
             current_Close(klines) > previous_Close(klines) and \
             volume_confirmation: 
             return True
     elif CANDLE == "RED":
-        if  current_Low(klines) < previous_Low(klines) and \
+        if  current_Low(klines)   < previous_Low(klines)   and \
             current_Close(klines) < previous_Close(klines) and \
             volume_confirmation:
                 return True
@@ -113,9 +113,9 @@ def pencil_wick_test(CANDLE):
 def one_minute_exit_test(POSITION):
     klines = binance_futures.KLINE_INTERVAL_1MINUTE()
     if POSITION == "LONG":
-        if (previous_Close(klines) > current_High(klines)) or current_candle(klines) == "RED": return True
+        if (previous_Close(klines) > current_High(klines)) or (previous_Close(klines) > current_Close(klines)): return True
     elif POSITION == "SHORT":
-        if (previous_Close(klines) < current_Low(klines)) or current_candle(klines) == "GREEN": return True
+        if (previous_Close(klines) < current_Low(klines)) or (previous_Close(klines) < current_Close(klines)): return True
 # ==========================================================================================================================================================================
 #                                                          IDENTIFY STRENGTH
 # ==========================================================================================================================================================================

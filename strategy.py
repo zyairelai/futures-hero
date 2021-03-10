@@ -34,11 +34,11 @@ def JACK_RABBIT():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if (six_hour == "GREEN") and GO_LONG(one_hour, one_minute):
+        if (six_hour == "GREEN") and strength_of("6HOUR") == "STRONG" and GO_LONG(one_hour, one_minute):
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
             if live_trade: binance_futures.open_position("LONG", trade_amount())
 
-        elif (six_hour == "RED") and GO_SHORT(one_hour, one_minute):
+        elif (six_hour == "RED") and strength_of("6HOUR") == "STRONG" and GO_SHORT(one_hour, one_minute):
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
             if live_trade: binance_futures.open_position("SHORT", trade_amount())
             else: print("ACTION           :   🐺 WAIT 🐺")
@@ -48,16 +48,49 @@ def JACK_RABBIT():
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
 
 # ==========================================================================================================================================================================
+#                                                  STRIFING - THIS ATTACK BOTH DIRECTION
+# ==========================================================================================================================================================================
+def STRIFING():
+    position_info = get_position.get_position_info()
+    one_hour      = heikin_ashi.get_hour(1)
+    one_minute    = heikin_ashi.get_current_minute(1)
+
+    if position_info == "LONGING":
+        if get_unRealizedProfit() == "PROFIT" and EXIT_LONG():
+            print("ACTION           :   💰 CLOSE_LONG 💰")
+            if live_trade: binance_futures.close_position("LONG")
+        else: print(colored("ACTION           :   HOLDING_LONG", "green"))
+
+    elif position_info == "SHORTING":
+        if get_unRealizedProfit() == "PROFIT" and EXIT_SHORT():
+            print("ACTION           :   💰 CLOSE_SHORT 💰")
+            if live_trade: binance_futures.close_position("SHORT")
+        else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
+
+    else:
+        if (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and GO_LONG(one_hour, one_minute):
+            print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
+            if live_trade: binance_futures.open_position("LONG", trade_amount())
+
+        elif (one_hour == "RED" or one_hour == "RED_INDECISIVE") and GO_SHORT(one_hour, one_minute):
+            print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
+            if live_trade: binance_futures.open_position("SHORT", trade_amount())
+            else: print("ACTION           :   🐺 WAIT 🐺")
+
+        else: print("ACTION           :   🐺 WAIT 🐺")
+    print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
+
+# ==========================================================================================================================================================================
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 def GO_LONG(one_hour, one_minute):
-    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE")) and volume_confirmation("1HOUR") and \
-        (strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
+    if  (one_hour == "GREEN" or one_hour == "GREEN_INDECISIVE") and volume_confirmation("1HOUR") and \
+        (strength_of("1HOUR")   == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
         (strength_of("1MINUTE") == "STRONG" and one_minute == "GREEN" and pencil_wick_test("GREEN")): return True
 
 def GO_SHORT(one_hour, one_minute):
-    if  (strength_of("6HOUR") == "STRONG" and (one_hour == "RED" or one_hour == "RED_INDECISIVE")) and volume_confirmation("1HOUR") and \
-        (strength_of("1HOUR") == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
+    if  (one_hour == "RED" or one_hour == "RED_INDECISIVE") and volume_confirmation("1HOUR") and \
+        (strength_of("1HOUR")   == "STRONG" and pattern_broken("1HOUR") == "NOT_BROKEN") and \
         (strength_of("1MINUTE") == "STRONG" and one_minute == "RED" and pencil_wick_test("RED")): return True
 
 def EXIT_LONG():
@@ -74,7 +107,7 @@ def volume_confirmation(INTERVAL):
 def slipping_back():
     return "Work in Progress"
 # ==========================================================================================================================================================================
-#                                                    Auto Adjusting Trade Amount
+#                                                     Auto Adjusting Trade Amount
 # ==========================================================================================================================================================================
 def trade_amount():
     return config.quantity
