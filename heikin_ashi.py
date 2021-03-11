@@ -45,51 +45,46 @@ def current_candle(klines):
     elif (current_Open(klines) > current_Close(klines)): return "RED_INDECISIVE"
     elif (current_Close(klines) > current_Open(klines)): return "GREEN_INDECISIVE"
     else: return "NO_MOVEMENT"
+
+# def upper_wick(CANDLE):
+
+#     if CANDLE == "GREEN" or CANDLE == "GREEN_INDECISIVE":
+#         wick = high - close
+
+#     return wick
+
+# def lower_wick():
+#     return wick
+
+# def candle_body():
+#     return body
 # ==========================================================================================================================================================================
 #                                                        Retrieve HOUR and MINUTE
 # ==========================================================================================================================================================================
-def get_hour(hour): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
-    title =  "RECENT " + str(hour) + " HOUR    :   "
-    if   hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif hour == 2: klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif hour == 4: klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    elif hour == 6: klines = binance_futures.KLINE_INTERVAL_6HOUR()
-
+def output_current(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     if troubleshooting:
         print("The current_Open is  :   " + str(current_Open(klines)))
         print("The current_Close is :   " + str(current_Close(klines)))
         print("The current_High is  :   " + str(current_High(klines)))
         print("The current_Low is   :   " + str(current_Low(klines)))
+
+    milliseconds = int(klines[-1][0]) - int(klines[-2][0])
+    if milliseconds == 1 * 60000: interval = "1 MINUTE  "
+    elif milliseconds == 3 * 60000: interval = "3 MINUTE  "
+    elif milliseconds == 5 * 60000: interval = "5 MINUTE  "
+    elif milliseconds == 15 * 60000: interval = "15 MINUTE "
+    elif milliseconds == 30 * 60000: interval = "30 MINUTE "
+    elif milliseconds == 1 * 60 * 60000: interval = "1 HOUR    "
+    elif milliseconds == 2 * 60 * 60000: interval = "2 HOUR    "
+    elif milliseconds == 4 * 60 * 60000: interval = "4 HOUR    "
+    elif milliseconds == 6 * 60 * 60000: interval = "6 HOUR    "
+    elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR   "
 
     current = current_candle(klines)
-    if   current == "GREEN"             : print(colored(title + current, "green"))
-    elif current == "GREEN_INDECISIVE"  : print(colored(title + current, "green"))
-    elif current == "RED"               : print(colored(title + current, "red"))
-    elif current == "RED_INDECISIVE"    : print(colored(title + current, "red"))
-    else: print(colored(title + current, "yellow"))
+    if   current == "GREEN" or current == "GREEN_INDECISIVE": print(colored("RECENT " + interval + ":   " + current, "green"))
+    elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + current, "red"))
+    else: print(colored("RECENT " + interval + ":   " + current, "yellow"))
     return current
-
-def get_current_minute(minute): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
-    title = "RECENT " + str(minute) + " MINUTE  :   "
-    if   minute == 1: klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif minute == 3: klines  = binance_futures.KLINE_INTERVAL_3MINUTE()
-    elif minute == 5: klines  = binance_futures.KLINE_INTERVAL_5MINUTE()
-    elif minute == 15: klines = binance_futures.KLINE_INTERVAL_15MINUTE()
-    elif minute == 30: klines = binance_futures.KLINE_INTERVAL_30MINUTE()
-
-    if troubleshooting:
-        print("The current_Open is  :   " + str(current_Open(klines)))
-        print("The current_Close is :   " + str(current_Close(klines)))
-        print("The current_High is  :   " + str(current_High(klines)))
-        print("The current_Low is   :   " + str(current_Low(klines)))
-
-    minute_candle = current_candle(klines)
-    if   minute_candle == "GREEN"            :   print(colored(title + minute_candle, "green"))
-    elif minute_candle == "GREEN_INDECISIVE" :   print(colored(title + minute_candle, "green"))
-    elif minute_candle == "RED"              :   print(colored(title + minute_candle, "red"))
-    elif minute_candle == "RED_INDECISIVE"   :   print(colored(title + minute_candle, "red"))
-    else: print(colored(title + minute_candle, "yellow"))
-    return minute_candle
 
 def get_clear_direction(hour):
     if   hour == 1: klines = binance_futures.KLINE_INTERVAL_1HOUR()
@@ -120,25 +115,23 @@ def get_clear_direction(hour):
 # ==========================================================================================================================================================================
 #                                                             WAR FORMATION
 # ==========================================================================================================================================================================
-def pencil_wick_test(CANDLE):
-    klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    previous_volume = binance_futures.get_volume("PREVIOUS", "1MINUTE")
-    current_volume  = binance_futures.get_volume("CURRENT",  "1MINUTE")
+def pencil_wick_test(klines):
+    previous_volume = binance_futures.get_volume("PREVIOUS", klines)
+    current_volume  = binance_futures.get_volume("CURRENT",  klines)
     volume_confirmation = (current_volume > (previous_volume / 2))
 
-    if CANDLE == "GREEN":
+    if current_candle(klines) == "GREEN":
         if  current_High(klines)  > previous_High(klines)  and \
             current_Close(klines) > previous_Close(klines) and \
             volume_confirmation: 
             return True
-    elif CANDLE == "RED":
+    elif current_candle(klines) == "RED":
         if  current_Low(klines)   < previous_Low(klines)   and \
             current_Close(klines) < previous_Close(klines) and \
             volume_confirmation:
                 return True
 
-def one_minute_exit_test(POSITION):
-    klines = binance_futures.KLINE_INTERVAL_1MINUTE()
+def one_minute_exit_test(klines, POSITION):
     if POSITION == "LONG":
         if (previous_Close(klines) > current_High(klines)) or (previous_Close(klines) > current_Close(klines)): return True
     elif POSITION == "SHORT":
@@ -146,17 +139,7 @@ def one_minute_exit_test(POSITION):
 # ==========================================================================================================================================================================
 #                                                          IDENTIFY STRENGTH
 # ==========================================================================================================================================================================
-def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
-    if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif INTERVAL == "3MINUTE" : klines = binance_futures.KLINE_INTERVAL_3MINUTE()
-    elif INTERVAL == "5MINUTE" : klines = binance_futures.KLINE_INTERVAL_5MINUTE()
-    elif INTERVAL == "15MINUTE": klines = binance_futures.KLINE_INTERVAL_15MINUTE()
-    elif INTERVAL == "30MINUTE": klines = binance_futures.KLINE_INTERVAL_30MINUTE()
-    elif INTERVAL == "1HOUR"   : klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif INTERVAL == "2HOUR"   : klines = binance_futures.KLINE_INTERVAL_2HOUR()
-    elif INTERVAL == "4HOUR"   : klines = binance_futures.KLINE_INTERVAL_4HOUR()
-    elif INTERVAL == "6HOUR"   : klines = binance_futures.KLINE_INTERVAL_6HOUR()
-
+def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     current  = current_candle(klines)
     if ((current == "GREEN" or current == "GREEN_INDECISIVE") and (first_High(klines) > previous_High(klines)) and (previous_High(klines) > current_High(klines))) or \
        ((current == "RED"   or current == "RED_INDECISIVE")   and (first_Low(klines)  < previous_Low(klines))  and (previous_Low(klines)  < current_Low(klines))) or \
@@ -164,11 +147,7 @@ def pattern_broken(INTERVAL): # return "BROKEN" // "NOT_BROKEN"
        ((current == "RED"   or current == "RED_INDECISIVE")   and (previous_Close(klines) < current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
-def strength_of(INTERVAL):
-    if   INTERVAL == "1MINUTE" : klines = binance_futures.KLINE_INTERVAL_1MINUTE()
-    elif INTERVAL == "1HOUR"   : klines = binance_futures.KLINE_INTERVAL_1HOUR()
-    elif INTERVAL == "6HOUR"   : klines = binance_futures.KLINE_INTERVAL_6HOUR()
-
+def strength_of(klines):
     previous = previous_candle(klines)
     current = current_candle(klines)
 
