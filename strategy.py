@@ -23,19 +23,18 @@ def JACK_RABBIT():
     klines_1HOUR  = binance_futures.KLINE_INTERVAL_1HOUR()
     klines_6HOUR  = binance_futures.KLINE_INTERVAL_6HOUR()
     
-    # direction = heikin_ashi.get_clear_direction(6)
     direction = heikin_ashi.output_current(klines_6HOUR)
     heikin_ashi.output_current(klines_1HOUR)
     heikin_ashi.output_current(klines_1min)
 
     if position_info == "LONGING":
-        if get_unRealizedProfit() == "PROFIT" and EXIT_LONG(klines_1min):
+        if get_unRealizedProfit(0.15) == "PROFIT" and EXIT_LONG(klines_1min):
             print("ACTION           :   💰 CLOSE_LONG 💰")
             if live_trade: binance_futures.close_position("LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if get_unRealizedProfit() == "PROFIT" and EXIT_SHORT(klines_1min):
+        if get_unRealizedProfit(0.15) == "PROFIT" and EXIT_SHORT(klines_1min):
             print("ACTION           :   💰 CLOSE_SHORT 💰")
             if live_trade: binance_futures.close_position("SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -84,27 +83,66 @@ def CUT_LOSS_LONG(six_hour):
 def CUT_LOSS_SHORT(six_hour):
     if six_hour != "RED": return True
 
+def slipping_back():
+    return "WORK IN PROGRESS"
+
 def DO_NOT_FUCKING_TRADE():
     return False
 
-def slipping_back():
-    return "Work in Progress"
+# ==========================================================================================================================================================================
+#                                                        SYSTEM TIME RECORD
+# ==========================================================================================================================================================================
+def record_timestamp(kline, filename):
+    if not os.path.exists("TIMESTAMP"): os.makedirs("TIMESTAMP")
+    if not os.path.exists(os.path.join("TIMESTAMP", config.pair)): os.makedirs(os.path.join("TIMESTAMP", config.pair))
+
+    with open((os.path.join("TIMESTAMP", config.pair, filename + ".txt")), "w", encoding="utf-8") as timestamp_record:
+        timestamp_record.write(str(current_kline_timestamp(kline)))
+
+def retrieve_timestamp(filename):
+    with open((os.path.join("TIMESTAMP", config.pair, filename + ".txt")), "r", encoding="utf-8") as timestamp_record:
+        return int(timestamp_record.read())
+
+def current_kline_timestamp(kline):
+    return kline[-1][0] # This will return <int> type of timestamp
+
 # ==========================================================================================================================================================================
 #                                                     Auto Adjusting Trade Amount
 # ==========================================================================================================================================================================
+def clear_direction(klines_6HOUR):
+    firstrun_candle = heikin_ashi.firstrun_candle(klines_6HOUR)
+    previous_candle = heikin_ashi.previous_candle(klines_6HOUR)
+    current_candle  = heikin_ashi.current_candle(klines_6HOUR)
+
+    if (previous_candle == "GREEN") and (current_candle == "GREEN"): trend = "GREEN"
+    elif (previous_candle == "RED") and (current_candle == "RED"): trend = "RED"
+    else: trend = "NO_TRADE_ZONE"
+    return trend
+
 def trade_amount(klines_6HOUR, klines_1HOUR):
+    firstrun_candle = heikin_ashi.firstrun_candle(klines_6HOUR)
+    previous_candle = heikin_ashi.previous_candle(klines_6HOUR)
+    current_candle  = heikin_ashi.current_candle(klines_6HOUR)
 
-    
-    six = heikin_ashi.get_clear_direction(6)
-    clear_six = (six == "GREEN" or six == "RED")
+    firstrun_volume = binance_futures.firstrun_volume(klines_6HOUR)
+    previous_volume = binance_futures.previous_volume(klines_6HOUR)
+    current_volume  = binance_futures.current_volume(klines_6HOUR)
 
-    one = heikin_ashi.get_clear_direction(1)
-    clear_one = (one == "GREEN" or one == "RED")
+    super_volume_increment = (current_volume > previous_volume) and (previous_volume > firstrun_volume)
+    middle_finger_indicator = (current_volume > previous_volume) and (previous_volume < firstrun_volume)
 
-    middle_finger_six = binance_futures.current_volume(klines_6HOUR) > binance_futures.previous_volume(klines_6HOUR)
-    middle_finger_one = binance_futures.current_volume(klines_1HOUR) > binance_futures.previous_volume(klines_1HOUR)
 
-    if clear_six and clear_one and middle_finger_six and middle_finger_one: trade_amount = config.quantity * 3
-    else: trade_amount = config.quantity * 1
+    if (previous_candle == "GREEN") and (current_candle == "GREEN"): trend = "CLEAR"
+    elif (previous_candle == "RED") and (current_candle == "RED"): trend = "CLEAR"
+    else: trend = "WHATEVER"
+
+
+    if (trend == "CLEAR") and super_volume_increment: 
+        if strength_of_current(klines_6HOUR) == "STRONG": trade_amount = config.quantity * 3
+        else: trade_amount = config.quantity * 1
+
+    elif (trend == "CLEAR") and middle_finger_indicator:
+        if strength_of_current(klines_6HOUR) == "STRONG": trade_amount = config.quantity * 3
+        else: trade_amount = config.quantity * 1
 
     return trade_amount

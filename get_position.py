@@ -28,12 +28,13 @@ def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
 
     return position
 
-def get_unRealizedProfit():
+def get_unRealizedProfit(taker_maker_fees):
+    # One transaction is 0.04 %, buy and sell means 0.04 * 2 = 0.08 %
+    # taker_maker_fees = 0.15 # // Always 15% to get a happy ending!
     response         = binance_futures.position_information()[0]
     markPrice        = float(response.get('markPrice'))
     positionAmt      = abs(float(response.get('positionAmt')))
     unRealizedProfit = round(float(response.get('unRealizedProfit')), 2)
-    taker_maker_fees = 0.15 # One transaction is 0.04 %, buy and sell means 0.04 * 2 = 0.08 % // But always 15% to get a happy ending!
     breakeven_USDT   = (markPrice * positionAmt * taker_maker_fees) / 100
 
     if unRealizedProfit > breakeven_USDT: return "PROFIT"

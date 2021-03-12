@@ -1,5 +1,5 @@
-live_trade      = False    # False to see the output & verify your API key is working
-troubleshooting = True   # Troubleshooting mode for @zyairelai
+live_trade      = True    # False to see the output & verify your API key is working
+troubleshooting = False   # Troubleshooting mode for @zyairelai
 
 # ====================================================
 #                  Prompt User Input
@@ -21,24 +21,24 @@ if user_input == '0':
 
 elif user_input == '2':
     coin     = "ETH"
-    quantity = 0.01         # This cost around 0.15 USDT with 100x @1535
+    quantity = 0.01
 
 elif user_input == '3':
     coin     = "BNB"
-    quantity = 0.05         # This cost around 0.15 USDT with 75x @225 
+    quantity = 0.05
 
 # You can add more coins here
 
 else:
     coin     = "BTC"
-    quantity = 0.001        # This cost around 0.5 USDT with 125x @48800
+    quantity = 0.001
 
 # ====================================================
 #          These are the Optimal Leverage
 # ====================================================
-if   coin == "BTC": leverage = 30
-elif coin == "ETH": leverage = 20
-else: leverage = 15
+if   coin == "BTC": leverage = 13
+elif coin == "ETH": leverage = 40
+else: leverage = 8
 # ====================================================
 #               Output Settings Status
 # ====================================================

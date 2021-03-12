@@ -31,8 +31,8 @@ try:
                 requests.exceptions.ReadTimeout,
                 ConnectionResetError, KeyError, OSError) as e:
 
-            if not os.path.exists("Error_Message"): os.makedirs("Error_Message")
-            with open((os.path.join("Error_Message", config.pair + ".txt")), "a", encoding="utf-8") as error_message:
+            if not os.path.exists("ERROR"): os.makedirs("ERROR")
+            with open((os.path.join("ERROR", config.pair + ".txt")), "a", encoding="utf-8") as error_message:
                 error_message.write("[!] " + config.pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
                 error_message.write(str(e) + "\n\n")
 
