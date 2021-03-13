@@ -1,4 +1,4 @@
-live_trade      = True    # False to see the output & verify your API key is working
+live_trade      = False    # False to see the output & verify your API key is working
 troubleshooting = False   # Troubleshooting mode for @zyairelai
 
 # ====================================================
@@ -7,7 +7,7 @@ troubleshooting = False   # Troubleshooting mode for @zyairelai
 print("Which pair do you want to trade?")
 print("1. BTC_USDT")
 print("2. ETH_USDT")
-# print("3. BNB_USDT")
+print("3. BNB_USDT")
 # Add More Coins Here
 
 # print("0. Others")
@@ -34,11 +34,11 @@ else:
     quantity = 0.001
 
 # ====================================================
-#          These are the Optimal Leverage
+#          These are the MAXIMUM Leverage
 # ====================================================
-if   coin == "BTC": leverage = 13
-elif coin == "ETH": leverage = 40
-else: leverage = 8
+if   coin == "BTC": leverage = 125
+elif coin == "ETH": leverage = 100
+else: leverage = 75
 # ====================================================
 #               Output Settings Status
 # ====================================================

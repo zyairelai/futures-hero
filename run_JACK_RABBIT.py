@@ -7,11 +7,29 @@ try:
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
-    live_trade = config.live_trade
-    profit = 0.6
+
+    live_trade  = config.live_trade
+    exit_profit = 0.6
+    leverage    = int((config.leverage / 5) * 2)
+
 # ==========================================================================================================================================================================
-#                    BLACK WHALE - ONLY ENTER WHEN THE VOLUME IS SMALL MEDIUM LARGE AND CANDLE SIZE WAR FORMATION
+#                                       JACK_RABBIT - QUICK IN, QUICK OUT, REPEAT
 # ==========================================================================================================================================================================
+#                                                                           
+# - DESCRIPTION     :   1. Focus on 1HOUR direction
+#                       2. Only allow ONE trade per hour to avoid overtrade
+#                       3. Optimal Leverage = (Maximum_Leverage / 5) * 2
+#                       4. This code will not enter any position in 60 minutes after you run the code to avoid fomo entry
+#
+# - ENTRY CONDITION :   1. 1HOUR - VOLUME is Small > Medium > Large (VOLUME_FORMATION)
+#                       2. 1HOUR - Current Volume is DOUBLE than the Previous Volume
+#                       3. 1HOUR - CANDLE SIZE is Small > Medium > Large (WAR_FORMATION)
+#
+# - EXIT CONDITION  :   1. When the profit is 0.6 movement
+#                       2. Exit on spotting weakness on 1 minute scheme
+#
+# ==========================================================================================================================================================================
+
     def lets_make_some_money():
         position_info = get_position.get_position_info()
         klines_1min   = binance_futures.KLINE_INTERVAL_1MINUTE()
@@ -28,28 +46,28 @@ try:
         heikin_ashi.output_current(klines_1min)
 
         if position_info == "LONGING":
-            if get_position.get_unRealizedProfit(profit) == "PROFIT" and heikin_ashi.one_minute_exit_test(klines_1min, "LONG"):
+            if get_position.get_unRealizedProfit(exit_profit) == "PROFIT" and heikin_ashi.one_minute_exit_test(klines_1min, "LONG"):
                 if live_trade: binance_futures.close_position("LONG")
-                record_timestamp(klines_1HOUR, "BLACK_WHALE")
+                record_timestamp(klines_1HOUR, "JACK_RABBIT")
                 print("ACTION           :   💰 CLOSE_LONG 💰")
             else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
-            if get_position.get_unRealizedProfit(profit) == "PROFIT" and heikin_ashi.one_minute_exit_test(klines_1min, "SHORT"):
+            if get_position.get_unRealizedProfit(exit_profit) == "PROFIT" and heikin_ashi.one_minute_exit_test(klines_1min, "SHORT"):
                 if live_trade: binance_futures.close_position("SHORT")
-                record_timestamp(klines_1HOUR, "BLACK_WHALE")
+                record_timestamp(klines_1HOUR, "JACK_RABBIT")
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
         else:
-            if direction == "GREEN" and GO_LONG(klines_1HOUR, klines_1min) and (retrieve_timestamp("BLACK_WHALE") != current_kline_timestamp(klines_1HOUR)):
+            if direction == "GREEN" and GO_LONG(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
                 if live_trade: binance_futures.open_position("LONG", config.quantity)
-                record_timestamp(klines_1HOUR, "BLACK_WHALE")
+                record_timestamp(klines_1HOUR, "JACK_RABBIT")
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-            elif direction == "RED" and GO_SHORT(klines_1HOUR, klines_1min) and (retrieve_timestamp("BLACK_WHALE") != current_kline_timestamp(klines_1HOUR)):
+            elif direction == "RED" and GO_SHORT(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
                 if live_trade: binance_futures.open_position("SHORT", config.quantity)
-                record_timestamp(klines_1HOUR, "BLACK_WHALE")
+                record_timestamp(klines_1HOUR, "JACK_RABBIT")
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
             else: print("ACTION           :   🐺 WAIT 🐺")
@@ -59,27 +77,32 @@ try:
 # ==========================================================================================================================================================================
 #                                                    ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
+
     def GO_LONG(klines_1HOUR, klines_1min):
-        if  heikin_ashi.strength_of_current(klines_1min) == "STRONG" and \
+        if (VOLUME_FORMATION(klines_1HOUR) or VOLUME_BREAKOUT(klines_1HOUR)) and \
             heikin_ashi.current_candle(klines_1min) == "GREEN" and \
+            heikin_ashi.strength_of_current(klines_1min) == "STRONG" and \
             heikin_ashi.pencil_wick_test(klines_1min) and \
-            heikin_ashi.WAR_FORMATION(klines_1HOUR) and \
-            VOLUME_FORMATION(klines_1HOUR): return True
+            heikin_ashi.WAR_FORMATION(klines_1HOUR): return True
 
     def GO_SHORT(klines_1HOUR, klines_1min):
-        if  heikin_ashi.strength_of_current(klines_1min) == "STRONG" and \
+        if (VOLUME_FORMATION(klines_1HOUR) or VOLUME_BREAKOUT(klines_1HOUR)) and \
             heikin_ashi.current_candle(klines_1min) == "RED" and \
+            heikin_ashi.strength_of_current(klines_1min) == "STRONG" and \
             heikin_ashi.pencil_wick_test(klines_1min) and \
-            heikin_ashi.WAR_FORMATION(klines_1HOUR) and \
-            VOLUME_FORMATION(klines_1HOUR): return True
+            heikin_ashi.WAR_FORMATION(klines_1HOUR): return True
 
     def VOLUME_FORMATION(klines):
         if  binance_futures.current_volume(klines) > binance_futures.previous_volume(klines) and \
             binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines): return True
 
+    def VOLUME_BREAKOUT(klines):
+        if  binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 2): return True
+
 # ==========================================================================================================================================================================
 #                                                      RECORD TIMESTAMP
 # ==========================================================================================================================================================================
+
     def record_timestamp(kline, filename):
         if not os.path.exists("TIMESTAMP"): os.makedirs("TIMESTAMP")
         if not os.path.exists(os.path.join("TIMESTAMP", config.pair)): os.makedirs(os.path.join("TIMESTAMP", config.pair))
@@ -102,9 +125,11 @@ try:
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
 
     if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
-    if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
-        binance_futures.change_leverage(config.leverage)
+    if int(binance_futures.position_information()[0].get("leverage")) != leverage:
+        binance_futures.change_leverage(leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
+
+    record_timestamp(binance_futures.KLINE_INTERVAL_1HOUR(), "JACK_RABBIT")
 
     while True:
         try:
