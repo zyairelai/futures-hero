@@ -132,7 +132,13 @@ def WAR_FORMATION(klines):
         if  previous_Low(klines) < firstrun_Low(klines) and \
             previous_Close(klines) < firstrun_Close(klines) and \
             strength_of_current(klines) == "STRONG": return True
-            
+
+def exit_test(klines, POSITION):
+    if POSITION == "LONG":
+        if previous_Close(klines) > current_Close(klines): return True
+    elif POSITION == "SHORT":
+        if previous_Close(klines) < current_Close(klines): return True
+
 def pencil_wick_test(klines):
     volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 2))
 
@@ -147,12 +153,6 @@ def pencil_wick_test(klines):
             volume_confirmation:
                 return True
 
-def one_minute_exit_test(klines, POSITION):
-    if POSITION == "LONG":
-        if (previous_Close(klines) > current_High(klines)) or (previous_Close(klines) > current_Close(klines)): return True
-    elif POSITION == "SHORT":
-        if (previous_Close(klines) < current_Low(klines)) or (previous_Close(klines) < current_Close(klines)): return True
-
 def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     current  = current_candle(klines)
     if ((current == "GREEN" or current == "GREEN_INDECISIVE") and (firstrun_High(klines) > previous_High(klines)) and (previous_High(klines) > current_High(klines))) or \
@@ -161,6 +161,17 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
        ((current == "RED"   or current == "RED_INDECISIVE")   and (previous_Close(klines) < current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
+def volume_formation(klines):
+    if  binance_futures.current_volume(klines) > binance_futures.previous_volume(klines) and \
+        binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines): return True
+
+def volume_breakout(klines):
+    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5): return True
+
+def volume_weakening(klines):
+    if  binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and \
+        binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 2): return True
+        # binance_futures.previous_volume(klines) > binance_futures.current_volume(klines) // This is small medium large, but it is too late
 # ==========================================================================================================================================================================
 #                                                          IDENTIFY STRENGTH
 # ==========================================================================================================================================================================

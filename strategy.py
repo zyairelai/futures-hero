@@ -7,16 +7,16 @@ from datetime import datetime
 from termcolor import colored
 from heikin_ashi import current_candle
 from heikin_ashi import pattern_broken
+from heikin_ashi import exit_test
 from heikin_ashi import pencil_wick_test
 from heikin_ashi import strength_of_current
-from heikin_ashi import one_minute_exit_test
 from get_position import get_unRealizedProfit
 
 live_trade = config.live_trade
 # ==========================================================================================================================================================================
 #                    JACK_RABBIT - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
 # ==========================================================================================================================================================================
-def JACK_RABBIT():
+def lets_make_some_money():
     # RETRIEVE KLINES and INFORMATION
     position_info = get_position.get_position_info()
     klines_1min   = binance_futures.KLINE_INTERVAL_1MINUTE()
@@ -69,10 +69,10 @@ def GO_SHORT(klines_1HOUR, klines_1min):
         volume_confirmation(klines_1HOUR) : return True
 
 def EXIT_LONG(klines_1min):
-    if one_minute_exit_test(klines_1min, "LONG"): return True
+    if exit_test(klines_1min, "LONG"): return True
 
 def EXIT_SHORT(klines_1min):
-    if  one_minute_exit_test(klines_1min, "SHORT"): return True
+    if  exit_test(klines_1min, "SHORT"): return True
 
 def volume_confirmation(klines):
     return (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 5))

@@ -35,7 +35,7 @@ try:
         klines_6HOUR  = binance_futures.KLINE_INTERVAL_6HOUR()
         klines_1HOUR  = binance_futures.KLINE_INTERVAL_1HOUR()
 
-        print("First hr Volume  :   " + str(binance_futures.firstrun_volume(klines_6HOUR)))
+        print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_6HOUR)))
         print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_6HOUR)))
         print("Current Volume   :   " + str(binance_futures.current_volume(klines_6HOUR)))
 
@@ -46,7 +46,7 @@ try:
         heikin_ashi.output_current(klines_1HOUR)
 
         if position_info == "LONGING":
-            if heikin_ashi.current_candle(klines_1HOUR) != "GREEN":
+            if EXIT_LONG(klines_1HOUR):
                 if live_trade: binance_futures.close_position("LONG")
                 print("ACTION           :   💰 CLOSE_LONG 💰")
             else: print(colored("ACTION           :   HOLDING_LONG", "green"))
@@ -58,11 +58,11 @@ try:
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
         else:
-            if direction == "GREEN" and GO_LONG(klines_1HOUR, klines_6HOUR):
+            if (direction == "GREEN" or direction == "GREEN_INDECISIVE") and GO_LONG(klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.open_position("LONG", config.quantity)
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-            elif direction == "RED" and GO_SHORT(klines_1HOUR, klines_6HOUR):
+            elif (direction == "RED" or direction == "RED_INDECISIVE") and GO_SHORT(klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.open_position("SHORT", config.quantity)
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
@@ -75,21 +75,26 @@ try:
 # ==========================================================================================================================================================================
 
     def GO_LONG(klines_1HOUR, klines_6HOUR):
-        if (VOLUME_FORMATION(klines_6HOUR) or VOLUME_BREAKOUT(klines_6HOUR)) and \
+        if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
             heikin_ashi.current_candle(klines_1HOUR) == "GREEN" and \
-            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": return True
+            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG" and \
+            heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG": return True
 
     def GO_SHORT(klines_1HOUR, klines_6HOUR):
-        if (VOLUME_FORMATION(klines_6HOUR) or VOLUME_BREAKOUT(klines_6HOUR)) and \
+        if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
             heikin_ashi.current_candle(klines_1HOUR) == "RED" and \
+            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG" and \
+            heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG": return True
+
+    def EXIT_LONG(klines_1HOUR):
+        if (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE") and \
             heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": return True
 
-    def VOLUME_FORMATION(klines):
-        if  binance_futures.current_volume(klines) > binance_futures.previous_volume(klines) and \
-            binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines): return True
+    def EXIT_SHORT(klines_1HOUR):
+        if (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and \
+            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": return True
 
-    def VOLUME_BREAKOUT(klines):
-        if  binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 2): return True
+
 
 # ==========================================================================================================================================================================
 #                                                        DEPLOY THE BOT
@@ -105,10 +110,8 @@ try:
 
     while True:
         try:
-            scheduler = BlockingScheduler()
-            # scheduler.add_job(lets_make_some_money, 'cron', minute='0,5,10,15,20,25,30,35,40,45,50,55')
-            scheduler.add_job(lets_make_some_money, 'cron', minute='0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57')
-            scheduler.start()
+            lets_make_some_money()
+            time.sleep(60)
 
         except (socket.timeout,
                 BinanceAPIException,
