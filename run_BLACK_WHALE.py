@@ -94,7 +94,6 @@ try:
         if ((heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
             (heikin_ashi.previous_Close(klines_1HOUR) < heikin_ashi.current_Low(klines_1HOUR)): return True
 
-
 # ==========================================================================================================================================================================
 #                                                        DEPLOY THE BOT
 # ==========================================================================================================================================================================
@@ -109,8 +108,9 @@ try:
 
     while True:
         try:
-            lets_make_some_money()
-            time.sleep(60)
+            scheduler = BlockingScheduler()
+            scheduler.add_job(lets_make_some_money, 'cron', second='0')
+            scheduler.start()
 
         except (socket.timeout,
                 BinanceAPIException,

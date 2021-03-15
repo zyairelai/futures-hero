@@ -162,8 +162,8 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     else: return "NOT_BROKEN"
 
 def volume_formation(klines):
-    if  binance_futures.current_volume(klines) > binance_futures.previous_volume(klines) and \
-        binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines): return True
+    if  binance_futures.current_volume(klines) >= binance_futures.previous_volume(klines) and \
+        binance_futures.previous_volume(klines) >= binance_futures.firstrun_volume(klines): return True
 
 def volume_breakout(klines):
     if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5): return True
