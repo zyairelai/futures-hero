@@ -87,13 +87,12 @@ try:
             heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG": return True
 
     def EXIT_LONG(klines_1HOUR):
-        if (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE") and \
-            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": return True
+        if ((heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
+            (heikin_ashi.previous_Close(klines_1HOUR) > heikin_ashi.current_High(klines_1HOUR)): return True
 
     def EXIT_SHORT(klines_1HOUR):
-        if (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and \
-            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": return True
-
+        if ((heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
+            (heikin_ashi.previous_Close(klines_1HOUR) < heikin_ashi.current_Low(klines_1HOUR)): return True
 
 
 # ==========================================================================================================================================================================
