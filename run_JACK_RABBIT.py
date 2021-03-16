@@ -25,7 +25,7 @@ try:
 #                       2. 1HOUR - Current Volume is DOUBLE than the Previous Volume
 #                       3. 1HOUR - CANDLE SIZE is Small > Medium > Large (WAR_FORMATION)
 #
-# - EXIT CONDITION  :   1. When the profit is 0.6 movement
+# - EXIT CONDITION  :   1. When the profit is 0.6 movement (30% at leverage 50x, 24% at leverage 40x)
 #                       2. Exit on spotting weakness on 1 minute scheme
 #
 # ==========================================================================================================================================================================

@@ -3,27 +3,25 @@ from termcolor import colored
 
 def entry_condition():
     import binance_futures, heikin_ashi
-    print("DIRECTION")
     klines_6HOUR = binance_futures.KLINE_INTERVAL_6HOUR()
     klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR()
+    print("DIRECTION")
+    heikin_ashi.output_firstrun(klines_6HOUR)
+    heikin_ashi.output_previous(klines_6HOUR)
     heikin_ashi.output_current(klines_6HOUR)
+    print("\nCONFIRMATION")
+    heikin_ashi.output_firstrun(klines_1HOUR)
+    heikin_ashi.output_previous(klines_1HOUR)
     heikin_ashi.output_current(klines_1HOUR)
 
-    print()
-    print("6 HOUR VOLUME")
+    print("\n6 HOUR VOLUME")
     print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_6HOUR)))
     print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_6HOUR)))
     print("Current Volume   :   " + str(binance_futures.current_volume(klines_6HOUR)))
-    if heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG": print(colored("CURRENT 6 HOUR   :   STRONG", "green"))
-    else: print(colored("CURRENT 6 HOUR   :   WEAK", "red"))
-
-    print()
-    print("1 HOUR VOLUME")
+    print("\n1 HOUR VOLUME")
     print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_1HOUR)))
     print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_1HOUR)))
     print("Current Volume   :   " + str(binance_futures.current_volume(klines_1HOUR)))
-    if heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": print(colored("CURRENT 1 HOUR   :   STRONG", "green"))
-    else: print(colored("CURRENT 1 HOUR   :   WEAK", "red"))
 
     if heikin_ashi.pattern_broken(klines_1HOUR) == "BROKEN": print(colored("1 HOUR PATTERN   :   BROKEN", "red"))
 

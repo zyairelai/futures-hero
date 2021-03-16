@@ -69,9 +69,9 @@ def output_current(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IND
     elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR   "
 
     current = current_candle(klines)
-    if   current == "GREEN" or current == "GREEN_INDECISIVE": print(colored("RECENT " + interval + ":   " + current, "green"))
-    elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + current, "red"))
-    else: print(colored("RECENT " + interval + ":   " + current, "yellow"))
+    if   current == "GREEN" or current == "GREEN_INDECISIVE": print(colored("RECENT " + interval + ":   " + strength_of_current(klines) + " " + current, "green"))
+    elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + strength_of_current(klines) + " " + current, "red"))
+    else: print(colored("RECENT " + interval + ":   " + strength_of_current(klines) + " " + current, "yellow"))
     return current
 
 def output_previous(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
@@ -92,9 +92,9 @@ def output_previous(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
     elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR "
 
     previous = previous_candle(klines)
-    if   previous == "GREEN" or previous == "GREEN_INDECISIVE": print(colored("PREVIOUS " + interval + ":   " + previous, "green"))
-    elif previous == "RED"   or previous == "RED_INDECISIVE"  : print(colored("PREVIOUS " + interval + ":   " + previous, "red"))
-    else: print(colored("RECENT " + interval + ":   " + previous, "yellow"))
+    if   previous == "GREEN" or previous == "GREEN_INDECISIVE": print(colored("PREVIOUS " + interval + ":   " + strength_of_previous(klines) + " " + previous, "green"))
+    elif previous == "RED"   or previous == "RED_INDECISIVE"  : print(colored("PREVIOUS " + interval + ":   " + strength_of_previous(klines) + " " + previous, "red"))
+    else: print(colored("RECENT " + interval + ":   " + strength_of_previous(klines) + " " + previous, "yellow"))
     return previous
 
 def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT

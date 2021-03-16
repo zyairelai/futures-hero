@@ -10,13 +10,13 @@ try:
     from apscheduler.schedulers.blocking import BlockingScheduler
 
     live_trade  = config.live_trade
-    leverage    = int(config.leverage / 5)
+    leverage    = int((config.leverage / 5) * 2)
 
 # ==========================================================================================================================================================================
-#                                              BLACK_WHALE - GO BIG, WIN BIG, LOSE BIGGER
+#                                              MINI_WHALE - GO BIG, WIN BIG, LOSE BIGGER
 # ==========================================================================================================================================================================
 #                                                                           
-# - DESCRIPTION     :   1. Focus on 6HOUR direction
+# - DESCRIPTION     :   1. Focus on 1HOUR direction
 #                       2. Optimal Leverage = Maximum_Leverage / 5
 #                       3. Loop every 3 minutes, to minimize stressing the server
 #
@@ -32,37 +32,37 @@ try:
 
     def lets_make_some_money():
         position_info = get_position.get_position_info()
-        klines_6HOUR  = binance_futures.KLINE_INTERVAL_6HOUR()
         klines_1HOUR  = binance_futures.KLINE_INTERVAL_1HOUR()
+        kline_15MIN   = binance_futures.KLINE_INTERVAL_15MINUTE()
 
-        print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_6HOUR)))
-        print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_6HOUR)))
-        print("Current Volume   :   " + str(binance_futures.current_volume(klines_6HOUR)))
+        print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_1HOUR)))
+        print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_1HOUR)))
+        print("Current Volume   :   " + str(binance_futures.current_volume(klines_1HOUR)))
 
-        heikin_ashi.output_firstrun(klines_6HOUR)
-        heikin_ashi.output_previous(klines_6HOUR)
+        heikin_ashi.output_firstrun(klines_1HOUR)
+        heikin_ashi.output_previous(klines_1HOUR)
 
-        direction = heikin_ashi.output_current(klines_6HOUR)
-        heikin_ashi.output_current(klines_1HOUR)
+        direction = heikin_ashi.output_current(klines_1HOUR)
+        heikin_ashi.output_current(kline_15MIN)
 
         if position_info == "LONGING":
-            if EXIT_LONG(klines_1HOUR):
+            if EXIT_LONG(kline_15MIN):
                 if live_trade: binance_futures.close_position("LONG")
                 print("ACTION           :   💰 CLOSE_LONG 💰")
             else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
-            if heikin_ashi.current_candle(klines_1HOUR) != "RED":
+            if heikin_ashi.current_candle(kline_15MIN) != "RED":
                 if live_trade: binance_futures.close_position("SHORT")
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
         else:
-            if (direction == "GREEN" or direction == "GREEN_INDECISIVE") and GO_LONG(klines_1HOUR, klines_6HOUR):
+            if (direction == "GREEN" or direction == "GREEN_INDECISIVE") and GO_LONG(kline_15MIN, klines_1HOUR):
                 if live_trade: binance_futures.open_position("LONG", config.quantity)
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-            elif (direction == "RED" or direction == "RED_INDECISIVE") and GO_SHORT(klines_1HOUR, klines_6HOUR):
+            elif (direction == "RED" or direction == "RED_INDECISIVE") and GO_SHORT(kline_15MIN, klines_1HOUR):
                 if live_trade: binance_futures.open_position("SHORT", config.quantity)
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
@@ -74,26 +74,26 @@ try:
 #                                                    ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 
-    def GO_LONG(klines_1HOUR, klines_6HOUR):
-        if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
-            heikin_ashi.current_candle(klines_1HOUR) == "GREEN" and \
-            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG" and \
-            heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG": return True
+    def GO_LONG(kline_15MIN, klines_1HOUR):
+        if (heikin_ashi.volume_formation(klines_1HOUR) or heikin_ashi.volume_breakout(klines_1HOUR)) and \
+            heikin_ashi.current_candle(kline_15MIN) == "GREEN" and \
+            heikin_ashi.strength_of_current(kline_15MIN) == "STRONG" and \
+            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": return True
 
-    def GO_SHORT(klines_1HOUR, klines_6HOUR):
-        if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
-            heikin_ashi.current_candle(klines_1HOUR) == "RED" and \
-            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG" and \
-            heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG": return True
+    def GO_SHORT(kline_15MIN, klines_1HOUR):
+        if (heikin_ashi.volume_formation(klines_1HOUR) or heikin_ashi.volume_breakout(klines_1HOUR)) and \
+            heikin_ashi.current_candle(kline_15MIN) == "RED" and \
+            heikin_ashi.strength_of_current(kline_15MIN) == "STRONG" and \
+            heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG": return True
 
-    def EXIT_LONG(klines_1HOUR):
-        if ((heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
-            (heikin_ashi.previous_Close(klines_1HOUR) > heikin_ashi.current_High(klines_1HOUR)): return True
+    def EXIT_LONG(kline_15MIN):
+        if ((heikin_ashi.current_candle(kline_15MIN) == "RED" or heikin_ashi.current_candle(kline_15MIN) == "RED_INDECISIVE") and heikin_ashi.strength_of_current(kline_15MIN) == "STRONG") or \
+            (heikin_ashi.previous_Close(kline_15MIN) > heikin_ashi.current_High(kline_15MIN)): return True
             # Secure profit on 1 hour and cut loss when 6 hour change
 
-    def EXIT_SHORT(klines_1HOUR):
-        if ((heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
-            (heikin_ashi.previous_Close(klines_1HOUR) < heikin_ashi.current_Low(klines_1HOUR)): return True
+    def EXIT_SHORT(kline_15MIN):
+        if ((heikin_ashi.current_candle(kline_15MIN) == "GREEN" or heikin_ashi.current_candle(kline_15MIN) == "GREEN_INDECISIVE") and heikin_ashi.strength_of_current(kline_15MIN) == "STRONG") or \
+            (heikin_ashi.previous_Close(kline_15MIN) < heikin_ashi.current_Low(kline_15MIN)): return True
             # Secure profit on 1 hour and cut loss when 6 hour change
 
 # ==========================================================================================================================================================================
@@ -111,7 +111,7 @@ try:
     while True:
         try:
             scheduler = BlockingScheduler()
-            scheduler.add_job(lets_make_some_money, 'cron', second='0')
+            scheduler.add_job(lets_make_some_money, 'cron', second='0,15,30,45')
             scheduler.start()
 
         except (socket.timeout,
