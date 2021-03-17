@@ -11,6 +11,7 @@ try:
 
     live_trade  = config.live_trade
     leverage    = int(config.leverage / 5)
+    profit      = 1
 
 # ==========================================================================================================================================================================
 #                                              BLACK_WHALE - GO BIG, WIN BIG, LOSE BIGGER
@@ -46,13 +47,13 @@ try:
         heikin_ashi.output_current(klines_1HOUR)
 
         if position_info == "LONGING":
-            if EXIT_LONG(klines_1HOUR):
+            if EXIT_LONG(klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.close_position("LONG")
                 print("ACTION           :   💰 CLOSE_LONG 💰")
             else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
-            if heikin_ashi.current_candle(klines_1HOUR) != "RED":
+            if EXIT_SHORT(klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.close_position("SHORT")
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -86,15 +87,25 @@ try:
             heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG" and \
             heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG": return True
 
-    def EXIT_LONG(klines_1HOUR):
-        if ((heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
-            (heikin_ashi.previous_Close(klines_1HOUR) > heikin_ashi.current_High(klines_1HOUR)): return True
-            # Secure profit on 1 hour and cut loss when 6 hour change
+    def EXIT_LONG(klines_1HOUR, klines_6HOUR):
+        if get_position.get_unRealizedProfit(profit) == "PROFIT":
+            if ((heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
+                (heikin_ashi.previous_Close(klines_1HOUR) > heikin_ashi.current_High(klines_1HOUR)):
+                return True
+        else:
+            if ((heikin_ashi.current_candle(klines_6HOUR) == "RED" or heikin_ashi.current_candle(klines_6HOUR) == "RED_INDECISIVE") and heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG") or \
+                (heikin_ashi.previous_Close(klines_6HOUR) > heikin_ashi.current_High(klines_6HOUR)):
+                return True
 
-    def EXIT_SHORT(klines_1HOUR):
-        if ((heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
-            (heikin_ashi.previous_Close(klines_1HOUR) < heikin_ashi.current_Low(klines_1HOUR)): return True
-            # Secure profit on 1 hour and cut loss when 6 hour change
+    def EXIT_SHORT(klines_1HOUR, klines_6HOUR):
+        if get_position.get_unRealizedProfit(profit) == "PROFIT":
+            if ((heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and heikin_ashi.strength_of_current(klines_1HOUR) == "STRONG") or \
+                (heikin_ashi.previous_Close(klines_1HOUR) < heikin_ashi.current_Low(klines_1HOUR)):
+                return True
+        else:
+            if ((heikin_ashi.current_candle(klines_6HOUR) == "GREEN" or heikin_ashi.current_candle(klines_6HOUR) == "GREEN_INDECISIVE") and heikin_ashi.strength_of_current(klines_6HOUR) == "STRONG") or \
+                (heikin_ashi.previous_Close(klines_6HOUR) < heikin_ashi.current_Low(klines_6HOUR)):
+                return True
 
 # ==========================================================================================================================================================================
 #                                                        DEPLOY THE BOT
