@@ -5,12 +5,14 @@ try:
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
 
+    leverage = int(config.leverage / 2.5)
+
     if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
 
     if binance_futures.position_information()[0].get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
-    if int(binance_futures.position_information()[0].get("leverage")) != config.leverage:
-        binance_futures.change_leverage(config.leverage)
+    if int(binance_futures.position_information()[0].get("leverage")) != leverage:
+        binance_futures.change_leverage(leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
 
     def added_to_job():

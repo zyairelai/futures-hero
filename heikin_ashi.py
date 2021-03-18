@@ -46,6 +46,10 @@ def current_candle(klines):
     elif (current_Close(klines) > current_Open(klines)): return "GREEN_INDECISIVE"
     else: return "NO_MOVEMENT"
 
+def firstrun_candlebody(klines): return abs(firstrun_Open(klines) - firstrun_Close(klines))
+def previous_candlebody(klines): return abs(previous_Open(klines) - previous_Close(klines))
+def current_candlebody(klines): return abs(current_Open(klines) - current_Close(klines))
+
 # ==========================================================================================================================================================================
 #                                                        OUTPUT TO CONSOLE
 # ==========================================================================================================================================================================
@@ -166,16 +170,20 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     else: return "NOT_BROKEN"
 
 def volume_formation(klines):
-    if  binance_futures.current_volume(klines) >= binance_futures.previous_volume(klines) and \
-        binance_futures.previous_volume(klines) >= binance_futures.firstrun_volume(klines): return True
+    if  binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines) and \
+        binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) / 1.5): return True
 
 def volume_breakout(klines):
-    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5): return True
+    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5) or \
+        current_candlebody(klines) > (previous_candlebody(klines) * 1.5): return True
 
-def volume_weakening(klines):
-    if  binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and \
-        binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 2): return True
-        # binance_futures.previous_volume(klines) > binance_futures.current_volume(klines) // This is small medium large, but it is too late
+def volume_sudden_breakout(klines):
+    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 2) or \
+        current_candlebody(klines) > (previous_candlebody(klines) * 2): return True
+
+def volume_weakening(klines): # Work in Progress
+    if  binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines): return True
+
 # ==========================================================================================================================================================================
 #                                                          IDENTIFY STRENGTH
 # ==========================================================================================================================================================================
@@ -227,6 +235,7 @@ def strength_of_current(klines):
                 open  < previous_Open(klines)  and \
                 low   < previous_Low(klines): strength = "STRONG"
             else: strength = "WEAK"
+    else: strength = "WEAK"
     return strength
 
 def strength_of_previous(klines):
@@ -277,4 +286,5 @@ def strength_of_previous(klines):
                 open  < firstrun_Open(klines)  and \
                 low   < firstrun_Low(klines): strength = "STRONG"
             else: strength = "WEAK"
+    else: strength = "WEAK"
     return strength
