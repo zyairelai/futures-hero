@@ -173,10 +173,11 @@ def volume_formation(klines):
     if  binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines) and \
         binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) / 1.5): return True
 
-def volume_breakout(klines):
-    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5): return True
+# def volume_breakout(klines):
+#     if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5): return True
+#     # Need to review this
 
-def volume_sudden_breakout(klines):
+def volume_breakout(klines):
     if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 2) or \
        (current_candlebody(klines) > (previous_candlebody(klines) * 2) and binance_futures.current_volume(klines) >= binance_futures.previous_volume(klines)): return True
 
@@ -209,7 +210,7 @@ def strength_of_current(klines):
     elif current == "GREEN_INDECISIVE":
         upper_wick = high - close
         lower_wick = open - low
-        if candlebody > lower_wick:
+        if candlebody > (lower_wick * 2):
             if previous == "GREEN": strength = "WEAK"
             else: strength = "STRONG"
         else: strength = "WEAK"
@@ -217,10 +218,10 @@ def strength_of_current(klines):
     elif current == "RED_INDECISIVE":
         upper_wick = high - open
         lower_wick = close - low
-        if candlebody > upper_wick:
+        if candlebody > (upper_wick * 2):
             if previous == "RED": strength = "WEAK"
             else: strength = "STRONG"
-        else:strength = "WEAK"
+        else: strength = "WEAK"
 
     else: strength = "WEAK"
 
