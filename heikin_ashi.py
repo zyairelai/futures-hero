@@ -174,12 +174,11 @@ def volume_formation(klines):
         binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) / 1.5): return True
 
 def volume_breakout(klines):
-    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5) or \
-        current_candlebody(klines) > (previous_candlebody(klines) * 1.5): return True
+    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5): return True
 
 def volume_sudden_breakout(klines):
     if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 2) or \
-        current_candlebody(klines) > (previous_candlebody(klines) * 2): return True
+       (current_candlebody(klines) > (previous_candlebody(klines) * 2) and binance_futures.current_volume(klines) >= binance_futures.previous_volume(klines)): return True
 
 def volume_weakening(klines): # Work in Progress
     if  binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines): return True
@@ -195,47 +194,36 @@ def strength_of_current(klines):
     close = current_Close(klines)
     high  = current_High(klines)
     low   = current_Low(klines)
+    candlebody = current_candlebody(klines)
 
     if current == "GREEN": 
         upper_wick = high - close
-        candlebody = close - open
         if upper_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
 
     elif current == "RED":
         lower_wick = close - low
-        candlebody = open - close
         if lower_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
     
     elif current == "GREEN_INDECISIVE":
         upper_wick = high - close
         lower_wick = open - low
-        candlebody = close - open
         if candlebody > lower_wick:
             if previous == "GREEN": strength = "WEAK"
             else: strength = "STRONG"
-        else:
-            if  high  > previous_High(klines)  and \
-                close > previous_Close(klines) and \
-                open  > previous_Open(klines)  and \
-                low   > previous_Low(klines): strength = "STRONG"
-            else: strength = "WEAK"
+        else: strength = "WEAK"
 
     elif current == "RED_INDECISIVE":
         upper_wick = high - open
         lower_wick = close - low
-        candlebody = open - close
         if candlebody > upper_wick:
             if previous == "RED": strength = "WEAK"
             else: strength = "STRONG"
-        else:
-            if  high  < previous_High(klines)  and \
-                close < previous_Close(klines) and \
-                open  < previous_Open(klines)  and \
-                low   < previous_Low(klines): strength = "STRONG"
-            else: strength = "WEAK"
+        else:strength = "WEAK"
+
     else: strength = "WEAK"
+
     return strength
 
 def strength_of_previous(klines):
@@ -246,45 +234,34 @@ def strength_of_previous(klines):
     close = previous_Close(klines)
     high  = previous_High(klines)
     low   = previous_Low(klines)
+    candlebody = previous_candlebody(klines)
 
     if previous == "GREEN": 
         upper_wick = high - close
-        candlebody = close - open
         if upper_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
 
     elif previous == "RED":
         lower_wick = close - low
-        candlebody = open - close
         if lower_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
     
     elif previous == "GREEN_INDECISIVE":
         upper_wick = high - close
         lower_wick = open - low
-        candlebody = close - open
         if candlebody > lower_wick:
             if firstrun == "GREEN": strength = "WEAK"
             else: strength = "STRONG"
-        else:
-            if  high  > firstrun_High(klines)  and \
-                close > firstrun_Close(klines) and \
-                open  > firstrun_Open(klines)  and \
-                low   > firstrun_Low(klines): strength = "STRONG"
-            else: strength = "WEAK"
+        else: strength = "WEAK"
 
     elif previous == "RED_INDECISIVE":
         upper_wick = high - open
         lower_wick = close - low
-        candlebody = open - close
         if candlebody > upper_wick:
             if firstrun == "RED": strength = "WEAK"
             else: strength = "STRONG"
-        else:
-            if  high  < firstrun_High(klines)  and \
-                close < firstrun_Close(klines) and \
-                open  < firstrun_Open(klines)  and \
-                low   < firstrun_Low(klines): strength = "STRONG"
-            else: strength = "WEAK"
+        else: strength = "WEAK"
+
     else: strength = "WEAK"
+
     return strength

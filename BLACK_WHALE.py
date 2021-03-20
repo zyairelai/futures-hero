@@ -102,8 +102,9 @@ try:
                 if ((current_candle(klines_6HOUR) == "RED" or current_candle(klines_6HOUR) == "RED_INDECISIVE") and strength_of_current(klines_6HOUR) == "STRONG") or \
                     (previous_Close(klines_6HOUR) > current_High(klines_6HOUR)): return True
         else:
-            if ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
-               ((previous_Close(klines_1HOUR) > current_High(klines_1HOUR)) and volume_confirmation(klines_1HOUR)): return True
+            if volume_confirmation(klines_1HOUR):
+                if ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
+                    (previous_Close(klines_1HOUR) > current_High(klines_1HOUR)): return True
 
     def EXIT_SHORT(klines_1HOUR, klines_6HOUR):
         if secure_profit:
@@ -114,8 +115,9 @@ try:
                 if ((current_candle(klines_6HOUR) == "GREEN" or current_candle(klines_6HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_6HOUR) == "STRONG") or \
                     (previous_Close(klines_6HOUR) < current_Low(klines_6HOUR)): return True
         else:   
-            if ((current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
-               ((previous_Close(klines_1HOUR) < current_Low(klines_1HOUR)) and volume_confirmation(klines_1HOUR)): return True
+            if volume_confirmation(klines_1HOUR):
+                if ((current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
+                    (previous_Close(klines_1HOUR) < current_Low(klines_1HOUR)): return True
 
     def volume_confirmation(klines):
         return (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 5))
