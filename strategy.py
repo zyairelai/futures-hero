@@ -24,7 +24,7 @@ def lets_make_some_money():
     klines_1HOUR  = binance_futures.KLINE_INTERVAL_1HOUR()
     klines_6HOUR  = binance_futures.KLINE_INTERVAL_6HOUR()
     
-    direction = heikin_ashi.output_current(klines_6HOUR)
+    heikin_ashi.output_current(klines_6HOUR)
     heikin_ashi.output_current(klines_1HOUR)
     heikin_ashi.output_current(klines_1min)
 
@@ -43,12 +43,12 @@ def lets_make_some_money():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if (direction == "GREEN" or direction == "GREEN_INDECISIVE") and strength_of_current(klines_6HOUR) == "STRONG" and GO_LONG(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
+        if check_direction(klines_6HOUR) == "GREEN" and GO_LONG(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
             if live_trade: binance_futures.open_position("LONG", trade_amount(klines_6HOUR, klines_1HOUR))
             record_timestamp(klines_1HOUR, "JACK_RABBIT")
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-        elif (direction == "RED" or direction == "RED_INDECISIVE") and strength_of_current(klines_6HOUR) == "STRONG" and GO_SHORT(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
+        elif check_direction(klines_6HOUR) == "RED" and GO_SHORT(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
             if live_trade: binance_futures.open_position("SHORT", trade_amount(klines_6HOUR, klines_1HOUR))
             record_timestamp(klines_1HOUR, "JACK_RABBIT")
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
@@ -60,6 +60,20 @@ def lets_make_some_money():
 # ==========================================================================================================================================================================
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
+def check_direction(klines_6HOUR):
+    if strength_of_current(klines_6HOUR) == "STRONG":
+        if current_candle(klines_6HOUR) == "GREEN" or current_candle(klines_6HOUR) == "GREEN_INDECISIVE" : direction = "GREEN"
+        elif current_candle(klines_6HOUR) == "RED" or current_candle(klines_6HOUR) == "RED_INDECISIVE" : direction = "RED"
+        else: direction = "INDECISIVE"
+
+    elif strength_of_current(klines_6HOUR) == "WEAK":
+        if current_candle(klines_6HOUR) == "GREEN": direction = "RED"
+        elif current_candle(klines_6HOUR) == "RED": direction = "GREEN"
+        else: direction = "INDECISIVE"
+
+    else: direction = "INDECISIVE"
+    return direction
+    
 def GO_LONG(klines_1HOUR, klines_1min):
     if volume_confirmation(klines_1HOUR):
         if (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and \
@@ -91,7 +105,9 @@ def EXIT_SHORT(klines_6HOUR, klines_1HOUR, klines_1min):
            (current_candle(klines_1HOUR) == "GREEN" and strength_of_current(klines_1HOUR) == "STRONG"): return True
 
 def volume_confirmation(klines):
-    return (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 5))
+    if heikin_ashi.volume_weakening(klines):
+        return binance_futures.current_volume(klines) > binance_futures.previous_volume(klines)
+    else: return (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 5))
 
 # ==========================================================================================================================================================================
 #                                                  EXTRA ADD-ON WORK IN PROGRESS
@@ -101,7 +117,7 @@ def slipping_back():
     return "WORK IN PROGRESS"
 
 def DO_NOT_FUCKING_TRADE():
-    return False
+    return True
 
 # ==========================================================================================================================================================================
 #                                              SYSTEM TIME RECORD TO AVOID OVER-TRADE

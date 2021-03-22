@@ -96,7 +96,7 @@ try:
         if volume_confirmation(klines_1HOUR):
             if get_position.get_unRealizedProfit(profit) == "PROFIT":
                 if ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
-                    (previous_Close(klines_1HOUR) > current_High(klines_1HOUR)): return True
+                    (previous_Close(klines_1HOUR) > current_High(klines_1HOUR)) or heikin_ashi.volume_declining("1HOUR"): return True
             else: # Cut loss strategy here
                 if ((current_candle(klines_6HOUR) == "GREEN" and strength_of_current(klines_6HOUR) == "WEAK") or current_candle(klines_6HOUR) != "GREEN") and \
                    ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG"):
@@ -106,7 +106,7 @@ try:
         if volume_confirmation(klines_1HOUR):
             if get_position.get_unRealizedProfit(profit) == "PROFIT":
                 if ((current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
-                    (previous_Close(klines_1HOUR) < current_Low(klines_1HOUR)): return True
+                    (previous_Close(klines_1HOUR) < current_Low(klines_1HOUR)) or heikin_ashi.volume_declining("1HOUR"): return True
             else: # Cut loss strategy here
                 if ((current_candle(klines_6HOUR) == "RED" and strength_of_current(klines_6HOUR) == "WEAK") or current_candle(klines_6HOUR) != "RED") and \
                    ((current_candle(klines_1HOUR) == "GREEB" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG"):
