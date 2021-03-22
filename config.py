@@ -34,7 +34,7 @@ else:
     quantity = 0.001
 
 # ====================================================
-#          These are the MAXIMUM Leverage
+#        !! DO NOT CHANGE THESE LEVERAGE !!
 # ====================================================
 if   coin == "BTC": leverage = 125
 elif coin == "ETH": leverage = 100

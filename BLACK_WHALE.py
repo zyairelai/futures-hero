@@ -12,7 +12,6 @@ try:
     live_trade  = config.live_trade
     leverage    = int(config.leverage / 2.5)
     profit      = 0.5
-    secure_profit = False
 
 # ==========================================================================================================================================================================
 #                                              BLACK_WHALE - GO BIG, WIN BIG, LOSE BIGGER
@@ -84,40 +83,34 @@ try:
     def GO_LONG(klines_1HOUR, klines_6HOUR):
         if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR) or heikin_ashi.volume_breakout(klines_1HOUR)) and \
            (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE")and \
-            strength_of_current(klines_1HOUR) == "STRONG" and \
-            strength_of_current(klines_6HOUR) == "STRONG": return True
+            strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
+            return True
 
     def GO_SHORT(klines_1HOUR, klines_6HOUR):
         if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR) or heikin_ashi.volume_breakout(klines_1HOUR)) and \
            (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE")and \
-            strength_of_current(klines_1HOUR) == "STRONG" and \
-            strength_of_current(klines_6HOUR) == "STRONG": return True
+            strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
+            return True
 
     def EXIT_LONG(klines_1HOUR, klines_6HOUR):
-        if secure_profit:
+        if volume_confirmation(klines_1HOUR):
             if get_position.get_unRealizedProfit(profit) == "PROFIT":
                 if ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
                     (previous_Close(klines_1HOUR) > current_High(klines_1HOUR)): return True
-            else:
-                if ((current_candle(klines_6HOUR) == "RED" or current_candle(klines_6HOUR) == "RED_INDECISIVE") and strength_of_current(klines_6HOUR) == "STRONG") or \
-                    (previous_Close(klines_6HOUR) > current_High(klines_6HOUR)): return True
-        else:
-            if volume_confirmation(klines_1HOUR):
-                if ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
-                    (previous_Close(klines_1HOUR) > current_High(klines_1HOUR) and get_position.get_unRealizedProfit(profit) == "PROFIT"): return True
+            else: # Cut loss strategy here
+                if ((current_candle(klines_6HOUR) == "GREEN" and strength_of_current(klines_6HOUR) == "WEAK") or current_candle(klines_6HOUR) != "GREEN") and \
+                   ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG"):
+                    return True
 
     def EXIT_SHORT(klines_1HOUR, klines_6HOUR):
-        if secure_profit:
+        if volume_confirmation(klines_1HOUR):
             if get_position.get_unRealizedProfit(profit) == "PROFIT":
                 if ((current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
                     (previous_Close(klines_1HOUR) < current_Low(klines_1HOUR)): return True
-            else:
-                if ((current_candle(klines_6HOUR) == "GREEN" or current_candle(klines_6HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_6HOUR) == "STRONG") or \
-                    (previous_Close(klines_6HOUR) < current_Low(klines_6HOUR)): return True
-        else:   
-            if volume_confirmation(klines_1HOUR):
-                if ((current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
-                    (previous_Close(klines_1HOUR) < current_Low(klines_1HOUR) and get_position.get_unRealizedProfit(profit) == "PROFIT"): return True
+            else: # Cut loss strategy here
+                if ((current_candle(klines_6HOUR) == "RED" and strength_of_current(klines_6HOUR) == "WEAK") or current_candle(klines_6HOUR) != "RED") and \
+                   ((current_candle(klines_1HOUR) == "GREEB" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG"):
+                    return True
 
     def volume_confirmation(klines):
         return (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 5))

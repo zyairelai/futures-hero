@@ -5,7 +5,7 @@ try:
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
 
-    leverage = int(config.leverage / 2.5)
+    leverage = int(config.leverage / 2.5) # AUTO ADJUST LEVERAGE
 
     if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))

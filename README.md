@@ -14,20 +14,19 @@ PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.
 # WALLET MANAGEMENT TUTORIAL
 This is a very crude, yet, ridiculously simple strategy with high risk high reward.  
 Hence, your wallet management skill becomes the priority to your success using this project.  
-The recommendation trade amount in this project is 5% of your Futures Wallet as your total trade amount.  
+The recommendation trade amount in this project is 10% of your Futures Wallet as your total trade amount.  
 ```
 For Example, I trade only BTCUSDT.
-I have 10 USDT in my Futures Wallet. The maximum amount that I will place for one position is 0.5 USDT.
+I have 10 USDT in my Futures Wallet. The maximum amount that I will place for one position is 1 USDT.
 
-Second Example, I want to trade both BTCUSDT and ETHUSDT at the same time
-I want to place 0.5 USDT for each position.
+Second Example, I want to trade both BTCUSDT and ETHUSDT at the same time.
+I want to place 1 USDT for each position.
 This will require my Futures Wallet to have at least 20 USDT to do so. 
-So I can place 0.5 USDT for BTCUSDT position and 0.5 USDT for ETHUSDT position.
-The total trade amount in this case will be 1 USDT, which is 5% of 20 USDT in my whole Futures Wallet.
+So I can place 1 USDT for BTCUSDT position and 1 USDT for ETHUSDT position.
+The total trade amount in this case will be 2 USDT, which is 10% of 20 USDT in my whole Futures Wallet.
 
-REMEMBER 5% IS THE KEY
+REMEMBER 10% IS THE KEY
 ```
-
 
 ## 1. Environment Setup
 Paste the following into your Default Shell

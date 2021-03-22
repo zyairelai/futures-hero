@@ -141,12 +141,6 @@ def WAR_FORMATION(klines):
             previous_Close(klines) < firstrun_Close(klines) and \
             strength_of_current(klines) == "STRONG": return True
 
-def exit_test(klines, POSITION):
-    if POSITION == "LONG":
-        if previous_Close(klines) > current_Close(klines): return True
-    elif POSITION == "SHORT":
-        if previous_Close(klines) < current_Close(klines): return True
-
 def pencil_wick_test(klines):
     volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 2))
 
