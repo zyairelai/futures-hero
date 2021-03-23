@@ -165,15 +165,18 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
 
 def volume_formation(klines):
     if  binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines) and \
-        binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) / 1.5): return True
+        binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 1.5): return True
 
 # def volume_breakout(klines):
-#     if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 1.5): return True
+#     if binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 1.5): return True
 #     # Need to review this
 
 def volume_breakout(klines):
-    if binance_futures.current_volume(klines) >= (binance_futures.previous_volume(klines) * 2) or \
-       (current_candlebody(klines) > (previous_candlebody(klines) * 2) and binance_futures.current_volume(klines) >= binance_futures.previous_volume(klines)): return True
+    if previous_candle(klines) == "GREEN" or previous_candle(klines) == "RED": threshold = 2
+    elif previous_candle(klines) == "GREEN_INDECISIVE" or previous_candle(klines) == "RED_INDECISIVE": threshold = 3
+    else: threshold = 10
+    if binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * threshold) or \
+       (current_candlebody(klines) > (previous_candlebody(klines) * threshold) and binance_futures.current_volume(klines) > binance_futures.previous_volume(klines)): return True
 
 def volume_weakening(klines):
     if binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and \
@@ -185,7 +188,7 @@ def volume_declining(klines):
        binance_futures.previous_volume(klines) > binance_futures.current_volume(klines): return True
 
 # ==========================================================================================================================================================================
-#                                                          IDENTIFY STRENGTH
+#                                                          IDENTIFY STRENGTH - Should add size of the candle 
 # ==========================================================================================================================================================================
 def strength_of_current(klines):
     previous = previous_candle(klines)
