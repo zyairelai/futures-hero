@@ -43,12 +43,12 @@ def lets_make_some_money():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if check_direction(klines_6HOUR) == "GREEN" and GO_LONG(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
+        if check_direction(klines_6HOUR) == "GREEN" and GO_LONG(klines_6HOUR, klines_1HOUR, klines_1min): # and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
             if live_trade: binance_futures.open_position("LONG", trade_amount(klines_6HOUR, klines_1HOUR))
             record_timestamp(klines_1HOUR, "JACK_RABBIT")
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-        elif check_direction(klines_6HOUR) == "RED" and GO_SHORT(klines_1HOUR, klines_1min) and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
+        elif check_direction(klines_6HOUR) == "RED" and GO_SHORT(klines_6HOUR, klines_1HOUR, klines_1min): # and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
             if live_trade: binance_futures.open_position("SHORT", trade_amount(klines_6HOUR, klines_1HOUR))
             record_timestamp(klines_1HOUR, "JACK_RABBIT")
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
@@ -74,18 +74,20 @@ def check_direction(klines_6HOUR):
     else: direction = "INDECISIVE"
     return direction
     
-def GO_LONG(klines_1HOUR, klines_1min):
-    if volume_confirmation(klines_1HOUR):
+def GO_LONG(klines_6HOUR, klines_1HOUR, klines_1min):
+    if volume_confirmation(klines_1HOUR) and not (heikin_ashi.volume_weakening(klines_6HOUR) or heikin_ashi.volume_weakening(klines_1HOUR)):
         if (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and \
            (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
-           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "GREEN" and pencil_wick_test(klines_1min)):
+           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "GREEN" and pencil_wick_test(klines_1min)) and \
+           (not heikin_ashi.volume_weakening(klines_1HOUR) and not heikin_ashi.volume_weakening(klines_6HOUR)):
             return True
 
-def GO_SHORT(klines_1HOUR, klines_1min):
-    if volume_confirmation(klines_1HOUR):
+def GO_SHORT(klines_6HOUR, klines_1HOUR, klines_1min):
+    if volume_confirmation(klines_1HOUR) and not (heikin_ashi.volume_weakening(klines_6HOUR) or heikin_ashi.volume_weakening(klines_1HOUR)):
         if (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and \
            (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
-           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "RED" and pencil_wick_test(klines_1min)):
+           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "RED" and pencil_wick_test(klines_1min))and \
+           (not heikin_ashi.volume_weakening(klines_1HOUR) and not heikin_ashi.volume_weakening(klines_6HOUR)):
             return True
 
 def EXIT_LONG(klines_6HOUR, klines_1HOUR, klines_1min):

@@ -202,19 +202,22 @@ def strength_of_current(klines):
 
     if current == "GREEN": 
         upper_wick = high - close
-        if upper_wick > candlebody: strength = "WEAK"
+        if upper_wick > candlebody:
+            strength = "WEAK"
         else: strength = "STRONG"
 
     elif current == "RED":
         lower_wick = close - low
-        if lower_wick > candlebody: strength = "WEAK"
+        if lower_wick > candlebody:
+            strength = "WEAK"
         else: strength = "STRONG"
     
     elif current == "GREEN_INDECISIVE":
         upper_wick = high - close
         lower_wick = open - low
         if candlebody > (lower_wick * 2):
-            if previous == "GREEN": strength = "WEAK"
+            if previous == "GREEN":
+                strength = "WEAK"
             else: strength = "STRONG"
         else: strength = "WEAK"
 
@@ -222,7 +225,8 @@ def strength_of_current(klines):
         upper_wick = high - open
         lower_wick = close - low
         if candlebody > (upper_wick * 2):
-            if previous == "RED": strength = "WEAK"
+            if previous == "RED":
+                strength = "WEAK"
             else: strength = "STRONG"
         else: strength = "WEAK"
 
@@ -242,19 +246,22 @@ def strength_of_previous(klines):
 
     if previous == "GREEN": 
         upper_wick = high - close
-        if upper_wick > candlebody: strength = "WEAK"
+        if upper_wick > candlebody:
+            strength = "WEAK"
         else: strength = "STRONG"
 
     elif previous == "RED":
         lower_wick = close - low
-        if lower_wick > candlebody: strength = "WEAK"
+        if lower_wick > candlebody:
+            strength = "WEAK"
         else: strength = "STRONG"
     
     elif previous == "GREEN_INDECISIVE":
         upper_wick = high - close
         lower_wick = open - low
         if candlebody > lower_wick:
-            if firstrun == "GREEN": strength = "WEAK"
+            if firstrun == "GREEN":
+                strength = "WEAK"
             else: strength = "STRONG"
         else: strength = "WEAK"
 
@@ -262,7 +269,8 @@ def strength_of_previous(klines):
         upper_wick = high - open
         lower_wick = close - low
         if candlebody > upper_wick:
-            if firstrun == "RED": strength = "WEAK"
+            if firstrun == "RED":
+                strength = "WEAK"
             else: strength = "STRONG"
         else: strength = "WEAK"
 
