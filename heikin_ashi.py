@@ -179,12 +179,12 @@ def volume_weakening(klines):
     if milliseconds == 1 * 60 * 60000: interval = "1 HOUR"
     elif milliseconds == 6 * 60 * 60000: interval = "6 HOUR"
 
-    if binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and \
-       binance_futures.previous_volume(klines) > binance_futures.current_volume(klines):
+    if binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and binance_futures.previous_volume(klines) > binance_futures.current_volume(klines):
         print("WEAKENING " + interval + " :   TRUE")
         return True
-    else: print("WEAKENING " + interval + " :   FALSE")
-
+    else:
+        print("WEAKENING " + interval + " :   FALSE")
+        return False
 
 def volume_declining(klines):
     if binance_futures.initial_volume(klines) > binance_futures.firstrun_volume(klines) and \
