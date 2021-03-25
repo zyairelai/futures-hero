@@ -175,8 +175,16 @@ def volume_breakout(klines):
        (current_candlebody(klines) > (previous_candlebody(klines) * threshold) and binance_futures.current_volume(klines) > binance_futures.previous_volume(klines)): return True
 
 def volume_weakening(klines):
+    milliseconds = int(klines[-1][0]) - int(klines[-2][0])
+    if milliseconds == 1 * 60 * 60000: interval = "1 HOUR"
+    elif milliseconds == 6 * 60 * 60000: interval = "6 HOUR"
+
     if binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and \
-       binance_futures.previous_volume(klines) > binance_futures.current_volume(klines): return True
+       binance_futures.previous_volume(klines) > binance_futures.current_volume(klines):
+        print("WEAKENING " + interval + " :   TRUE")
+        return True
+    else: print("WEAKENING " + interval + " :   FALSE")
+
 
 def volume_declining(klines):
     if binance_futures.initial_volume(klines) > binance_futures.firstrun_volume(klines) and \

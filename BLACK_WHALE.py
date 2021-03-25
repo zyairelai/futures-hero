@@ -81,16 +81,18 @@ try:
     from heikin_ashi import strength_of_current
 
     def GO_LONG(klines_1HOUR, klines_6HOUR):
-        if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
-           (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE")and \
-            strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
-            return True
+        if not heikin_ashi.volume_weakening(klines_1HOUR):
+            if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
+            (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE")and \
+                strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
+                return True
 
     def GO_SHORT(klines_1HOUR, klines_6HOUR):
-        if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
-           (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE")and \
-            strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
-            return True
+        if not heikin_ashi.volume_weakening(klines_1HOUR):
+            if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
+            (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE")and \
+                strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
+                return True
 
     def EXIT_LONG(klines_1HOUR, klines_6HOUR):
         if volume_confirmation(klines_1HOUR):
