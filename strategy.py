@@ -75,20 +75,18 @@ def check_direction(klines_6HOUR):
     return direction
     
 def GO_LONG(klines_6HOUR, klines_1HOUR, klines_1min):
-    if volume_confirmation(klines_1HOUR) and not (heikin_ashi.volume_weakening(klines_6HOUR) or heikin_ashi.volume_weakening(klines_1HOUR)):
-        if (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and \
-           (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
-           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "GREEN" and pencil_wick_test(klines_1min)) and \
-           (not heikin_ashi.volume_weakening(klines_1HOUR) and not heikin_ashi.volume_weakening(klines_6HOUR)):
-            return True
+    if  (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and \
+        (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
+        (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "GREEN" and pencil_wick_test(klines_1min)) and \
+        (not heikin_ashi.volume_weakening(klines_1HOUR) and not heikin_ashi.volume_weakening(klines_6HOUR)):
+        return True
 
 def GO_SHORT(klines_6HOUR, klines_1HOUR, klines_1min):
-    if volume_confirmation(klines_1HOUR) and not (heikin_ashi.volume_weakening(klines_6HOUR) or heikin_ashi.volume_weakening(klines_1HOUR)):
-        if (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and \
-           (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
-           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "RED" and pencil_wick_test(klines_1min))and \
-           (not heikin_ashi.volume_weakening(klines_1HOUR) and not heikin_ashi.volume_weakening(klines_6HOUR)):
-            return True
+    if  (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and \
+        (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
+        (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "RED" and pencil_wick_test(klines_1min))and \
+        (not heikin_ashi.volume_weakening(klines_1HOUR) and not heikin_ashi.volume_weakening(klines_6HOUR)):
+        return True
 
 def EXIT_LONG(klines_6HOUR, klines_1HOUR, klines_1min):
     if get_unRealizedProfit(profit) == "PROFIT":

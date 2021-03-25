@@ -142,7 +142,7 @@ def WAR_FORMATION(klines):
             strength_of_current(klines) == "STRONG": return True
 
 def pencil_wick_test(klines):
-    volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 2))
+    volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 3))
 
     if current_candle(klines) == "GREEN":
         if  current_High(klines)  > previous_High(klines)  and \
@@ -166,10 +166,6 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
 def volume_formation(klines):
     if  binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines) and \
         binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 1.5): return True
-
-# def volume_breakout(klines):
-#     if binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 1.5): return True
-#     # Need to review this
 
 def volume_breakout(klines):
     if previous_candle(klines) == "GREEN" or previous_candle(klines) == "RED": threshold = 2
