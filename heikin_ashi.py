@@ -145,15 +145,9 @@ def pencil_wick_test(klines):
     volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 3))
 
     if current_candle(klines) == "GREEN":
-        if  current_High(klines)  > previous_High(klines)  and \
-            current_Close(klines) > previous_Close(klines) and \
-            volume_confirmation: 
-            return True
+        if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines) and volume_confirmation: return True
     elif current_candle(klines) == "RED":
-        if  current_Low(klines)   < previous_Low(klines)   and \
-            current_Close(klines) < previous_Close(klines) and \
-            volume_confirmation:
-                return True
+        if current_Low(klines) < previous_Low(klines) and current_Close(klines) < previous_Close(klines) and volume_confirmation: return True
 
 def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     current  = current_candle(klines)
