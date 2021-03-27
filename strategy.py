@@ -75,14 +75,14 @@ def check_direction(klines_6HOUR):
     return direction
     
 def GO_LONG(klines_6HOUR, klines_1HOUR, klines_1min):
-    if not heikin_ashi.volume_weakening(klines_1HOUR):
+    if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_6HOUR, klines_1HOUR):
         if (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and \
             (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
             (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "GREEN" and pencil_wick_test(klines_1min)):
             return True
 
 def GO_SHORT(klines_6HOUR, klines_1HOUR, klines_1min):
-    if not heikin_ashi.volume_weakening(klines_1HOUR):
+    if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_6HOUR, klines_1HOUR):
         if (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and \
             (strength_of_current(klines_1HOUR) == "STRONG" and pattern_broken(klines_1HOUR) == "NOT_BROKEN") and \
             (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "RED" and pencil_wick_test(klines_1min)):
@@ -103,6 +103,9 @@ def EXIT_SHORT(klines_6HOUR, klines_1HOUR, klines_1min):
     else: # Cut loss when the 6HOUR is going against you
         if (current_candle(klines_6HOUR) != "RED" or (current_candle(klines_6HOUR) == "RED" and strength_of_current(klines_6HOUR) == "WEAK")) and \
            (current_candle(klines_1HOUR) == "GREEN" and strength_of_current(klines_1HOUR) == "STRONG"): return True
+
+def hot_zone(klines_6HOUR, klines_1HOUR):
+    if klines_6HOUR[-1][0] == klines_1HOUR[-1][0]: return True
 
 def volume_confirmation(klines):
     if heikin_ashi.volume_weakening(klines):

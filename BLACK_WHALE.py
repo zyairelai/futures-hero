@@ -81,14 +81,14 @@ try:
     from heikin_ashi import strength_of_current
 
     def GO_LONG(klines_1HOUR, klines_6HOUR):
-        if not heikin_ashi.volume_weakening(klines_1HOUR):
+        if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_6HOUR, klines_1HOUR):
             if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
                 (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE")and \
                 strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
                 return True
 
     def GO_SHORT(klines_1HOUR, klines_6HOUR):
-        if not heikin_ashi.volume_weakening(klines_1HOUR):
+        if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_6HOUR, klines_1HOUR):
             if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
                 (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE")and \
                 strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
@@ -117,6 +117,8 @@ try:
     def volume_confirmation(klines):
         return (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 5))
 
+    def hot_zone(klines_6HOUR, klines_1HOUR):
+        if klines_6HOUR[-1][0] == klines_1HOUR[-1][0]: return True
 # ==========================================================================================================================================================================
 #                                                        DEPLOY THE BOT
 # ==========================================================================================================================================================================
