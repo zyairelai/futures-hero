@@ -32,8 +32,9 @@ try:
 
     def lets_make_some_money():
         position_info = get_position.get_position_info()
-        klines_6HOUR  = binance_futures.KLINE_INTERVAL_6HOUR()
+        klines_30MIN  = binance_futures.KLINE_INTERVAL_30MINUTE()
         klines_1HOUR  = binance_futures.KLINE_INTERVAL_1HOUR()
+        klines_6HOUR  = binance_futures.KLINE_INTERVAL_6HOUR()
 
         print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_6HOUR)))
         print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_6HOUR)))
@@ -46,23 +47,23 @@ try:
         heikin_ashi.output_current(klines_1HOUR)
 
         if position_info == "LONGING":
-            if EXIT_LONG(klines_1HOUR, klines_6HOUR):
+            if EXIT_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.close_position("LONG")
                 print("ACTION           :   💰 CLOSE_LONG 💰")
             else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
         elif position_info == "SHORTING":
-            if EXIT_SHORT(klines_1HOUR, klines_6HOUR):
+            if EXIT_SHORT(klines_30MIN, klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.close_position("SHORT")
                 print("ACTION           :   💰 CLOSE_SHORT 💰")
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
         else:
-            if (direction == "GREEN" or direction == "GREEN_INDECISIVE") and GO_LONG(klines_1HOUR, klines_6HOUR):
+            if (direction == "GREEN" or direction == "GREEN_INDECISIVE") and GO_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.open_position("LONG", config.quantity)
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-            elif (direction == "RED" or direction == "RED_INDECISIVE") and GO_SHORT(klines_1HOUR, klines_6HOUR):
+            elif (direction == "RED" or direction == "RED_INDECISIVE") and GO_SHORT(klines_30MIN, klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.open_position("SHORT", config.quantity)
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
@@ -80,22 +81,22 @@ try:
     from heikin_ashi import current_Low
     from heikin_ashi import strength_of_current
 
-    def GO_LONG(klines_1HOUR, klines_6HOUR):
-        if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_6HOUR, klines_1HOUR):
+    def GO_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
+        if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_30MIN, klines_6HOUR):
             if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
                 (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE")and \
                 strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
                 return True
 
-    def GO_SHORT(klines_1HOUR, klines_6HOUR):
-        if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_6HOUR, klines_1HOUR):
+    def GO_SHORT(klines_30MIN, klines_1HOUR, klines_6HOUR):
+        if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_30MIN, klines_6HOUR):
             if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
                 (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE")and \
                 strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
                 return True
 
-    def EXIT_LONG(klines_1HOUR, klines_6HOUR):
-        if volume_confirmation(klines_1HOUR):
+    def EXIT_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
+        if hot_zone(klines_30MIN, klines_6HOUR):
             if get_position.get_unRealizedProfit(profit) == "PROFIT":
                 if ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
                     (previous_Close(klines_1HOUR) > current_High(klines_1HOUR)) or heikin_ashi.volume_declining("1HOUR"): return True
@@ -104,8 +105,8 @@ try:
                    ((current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG"):
                     return True
 
-    def EXIT_SHORT(klines_1HOUR, klines_6HOUR):
-        if volume_confirmation(klines_1HOUR):
+    def EXIT_SHORT(klines_30MIN, klines_1HOUR, klines_6HOUR):
+        if hot_zone(klines_30MIN, klines_6HOUR):
             if get_position.get_unRealizedProfit(profit) == "PROFIT":
                 if ((current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG") or \
                     (previous_Close(klines_1HOUR) < current_Low(klines_1HOUR)) or heikin_ashi.volume_declining("1HOUR"): return True
@@ -114,11 +115,8 @@ try:
                    ((current_candle(klines_1HOUR) == "GREEB" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG"):
                     return True
 
-    def volume_confirmation(klines):
-        return (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 5))
-
-    def hot_zone(klines_6HOUR, klines_1HOUR):
-        if klines_6HOUR[-1][0] == klines_1HOUR[-1][0]: return True
+    def hot_zone(klines_30MIN, klines_6HOUR):
+        if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
 # ==========================================================================================================================================================================
 #                                                        DEPLOY THE BOT
 # ==========================================================================================================================================================================
