@@ -75,15 +75,15 @@ def check_direction(klines_6HOUR):
     return direction
     
 def GO_LONG(klines_6HOUR, klines_1HOUR, klines_1min):
-    if not hot_zone(klines_6HOUR, klines_1HOUR):
+    if not hot_zone(klines_6HOUR, klines_1HOUR) and not heikin_ashi.volume_declining(klines_6HOUR):
         if (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and (strength_of_current(klines_1HOUR) == "STRONG") and \
-           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "GREEN" and pencil_wick_test(klines_1min)):
+           (current_candle(klines_1min)  == "GREEN" and strength_of_current(klines_1min)  == "STRONG" and pencil_wick_test(klines_1min)):
             return True
 
 def GO_SHORT(klines_6HOUR, klines_1HOUR, klines_1min):
-    if not hot_zone(klines_6HOUR, klines_1HOUR):
+    if not hot_zone(klines_6HOUR, klines_1HOUR) and not heikin_ashi.volume_declining(klines_6HOUR):
         if (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and (strength_of_current(klines_1HOUR) == "STRONG") and \
-           (strength_of_current(klines_1min)  == "STRONG" and current_candle(klines_1min)  == "RED" and pencil_wick_test(klines_1min)):
+           (current_candle(klines_1min)  == "RED" and strength_of_current(klines_1min)  == "STRONG" and pencil_wick_test(klines_1min)):
             return True
 
 def EXIT_LONG(klines_6HOUR, klines_1HOUR, klines_1min):
