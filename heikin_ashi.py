@@ -131,7 +131,7 @@ def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
 #                                                             WAR FORMATION
 # ==========================================================================================================================================================================
 def war_formation(klines):
-    volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 3))
+    volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
 
     if current_candle(klines) == "GREEN":
         if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines) and volume_confirmation: return True

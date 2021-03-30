@@ -43,7 +43,7 @@ try:
         heikin_ashi.output_firstrun(klines_6HOUR)
         heikin_ashi.output_previous(klines_6HOUR)
 
-        direction = heikin_ashi.output_current(klines_6HOUR)
+        heikin_ashi.output_current(klines_6HOUR)
         heikin_ashi.output_current(klines_1HOUR)
 
         if position_info == "LONGING":
@@ -59,11 +59,11 @@ try:
             else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
         else:
-            if (direction == "GREEN" or direction == "GREEN_INDECISIVE") and GO_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
+            if check_direction(klines_6HOUR) == "GREEN" and GO_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.open_position("LONG", config.quantity)
                 print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-            elif (direction == "RED" or direction == "RED_INDECISIVE") and GO_SHORT(klines_30MIN, klines_1HOUR, klines_6HOUR):
+            elif check_direction(klines_6HOUR) == "RED" and GO_SHORT(klines_30MIN, klines_1HOUR, klines_6HOUR):
                 if live_trade: binance_futures.open_position("SHORT", config.quantity)
                 print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
@@ -74,6 +74,19 @@ try:
 # ==========================================================================================================================================================================
 #                                                    ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
+    def check_direction(klines):
+        if strength_of_current(klines) == "STRONG":
+            if current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE" : direction = "GREEN"
+            elif current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" : direction = "RED"
+            else: direction = "INDECISIVE"
+
+        # elif strength_of_current(klines) == "WEAK":
+        #     if current_candle(klines) == "GREEN": direction = "RED"
+        #     elif current_candle(klines) == "RED": direction = "GREEN"
+        #     else: direction = "INDECISIVE"
+
+        else: direction = "INDECISIVE"
+        return direction
 
     from heikin_ashi import current_candle
     from heikin_ashi import previous_Close
@@ -84,15 +97,13 @@ try:
     def GO_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
         if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_30MIN, klines_6HOUR):
             if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
-                (heikin_ashi.current_candle(klines_1HOUR) == "GREEN" or heikin_ashi.current_candle(klines_1HOUR) == "GREEN_INDECISIVE")and \
-                strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
+                check_direction(klines_1HOUR) == "GREEN":
                 return True
 
     def GO_SHORT(klines_30MIN, klines_1HOUR, klines_6HOUR):
         if not heikin_ashi.volume_weakening(klines_1HOUR) and not hot_zone(klines_30MIN, klines_6HOUR):
             if (heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR)) and \
-                (heikin_ashi.current_candle(klines_1HOUR) == "RED" or heikin_ashi.current_candle(klines_1HOUR) == "RED_INDECISIVE")and \
-                strength_of_current(klines_1HOUR) == "STRONG" and strength_of_current(klines_6HOUR) == "STRONG":
+                check_direction(klines_1HOUR) == "RED":
                 return True
 
     def EXIT_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
