@@ -142,10 +142,21 @@ def clear_direction(klines_6HOUR):
     return trend
 
 def trade_amount(klines_6HOUR, klines_1HOUR):
-    if heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR):
+    if heikin_ashi.volume_formation(klines_6HOUR) and heikin_ashi.volume_breakout(klines_6HOUR):
+        if clear_direction(klines_6HOUR) == "GREEN" or clear_direction(klines_6HOUR) == "RED": 
+            trade_amount = config.quantity * 5
+        else: trade_amount = config.quantity * 4
+    
+    elif heikin_ashi.volume_formation(klines_6HOUR) and not heikin_ashi.volume_breakout(klines_6HOUR):
         if clear_direction(klines_6HOUR) == "GREEN" or clear_direction(klines_6HOUR) == "RED": 
             trade_amount = config.quantity * 3
         else: trade_amount = config.quantity * 2
+
+    elif not heikin_ashi.volume_formation(klines_6HOUR) and heikin_ashi.volume_breakout(klines_6HOUR):
+        if clear_direction(klines_6HOUR) == "GREEN" or clear_direction(klines_6HOUR) == "RED": 
+            trade_amount = config.quantity * 2
+        else: trade_amount = config.quantity * 1
+
     else: trade_amount = config.quantity
 
     return trade_amount
