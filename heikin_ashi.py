@@ -130,7 +130,7 @@ def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
 # ==========================================================================================================================================================================
 #                                                             WAR FORMATION
 # ==========================================================================================================================================================================
-def war_formation(klines):
+def war_formation(klines): # Pencil_Wick_Test
     volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
 
     if current_candle(klines) == "GREEN":

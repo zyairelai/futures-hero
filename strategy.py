@@ -12,7 +12,7 @@ from heikin_ashi import strength_of_current
 from get_position import get_unRealizedProfit
 
 live_trade = config.live_trade
-profit = 0.3 # This float times leverage is the expected profit percentage
+profit = 0.6 # This float times leverage is the expected profit percentage
 
 # ==========================================================================================================================================================================
 #                    JACK_RABBIT - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
@@ -32,26 +32,27 @@ def lets_make_some_money():
     if position_info == "LONGING":
         if EXIT_LONG(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position("LONG")
-            record_timestamp(klines_1HOUR, "JACK_RABBIT")
+            # record_timestamp(klines_1HOUR)
             print("ACTION           :   💰 CLOSE_LONG 💰")
+        #  elif  
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
         if EXIT_SHORT(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position("SHORT")
-            record_timestamp(klines_1HOUR, "JACK_RABBIT")
+            # record_timestamp(klines_1HOUR)
             print("ACTION           :   💰 CLOSE_SHORT 💰")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if check_direction(klines_6HOUR) == "GREEN" and GO_LONG(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR): # and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
+        if check_direction(klines_6HOUR) == "GREEN" and GO_LONG(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR): # and (retrieve_timestamp() != current_kline_timestamp(klines_1HOUR)):
             if live_trade: binance_futures.open_position("LONG", trade_amount(klines_1HOUR, klines_6HOUR))
-            record_timestamp(klines_1HOUR, "JACK_RABBIT")
+            # record_timestamp(klines_1HOUR)
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-        elif check_direction(klines_6HOUR) == "RED" and GO_SHORT(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR): # and (retrieve_timestamp("JACK_RABBIT") != current_kline_timestamp(klines_1HOUR)):
+        elif check_direction(klines_6HOUR) == "RED" and GO_SHORT(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR): # and (retrieve_timestamp() != current_kline_timestamp(klines_1HOUR)):
             if live_trade: binance_futures.open_position("SHORT", trade_amount(klines_1HOUR, klines_6HOUR))
-            record_timestamp(klines_1HOUR, "JACK_RABBIT")
+            # record_timestamp(klines_1HOUR)
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -88,14 +89,19 @@ def GO_SHORT(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
 def EXIT_LONG(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_unRealizedProfit(profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) > heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "GREEN": return True
-    else: # Cut loss when the 6HOUR is going against you
-        if not hot_zone(klines_30MIN, klines_6HOUR) and check_direction(klines_6HOUR) == "RED": return True
+    else: # Cut loss when both the 1HOUR and 6HOUR is going against you
+        if not hot_zone(klines_30MIN, klines_6HOUR) and check_direction(klines_1HOUR) == "RED" and check_direction(klines_6HOUR) == "RED": return True
 
 def EXIT_SHORT(klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_unRealizedProfit(profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) < heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "RED": return True
-    else: # Cut loss when the 6HOUR is going against you
-        if not hot_zone(klines_30MIN, klines_6HOUR) and check_direction(klines_6HOUR) == "GREEN": return True
+    else: # Cut loss when both the 1HOUR and 6HOUR is going against you
+        if not hot_zone(klines_30MIN, klines_6HOUR) and check_direction(klines_1HOUR) == "GREEN" and check_direction(klines_6HOUR) == "GREEN": return True
+
+def THROTTLE_LONG(klines_30MIN, klines_1HOUR, klines_6HOUR):
+    if get_unRealizedProfit(profit) == "LOSS":
+        if retrieve_timestamp() != current_kline_timestamp(klines_1HOUR) and current_kline_timestamp(klines_1HOUR) != current_kline_timestamp(klines_30MIN):
+            if heikin_ashi.current_Low(klines_1HOUR) > heikin_ashi.previous_Low(klines_1HOUR): return True
 
 def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
@@ -114,21 +120,19 @@ def DO_NOT_FUCKING_TRADE():
 #                                              SYSTEM TIME RECORD TO AVOID OVER-TRADE
 # ==========================================================================================================================================================================
 
-def record_timestamp(kline, filename):
-    if not os.path.exists("TIMESTAMP"): os.makedirs("TIMESTAMP")
-    if not os.path.exists(os.path.join("TIMESTAMP", config.pair)): os.makedirs(os.path.join("TIMESTAMP", config.pair))
-
-    with open((os.path.join("TIMESTAMP", config.pair, filename + ".txt")), "w", encoding="utf-8") as timestamp_record:
+def record_timestamp(kline):
+    if not os.path.exists(config.pair): os.makedirs(config.pair)
+    with open((os.path.join(config.pair, "TIMESTAMP.txt")), "w", encoding="utf-8") as timestamp_record:
         timestamp_record.write(str(current_kline_timestamp(kline)))
 
-def retrieve_timestamp(filename):
-    with open((os.path.join("TIMESTAMP", config.pair, filename + ".txt")), "r", encoding="utf-8") as timestamp_record:
+def retrieve_timestamp():
+    with open((os.path.join(config.pair, "TIMESTAMP.txt")), "r", encoding="utf-8") as timestamp_record:
         return int(timestamp_record.read())
 
 def current_kline_timestamp(kline):
     return kline[-1][0] # This will return <int> type of timestamp
 
-record_timestamp(binance_futures.KLINE_INTERVAL_1HOUR(), "JACK_RABBIT")
+record_timestamp(binance_futures.KLINE_INTERVAL_1HOUR())
 
 # ==========================================================================================================================================================================
 #                                                     Auto Adjust Trade Amount

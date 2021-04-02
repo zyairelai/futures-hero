@@ -5,7 +5,7 @@ try:
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
 
-    leverage = int(config.leverage / 2.5) # AUTO ADJUST LEVERAGE
+    leverage = int(config.leverage / 5) # AUTO ADJUST LEVERAGE
 
     if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
@@ -32,8 +32,8 @@ try:
                 requests.exceptions.ReadTimeout,
                 ConnectionResetError, KeyError, OSError) as e:
 
-            if not os.path.exists("ERROR"): os.makedirs("ERROR")
-            with open((os.path.join("ERROR", config.pair + ".txt")), "a", encoding="utf-8") as error_message:
+            if not os.path.exists(config.pair): os.makedirs(config.pair)
+            with open((os.path.join(config.pair + "ERROR.txt")), "a", encoding="utf-8") as error_message:
                 error_message.write("[!] " + config.pair + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
                 error_message.write(str(e) + "\n\n")
 
