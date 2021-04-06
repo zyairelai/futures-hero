@@ -1,5 +1,6 @@
 live_trade      = False    # False to see the output & verify your API key is working
 troubleshooting = False   # Troubleshooting mode for @zyairelai
+position_mode   = "CROSSED" # CROSSED or ISOLATED
 
 # ====================================================
 #                  Prompt User Input

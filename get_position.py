@@ -3,10 +3,13 @@ import config
 import binance_futures
 from termcolor import colored
 
-def get_position_info(): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
+def get_positionSize(response):
+    return abs(float(response.get('positionAmt')))
+
+def get_position_info(response): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
     title = config.pair + " POSITION :   "
 
-    response = binance_futures.position_information()[0]
+    # response = binance_futures.position_information()[0]
     positionAmt = float(response.get('positionAmt'))
     unRealizedProfit = round(float(response.get('unRealizedProfit')), 2)
 
