@@ -27,6 +27,7 @@ def lets_make_some_money():
     klines_2HOUR = binance_futures.KLINE_INTERVAL_2HOUR()
     klines_6HOUR = binance_futures.KLINE_INTERVAL_6HOUR()
     
+    heikin_ashi.output_previous(klines_6HOUR)
     heikin_ashi.output_current(klines_6HOUR)
     heikin_ashi.output_current(klines_1HOUR)
     heikin_ashi.output_current(klines_1min)
@@ -155,8 +156,6 @@ def retrieve_timestamp():
 
 def current_kline_timestamp(kline):
     return kline[-1][0] # This will return <int> type of timestamp
-
-record_timestamp(binance_futures.KLINE_INTERVAL_1HOUR())
 
 # ==========================================================================================================================================================================
 #                                                     Auto Adjust Trade Amount
