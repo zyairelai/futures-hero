@@ -131,12 +131,16 @@ def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
 #                                                             WAR FORMATION
 # ==========================================================================================================================================================================
 def war_formation(klines): # Pencil_Wick_Test
-    volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
-
+    # volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
+    
     if current_candle(klines) == "GREEN":
-        if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines) and volume_confirmation: return True
+        if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines) and \
+            binance_futures.mark_price() > previous_Close(klines):
+            return True
     elif current_candle(klines) == "RED":
-        if current_Low(klines) < previous_Low(klines) and current_Close(klines) < previous_Close(klines) and volume_confirmation: return True
+        if current_Low(klines) < previous_Low(klines) and current_Close(klines) < previous_Close(klines) and \
+            binance_futures.mark_price() < previous_Close(klines):
+            return True
 
 def volume_formation(klines):
     if  binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines) and \
@@ -209,7 +213,7 @@ def strength_of_current(klines):
     elif current == "GREEN_INDECISIVE":
         upper_wick = high - close
         lower_wick = open - low
-        if candlebody > (lower_wick * 2):
+        if candlebody > lower_wick: # (lower_wick * 1.5):
             if previous == "GREEN":
                 strength = "WEAK"
             else: strength = "STRONG"
@@ -218,7 +222,7 @@ def strength_of_current(klines):
     elif current == "RED_INDECISIVE":
         upper_wick = high - open
         lower_wick = close - low
-        if candlebody > (upper_wick * 2):
+        if candlebody > upper_wick: # (upper_wick * 1.5):
             if previous == "RED":
                 strength = "WEAK"
             else: strength = "STRONG"
@@ -229,7 +233,6 @@ def strength_of_current(klines):
     return strength
 
 def strength_of_previous(klines):
-    firstrun = firstrun_candle(klines)
     previous = previous_candle(klines)
 
     open  = previous_Open(klines)
@@ -240,32 +243,22 @@ def strength_of_previous(klines):
 
     if previous == "GREEN": 
         upper_wick = high - close
-        if upper_wick > candlebody:
-            strength = "WEAK"
-        else: strength = "STRONG"
+        if candlebody > upper_wick: strength = "STRONG"
+        else: strength = "WEAK"
 
     elif previous == "RED":
         lower_wick = close - low
-        if lower_wick > candlebody:
-            strength = "WEAK"
-        else: strength = "STRONG"
+        if candlebody > lower_wick: strength = "STRONG"
+        else: strength = "WEAK"
     
     elif previous == "GREEN_INDECISIVE":
-        upper_wick = high - close
         lower_wick = open - low
-        if candlebody > lower_wick:
-            if firstrun == "GREEN":
-                strength = "WEAK"
-            else: strength = "STRONG"
+        if candlebody > lower_wick: strength = "STRONG"
         else: strength = "WEAK"
 
     elif previous == "RED_INDECISIVE":
         upper_wick = high - open
-        lower_wick = close - low
-        if candlebody > upper_wick:
-            if firstrun == "RED":
-                strength = "WEAK"
-            else: strength = "STRONG"
+        if candlebody > upper_wick: strength = "STRONG"
         else: strength = "WEAK"
 
     else: strength = "WEAK"

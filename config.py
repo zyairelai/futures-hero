@@ -1,6 +1,6 @@
 live_trade      = True    # False to see the output & verify your API key is working
 troubleshooting = False   # Troubleshooting mode for @zyairelai
-position_mode   = "CROSSED" # CROSSED or ISOLATED
+position_mode   = "CROSSED" # "CROSSED" (Higher Risk) or "ISOLATED" (Lower Risk)
 
 # ====================================================
 #                  Prompt User Input
@@ -10,8 +10,10 @@ print("1. BTC_USDT")
 print("2. ETH_USDT")
 # print("3. BNB_USDT")
 # Add More Coins Here
-
+# Add More Coins Here
+# Add More Coins Here
 # print("0. Others")
+
 user_input = input("\nEnter a number   :   ")
 # ====================================================
 #                 Asset Configuration

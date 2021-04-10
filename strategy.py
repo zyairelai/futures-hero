@@ -121,13 +121,13 @@ def EXIT_SHORT(profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
 
 def THROTTLE_LONG(profit, klines_1HOUR, klines_2HOUR, klines_6HOUR):
     if get_position.get_unRealizedProfit(profit) == "LOSS":
-        if binance_futures.mark_price() < heikin_ashi.previous_Low(klines_1HOUR) and retrieve_timestamp() != current_kline_timestamp(klines_2HOUR):
-            return True
+        if binance_futures.mark_price() < heikin_ashi.previous_Low(klines_1HOUR) and binance_futures.mark_price() < heikin_ashi.firstrun_Low(klines_1HOUR) and \
+            retrieve_timestamp() != current_kline_timestamp(klines_2HOUR): return True
 
 def THROTTLE_SHORT(profit, klines_1HOUR, klines_2HOUR, klines_6HOUR):
     if get_position.get_unRealizedProfit(profit) == "LOSS":
-        if binance_futures.mark_price() > heikin_ashi.previous_High(klines_1HOUR) and retrieve_timestamp() != current_kline_timestamp(klines_2HOUR):
-            return True
+        if binance_futures.mark_price() > heikin_ashi.previous_High(klines_1HOUR) and binance_futures.mark_price() < heikin_ashi.firstrun_High(klines_1HOUR) and \
+            retrieve_timestamp() != current_kline_timestamp(klines_2HOUR): return True
 
 def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
@@ -186,4 +186,4 @@ def trade_amount(klines_6HOUR, klines_1HOUR):
 
     else: trade_amount = config.quantity
 
-    return config.quantity
+    return trade_amount
