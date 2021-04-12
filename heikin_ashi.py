@@ -147,11 +147,7 @@ def volume_formation(klines):
         binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 1.5): return True
 
 def volume_breakout(klines):
-    if previous_candle(klines) == "GREEN" or previous_candle(klines) == "RED": threshold = 2
-    elif previous_candle(klines) == "GREEN_INDECISIVE" or previous_candle(klines) == "RED_INDECISIVE": threshold = 3
-    else: threshold = 10
-    if binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * threshold) or \
-       (current_candlebody(klines) > (previous_candlebody(klines) * threshold) and binance_futures.current_volume(klines) > binance_futures.previous_volume(klines)): return True
+    if binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2) and current_candlebody(klines) > (previous_candlebody(klines) * 2): return True
 
 def volume_weakening(klines):
     milliseconds = int(klines[-1][0]) - int(klines[-2][0])
