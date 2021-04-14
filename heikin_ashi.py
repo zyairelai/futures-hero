@@ -10,17 +10,17 @@ troubleshooting = config.troubleshooting
 def initial_Open(klines)  : return (float(klines[-4][1]) + float(klines[-4][4])) / 2
 def initial_Close(klines) : return (float(klines[-4][1]) + float(klines[-4][2]) + float(klines[-4][3]) + float(klines[-4][4])) / 4
 
-def firstrun_Open(klines) : return (initial_Open(klines) + initial_Close(klines)) / 2
+def firstrun_Open(klines) : return float((initial_Open(klines) + initial_Close(klines)) / 2)
 def firstrun_Close(klines): return (float(klines[-3][1]) + float(klines[-3][2]) + float(klines[-3][3]) + float(klines[-3][4])) / 4
 def firstrun_High(klines) : return max(float(klines[-3][2]), firstrun_Open(klines), firstrun_Close(klines))
 def firstrun_Low(klines)  : return min(float(klines[-3][3]), firstrun_Open(klines), firstrun_Close(klines))
 
-def previous_Open(klines) : return (firstrun_Open(klines) + firstrun_Close(klines)) / 2
+def previous_Open(klines) : return float((firstrun_Open(klines) + firstrun_Close(klines)) / 2)
 def previous_Close(klines): return (float(klines[-2][1]) + float(klines[-2][2]) + float(klines[-2][3]) + float(klines[-2][4])) / 4
 def previous_High(klines) : return max(float(klines[-2][2]), previous_Open(klines), previous_Close(klines))
 def previous_Low(klines)  : return min(float(klines[-2][3]), previous_Open(klines), previous_Close(klines))
 
-def current_Open(klines)  : return (previous_Open(klines) + previous_Close(klines)) / 2
+def current_Open(klines)  : return float((previous_Open(klines) + previous_Close(klines)) / 2)
 def current_Close(klines) : return (float(klines[-1][1]) + float(klines[-1][2]) + float(klines[-1][3]) + float(klines[-1][4])) / 4
 def current_High(klines)  : return max(float(klines[-1][2]), current_Open(klines), current_Close(klines))
 def current_Low(klines)   : return min(float(klines[-1][3]), current_Open(klines), current_Close(klines))
@@ -130,16 +130,16 @@ def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
 # ==========================================================================================================================================================================
 #                                                             WAR FORMATION
 # ==========================================================================================================================================================================
-def war_formation(klines): # Pencil_Wick_Test
+def war_formation(mark_price, klines): # Pencil_Wick_Test
     # volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
     
     if current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE":
         if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines) and \
-            binance_futures.mark_price() > previous_Close(klines):
+            mark_price > previous_Close(klines):
             return True
     elif current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE":
         if current_Low(klines) < previous_Low(klines) and current_Close(klines) < previous_Close(klines) and \
-            binance_futures.mark_price() < previous_Close(klines):
+            mark_price < previous_Close(klines):
             return True
 
 def volume_formation(klines):
@@ -185,14 +185,17 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     else: return "NOT_BROKEN"
 
 def strength_of_current(klines): # MARK PRICE
-    previous = previous_candle(klines)
-    current = current_candle(klines)
 
+    candlebody = current_candlebody(klines)
+    mark_price = binance_futures.mark_price()
+
+    current = current_candle(klines)
     open  = current_Open(klines)
     close = current_Close(klines)
     high  = current_High(klines)
     low   = current_Low(klines)
-    candlebody = current_candlebody(klines)
+
+    benchmark = (open + close) / 2
 
     if current == "GREEN": 
         upper_wick = high - close
@@ -209,19 +212,17 @@ def strength_of_current(klines): # MARK PRICE
     elif current == "GREEN_INDECISIVE":
         upper_wick = high - close
         lower_wick = open - low
-        if candlebody > lower_wick: # (lower_wick * 1.5):
-            if previous == "GREEN":
-                strength = "WEAK"
-            else: strength = "STRONG"
+        if candlebody > lower_wick:
+            if mark_price > benchmark: strength = "STRONG"
+            else: strength = "WEAK"
         else: strength = "WEAK"
 
     elif current == "RED_INDECISIVE":
         upper_wick = high - open
         lower_wick = close - low
-        if candlebody > upper_wick: # (upper_wick * 1.5):
-            if previous == "RED":
-                strength = "WEAK"
-            else: strength = "STRONG"
+        if candlebody > upper_wick:
+            if mark_price < benchmark: strength = "STRONG"
+            else: strength = "WEAK"
         else: strength = "WEAK"
 
     else: strength = "WEAK"

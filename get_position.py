@@ -6,6 +6,17 @@ from termcolor import colored
 def get_positionSize(response):
     return abs(float(response.get('positionAmt')))
 
+def get_unrealizedProfit(response):
+    return round(float(response.get('unRealizedProfit')), 2)
+
+def get_margin(response):
+    markPrice = float(response.get('markPrice'))
+    leverage = int(response.get('leverage'))
+    positionAmt = get_positionSize(response)
+
+    margin = (positionAmt / leverage) * markPrice
+    return margin
+
 def get_position_info(response): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
     title = config.pair + " POSITION :   "
 
@@ -31,7 +42,7 @@ def get_position_info(response): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
 
     return position
 
-def get_unRealizedProfit(taker_maker_fees):
+def profit_or_loss(taker_maker_fees):
     # One transaction is 0.04 %, buy and sell means 0.04 * 2 = 0.08 %
     # taker_maker_fees = 0.15 # // Always 15% to get a happy ending!
     response         = binance_futures.position_information()[0]
