@@ -133,11 +133,11 @@ def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
 def war_formation(klines): # Pencil_Wick_Test
     # volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
     
-    if current_candle(klines) == "GREEN":
+    if current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE":
         if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines) and \
             binance_futures.mark_price() > previous_Close(klines):
             return True
-    elif current_candle(klines) == "RED":
+    elif current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE":
         if current_Low(klines) < previous_Low(klines) and current_Close(klines) < previous_Close(klines) and \
             binance_futures.mark_price() < previous_Close(klines):
             return True
@@ -169,7 +169,7 @@ def volume_declining(klines):
     if binance_futures.initial_volume(klines) > binance_futures.firstrun_volume(klines) and \
        binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and \
        binance_futures.previous_volume(klines) > binance_futures.current_volume(klines):
-       print(interval + "VOLUME DECLINING")
+       print(interval + " VOLUME DECLINING")
        return True
 
 # ==========================================================================================================================================================================
@@ -184,7 +184,7 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
        ((current == "RED"   or current == "RED_INDECISIVE")   and (previous_Close(klines) < current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
-def strength_of_current(klines):
+def strength_of_current(klines): # MARK PRICE
     previous = previous_candle(klines)
     current = current_candle(klines)
 
@@ -232,20 +232,12 @@ def strength_of_previous(klines):
     previous = previous_candle(klines)
 
     open  = previous_Open(klines)
-    close = previous_Close(klines)
     high  = previous_High(klines)
     low   = previous_Low(klines)
     candlebody = previous_candlebody(klines)
 
-    if previous == "GREEN": 
-        upper_wick = high - close
-        if candlebody > upper_wick: strength = "STRONG"
-        else: strength = "WEAK"
-
-    elif previous == "RED":
-        lower_wick = close - low
-        if candlebody > lower_wick: strength = "STRONG"
-        else: strength = "WEAK"
+    if previous == "GREEN": strength = "STRONG"
+    elif previous == "RED": strength = "STRONG"
     
     elif previous == "GREEN_INDECISIVE":
         lower_wick = open - low
