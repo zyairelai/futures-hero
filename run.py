@@ -15,7 +15,8 @@ try:
             print("Changed to ISOLATED mode")
 
     else: # if config.position_mode == "CROSSED":
-        leverage = int(config.leverage) # AUTO ADJUST LEVERAGE
+        leverage = int(config.leverage / 5) # AUTO ADJUST LEVERAGE
+        # leverage = int(config.leverage) # AUTO ADJUST LEVERAGE
         if binance_futures.position_information()[0].get('marginType') != "cross":
             binance_futures.change_margin_to_CROSSED()
             print("Changed to CROSSED mode")

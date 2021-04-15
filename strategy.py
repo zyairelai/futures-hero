@@ -42,10 +42,7 @@ def lets_make_some_money():
         if EXIT_LONG(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position("LONG")
             print("ACTION           :   💰 CLOSE_LONG 💰")
-        elif MARGIN_MAINTAINENCE(response):
-            if live_trade: binance_futures.throttle("LONG")
-            print("ACTION           :   🔥 THROTTLE_LONG 🔥")
-        elif THROTTLE_LONG(mark_price, profit, klines_1HOUR, klines_2HOUR, klines_6HOUR):
+        elif THROTTLE_LONG(response, mark_price, klines_1HOUR, klines_2HOUR, klines_6HOUR):
             if live_trade:
                 binance_futures.throttle("LONG")
                 record_timestamp(klines_1HOUR)
@@ -56,10 +53,8 @@ def lets_make_some_money():
         if EXIT_SHORT(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position("SHORT")
             print("ACTION           :   💰 CLOSE_SHORT 💰")
-        elif MARGIN_MAINTAINENCE(response):
-            if live_trade: binance_futures.throttle("SHORT")
             print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
-        elif THROTTLE_SHORT(mark_price, profit, klines_1HOUR, klines_2HOUR, klines_6HOUR):
+        elif THROTTLE_SHORT(response, mark_price, klines_1HOUR, klines_2HOUR, klines_6HOUR):
             if live_trade:
                 binance_futures.throttle("SHORT")
                 record_timestamp(klines_1HOUR)
@@ -83,16 +78,12 @@ def lets_make_some_money():
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 def clear_direction(klines):
-    if strength_of_previous(klines) == "STRONG":
-        if previous_candle(klines) == "GREEN" or previous_candle(klines) == "GREEN_INDECISIVE" : previous = "GREEN"
-        elif previous_candle(klines) == "RED" or previous_candle(klines) == "RED_INDECISIVE" : previous = "RED"
-        else: previous = "INDECISIVE"
+    if (previous_candle(klines) == "GREEN" or previous_candle(klines) == "GREEN_INDECISIVE") and strength_of_previous(klines) == "STRONG" : previous = "GREEN"
+    elif (previous_candle(klines) == "RED" or previous_candle(klines) == "RED_INDECISIVE") and strength_of_previous(klines) == "STRONG" : previous = "RED"
     else: previous = "INDECISIVE"
 
-    if strength_of_current(klines) == "STRONG":
-        if current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE" : current = "GREEN"
-        elif current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" : current = "RED"
-        else: current = "INDECISIVE"
+    if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and strength_of_current(klines) == "STRONG" : current = "GREEN"
+    elif (current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" and strength_of_current(klines) == "STRONG") : current = "RED"
     else: current = "INDECISIVE"
 
     if previous == "GREEN" and current == "GREEN": direction = "GREEN"
@@ -128,18 +119,13 @@ def EXIT_SHORT(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, kli
     else: # Cut loss when both the 1HOUR and 6HOUR is going against you
         if not hot_zone(klines_30MIN, klines_6HOUR) and clear_direction(klines_1HOUR) == "GREEN" and clear_direction(klines_6HOUR) == "GREEN": return True
 
-def MARGIN_MAINTAINENCE(response):
-    if get_position.get_unrealizedProfit(response) < (get_position.get_margin(response) * -1): return True
+def THROTTLE_LONG(response, mark_price, klines_1HOUR, klines_2HOUR, klines_6HOUR):
+    if get_position.get_unrealizedProfit(response) < (get_position.get_margin(response) * -1) and clear_direction(klines_6HOUR) != "RED": return True
+        # if mark_price < heikin_ashi.previous_Close(klines_1HOUR) and retrieve_timestamp() != current_kline_timestamp(klines_1HOUR): return True
 
-def THROTTLE_LONG(mark_price, profit, klines_1HOUR, klines_2HOUR, klines_6HOUR):
-    if get_position.profit_or_loss(profit) == "LOSS":
-        if mark_price < heikin_ashi.previous_Low(klines_1HOUR) and mark_price < heikin_ashi.firstrun_Low(klines_1HOUR) and \
-            retrieve_timestamp() != current_kline_timestamp(klines_1HOUR): return True
-
-def THROTTLE_SHORT(mark_price, profit, klines_1HOUR, klines_2HOUR, klines_6HOUR):
-    if get_position.profit_or_loss(profit) == "LOSS":
-        if mark_price > heikin_ashi.previous_High(klines_1HOUR) and mark_price < heikin_ashi.firstrun_High(klines_1HOUR) and \
-            retrieve_timestamp() != current_kline_timestamp(klines_1HOUR): return True
+def THROTTLE_SHORT(response, mark_price, klines_1HOUR, klines_2HOUR, klines_6HOUR):
+    if get_position.get_unrealizedProfit(response) < (get_position.get_margin(response) * -1) and clear_direction(klines_6HOUR) != "GREEN": return True
+        # if mark_price > heikin_ashi.previous_Close(klines_1HOUR) and retrieve_timestamp() != current_kline_timestamp(klines_1HOUR): return True
 
 def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
