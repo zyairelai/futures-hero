@@ -1,6 +1,7 @@
 # DISCORD SERVER WORK IN PROGRESS
 
-# futures-omax
+# HEROES ALWAYS WIN
+# futures-hero
 Leverage Trading Automation on Binance Futures.  
 This is a `Set and Forget` script, means you need to keep it running 24/7 and forget about it.  
 

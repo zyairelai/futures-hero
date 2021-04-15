@@ -1,6 +1,5 @@
 live_trade      = True    # False to see the output & verify your API key is working
 troubleshooting = False   # Troubleshooting mode for @zyairelai
-position_mode   = "CROSSED" # "CROSSED" (Higher Risk) or "ISOLATED" (Lower Risk)
 
 # ====================================================
 #                  Prompt User Input
@@ -28,7 +27,7 @@ elif user_input == '2':
 
 elif user_input == '3':
     coin     = "BNB"
-    quantity = 0.05
+    quantity = 0.03
 
 # You can add more coins here
 

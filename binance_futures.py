@@ -42,7 +42,7 @@ def open_position(position, amount):
         client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=amount, timestamp=get_timestamp())
 
 def throttle(position):
-    positionAmt = float(position_information()[0].get('positionAmt')) # * 2
+    positionAmt = float(position_information()[0].get('positionAmt')) * 2
     if position == "LONG":
         client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
     if position == "SHORT":
@@ -89,3 +89,14 @@ def set_stop_loss(position, percentage): # Percentage of the initial amount that
     elif position == "SHORT":
         stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), round_decimal)
         client.futures_create_order(symbol=config.pair, side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
+
+def record_timestamp(kline):
+    with open((os.path.join(config.pair, "TIMESTAMP.txt")), "w", encoding="utf-8") as timestamp_record:
+        timestamp_record.write(str(current_kline_timestamp(kline)))
+
+def retrieve_timestamp():
+    with open((os.path.join(config.pair, "TIMESTAMP.txt")), "r", encoding="utf-8") as timestamp_record:
+        return int(timestamp_record.read())
+
+def current_kline_timestamp(kline):
+    return kline[-1][0] # This will return <int> type of timestamp
