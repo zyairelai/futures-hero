@@ -18,12 +18,13 @@ def entry_condition():
     print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_6HOUR)))
     print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_6HOUR)))
     print("Current Volume   :   " + str(binance_futures.current_volume(klines_6HOUR)))
-    print("\n1 HOUR VOLUME")
-    print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_1HOUR)))
-    print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_1HOUR)))
-    print("Current Volume   :   " + str(binance_futures.current_volume(klines_1HOUR)))
 
-    if heikin_ashi.pattern_broken(klines_1HOUR) == "BROKEN": print(colored("1 HOUR PATTERN   :   BROKEN", "red"))
+    # print("\n1 HOUR VOLUME")
+    # print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_1HOUR)))
+    # print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_1HOUR)))
+    # print("Current Volume   :   " + str(binance_futures.current_volume(klines_1HOUR)))
+
+    # if heikin_ashi.pattern_broken(klines_1HOUR) == "BROKEN": print(colored("1 HOUR PATTERN   :   BROKEN", "red"))
 
 def check():
     print("What do you want to check? ")
@@ -53,8 +54,10 @@ def check():
 
     elif (input_num == '3'):
         start = time.time()
+        import binance_futures
         from get_position import get_position_info
-        print("\nThe <get_position.py> return value is : " + get_position_info())
+        response = binance_futures.position_information()[0]
+        print("\nThe <get_position.py> return value is : " + get_position_info(response))
         print(f"Time Taken: {time.time() - start} seconds")
 
     else: import get_realizedPNL

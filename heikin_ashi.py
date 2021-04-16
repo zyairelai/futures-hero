@@ -134,13 +134,9 @@ def war_formation(mark_price, klines): # Pencil_Wick_Test
     # volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
     
     if current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE":
-        if current_High(klines) > previous_High(klines) and current_Close(klines) > previous_Close(klines) and \
-            mark_price > previous_Close(klines):
-            return True
+        if current_Close(klines) > previous_Close(klines) and mark_price > previous_Close(klines): return True
     elif current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE":
-        if current_Low(klines) < previous_Low(klines) and current_Close(klines) < previous_Close(klines) and \
-            mark_price < previous_Close(klines):
-            return True
+        if current_Close(klines) < previous_Close(klines) and mark_price < previous_Close(klines): return True
 
 def volume_formation(klines):
     if  binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines) and \

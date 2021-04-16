@@ -14,7 +14,6 @@ live_trade = config.live_trade
 def profit_threshold(response):
     if   get_position.get_positionSize(response) > (config.quantity * 5): return 0.2
     elif get_position.get_positionSize(response) > (config.quantity * 3): return 0.3
-    elif get_position.get_positionSize(response) == config.quantity : return 0.8
     else: return 0.5
 
 # ==========================================================================================================================================================================
@@ -78,8 +77,8 @@ def lets_make_some_money():
 # ==========================================================================================================================================================================
 
 def clear_direction(klines):
-    if (previous_candle(klines) == "GREEN" or previous_candle(klines) == "GREEN_INDECISIVE") and strength_of_previous(klines) == "STRONG" : previous = "GREEN"
-    elif (previous_candle(klines) == "RED" or previous_candle(klines) == "RED_INDECISIVE") and strength_of_previous(klines) == "STRONG" : previous = "RED"
+    if (previous_candle(klines) == "GREEN" or previous_candle(klines) == "GREEN_INDECISIVE"): previous = "GREEN"
+    elif (previous_candle(klines) == "RED" or previous_candle(klines) == "RED_INDECISIVE"): previous = "RED"
     else: previous = "INDECISIVE"
 
     if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and strength_of_current(klines) == "STRONG" : current = "GREEN"
