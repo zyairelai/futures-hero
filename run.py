@@ -5,23 +5,17 @@ try:
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
 
-    if not os.path.exists(config.pair):
-        os.makedirs(config.pair)
+    if not os.path.exists(config.pair): os.makedirs(config.pair)
 
-    if config.live_trade:
-        print(colored("LIVE TRADE IS ENABLED\n", "green"))
+    if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
 
     leverage = int(config.leverage / 2.5) # AUTO ADJUST LEVERAGE
     if int(binance_futures.position_information()[0].get("leverage")) != leverage:
         binance_futures.change_leverage(leverage)
         print(colored("CHANGED LEVERAGE :   " + binance_futures.position_information()[0].get("leverage") + "x\n", "red"))
-    
-    if binance_futures.position_information()[0].get('marginType') != "cross":
-        binance_futures.change_margin_to_CROSSED()
 
-    def added_to_job():
-        strategy.lets_make_some_money()
+    def added_to_job(): strategy.lets_make_some_money()
 
     while True:
         try:

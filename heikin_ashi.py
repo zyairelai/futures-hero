@@ -195,30 +195,22 @@ def strength_of_current(klines): # MARK PRICE
 
     if current == "GREEN": 
         upper_wick = high - close
-        if upper_wick > candlebody:
-            strength = "WEAK"
+        if upper_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
 
     elif current == "RED":
         lower_wick = close - low
-        if lower_wick > candlebody:
-            strength = "WEAK"
+        if lower_wick > candlebody: strength = "WEAK"
         else: strength = "STRONG"
     
     elif current == "GREEN_INDECISIVE":
         lower_wick = open - low
-        if candlebody > lower_wick:
-            if mark_price > benchmark: strength = "STRONG"
-            else: strength = "WEAK"
-        elif candlebody <= lower_wick: strength = "WEAK"
+        if candlebody > lower_wick and mark_price > benchmark: strength = "STRONG"
         else: strength = "WEAK"
 
     elif current == "RED_INDECISIVE":
         upper_wick = high - open
-        if candlebody > upper_wick:
-            if mark_price < benchmark: strength = "STRONG"
-            else: strength = "WEAK"
-        elif candlebody <= upper_wick: strength = "WEAK"
+        if candlebody > upper_wick and mark_price < benchmark: strength = "STRONG"
         else: strength = "WEAK"
 
     else: strength = "WEAK"

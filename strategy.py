@@ -12,8 +12,10 @@ from heikin_ashi import strength_of_current, strength_of_previous
 live_trade = config.live_trade
 
 def profit_threshold(response):
-    if   get_position.get_positionSize(response) > (config.quantity * 5): return 0.2
-    elif get_position.get_positionSize(response) > (config.quantity * 3): return 0.3
+    if get_position.get_positionSize(response) >= (config.quantity * 3):
+        # When ammo maxed out, switch to ISOLATED mode to avoid getting wiped out
+        if response.get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED() 
+        return 0.3
     else: return 0.5
 
 # ==========================================================================================================================================================================
@@ -60,12 +62,13 @@ def lets_make_some_money():
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
+        if response.get('marginType') != "cross": binance_futures.change_margin_to_CROSSED() # When no position, initialize to CROSS mode
         if clear_direction(klines_6HOUR) == "GREEN" and GO_LONG(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
-            if live_trade: binance_futures.open_position("LONG", trade_amount(klines_1HOUR, klines_6HOUR))
+            if live_trade: binance_futures.open_position("LONG", trade_amount(klines_6HOUR))
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
         elif clear_direction(klines_6HOUR) == "RED" and GO_SHORT(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
-            if live_trade: binance_futures.open_position("SHORT", trade_amount(klines_1HOUR, klines_6HOUR))
+            if live_trade: binance_futures.open_position("SHORT", trade_amount(klines_6HOUR))
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -96,8 +99,6 @@ def GO_LONG(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, kl
            (current_candle(klines_5min) == "GREEN" or current_candle(klines_5min) == "GREEN_INDECISIVE") and strength_of_current(klines_5min) == "STRONG" and \
            (current_candle(klines_1min) == "GREEN" and strength_of_current(klines_1min) == "STRONG") and \
             war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_1min): return True
-
-            # Mark Price not at lower wick???
 
 def GO_SHORT(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if not hot_zone(klines_30MIN, klines_6HOUR) and not heikin_ashi.volume_declining(klines_1HOUR):
@@ -131,21 +132,7 @@ def hot_zone(klines_30MIN, klines_6HOUR):
 #                                                     Auto Adjust Trade Amount
 # ==========================================================================================================================================================================
 
-def trade_amount(klines_6HOUR, klines_1HOUR):
-    if heikin_ashi.volume_formation(klines_6HOUR) and heikin_ashi.volume_breakout(klines_6HOUR):
-        if clear_direction(klines_6HOUR) == "GREEN" or clear_direction(klines_6HOUR) == "RED": 
-            trade_amount = config.quantity * 5
-        else: trade_amount = config.quantity * 4
-    
-    elif heikin_ashi.volume_formation(klines_6HOUR) and not heikin_ashi.volume_breakout(klines_6HOUR):
-        if clear_direction(klines_6HOUR) == "GREEN" or clear_direction(klines_6HOUR) == "RED": 
-            trade_amount = config.quantity * 3
-        else: trade_amount = config.quantity * 2
-
-    elif not heikin_ashi.volume_formation(klines_6HOUR) and heikin_ashi.volume_breakout(klines_6HOUR):
-        if clear_direction(klines_6HOUR) == "GREEN" or clear_direction(klines_6HOUR) == "RED": 
-            trade_amount = config.quantity * 2
-        else: trade_amount = config.quantity * 1
-
+def trade_amount(klines_6HOUR):
+    if heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR): trade_amount = config.quantity * 3
     else: trade_amount = config.quantity
     return trade_amount

@@ -41,6 +41,7 @@ else:
 if   coin == "BTC": leverage = 125
 elif coin == "ETH": leverage = 100
 else: leverage = 75
+
 # ====================================================
 #               Output Settings Status
 # ====================================================
