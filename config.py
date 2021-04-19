@@ -38,9 +38,9 @@ else:
 # ====================================================
 #        !! DO NOT CHANGE THESE LEVERAGE !!
 # ====================================================
-if   coin == "BTC": leverage = 125
-elif coin == "ETH": leverage = 100
-else: leverage = 75
+if   coin == "BTC": leverage = 50
+elif coin == "ETH": leverage = 40
+else: leverage = 30
 
 # ====================================================
 #               Output Settings Status

@@ -6,22 +6,19 @@ try:
     from binance.exceptions import BinanceAPIException
 
     if not os.path.exists(config.pair): os.makedirs(config.pair)
-    response = binance_futures.position_information()[0]
-
     if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
 
-    # NEVER EVER USE CROSSED MODE
+    response = binance_futures.position_information()[0]
+
+    # NEVER EVER USE CROSSED MODE ON LEVERAGE TRADING
     if response.get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
-    # if response.get('marginType') != "cross": binance_futures.change_margin_to_CROSSED()
 
     # AUTO ADJUST LEVERAGE
-    leverage = int(config.leverage * 0.4)
-    if int(response.get("leverage")) != leverage:
-        binance_futures.change_leverage(leverage)
-        print(colored("CHANGED LEVERAGE :   " + response.get("leverage") + "x\n", "red"))
+    if int(response.get("leverage")) != config.leverage: binance_futures.change_leverage(config.leverage)
 
-    def added_to_job(): strategy.lets_make_some_money()
+    def added_to_job():
+        strategy.lets_make_some_money()
 
     while True:
         try:
