@@ -12,9 +12,9 @@ from heikin_ashi import strength_of_current, strength_of_previous
 live_trade = config.live_trade
 
 def profit_threshold(response):
-    if get_position.get_positionSize(response) >= (config.quantity * 3):
-        return 0.3
-    else: return 0.5
+    if get_position.get_positionSize(response) == (config.quantity * 3): return 0.3
+    elif get_position.get_positionSize(response) == config.quantity: return 0.4
+    else: return 0.2
 
 # ==========================================================================================================================================================================
 #                   Jackrabbit Martingale_Strategy - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
@@ -43,6 +43,7 @@ def lets_make_some_money():
     if position_info == "LONGING":
         if EXIT_LONG(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position("LONG")
+            # record_timestamp(klines_5min)
             print("ACTION           :   💰 CLOSE_LONG 💰")
         elif THROTTLE_LONG(response, mark_price, klines_1HOUR, klines_2HOUR, klines_6HOUR):
             if live_trade: binance_futures.throttle("LONG")
@@ -53,18 +54,20 @@ def lets_make_some_money():
         if EXIT_SHORT(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position("SHORT")
             print("ACTION           :   💰 CLOSE_SHORT 💰")
+            # record_timestamp(klines_5min)
         elif THROTTLE_SHORT(response, mark_price, klines_1HOUR, klines_2HOUR, klines_6HOUR):
             if live_trade: binance_futures.throttle("SHORT")
             print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
+        # current_kline_timestamp(klines_5min) != retrieve_timestamp() and 
         if clear_direction(klines_6HOUR) == "GREEN" and GO_LONG(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
-            if live_trade: binance_futures.open_position("LONG", trade_amount(klines_6HOUR))
+            if live_trade: binance_futures.open_position("LONG", config.quantity)
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
         elif clear_direction(klines_6HOUR) == "RED" and GO_SHORT(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
-            if live_trade: binance_futures.open_position("SHORT", trade_amount(klines_6HOUR))
+            if live_trade: binance_futures.open_position("SHORT", config.quantity)
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -105,16 +108,20 @@ def GO_SHORT(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, k
 
 def EXIT_LONG(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(profit) == "PROFIT":
+        # if (current_candle(klines_1min) == "RED" or current_candle(klines_1min) == "RED_INDECISIVE") and strength_of_current(klines_1min) == "STRONG": return True
         if heikin_ashi.previous_Close(klines_1min) > heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "GREEN": return True
-    else: # Cut loss when both the 1HOUR and 6HOUR is going against you
+    else:
+        # Cut loss when both the 1HOUR and 6HOUR is going against you
         if not hot_zone(klines_30MIN, klines_6HOUR) and clear_direction(klines_1HOUR) == "RED" and clear_direction(klines_6HOUR) == "RED": return True
 
 # ADD mark_price on exit to avoid retard exit
 
 def EXIT_SHORT(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(profit) == "PROFIT":
+        # if (current_candle(klines_1min) == "GREEN" or current_candle(klines_1min) == "GREEN_INDECISIVE") and strength_of_current(klines_1min) == "STRONG": return True
         if heikin_ashi.previous_Close(klines_1min) < heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "RED": return True
-    else: # Cut loss when both the 1HOUR and 6HOUR is going against you
+    else:
+        # Cut loss when both the 1HOUR and 6HOUR is going against you
         if not hot_zone(klines_30MIN, klines_6HOUR) and clear_direction(klines_1HOUR) == "GREEN" and clear_direction(klines_6HOUR) == "GREEN": return True
 
 # Adding to the losing position to pull back the entry price when the maintenance margin is below 70%
@@ -133,10 +140,16 @@ def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
 # ==========================================================================================================================================================================
-#                                                     Auto Adjust Trade Amount
+#                                                        SYSTEM RECORD
 # ==========================================================================================================================================================================
 
-def trade_amount(klines_6HOUR):
-    if heikin_ashi.volume_formation(klines_6HOUR) or heikin_ashi.volume_breakout(klines_6HOUR): trade_amount = config.quantity * 3
-    else: trade_amount = config.quantity
-    return trade_amount
+def record_timestamp(kline):
+    with open((os.path.join(config.pair, "TIMESTAMP.txt")), "w", encoding="utf-8") as timestamp_record:
+        timestamp_record.write(str(current_kline_timestamp(kline)))
+
+def retrieve_timestamp():
+    with open((os.path.join(config.pair, "TIMESTAMP.txt")), "r", encoding="utf-8") as timestamp_record:
+        return int(timestamp_record.read())
+
+def current_kline_timestamp(kline):
+    return kline[-1][0] # This will return <int> type of timestamp

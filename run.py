@@ -11,8 +11,9 @@ try:
     if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
 
-    # if response.get('marginType') != "cross": binance_futures.change_margin_to_CROSSED()
+    # NEVER EVER USE CROSSED MODE
     if response.get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED()
+    # if response.get('marginType') != "cross": binance_futures.change_margin_to_CROSSED()
 
     # AUTO ADJUST LEVERAGE
     leverage = int(config.leverage * 0.4)
