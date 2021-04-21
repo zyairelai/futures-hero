@@ -42,7 +42,7 @@ def open_position(position, amount):
         client.futures_create_order(symbol=config.pair, side="SELL", type="MARKET", quantity=amount, timestamp=get_timestamp())
 
 def throttle(position):
-    positionAmt = float(position_information()[0].get('positionAmt')) * 2
+    positionAmt = float(position_information()[0].get('positionAmt'))
     if position == "LONG":
         client.futures_create_order(symbol=config.pair, side="BUY", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
     if position == "SHORT":

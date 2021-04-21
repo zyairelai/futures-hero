@@ -11,10 +11,10 @@ from heikin_ashi import strength_of_current, strength_of_previous
 
 live_trade = config.live_trade
 
-def profit_threshold(response):
-    if get_position.get_positionSize(response) == (config.quantity * 3): return 0.3
-    elif get_position.get_positionSize(response) == config.quantity: return 0.4
-    else: return 0.2
+def profit_threshold():
+    return 0.2 # This number times leverage is the realized PnL Percentage
+    # For example, BTC leverage 50x * 0.2 = 10% It will take profit when it reaches 10%
+    # Do note that the fees Binance charges is 0.15 * 50 = 7.5% 
 
 # ==========================================================================================================================================================================
 #                   Jackrabbit Martingale_Strategy - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
@@ -38,7 +38,7 @@ def lets_make_some_money():
     heikin_ashi.output_current(klines_1min)
 
     position_info = get_position.get_position_info(response)
-    profit = profit_threshold(response)
+    profit = profit_threshold()
 
     if position_info == "LONGING":
         if EXIT_LONG(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
@@ -126,7 +126,7 @@ def EXIT_SHORT(profit, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, kli
 
 # Adding to the losing position to pull back the entry price when the maintenance margin is below 70%
 throttle_threshold = -0.7
-max_throttle_size  = 9
+max_throttle_size  = 8
 
 def THROTTLE_LONG(response, mark_price, klines_1HOUR, klines_2HOUR, klines_6HOUR):
     if clear_direction(klines_6HOUR) != "RED" and get_position.get_positionSize(response) < (config.quantity * max_throttle_size) and \
