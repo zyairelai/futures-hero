@@ -17,7 +17,7 @@ def profit_threshold():
     # Do note that the fees Binance charges is 0.15 * 50 = 7.5% 
 
 # ==========================================================================================================================================================================
-#                   Jackrabbit Martingale_Strategy - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
+#     Jackrabbit Martingale_Strategy - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
 # ==========================================================================================================================================================================
 
 def lets_make_some_money():
