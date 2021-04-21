@@ -30,6 +30,7 @@ def lets_make_some_money():
     klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR()
     klines_2HOUR = binance_futures.KLINE_INTERVAL_2HOUR()
     klines_6HOUR = binance_futures.KLINE_INTERVAL_6HOUR()
+    klines_12HOUR = binance_futures.KLINE_INTERVAL_12HOUR()
     
     heikin_ashi.output_previous(klines_6HOUR)
     heikin_ashi.output_current(klines_6HOUR)
@@ -62,11 +63,13 @@ def lets_make_some_money():
 
     else:
         # current_kline_timestamp(klines_5min) != retrieve_timestamp() and 
-        if clear_direction(klines_6HOUR) == "GREEN" and GO_LONG(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
+        if clear_direction(klines_6HOUR) == "GREEN" and direction_confirmation(klines_12HOUR) == "GREEN" and \
+            GO_LONG(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.open_position("LONG", config.quantity)
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-        elif clear_direction(klines_6HOUR) == "RED" and GO_SHORT(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
+        elif clear_direction(klines_6HOUR) == "RED" and direction_confirmation(klines_12HOUR) == "RED" and \
+            GO_SHORT(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.open_position("SHORT", config.quantity)
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
@@ -91,7 +94,12 @@ def clear_direction(klines):
     elif previous == "RED" and current == "RED": direction = "RED"
     else: direction = "INDECISIVE"
     return direction
-    
+
+def direction_confirmation(klines):
+    if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and strength_of_current(klines) == "STRONG" : return "GREEN"
+    elif (current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" and strength_of_current(klines) == "STRONG") : return "RED"
+    else: return "INDECISIVE"
+
 def GO_LONG(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if not hot_zone(klines_30MIN, klines_6HOUR) and not heikin_ashi.volume_declining(klines_1HOUR):
         if (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG" and \
