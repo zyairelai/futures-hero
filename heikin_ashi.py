@@ -130,43 +130,11 @@ def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
 # ==========================================================================================================================================================================
 #                                                             WAR FORMATION
 # ==========================================================================================================================================================================
-def war_formation(mark_price, klines): # Pencil_Wick_Test
-    # volume_confirmation = (binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2))
-    
+def war_formation(mark_price, klines): # Pencil_Wick_Test    
     if current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE":
         if current_Close(klines) > previous_Close(klines) and mark_price > previous_Close(klines): return True
     elif current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE":
         if current_Close(klines) < previous_Close(klines) and mark_price < previous_Close(klines): return True
-
-def volume_formation(klines):
-    if  binance_futures.previous_volume(klines) > binance_futures.firstrun_volume(klines) and \
-        binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) / 1.5): return True
-
-def volume_breakout(klines):
-    if binance_futures.current_volume(klines) > (binance_futures.previous_volume(klines) * 2) and current_candlebody(klines) > (previous_candlebody(klines) * 2): return True
-
-def volume_weakening(klines):
-    milliseconds = int(klines[-1][0]) - int(klines[-2][0])
-    if milliseconds == 1 * 60 * 60000: interval = "1 HOUR"
-    elif milliseconds == 6 * 60 * 60000: interval = "6 HOUR"
-
-    if binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and binance_futures.previous_volume(klines) > binance_futures.current_volume(klines):
-        print("WEAKENING " + interval + " :   TRUE")
-        return True
-    else:
-        print("WEAKENING " + interval + " :   FALSE")
-        return False
-
-def volume_declining(klines):
-    milliseconds = int(klines[-1][0]) - int(klines[-2][0])
-    if milliseconds == 1 * 60 * 60000: interval = "1 HOUR"
-    elif milliseconds == 6 * 60 * 60000: interval = "6 HOUR"
-
-    if binance_futures.initial_volume(klines) > binance_futures.firstrun_volume(klines) and \
-       binance_futures.firstrun_volume(klines) > binance_futures.previous_volume(klines) and \
-       binance_futures.previous_volume(klines) > binance_futures.current_volume(klines):
-       print("🚫 " + interval + " VOLUME DECLINING 🚫")
-       return True
 
 # ==========================================================================================================================================================================
 #                                                          IDENTIFY STRENGTH - Should add size of the candle 

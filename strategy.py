@@ -1,5 +1,5 @@
-import os
-import config
+import os, config, volume
+import candlestick
 import heikin_ashi
 import get_position
 import binance_futures
@@ -101,14 +101,14 @@ def direction_confirmation(klines):
     else: return "INDECISIVE"
 
 def GO_LONG(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
-    if not hot_zone(klines_30MIN, klines_6HOUR) and not heikin_ashi.volume_declining(klines_1HOUR):
+    if not hot_zone(klines_30MIN, klines_6HOUR) and not volume.volume_declining(klines_1HOUR):
         if (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG" and \
            (current_candle(klines_5min) == "GREEN" or current_candle(klines_5min) == "GREEN_INDECISIVE") and strength_of_current(klines_5min) == "STRONG" and \
            (current_candle(klines_1min) == "GREEN" and strength_of_current(klines_1min) == "STRONG") and \
             war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_1min): return True
 
 def GO_SHORT(mark_price, klines_1min, klines_5min, klines_30MIN, klines_1HOUR, klines_6HOUR):
-    if not hot_zone(klines_30MIN, klines_6HOUR) and not heikin_ashi.volume_declining(klines_1HOUR):
+    if not hot_zone(klines_30MIN, klines_6HOUR) and not volume.volume_declining(klines_1HOUR):
         if (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(klines_1HOUR) == "STRONG" and \
            (current_candle(klines_5min) == "RED" or current_candle(klines_5min) == "RED_INDECISIVE") and strength_of_current(klines_5min) == "STRONG" and \
            (current_candle(klines_1min) == "RED" and strength_of_current(klines_1min) == "STRONG")  and \

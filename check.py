@@ -19,13 +19,6 @@ def entry_condition():
     print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_6HOUR)))
     print("Current Volume   :   " + str(binance_futures.current_volume(klines_6HOUR)))
 
-    # print("\n1 HOUR VOLUME")
-    # print("Firstrun Volume  :   " + str(binance_futures.firstrun_volume(klines_1HOUR)))
-    # print("Previous Volume  :   " + str(binance_futures.previous_volume(klines_1HOUR)))
-    # print("Current Volume   :   " + str(binance_futures.current_volume(klines_1HOUR)))
-
-    # if heikin_ashi.pattern_broken(klines_1HOUR) == "BROKEN": print(colored("1 HOUR PATTERN   :   BROKEN", "red"))
-
 def check():
     print("What do you want to check? ")
     print("1. entry condition")

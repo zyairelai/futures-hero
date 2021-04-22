@@ -8,6 +8,7 @@ print("Which pair do you want to trade?")
 print("1. BTC_USDT")
 print("2. ETH_USDT")
 # print("3. BNB_USDT")
+# print("4. BCH_USDT")
 # Add More Coins Here
 # Add More Coins Here
 # Add More Coins Here
@@ -28,6 +29,10 @@ elif user_input == '2':
 elif user_input == '3':
     coin     = "BNB"
     quantity = 0.03
+
+elif user_input == '4':
+    coin     = "BCH"
+    quantity = 0.01
 
 # You can add more coins here
 

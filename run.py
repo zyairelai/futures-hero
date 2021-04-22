@@ -1,6 +1,6 @@
 try:
     import os, time, requests, socket, urllib3
-    import config, binance_futures, strategy
+    import config, binance_futures, strategy, strife
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -18,7 +18,7 @@ try:
     if int(response.get("leverage")) != config.leverage: binance_futures.change_leverage(config.leverage)
 
     def added_to_job():
-        strategy.lets_make_some_money()
+        strife.lets_make_some_money()
 
     while True:
         try:
