@@ -53,7 +53,7 @@ def current_candlebody(klines): return abs(current_Open(klines) - current_Close(
 # ==========================================================================================================================================================================
 #                                                        OUTPUT TO CONSOLE
 # ==========================================================================================================================================================================
-def output_current(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
+def output_current(mark_price, klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     if troubleshooting:
         print("The current_Open  is :   " + str(current_Open(klines)))
         print("The current_Close is :   " + str(current_Close(klines)))
@@ -73,9 +73,9 @@ def output_current(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IND
     elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR   "
 
     current = current_candle(klines)
-    if   current == "GREEN" or current == "GREEN_INDECISIVE": print(colored("RECENT " + interval + ":   " + strength_of_current(klines) + " " + current, "green"))
-    elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + strength_of_current(klines) + " " + current, "red"))
-    else: print(colored("RECENT " + interval + ":   " + strength_of_current(klines) + " " + current, "yellow"))
+    if   current == "GREEN" or current == "GREEN_INDECISIVE": print(colored("RECENT " + interval + ":   " + strength_of_current(mark_price, klines) + " " + current, "green"))
+    elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + strength_of_current(mark_price, klines) + " " + current, "red"))
+    else: print(colored("RECENT " + interval + ":   " + strength_of_current(mark_price, klines) + " " + current, "yellow"))
     return current
 
 def output_previous(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
@@ -132,9 +132,9 @@ def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
 # ==========================================================================================================================================================================
 def war_formation(mark_price, klines): # Pencil_Wick_Test    
     if current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE":
-        if current_Close(klines) > previous_Close(klines) and mark_price > previous_Close(klines): return True
+        if current_Close(klines) > previous_Close(klines) and mark_price > previous_High(klines): return True
     elif current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE":
-        if current_Close(klines) < previous_Close(klines) and mark_price < previous_Close(klines): return True
+        if current_Close(klines) < previous_Close(klines) and mark_price < previous_Low(klines): return True
 
 # ==========================================================================================================================================================================
 #                                                          IDENTIFY STRENGTH - Should add size of the candle 
@@ -148,11 +148,9 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
        ((current == "RED"   or current == "RED_INDECISIVE")   and (previous_Close(klines) < current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
-def strength_of_current(klines): # MARK PRICE
+def strength_of_current(mark_price, klines): # MARK PRICE
 
     candlebody = current_candlebody(klines)
-    mark_price = binance_futures.mark_price()
-
     current = current_candle(klines)
     open  = current_Open(klines)
     close = current_Close(klines)

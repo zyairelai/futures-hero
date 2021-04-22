@@ -1,10 +1,10 @@
-import time
+import config, time
 from termcolor import colored
 
-def entry_condition():
+def entry_condition(i):
     import binance_futures, heikin_ashi
-    klines_6HOUR = binance_futures.KLINE_INTERVAL_6HOUR()
-    klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR()
+    klines_6HOUR = binance_futures.KLINE_INTERVAL_6HOUR(i)
+    klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR(i)
     print("DIRECTION")
     heikin_ashi.output_firstrun(klines_6HOUR)
     heikin_ashi.output_previous(klines_6HOUR)
@@ -29,7 +29,7 @@ def check():
 
     if (input_num == '1'):
         start = time.time()
-        entry_condition()
+        for i in range(len(config.pair[i])): entry_condition(i)
         print(f"Time Taken: {time.time() - start} seconds")
 
     elif (input_num == '2'):
@@ -37,21 +37,22 @@ def check():
         loop = input("Do you want to loop? [Y/n]") or 'n'
         if loop == 'Y':
             while True:
-                heikin_ashi.output_current(binance_futures.KLINE_INTERVAL_1MINUTE())
+                for i in range(len(config.pair[i])): heikin_ashi.output_current(binance_futures.KLINE_INTERVAL_1MINUTE(i))
                 print()
                 time.sleep(3)
         else:
             start = time.time()
-            heikin_ashi.output_current(binance_futures.KLINE_INTERVAL_1MINUTE())
+            for i in range(len(config.pair[i])): heikin_ashi.output_current(binance_futures.KLINE_INTERVAL_1MINUTE(i))
             print(f"Time Taken: {time.time() - start} seconds")
 
     elif (input_num == '3'):
         start = time.time()
         import binance_futures
         from get_position import get_position_info
-        response = binance_futures.position_information()[0]
-        print("\nThe <get_position.py> return value is : " + get_position_info(response))
-        print(f"Time Taken: {time.time() - start} seconds")
+        for i in range(len(config.pair[i])):
+            response = binance_futures.position_information(i)[0]
+            print("\nThe <get_position.py> return value is : " + get_position_info(response))
+            print(f"Time Taken: {time.time() - start} seconds")
 
     else: import get_realizedPNL
     print()

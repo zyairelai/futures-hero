@@ -13,77 +13,85 @@ live_trade = config.live_trade
 def profit_threshold(): return 0.2 
 
 def lets_make_some_money():
-    response = binance_futures.position_information()[0]
-    mark_price   = binance_futures.mark_price()
-    klines_1min  = binance_futures.KLINE_INTERVAL_1MINUTE()
-    klines_5min  = binance_futures.KLINE_INTERVAL_5MINUTE()
-    klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR()
+    for i in range(len(config.pair)):
+        response = binance_futures.position_information(i)[0]
+        mark_price   = binance_futures.mark_price(i)
+        klines_1min  = binance_futures.KLINE_INTERVAL_1MINUTE(i)
+        klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR(i)
 
-    position_info = get_position.get_position_info(response)
-    profit = profit_threshold()
+        position_info = get_position.get_position_info(i, response)
+        profit = profit_threshold()
 
-    if candlestick.strong_candle(klines_1HOUR): strength = "STRONG "
-    else: strength = "WEAK "
-    print("CANDLESTICK COLOR:   " + strength + candlestick.candle_color(klines_1HOUR))
-    heikin_ashi.output_current(klines_1HOUR)
-    heikin_ashi.output_current(klines_5min)
-    heikin_ashi.output_current(klines_1min)
+        if candlestick.strong_candle(klines_1HOUR): strength = "STRONG "
+        else: strength = "WEAK "
+        if candlestick.candle_color(klines_1HOUR) == "GREEN":
+            print(colored("CANDLESTICK COLOR:   " + strength + candlestick.candle_color(klines_1HOUR), "green"))
+        else: print(colored("CANDLESTICK COLOR:   " + strength + candlestick.candle_color(klines_1HOUR), "red"))
 
-    if position_info == "LONGING":
-        if EXIT_LONG(profit, klines_1min, klines_5min, klines_1HOUR):
-            if live_trade: binance_futures.close_position("LONG")
-            print("ACTION           :   💰 CLOSE_LONG 💰")
-        else: print(colored("ACTION           :   HOLDING_LONG", "green"))
+        heikin_ashi.output_current(mark_price, klines_1HOUR)
+        heikin_ashi.output_current(mark_price, klines_1min)
 
-    elif position_info == "SHORTING":
-        if EXIT_SHORT(profit, klines_1min, klines_5min, klines_1HOUR):
-            if live_trade: binance_futures.close_position("SHORT")
-            print("ACTION           :   💰 CLOSE_SHORT 💰")
-        else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
+        if response.get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED(i)
+        if int(response.get("leverage")) != config.leverage[i]: binance_futures.change_leverage(i, config.leverage[i])
 
-    else:
-        if clear_direction(klines_1HOUR) == "GREEN" and GO_LONG(mark_price, klines_1min, klines_5min):
-            if live_trade: binance_futures.open_position("LONG", config.quantity)
-            print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
+        if position_info == "LONGING":
+            if EXIT_LONG(response, mark_price, profit, klines_1min, klines_1HOUR):
+                if live_trade: binance_futures.close_position(i, "LONG")
+                print("ACTION           :   💰 CLOSE_LONG 💰")
+            else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
-        elif clear_direction(klines_1HOUR) == "RED" and GO_SHORT(mark_price, klines_1min, klines_5min):
-            if live_trade: binance_futures.open_position("SHORT", config.quantity)
-            print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
+        elif position_info == "SHORTING":
+            if EXIT_SHORT(response, mark_price, profit, klines_1min, klines_1HOUR):
+                if live_trade: binance_futures.close_position(i, "SHORT")
+                print("ACTION           :   💰 CLOSE_SHORT 💰")
+            else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
-        else: print("ACTION           :   🐺 WAIT 🐺")
+        else:
+            if clear_direction(mark_price, klines_1HOUR) == "GREEN" and GO_LONG(mark_price, klines_1min):
+                if live_trade: binance_futures.open_position(i, "LONG", config.quantity)
+                print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-    print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
+            elif clear_direction(mark_price, klines_1HOUR) == "RED" and GO_SHORT(mark_price, klines_1min):
+                if live_trade: binance_futures.open_position(i, "SHORT", config.quantity)
+                print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
-def clear_direction(klines):
-    if candlestick.candle_color(klines) == "GREEN" and candlestick.strong_candle(klines): candle = "GREEN"
-    elif candlestick.candle_color(klines) == "RED" and candlestick.strong_candle(klines): candle = "RED"
-    else: candle = "INDECISIVE"
+            else: print("ACTION           :   🐺 WAIT 🐺")
 
-    if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and strength_of_current(klines) == "STRONG" : current = "GREEN"
-    elif (current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" and strength_of_current(klines) == "STRONG") : current = "RED"
-    else: current = "INDECISIVE"
+        print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
+
+def strong_candlestick(klines):
+    if candlestick.candle_color(klines) == "GREEN" and candlestick.strong_candle(klines): return "GREEN"
+    elif candlestick.candle_color(klines) == "RED" and candlestick.strong_candle(klines): return "RED"
+    else: return "INDECISIVE"
+
+def strong_heikin_ashi(mark_price, klines):
+    if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and strength_of_current(mark_price, klines) == "STRONG" : return "GREEN"
+    elif (current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" and strength_of_current(mark_price, klines) == "STRONG") : return "RED"
+    else: return "INDECISIVE"
+
+def clear_direction(mark_price, klines):
+    candle = strong_candlestick(klines)
+    current = strong_heikin_ashi(mark_price, klines)
 
     if candle == "GREEN" and current == "GREEN": direction = "GREEN"
     elif candle == "RED" and current == "RED": direction = "RED"
     else: direction = "INDECISIVE"
     return direction
 
-def GO_LONG(mark_price, klines_1min, klines_5min):
-    if war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_1min) and \
-        (current_candle(klines_5min) == "GREEN" or current_candle(klines_5min) == "GREEN_INDECISIVE") and strength_of_current(klines_5min) == "STRONG" and \
-        (current_candle(klines_1min) == "GREEN" and strength_of_current(klines_1min) == "STRONG"): return True
+def GO_LONG(mark_price, klines_1min):
+    if war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "GREEN" and \
+        (current_candle(klines_1min) == "GREEN" and strength_of_current(mark_price, klines_1min) == "STRONG"): return True
 
-def GO_SHORT(mark_price, klines_1min, klines_5min):
-    if war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_1min) and \
-        (current_candle(klines_5min) == "RED" or current_candle(klines_5min) == "RED_INDECISIVE") and strength_of_current(klines_5min) == "STRONG" and \
-        (current_candle(klines_1min) == "RED" and strength_of_current(klines_1min) == "STRONG"): return True
+def GO_SHORT(mark_price, klines_1min):
+    if war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "RED" and \
+        (current_candle(klines_1min) == "RED" and strength_of_current(mark_price, klines_1min) == "STRONG"): return True
 
-def EXIT_LONG(profit, klines_1min, klines_5min, klines_1HOUR):
-    if get_position.profit_or_loss(profit) == "PROFIT":
+def EXIT_LONG(response, mark_price, profit, klines_1min, klines_1HOUR):
+    if get_position.profit_or_loss(response, profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) > heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "GREEN": return True
-    elif clear_direction(klines_1HOUR) == "RED": return True
+    elif strong_candlestick(klines_1HOUR) == "RED" or strong_heikin_ashi(mark_price, klines_1HOUR) == "RED": return True
 
-def EXIT_SHORT(profit, klines_1min, klines_5min, klines_1HOUR):
-    if get_position.profit_or_loss(profit) == "PROFIT":
+def EXIT_SHORT(response, mark_price, profit, klines_1min, klines_1HOUR):
+    if get_position.profit_or_loss(response, profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) < heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "RED": return True
-        elif clear_direction(klines_1HOUR) == "GREEN": return True
+    elif strong_candlestick(klines_1HOUR) == "GREEN" or strong_heikin_ashi(mark_price, klines_1HOUR) == "GREEN": return True

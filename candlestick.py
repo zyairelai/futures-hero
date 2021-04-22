@@ -30,6 +30,6 @@ def candle_color(klines):
 
 def strong_candle(klines):
     if candle_color(klines) == "GREEN":
-        if candle_body(klines) > lower_wick(klines): return True
+        if candle_body(klines) > lower_wick(klines) or lower_wick(klines) > (upper_wick(klines) + candle_body(klines)): return True
     elif candle_color(klines) == "RED":
-        if candle_body(klines) > upper_wick(klines): return True
+        if candle_body(klines) > upper_wick(klines) or upper_wick(klines) > (lower_wick(klines) + candle_body(klines)): return True
