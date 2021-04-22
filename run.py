@@ -1,6 +1,6 @@
 try:
     import os, time, requests, socket, urllib3
-    import config, binance_futures, steady, strife
+    import config, binance_futures, steady
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException

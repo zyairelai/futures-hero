@@ -4,9 +4,6 @@ rm -rf BTCUSDT/
 rm -rf ETHUSDT/
 rm -rf BNBUSDT/
 rm -rf BCHUSDT/
-rm README.md
-rm test.py
-rm check.py
 
 heroku git:remote -a futures-hero
 git push heroku master
