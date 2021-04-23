@@ -34,3 +34,22 @@ def strong_candle(klines):
             if candle_body(klines) > lower_wick(klines) or lower_wick(klines) > (upper_wick(klines) + candle_body(klines)): return True
         elif candle_color(klines) == "RED":
             if candle_body(klines) > upper_wick(klines) or upper_wick(klines) > (lower_wick(klines) + candle_body(klines)): return True
+
+def output_candle(klines):
+    milliseconds = int(klines[-1][0]) - int(klines[-2][0])
+    if milliseconds == 1 * 60000: interval = "1 MINUTE  "
+    elif milliseconds == 3 * 60000: interval = "3 MINUTE  "
+    elif milliseconds == 5 * 60000: interval = "5 MINUTE  "
+    elif milliseconds == 15 * 60000: interval = "15 MINUTE "
+    elif milliseconds == 30 * 60000: interval = "30 MINUTE "
+    elif milliseconds == 1 * 60 * 60000: interval = "1 HOUR    "
+    elif milliseconds == 2 * 60 * 60000: interval = "2 HOUR    "
+    elif milliseconds == 4 * 60 * 60000: interval = "4 HOUR    "
+    elif milliseconds == 6 * 60 * 60000: interval = "6 HOUR    "
+    elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR   "
+
+    candle = candle_color(klines)
+    if   candle == "GREEN" or candle == "GREEN_INDECISIVE": print(colored("CANDLE " + interval + ":   " + candle, "green"))
+    elif candle == "RED"   or candle == "RED_INDECISIVE"  : print(colored("CANDLE " + interval + ":   " + candle, "red"))
+    else: print(colored("CANDLE " + interval + ":   " + candle, "yellow"))
+    return candle

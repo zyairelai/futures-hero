@@ -149,7 +149,6 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     else: return "NOT_BROKEN"
 
 def strength_of_current(mark_price, klines): # MARK PRICE
-
     candlebody = current_candlebody(klines)
     current = current_candle(klines)
     open  = current_Open(klines)
@@ -207,3 +206,6 @@ def strength_of_previous(klines):
     else: strength = "WEAK"
 
     return strength
+
+def HEIKIN_ASHI():
+    return True

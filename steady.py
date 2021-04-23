@@ -32,10 +32,12 @@ def lets_make_some_money():
         position_info = get_position.get_position_info(i, response)
         profit = profit_threshold()
 
+        heikin_ashi.output_current(mark_price, klines_12HOUR)
         heikin_ashi.output_previous(klines_6HOUR)
         heikin_ashi.output_current(mark_price, klines_6HOUR)
         heikin_ashi.output_current(mark_price, klines_1HOUR)
         heikin_ashi.output_current(mark_price, klines_1min)
+        candlestick.output_candle(klines_1min)
         
         if response.get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED(i)
         if int(response.get("leverage")) != config.leverage[i]: binance_futures.change_leverage(i, config.leverage[i])
@@ -95,14 +97,12 @@ def direction_confirmation(mark_price, klines):
 def GO_LONG(mark_price, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if not hot_zone(klines_30MIN, klines_6HOUR): # and not volume.volume_declining(klines_1HOUR):
         if war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "GREEN" and \
-           (candlestick.candle_color(klines_1HOUR) == "GREEN" and candlestick.strong_candle(klines_1HOUR)) and \
            (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(mark_price, klines_1HOUR) == "STRONG" and \
            (current_candle(klines_1min) == "GREEN" and strength_of_current(mark_price, klines_1min) == "STRONG"): return True
 
 def GO_SHORT(mark_price, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if not hot_zone(klines_30MIN, klines_6HOUR): # and not volume.volume_declining(klines_1HOUR):
         if war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "RED" and \
-           (candlestick.candle_color(klines_1HOUR) == "RED" and candlestick.strong_candle(klines_1HOUR)) and \
            (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(mark_price, klines_1HOUR) == "STRONG" and \
            (current_candle(klines_1min) == "RED" and strength_of_current(mark_price, klines_1min) == "STRONG"): return True
 
