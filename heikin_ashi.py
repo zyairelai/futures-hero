@@ -73,9 +73,11 @@ def output_current(mark_price, klines): # return GREEN // GREEN_INDECISIVE // RE
     elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR   "
 
     current = current_candle(klines)
-    if   current == "GREEN" or current == "GREEN_INDECISIVE": print(colored("RECENT " + interval + ":   " + strength_of_current(mark_price, klines) + " " + current, "green"))
-    elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + strength_of_current(mark_price, klines) + " " + current, "red"))
-    else: print(colored("RECENT " + interval + ":   " + strength_of_current(mark_price, klines) + " " + current, "yellow"))
+    if current_is_strong(mark_price, klines): current_strength = "STRONG"
+    else: current_strength = "WEAK"
+    if   current == "GREEN" or current == "GREEN_INDECISIVE": print(colored("RECENT " + interval + ":   " + current_strength + " " + current, "green"))
+    elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + current_strength + " " + current, "red"))
+    else: print(colored("RECENT " + interval + ":   " + current_strength + " " + current, "yellow"))
     return current
 
 def output_previous(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
@@ -98,9 +100,11 @@ def output_previous(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_IN
     elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR "
 
     previous = previous_candle(klines)
-    if   previous == "GREEN" or previous == "GREEN_INDECISIVE": print(colored("PREVIOUS " + interval + ":   " + strength_of_previous(klines) + " " + previous, "green"))
-    elif previous == "RED"   or previous == "RED_INDECISIVE"  : print(colored("PREVIOUS " + interval + ":   " + strength_of_previous(klines) + " " + previous, "red"))
-    else: print(colored("RECENT " + interval + ":   " + strength_of_previous(klines) + " " + previous, "yellow"))
+    if previous_is_strong(klines): previous_strength = "STRONG"
+    else: previous_strength = "WEAK"
+    if   previous == "GREEN" or previous == "GREEN_INDECISIVE": print(colored("PREVIOUS " + interval + ":   " + previous_strength + " " + previous, "green"))
+    elif previous == "RED"   or previous == "RED_INDECISIVE"  : print(colored("PREVIOUS " + interval + ":   " + previous_strength + " " + previous, "red"))
+    else: print(colored("RECENT " + interval + ":   " + previous_strength + " " + previous, "yellow"))
     return previous
 
 def output_firstrun(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
@@ -148,64 +152,40 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
        ((current == "RED"   or current == "RED_INDECISIVE")   and (previous_Close(klines) < current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
-def strength_of_current(mark_price, klines): # MARK PRICE
+def current_is_strong(mark_price, klines): # MARK PRICE
     candlebody = current_candlebody(klines)
     current = current_candle(klines)
-    open  = current_Open(klines)
-    close = current_Close(klines)
-    high  = current_High(klines)
-    low   = current_Low(klines)
+    open = current_Open(klines)
+    high = current_High(klines)
+    low  = current_Low(klines)
 
     benchmark = (high + low) / 2
 
-    if current == "GREEN": 
-        upper_wick = high - close
-        if upper_wick > candlebody: strength = "WEAK"
-        else: strength = "STRONG"
-
-    elif current == "RED":
-        lower_wick = close - low
-        if lower_wick > candlebody: strength = "WEAK"
-        else: strength = "STRONG"
-    
-    elif current == "GREEN_INDECISIVE":
+    if current == "GREEN" or current == "GREEN_INDECISIVE":
         lower_wick = open - low
-        if candlebody > lower_wick and mark_price > benchmark: strength = "STRONG"
-        else: strength = "WEAK"
+        if candlebody > lower_wick and mark_price > benchmark: return True
 
-    elif current == "RED_INDECISIVE":
+    elif current == "RED" or current == "RED_INDECISIVE":
         upper_wick = high - open
-        if candlebody > upper_wick and mark_price < benchmark: strength = "STRONG"
-        else: strength = "WEAK"
+        if candlebody > upper_wick and mark_price < benchmark: return True
 
-    else: strength = "WEAK"
-
-    return strength
-
-def strength_of_previous(klines):
+def previous_is_strong(klines):
     previous = previous_candle(klines)
 
-    open  = previous_Open(klines)
-    high  = previous_High(klines)
-    low   = previous_Low(klines)
+    open = previous_Open(klines)
+    high = previous_High(klines)
+    low  = previous_Low(klines)
     candlebody = previous_candlebody(klines)
 
-    if previous == "GREEN": strength = "STRONG"
-    elif previous == "RED": strength = "STRONG"
-    
-    elif previous == "GREEN_INDECISIVE":
+    if previous == "GREEN" or previous == "GREEN_INDECISIVE":
         lower_wick = open - low
-        if candlebody > lower_wick: strength = "STRONG"
-        else: strength = "WEAK"
+        if candlebody > lower_wick: return True
 
-    elif previous == "RED_INDECISIVE":
+    elif previous == "RED" or previous == "RED_INDECISIVE":
         upper_wick = high - open
-        if candlebody > upper_wick: strength = "STRONG"
-        else: strength = "WEAK"
+        if candlebody > upper_wick: return True
 
-    else: strength = "WEAK"
-
-    return strength
-
-def HEIKIN_ASHI():
-    return True
+def HEIKIN_ASHI(mark_price, klines):
+    if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and current_is_strong(mark_price, klines) : return "GREEN"
+    elif (current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE") and current_is_strong(mark_price, klines) : return "RED"
+    else: return "INDECISIVE"

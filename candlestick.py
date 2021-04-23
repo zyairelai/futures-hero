@@ -53,3 +53,7 @@ def output_candle(klines):
     elif candle == "RED"   or candle == "RED_INDECISIVE"  : print(colored("CANDLE " + interval + ":   " + candle, "red"))
     else: print(colored("CANDLE " + interval + ":   " + candle, "yellow"))
     return candle
+
+def CANDLE(klines):
+    if candle_color(klines) == "GREEN" and strong_candle(klines): return "GREEN"
+    elif candle_color(klines) == "RED" and strong_candle(klines): return "RED"

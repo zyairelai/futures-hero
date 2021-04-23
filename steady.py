@@ -5,17 +5,13 @@ import get_position
 import binance_futures
 from datetime import datetime
 from termcolor import colored
-from heikin_ashi import war_formation
-from heikin_ashi import current_candle, previous_candle
-from heikin_ashi import strength_of_current, strength_of_previous
+from heikin_ashi import war_formation, current_is_strong, current_candle, previous_candle, HEIKIN_ASHI
 
 live_trade = config.live_trade
 throttle = True # Adding to losing position to pull the entry price
 
 def profit_threshold():
-    return 0.2 # This number times leverage is the realized PnL Percentage
-    # For example, BTC leverage 50x * 0.2 = 10% It will take profit when it reaches 10%
-    # Do note that the fees Binance charges is 0.15 * 50 = 7.5% 
+    return 0.2
 
 # ==========================================================================================================================================================================
 #     Jackrabbit Martingale_Strategy - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
@@ -61,12 +57,14 @@ def lets_make_some_money(i):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if clear_direction(mark_price, klines_6HOUR) == "GREEN" and direction_confirmation(mark_price, klines_12HOUR) == "GREEN" and \
+        # if clear_direction(mark_price, klines_6HOUR) == "GREEN" and direction_confirmation(mark_price, klines_12HOUR) == "GREEN" and \
+        if heikin_ashi_candle_hybrid_direction(mark_price, klines_6HOUR) == "GREEN" and \
             GO_LONG(mark_price, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-        elif clear_direction(mark_price, klines_6HOUR) == "RED" and direction_confirmation(mark_price, klines_12HOUR) == "RED" and \
+        # elif clear_direction(mark_price, klines_6HOUR) == "RED" and direction_confirmation(mark_price, klines_12HOUR) == "RED" and \
+        elif heikin_ashi_candle_hybrid_direction(mark_price, klines_6HOUR) == "RED" and \
             GO_SHORT(mark_price, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
@@ -79,36 +77,41 @@ def lets_make_some_money(i):
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 
+def heikin_ashi_candle_hybrid_direction(mark_price, klines):
+    if HEIKIN_ASHI(mark_price, klines) == "GREEN" and candlestick.CANDLE(klines) == "GREEN" : return "GREEN"
+    elif HEIKIN_ASHI(mark_price, klines) == "RED" and candlestick.CANDLE(klines) == "RED" : return "RED"
+    else: return "INDECISIVE"
+
 def clear_direction(mark_price, klines):
-    if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and strength_of_current(mark_price, klines) == "STRONG" : current = "GREEN"
-    elif (current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" and strength_of_current(mark_price, klines) == "STRONG") : current = "RED"
+    if HEIKIN_ASHI(mark_price, klines) == "GREEN" : current = "GREEN"
+    elif HEIKIN_ASHI(mark_price, klines) == "RED" : current = "RED"
     else: current = "INDECISIVE"
 
     if previous_candle(klines) == "GREEN" and current == "GREEN": direction = "GREEN"
     elif previous_candle(klines) == "RED" and current == "RED": direction = "RED"
     else: direction = "INDECISIVE"
+
     return direction
 
 def direction_confirmation(mark_price, klines):
-    if (current_candle(klines) == "GREEN" or current_candle(klines) == "GREEN_INDECISIVE") and strength_of_current(mark_price, klines) == "STRONG" : return "GREEN"
-    elif (current_candle(klines) == "RED" or current_candle(klines) == "RED_INDECISIVE" and strength_of_current(mark_price, klines) == "STRONG") : return "RED"
+    if HEIKIN_ASHI(mark_price, klines) == "GREEN" : return "GREEN"
+    elif HEIKIN_ASHI(mark_price, klines) == "RED" : return "RED"
     else: return "INDECISIVE"
 
 def GO_LONG(mark_price, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if not hot_zone(klines_30MIN, klines_6HOUR): # and not volume.volume_declining(klines_1HOUR):
-        if war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "GREEN" and \
-           (current_candle(klines_1HOUR) == "GREEN" or current_candle(klines_1HOUR) == "GREEN_INDECISIVE") and strength_of_current(mark_price, klines_1HOUR) == "STRONG" and \
-           (current_candle(klines_1min) == "GREEN" and strength_of_current(mark_price, klines_1min) == "STRONG"): return True
+        if (current_candle(klines_1min) == "GREEN" and current_is_strong(mark_price, klines_1min)) and \
+            war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "GREEN" and \
+            HEIKIN_ASHI(mark_price, klines_1HOUR) == "GREEN" : return True
 
 def GO_SHORT(mark_price, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if not hot_zone(klines_30MIN, klines_6HOUR): # and not volume.volume_declining(klines_1HOUR):
-        if war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "RED" and \
-           (current_candle(klines_1HOUR) == "RED" or current_candle(klines_1HOUR) == "RED_INDECISIVE") and strength_of_current(mark_price, klines_1HOUR) == "STRONG" and \
-           (current_candle(klines_1min) == "RED" and strength_of_current(mark_price, klines_1min) == "STRONG"): return True
+        if (current_candle(klines_1min) == "RED" and current_is_strong(mark_price, klines_1min)) and \
+            war_formation(mark_price, klines_1min) and candlestick.candle_color(klines_1min) == "RED" and \
+            HEIKIN_ASHI(mark_price, klines_1HOUR) == "RED" : return True
 
 def EXIT_LONG(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
-        # if (current_candle(klines_1min) == "RED" or current_candle(klines_1min) == "RED_INDECISIVE") and strength_of_current(mark_price, klines_1min) == "STRONG": return True
         if heikin_ashi.previous_Close(klines_1min) > heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "GREEN": return True
     else:
         # Cut loss when both the 1HOUR and 6HOUR is going against you
@@ -116,7 +119,6 @@ def EXIT_LONG(response, mark_price, profit, klines_1min, klines_30MIN, klines_1H
 
 def EXIT_SHORT(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
-        # if (current_candle(klines_1min) == "GREEN" or current_candle(klines_1min) == "GREEN_INDECISIVE") and strength_of_current(mark_price, klines_1min) == "STRONG": return True
         if heikin_ashi.previous_Close(klines_1min) < heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "RED": return True
     else:
         # Cut loss when both the 1HOUR and 6HOUR is going against you
