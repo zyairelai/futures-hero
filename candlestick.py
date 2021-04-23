@@ -25,7 +25,7 @@ def lower_wick(klines):
 def candle_color(klines):
     if close(klines) > open(klines): color = "GREEN"
     elif close(klines) < open(klines): color = "RED"
-    else: "INDECISIVE"
+    else: color = "INDECISIVE"
     return color
 
 def strong_candle(klines):

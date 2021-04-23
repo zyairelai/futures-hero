@@ -8,13 +8,10 @@ try:
     if config.live_trade: print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else: print(colored("LIVE TRADE IS NOT ENABLED\n", "red"))
 
-    def added_to_job():
-        steady.lets_make_some_money()
-
     while True:
         try:
-            added_to_job()
-            time.sleep(3)
+            for i in range(len(config.pair)):
+                steady.lets_make_some_money(i)
 
         except (socket.timeout,
                 BinanceAPIException,
@@ -23,11 +20,11 @@ try:
                 requests.exceptions.ConnectionError,
                 requests.exceptions.ConnectTimeout,
                 requests.exceptions.ReadTimeout,
-                ConnectionResetError, KeyError, OSError) as e: print(e)
+                ConnectionResetError, KeyError, OSError) as e:
 
-            # if not os.path.exists(config.pair[i]): os.makedirs(config.pair[i])
-            # with open((os.path.join(config.pair[i], "ERROR.txt")), "a", encoding="utf-8") as error_message:
-            #     error_message.write("[!] " + config.pair[i] + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
-            #     error_message.write(str(e) + "\n\n")
+            if not os.path.exists(config.pair[i]): os.makedirs(config.pair[i])
+            with open((os.path.join(config.pair[i], "ERROR.txt")), "a", encoding="utf-8") as error_message:
+                error_message.write("[!] " + config.pair[i] + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
+                error_message.write(str(e) + "\n\n")
 
 except KeyboardInterrupt: print("\n\nAborted.\n")
