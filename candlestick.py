@@ -31,9 +31,11 @@ def candle_color(klines):
 def strong_candle(klines):
     if candle_body(klines) > lower_wick(klines) or candle_body(klines) > upper_wick(klines):
         if candle_color(klines) == "GREEN":
-            if candle_body(klines) > lower_wick(klines) or lower_wick(klines) > (upper_wick(klines) + candle_body(klines)): return True
+            if (candle_body(klines) > lower_wick(klines) or lower_wick(klines) > (upper_wick(klines) + candle_body(klines))) and \
+                not upper_wick(klines) > (lower_wick(klines) + candle_body(klines)): return True
         elif candle_color(klines) == "RED":
-            if candle_body(klines) > upper_wick(klines) or upper_wick(klines) > (lower_wick(klines) + candle_body(klines)): return True
+            if (candle_body(klines) > upper_wick(klines) or upper_wick(klines) > (lower_wick(klines) + candle_body(klines))) and \
+                not lower_wick(klines) > (upper_wick(klines) + candle_body(klines)): return True
 
 def output_candle(klines):
     milliseconds = int(klines[-1][0]) - int(klines[-2][0])
