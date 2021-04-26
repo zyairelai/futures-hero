@@ -28,7 +28,7 @@ def candle_color(klines):
     else: color = "INDECISIVE"
     return color
 
-def strong_candle(klines):
+def that_bullish_bearish_candle(klines):
     if candle_body(klines) > lower_wick(klines) or candle_body(klines) > upper_wick(klines):
         if candle_color(klines) == "GREEN":
             if (candle_body(klines) > lower_wick(klines) or lower_wick(klines) > (upper_wick(klines) + candle_body(klines))) and \
@@ -36,6 +36,10 @@ def strong_candle(klines):
         elif candle_color(klines) == "RED":
             if (candle_body(klines) > upper_wick(klines) or upper_wick(klines) > (lower_wick(klines) + candle_body(klines))) and \
                 not lower_wick(klines) > (upper_wick(klines) + candle_body(klines)): return True
+
+def strong_candle(klines):
+    if candle_color(klines) == "GREEN" and candle_body(klines) > lower_wick(klines): return True
+    elif candle_color(klines) == "RED" and candle_body(klines) > upper_wick(klines): return True
 
 def output_candle(klines):
     milliseconds = int(klines[-1][0]) - int(klines[-2][0])
