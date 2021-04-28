@@ -79,35 +79,6 @@ def lets_make_some_money(i):
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 
-def clear_direction(mark_price, klines):
-    if HEIKIN_ASHI(mark_price, klines) == "GREEN" : current = "GREEN"
-    elif HEIKIN_ASHI(mark_price, klines) == "RED" : current = "RED"
-    else: current = "INDECISIVE"
-
-    if previous_candle(klines) == "GREEN" and current == "GREEN": direction = "GREEN"
-    elif previous_candle(klines) == "RED" and current == "RED": direction = "RED"
-    else: direction = "INDECISIVE"
-
-    return direction
-
-def direction_confirmation(mark_price, klines):
-    if HEIKIN_ASHI(mark_price, klines) == "GREEN" : return "GREEN"
-    elif HEIKIN_ASHI(mark_price, klines) == "RED" : return "RED"
-    else: return "INDECISIVE"
-
-def hybrid_direction(mark_price, klines):
-    if HEIKIN_ASHI(mark_price, klines) == "GREEN" and candlestick.CANDLE(klines) == "GREEN" : return "GREEN"
-    elif HEIKIN_ASHI(mark_price, klines) == "RED" and candlestick.CANDLE(klines) == "RED" : return "RED"
-    else: return "INDECISIVE"
-
-def ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR):
-    if clear_direction(mark_price, klines_6HOUR) == "GREEN" and \
-        direction_confirmation(mark_price, klines_12HOUR) == "GREEN" and \
-        hybrid_direction(mark_price, klines_6HOUR) == "GREEN": return "GREEN"
-    elif clear_direction(mark_price, klines_6HOUR) == "RED" and \
-        direction_confirmation(mark_price, klines_12HOUR) == "RED" and \
-        hybrid_direction(mark_price, klines_6HOUR) == "RED": return "RED"
-
 def GO_LONG(mark_price, klines_1min, klines_1HOUR, klines_6HOUR):
         if hybrid_direction(mark_price, klines_1min) == "GREEN" and war_formation(mark_price, klines_1min) and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "GREEN" : return True
@@ -142,3 +113,55 @@ def THROTTLE_SHORT(i, response, mark_price, klines_1HOUR, klines_6HOUR):
 
 def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
+
+# ==========================================================================================================================================================================
+#                                                     TRADE AND NO TRADE ZONE
+# ==========================================================================================================================================================================
+
+def clear_direction(mark_price, klines):
+    if HEIKIN_ASHI(mark_price, klines) == "GREEN" : current = "GREEN"
+    elif HEIKIN_ASHI(mark_price, klines) == "RED" : current = "RED"
+    else: current = "INDECISIVE"
+
+    if previous_candle(klines) == "GREEN" and current == "GREEN": direction = "GREEN"
+    elif previous_candle(klines) == "RED" and current == "RED": direction = "RED"
+    else: direction = "INDECISIVE"
+
+    return direction
+
+def direction_confirmation(mark_price, klines):
+    if HEIKIN_ASHI(mark_price, klines) == "GREEN" : return "GREEN"
+    elif HEIKIN_ASHI(mark_price, klines) == "RED" : return "RED"
+    else: return "INDECISIVE"
+
+def hybrid_direction(mark_price, klines):
+    if HEIKIN_ASHI(mark_price, klines) == "GREEN" and candlestick.CANDLE(klines) == "GREEN" : return "GREEN"
+    elif HEIKIN_ASHI(mark_price, klines) == "RED" and candlestick.CANDLE(klines) == "RED" : return "RED"
+    else: return "INDECISIVE"
+
+def ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR):
+    if clear_direction(mark_price, klines_6HOUR) == "GREEN" and \
+        direction_confirmation(mark_price, klines_12HOUR) == "GREEN" and \
+        hybrid_direction(mark_price, klines_6HOUR) == "GREEN": return "GREEN"
+    elif clear_direction(mark_price, klines_6HOUR) == "RED" and \
+        direction_confirmation(mark_price, klines_12HOUR) == "RED" and \
+        hybrid_direction(mark_price, klines_6HOUR) == "RED": return "RED"
+
+def get_out_zone(klines_30MIN, klines_6HOUR):
+    future_direction = timestamp_of(klines_6HOUR) + return_interval(klines_6HOUR)
+    get_out_zone = future_direction - return_interval(klines_30MIN)
+    if get_timestamp() > get_out_zone: return True
+
+def return_interval(klines):
+    milliseconds = int(klines[-1][0]) - int(klines[-2][0])
+    if milliseconds == 1 * 60000: interval = 1
+    elif milliseconds == 3 * 60000: interval = 3
+    elif milliseconds == 5 * 60000: interval = 5
+    elif milliseconds == 15 * 60000: interval = 15
+    elif milliseconds == 30 * 60000: interval = 30
+    elif milliseconds == 1 * 60 * 60000: interval = 1 * 60
+    elif milliseconds == 2 * 60 * 60000: interval = 2 * 60
+    elif milliseconds == 4 * 60 * 60000: interval = 4 * 60
+    elif milliseconds == 6 * 60 * 60000: interval = 6 * 60
+    elif milliseconds == 12 * 60 * 60000: interval = 12 * 60
+    return (interval * 60000)
