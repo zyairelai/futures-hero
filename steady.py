@@ -5,7 +5,7 @@ import get_position
 import binance_futures
 from datetime import datetime
 from termcolor import colored
-from heikin_ashi import war_formation, current_is_strong, current_candle, previous_candle, HEIKIN_ASHI
+from heikin_ashi import war_formation, current_candle, previous_candle, HEIKIN_ASHI, current_is_strong, previous_is_strong
 
 live_trade = config.live_trade
 throttle = True # Adding to losing position to pull the entry price
@@ -59,14 +59,14 @@ def lets_make_some_money(i):
     else:
         if not hot_zone(klines_30MIN, klines_6HOUR) and \
             ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) == "GREEN" and \
-            GO_LONG(mark_price, klines_1min, klines_1HOUR, klines_6HOUR):
+            GO_LONG(mark_price, klines_1min, klines_1HOUR):
 
             if live_trade: binance_futures.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
         elif not hot_zone(klines_30MIN, klines_6HOUR) and \
             ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) == "RED" and \
-            GO_SHORT(mark_price, klines_1min, klines_1HOUR, klines_6HOUR):
+            GO_SHORT(mark_price, klines_1min, klines_1HOUR):
 
             if live_trade: binance_futures.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
@@ -79,11 +79,11 @@ def lets_make_some_money(i):
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 
-def GO_LONG(mark_price, klines_1min, klines_1HOUR, klines_6HOUR):
+def GO_LONG(mark_price, klines_1min, klines_1HOUR):
         if hybrid_direction(mark_price, klines_1min) == "GREEN" and war_formation(mark_price, klines_1min) and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "GREEN" : return True
 
-def GO_SHORT(mark_price, klines_1min, klines_1HOUR, klines_6HOUR):
+def GO_SHORT(mark_price, klines_1min, klines_1HOUR):
         if hybrid_direction(mark_price, klines_1min) == "RED" and war_formation(mark_price, klines_1min) and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "RED" : return True
 
@@ -123,10 +123,10 @@ def clear_direction(mark_price, klines):
     elif HEIKIN_ASHI(mark_price, klines) == "RED" : current = "RED"
     else: current = "INDECISIVE"
 
-    if previous_candle(klines) == "GREEN" and current == "GREEN": direction = "GREEN"
-    elif previous_candle(klines) == "RED" and current == "RED": direction = "RED"
+    if (previous_candle(klines) == "GREEN" or previous_candle(klines) == "GREEN_INDECISIVE") and previous_is_strong(klines): direction = "GREEN"
+    elif (previous_candle(klines) == "RED" or previous_candle(klines) == "RED_INDECISIVE") and previous_is_strong(klines) : direction = "RED"
     else: direction = "INDECISIVE"
-
+    
     return direction
 
 def direction_confirmation(mark_price, klines):
