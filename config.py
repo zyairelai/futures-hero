@@ -4,8 +4,8 @@ troubleshooting = False   # Troubleshooting mode for @zyairelai
 # ====================================================
 #                  User Settings
 # ====================================================
-coin     = ["BTC"]
-quantity = [0.001]
+coin     = ["BTC", "ETH"]
+quantity = [0.001, 0.01]
 leverage, pair = [], []
 
 # ====================================================
