@@ -91,24 +91,26 @@ def EXIT_LONG(response, mark_price, profit, klines_1min, klines_30MIN, klines_1H
     if get_position.profit_or_loss(response, profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) > heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "GREEN": return True
     else: # Cut loss when both the 1HOUR and 6HOUR is going against you
-        if not hot_zone(klines_30MIN, klines_6HOUR) and clear_direction(mark_price, klines_6HOUR) == "RED": return True
+        if not hot_zone(klines_1HOUR, klines_6HOUR) and (candlestick.CANDLE(klines_6HOUR) == "RED" and HEIKIN_ASHI(mark_price, klines_6HOUR) != "GREEN"): return True
 
 def EXIT_SHORT(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) < heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "RED": return True
     else: # Cut loss when both the 1HOUR and 6HOUR is going against you
-        if not hot_zone(klines_30MIN, klines_6HOUR) and clear_direction(mark_price, klines_6HOUR) == "GREEN": return True
+        if not hot_zone(klines_1HOUR, klines_6HOUR) and (candlestick.CANDLE(klines_6HOUR) == "GREEN" and HEIKIN_ASHI(mark_price, klines_6HOUR) != "RED"): return True
 
 # Adding to the losing position to pull back the entry price when the maintenance margin is below 70%
 throttle_threshold = -0.7
 max_throttle_size  = 8
 
 def THROTTLE_LONG(i, response, mark_price, klines_1HOUR, klines_6HOUR):
-    if HEIKIN_ASHI(mark_price, klines_6HOUR) != "RED" and get_position.get_positionSize(response) < (config.quantity[i] * max_throttle_size) and \
+    if (HEIKIN_ASHI(mark_price, klines_6HOUR) != "RED" and candlestick.CANDLE(klines_6HOUR) != "RED") and \
+        get_position.get_positionSize(response) < (config.quantity[i] * max_throttle_size) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
 def THROTTLE_SHORT(i, response, mark_price, klines_1HOUR, klines_6HOUR):
-    if HEIKIN_ASHI(mark_price, klines_6HOUR) != "GREEN" and get_position.get_positionSize(response) < (config.quantity[i] * max_throttle_size) and \
+    if (HEIKIN_ASHI(mark_price, klines_6HOUR) != "GREEN" and candlestick.CANDLE(klines_6HOUR) != "GREEN") and \
+        get_position.get_positionSize(response) < (config.quantity[i] * max_throttle_size) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
 def hot_zone(klines_30MIN, klines_6HOUR):
