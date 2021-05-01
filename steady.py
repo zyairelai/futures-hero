@@ -90,14 +90,10 @@ def GO_SHORT(mark_price, klines_1min, klines_1HOUR):
 def EXIT_LONG(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) > heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "GREEN": return True
-    else: # Cut loss when both the 1HOUR and 6HOUR is going against you
-        if not hot_zone(klines_1HOUR, klines_6HOUR) and (candlestick.CANDLE(klines_6HOUR) == "RED" and HEIKIN_ASHI(mark_price, klines_6HOUR) != "GREEN"): return True
 
 def EXIT_SHORT(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
         if heikin_ashi.previous_Close(klines_1min) < heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "RED": return True
-    else: # Cut loss when both the 1HOUR and 6HOUR is going against you
-        if not hot_zone(klines_1HOUR, klines_6HOUR) and (candlestick.CANDLE(klines_6HOUR) == "GREEN" and HEIKIN_ASHI(mark_price, klines_6HOUR) != "RED"): return True
 
 # Adding to the position to pull back the entry price when the maintenance margin is below 70%
 throttle_threshold = -0.7
