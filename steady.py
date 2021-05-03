@@ -98,13 +98,13 @@ def EXIT_SHORT(response, mark_price, profit, klines_1min, klines_30MIN, klines_1
 # Adding to the position to pull back the entry price when the maintenance margin is below 70%
 throttle_threshold = -0.7
 
-def THROTTLE_LONG(i, response, mark_price, klines_1HOUR, klines_6HOUR):
-    if (HEIKIN_ASHI(mark_price, klines_6HOUR) != "RED" and candlestick.CANDLE(klines_6HOUR) != "RED") and \
+def THROTTLE_LONG(i, response, mark_price, klines_1HOUR, klines_6HOUR, klines_12HOUR):
+    if (ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) != "RED") and \
         get_position.get_positionSize(response) < (config.quantity[i] * 8) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
-def THROTTLE_SHORT(i, response, mark_price, klines_1HOUR, klines_6HOUR):
-    if (HEIKIN_ASHI(mark_price, klines_6HOUR) != "GREEN" and candlestick.CANDLE(klines_6HOUR) != "GREEN") and \
+def THROTTLE_SHORT(i, response, mark_price, klines_1HOUR, klines_6HOUR, klines_12HOUR):
+    if (ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) != "GREEN") and \
         get_position.get_positionSize(response) < (config.quantity[i] * 8) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
