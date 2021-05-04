@@ -11,7 +11,7 @@ try:
     while True:
         try:
             for i in range(len(config.pair)):
-                simple.lets_make_some_money(i)
+                safety_first.lets_make_some_money(i)
 
         except (socket.timeout,
                 BinanceAPIException,
