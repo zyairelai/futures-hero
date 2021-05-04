@@ -11,7 +11,7 @@ live_trade = config.live_trade
 throttle = True # Adding to losing position to pull back the entry price
 
 def profit_threshold():
-    return 0.3
+    return 0.5
 
 # ==========================================================================================================================================================================
 #     Jackrabbit Martingale_Strategy - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
