@@ -42,7 +42,7 @@ def lets_make_some_money(i):
         if EXIT_LONG(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position(i, "LONG")
             print("ACTION           :   💰 CLOSE_LONG 💰")
-        elif THROTTLE_LONG(i, response, mark_price, klines_1HOUR, klines_6HOUR):
+        elif THROTTLE_LONG(i, response, mark_price, klines_6HOUR):
             if live_trade and throttle: binance_futures.throttle(i, "LONG")
             print("ACTION           :   🔥 THROTTLE_LONG 🔥")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
@@ -51,7 +51,7 @@ def lets_make_some_money(i):
         if EXIT_SHORT(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
             if live_trade: binance_futures.close_position(i, "SHORT")
             print("ACTION           :   💰 CLOSE_SHORT 💰")
-        elif THROTTLE_SHORT(i, response, mark_price, klines_1HOUR, klines_6HOUR):
+        elif THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
             if live_trade and throttle: binance_futures.throttle(i, "SHORT")
             print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
@@ -80,11 +80,11 @@ def lets_make_some_money(i):
 # ==========================================================================================================================================================================
 
 def GO_LONG(mark_price, klines_1min, klines_1HOUR):
-        if hybrid_direction(mark_price, klines_1min) == "GREEN" and war_formation(mark_price, klines_1min) and \
+        if hybrid_candle(mark_price, klines_1min) == "GREEN" and war_formation(mark_price, klines_1min) and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "GREEN" : return True
 
 def GO_SHORT(mark_price, klines_1min, klines_1HOUR):
-        if hybrid_direction(mark_price, klines_1min) == "RED" and war_formation(mark_price, klines_1min) and \
+        if hybrid_candle(mark_price, klines_1min) == "RED" and war_formation(mark_price, klines_1min) and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "RED" : return True
 
 def EXIT_LONG(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
@@ -98,13 +98,13 @@ def EXIT_SHORT(response, mark_price, profit, klines_1min, klines_30MIN, klines_1
 # Adding to the position to pull back the entry price when the maintenance margin is below 70%
 throttle_threshold = -0.7
 
-def THROTTLE_LONG(i, response, mark_price, klines_1HOUR, klines_6HOUR, klines_12HOUR):
-    if (ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) != "RED") and \
+def THROTTLE_LONG(i, response, mark_price, klines_6HOUR):
+    if HEIKIN_ASHI(mark_price, klines_6HOUR) != "RED" and \
         get_position.get_positionSize(response) < (config.quantity[i] * 8) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
-def THROTTLE_SHORT(i, response, mark_price, klines_1HOUR, klines_6HOUR, klines_12HOUR):
-    if (ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) != "GREEN") and \
+def THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
+    if HEIKIN_ASHI(mark_price, klines_6HOUR) != "GREEN" and \
         get_position.get_positionSize(response) < (config.quantity[i] * 8) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
@@ -135,7 +135,7 @@ def direction_confirmation(mark_price, klines):
     elif HEIKIN_ASHI(mark_price, klines) == "RED" : return "RED"
     else: return "INDECISIVE"
 
-def hybrid_direction(mark_price, klines):
+def hybrid_candle(mark_price, klines):
     if HEIKIN_ASHI(mark_price, klines) == "GREEN" and candlestick.CANDLE(klines) == "GREEN" : return "GREEN"
     elif HEIKIN_ASHI(mark_price, klines) == "RED" and candlestick.CANDLE(klines) == "RED" : return "RED"
     else: return "INDECISIVE"
@@ -143,10 +143,10 @@ def hybrid_direction(mark_price, klines):
 def ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR):
     if clear_direction(mark_price, klines_6HOUR) == "GREEN" and \
         direction_confirmation(mark_price, klines_12HOUR) == "GREEN" and \
-        hybrid_direction(mark_price, klines_6HOUR) == "GREEN": return "GREEN"
+        hybrid_candle(mark_price, klines_6HOUR) == "GREEN": return "GREEN"
     elif clear_direction(mark_price, klines_6HOUR) == "RED" and \
         direction_confirmation(mark_price, klines_12HOUR) == "RED" and \
-        hybrid_direction(mark_price, klines_6HOUR) == "RED": return "RED"
+        hybrid_candle(mark_price, klines_6HOUR) == "RED": return "RED"
 
 def get_out_zone(klines_30MIN, klines_6HOUR):
     future_direction = timestamp_of(klines_6HOUR) + return_interval(klines_6HOUR)

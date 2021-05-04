@@ -88,17 +88,17 @@ def clear_direction(mark_price, klines):
 
     return direction
 
-def hybrid_direction(mark_price, klines):
+def hybrid_candle(mark_price, klines):
     if HEIKIN_ASHI(mark_price, klines) == "GREEN" and candlestick.CANDLE(klines) == "GREEN" : return "GREEN"
     elif HEIKIN_ASHI(mark_price, klines) == "RED" and candlestick.CANDLE(klines) == "RED" : return "RED"
     else: return "INDECISIVE"
 
 def GO_LONG(mark_price, klines_1min, klines_1HOUR):
-        if hybrid_direction(mark_price, klines_1min) == "GREEN" and HEIKIN_ASHI(mark_price, klines_1HOUR) != "RED" and \
+        if hybrid_candle(mark_price, klines_1min) == "GREEN" and HEIKIN_ASHI(mark_price, klines_1HOUR) != "RED" and \
             war_formation(mark_price, klines_1min) : return True
 
 def GO_SHORT(mark_price, klines_1min, klines_1HOUR):
-        if hybrid_direction(mark_price, klines_1min) == "RED" and HEIKIN_ASHI(mark_price, klines_1HOUR) != "GREEN" and \
+        if hybrid_candle(mark_price, klines_1min) == "RED" and HEIKIN_ASHI(mark_price, klines_1HOUR) != "GREEN" and \
             war_formation(mark_price, klines_1min): return True
 
 def EXIT_LONG(response, mark_price, profit, klines_1min):

@@ -1,6 +1,6 @@
 try:
     import os, time, requests, socket, urllib3
-    import config, binance_futures, steady
+    import config, binance_futures, simple, safety_first
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -11,7 +11,7 @@ try:
     while True:
         try:
             for i in range(len(config.pair)):
-                steady.lets_make_some_money(i)
+                simple.lets_make_some_money(i)
 
         except (socket.timeout,
                 BinanceAPIException,
