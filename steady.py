@@ -89,11 +89,11 @@ def GO_SHORT(mark_price, klines_1min, klines_1HOUR):
 
 def EXIT_LONG(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
-        if heikin_ashi.previous_Close(klines_1min) > heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "GREEN": return True
+        if heikin_ashi.previous_Close(klines_1min) > mark_price: return True
 
 def EXIT_SHORT(response, mark_price, profit, klines_1min, klines_30MIN, klines_1HOUR, klines_6HOUR):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
-        if heikin_ashi.previous_Close(klines_1min) < heikin_ashi.current_Close(klines_1min) or current_candle(klines_1min) != "RED": return True
+        if heikin_ashi.previous_Close(klines_1min) < mark_price: return True
 
 # Adding to the position to pull back the entry price when the maintenance margin is below 70%
 throttle_threshold = -0.7
@@ -120,10 +120,14 @@ def clear_direction(mark_price, klines):
     elif HEIKIN_ASHI(mark_price, klines) == "RED" : current = "RED"
     else: current = "INDECISIVE"
 
-    if (previous_candle(klines) == "GREEN" or previous_candle(klines) == "GREEN_INDECISIVE") and previous_is_strong(klines): direction = "GREEN"
-    elif (previous_candle(klines) == "RED" or previous_candle(klines) == "RED_INDECISIVE") and previous_is_strong(klines) : direction = "RED"
+    if (previous_candle(klines) == "GREEN" or previous_candle(klines) == "GREEN_INDECISIVE") and previous_is_strong(klines): previous = "GREEN"
+    elif (previous_candle(klines) == "RED" or previous_candle(klines) == "RED_INDECISIVE") and previous_is_strong(klines) : previous = "RED"
+    else: previous = "INDECISIVE"
+
+    if previous == "GREEN" and current == "GREEN": direction = "GREEN"
+    elif previous == "RED" and current == "RED": direction = "RED"
     else: direction = "INDECISIVE"
-    
+
     return direction
 
 def direction_confirmation(mark_price, klines):
