@@ -9,6 +9,7 @@ api_secret  = os.environ.get('API_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_timestamp()              : return int(time.time() * 1000)
+def timestamp_of(klines)         : return int(klines[-1][0])
 def mark_price(i)                : return float(client.futures_mark_price(symbol=config.pair[i], timestamp=get_timestamp()).get('markPrice'))
 def account_trades(i, timestamp) : return client.futures_account_trades(symbol=config.pair[i], timestamp=get_timestamp(), startTime=timestamp)
 def change_leverage(i, leverage) : return client.futures_change_leverage(symbol=config.pair[i], leverage=leverage, timestamp=get_timestamp())

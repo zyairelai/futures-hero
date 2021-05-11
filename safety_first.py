@@ -147,9 +147,9 @@ def ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR):
         hybrid_candle(mark_price, klines_6HOUR) == "RED": return "RED"
 
 def get_out_zone(klines_30MIN, klines_6HOUR):
-    future_direction = timestamp_of(klines_6HOUR) + return_interval(klines_6HOUR)
+    future_direction = binance_futures.timestamp_of(klines_6HOUR) + return_interval(klines_6HOUR)
     get_out_zone = future_direction - return_interval(klines_30MIN)
-    if get_timestamp() > get_out_zone: return True
+    if binance_futures.get_timestamp() > get_out_zone: return True
 
 def return_interval(klines):
     milliseconds = int(klines[-1][0]) - int(klines[-2][0])
