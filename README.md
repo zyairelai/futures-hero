@@ -1,4 +1,5 @@
-# DISCORD SERVER WORK IN PROGRESS
+# DISCORD MY DISCORD HERE
+https://discord.gg/B5sUpfSw4m
 
 # futures-hero
 Leverage Trading Automation on Binance Futures.  
@@ -6,8 +7,6 @@ This is a `Set and Forget` script, means you need to keep it running 24/7 and fo
 
 # DISCLAIMER
 This automation software is purely handcoded by [@zyairelai](https://github.com/zyairelai) from scratch with my personal manual trading strategy.  
-Kindly provide feedback through my email `zyairelai@gmail.com` if you are using my repository.  
-If you had modified or improved my code feel free to share with me and we may have futher discussion on this project!  
 Anybody may copy, redistribute, modify of the software. However, limited to NON-COMMERCIAL USED only.  
 
 LEVERAGE TRADING IS A HIGH RISK GAME.  
