@@ -51,9 +51,10 @@ def lets_make_some_money(i):
         if EXIT_SHORT(response, mark_price, profit, klines_1min):
             if live_trade: binance_futures.close_position(i, "SHORT")
             print("ACTION           :   💰 CLOSE_SHORT 💰")
-        elif THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
-            if live_trade and throttle: binance_futures.throttle(i, "SHORT")
-            print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
+        # We do not throttle the short
+        # elif THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
+        #     if live_trade and throttle: binance_futures.throttle(i, "SHORT")
+        #     print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
