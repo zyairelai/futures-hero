@@ -1,5 +1,5 @@
 # DISCORD MY DISCORD HERE
-https://discord.gg/B5sUpfSw4m
+https://discord.gg/r4TnhcdqmT
 
 # futures-hero
 Leverage Trading Automation on Binance Futures.  
