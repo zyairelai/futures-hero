@@ -1,6 +1,4 @@
-import time
-import config
-import binance_futures
+import config, binance_futures
 from termcolor import colored
 from datetime import datetime
 

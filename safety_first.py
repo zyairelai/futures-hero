@@ -1,11 +1,11 @@
-import os, config, volume
+import config
 import candlestick
 import heikin_ashi
 import get_position
 import binance_futures
 from datetime import datetime
 from termcolor import colored
-from heikin_ashi import war_formation, current_candle, previous_candle, HEIKIN_ASHI, current_is_strong, previous_is_strong
+from heikin_ashi import war_formation, previous_candle, HEIKIN_ASHI, previous_is_strong
 
 live_trade = config.live_trade
 throttle = True # Adding to losing position to pull the entry price
@@ -14,7 +14,7 @@ def profit_threshold():
     return 0.5
 
 # ==========================================================================================================================================================================
-#     Jackrabbit Martingale_Strategy - IN AND OUT QUICK, SOMETIMES MIGHT GET YOU STUCK IN A TRADE AND LIQUIDATED WHEN DIRECTION CHANGE
+#     Check on 1HR, 6HR, 12HR, entry on 1 minute, confirmation with candlestick
 # ==========================================================================================================================================================================
 
 def lets_make_some_money(i):

@@ -1,6 +1,4 @@
-import config, os
-import binance_futures
-from datetime import datetime
+import config
 from termcolor import colored
 troubleshooting = config.troubleshooting
 
@@ -152,6 +150,9 @@ def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
        ((current == "RED"   or current == "RED_INDECISIVE")   and (previous_Close(klines) < current_Close(klines))): return "BROKEN"
     else: return "NOT_BROKEN"
 
+def benchmark(high, low):
+    return (high + low) / 2
+
 def current_is_strong(mark_price, klines): # MARK PRICE
     candlebody = current_candlebody(klines)
     current = current_candle(klines)
@@ -159,15 +160,13 @@ def current_is_strong(mark_price, klines): # MARK PRICE
     high = current_High(klines)
     low  = current_Low(klines)
 
-    benchmark = (high + low) / 2
-
     if current == "GREEN" or current == "GREEN_INDECISIVE":
         lower_wick = open - low
-        if candlebody > lower_wick and mark_price > benchmark: return True
+        if candlebody > lower_wick and mark_price > benchmark(high, low): return True
 
     elif current == "RED" or current == "RED_INDECISIVE":
         upper_wick = high - open
-        if candlebody > upper_wick and mark_price < benchmark: return True
+        if candlebody > upper_wick and mark_price < benchmark(high, low): return True
 
 def previous_is_strong(klines):
     previous = previous_candle(klines)

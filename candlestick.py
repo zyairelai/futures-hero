@@ -1,6 +1,4 @@
-import config, os
-import binance_futures
-from datetime import datetime
+import config
 from termcolor import colored
 troubleshooting = config.troubleshooting
 

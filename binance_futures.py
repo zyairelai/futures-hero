@@ -1,6 +1,4 @@
-import os
-import time
-import config
+import os, time, config
 from binance.client import Client
 
 # Get environment variables

@@ -1,7 +1,4 @@
-import config, os
-import binance_futures
-import heikin_ashi
-from datetime import datetime
+import binance_futures, heikin_ashi
 from termcolor import colored
 
 def volume_formation(klines):

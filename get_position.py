@@ -1,6 +1,4 @@
-import time
 import config
-import binance_futures
 from termcolor import colored
 
 def get_positionSize(response):
