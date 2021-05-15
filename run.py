@@ -1,6 +1,6 @@
 try:
     import os, requests, socket, urllib3
-    import config, simple, standard, safety_first
+    import config, safety_first
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
