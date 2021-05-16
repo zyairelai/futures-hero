@@ -18,12 +18,12 @@ def lets_make_some_money(i):
     klines_15min = binance_futures.KLINE_INTERVAL_15MINUTE(i)
     klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR(i)
     position_info = get_position.get_position_info(i, response)
-    profit = 0.5
+    profit = 0.2
 
     heikin_ashi.output_current(mark_price, klines_1HOUR)
     heikin_ashi.output_current(mark_price, klines_15min)
     
-    using_lower_leverage = config.leverage[i] - 10
+    using_lower_leverage = config.leverage[i]
     if response.get('marginType') != "isolated": binance_futures.change_margin_to_ISOLATED(i)
     if int(response.get("leverage")) != using_lower_leverage: binance_futures.change_leverage(i, using_lower_leverage)
 

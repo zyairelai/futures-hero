@@ -11,7 +11,7 @@ live_trade = config.live_trade
 throttle = True # Adding to losing position to pull the entry price
 
 def profit_threshold():
-    return 0.5
+    return 0.2
 
 # ==========================================================================================================================================================================
 #     Check on 1HR, 6HR, 12HR, entry on 1 minute, confirmation with candlestick
@@ -51,10 +51,9 @@ def lets_make_some_money(i):
         if EXIT_SHORT(response, mark_price, profit, klines_1min):
             if live_trade: binance_futures.close_position(i, "SHORT")
             print("ACTION           :   💰 CLOSE_SHORT 💰")
-        # We do not throttle the short
-        # elif THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
-        #     if live_trade and throttle: binance_futures.throttle(i, "SHORT")
-        #     print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
+        elif THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
+            if live_trade and throttle: binance_futures.throttle(i, "SHORT")
+            print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
