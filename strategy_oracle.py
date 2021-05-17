@@ -21,6 +21,7 @@ def lets_make_some_money(i):
     response = binance_futures.position_information(i)[0]
     mark_price   = binance_futures.mark_price(i)
     klines_1min  = binance_futures.KLINE_INTERVAL_1MINUTE(i)
+    klines_30MIN = binance_futures.KLINE_INTERVAL_30MINUTE(i)
     klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR(i)
     klines_6HOUR = binance_futures.KLINE_INTERVAL_6HOUR(i)
     position_info = get_position.get_position_info(i, response)
@@ -57,11 +58,11 @@ def lets_make_some_money(i):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if clear_direction(mark_price, klines_6HOUR) == "GREEN" and GO_LONG(mark_price, klines_1min, klines_1HOUR):
+        if not hot_zone(klines_30MIN, klines_6HOUR) and clear_direction(mark_price, klines_6HOUR) == "GREEN" and GO_LONG(mark_price, klines_1min, klines_1HOUR):
             if live_trade: binance_futures.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-        elif clear_direction(mark_price, klines_6HOUR) == "RED" and GO_SHORT(mark_price, klines_1min, klines_1HOUR):
+        elif not hot_zone(klines_30MIN, klines_6HOUR) and clear_direction(mark_price, klines_6HOUR) == "RED" and GO_SHORT(mark_price, klines_1min, klines_1HOUR):
             if live_trade: binance_futures.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
@@ -72,6 +73,9 @@ def lets_make_some_money(i):
 # ==========================================================================================================================================================================
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
+
+def hot_zone(klines_30MIN, klines_6HOUR):
+    if klines_6HOUR[-1][0] == klines_30MIN[-1][0] and heikin_ashi.current_candlebody(klines_6HOUR) > 2 : return True
 
 def clear_direction(mark_price, klines):
     if HEIKIN_ASHI(mark_price, klines) == "GREEN" : current = "GREEN"

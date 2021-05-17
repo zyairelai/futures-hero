@@ -107,7 +107,7 @@ def THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
 def hot_zone(klines_30MIN, klines_6HOUR):
-    if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
+    if klines_6HOUR[-1][0] == klines_30MIN[-1][0] and heikin_ashi.current_candlebody(klines_6HOUR) > 2 : return True
 
 # ==========================================================================================================================================================================
 #                                                     TRADE AND NO TRADE ZONE
