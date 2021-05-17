@@ -98,12 +98,12 @@ throttle_threshold = -0.7
 
 def THROTTLE_LONG(i, response, mark_price, klines_6HOUR):
     if HEIKIN_ASHI(mark_price, klines_6HOUR) != "RED" and \
-        get_position.get_positionSize(response) < (config.quantity[i] * 8) and \
+        get_position.get_positionSize(response) < (config.quantity[i] * 9) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
 def THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
     if HEIKIN_ASHI(mark_price, klines_6HOUR) != "GREEN" and \
-        get_position.get_positionSize(response) < (config.quantity[i] * 8) and \
+        get_position.get_positionSize(response) < (config.quantity[i] * 9) and \
         get_position.get_unrealizedProfit(response) < get_position.get_margin(response) * throttle_threshold: return True
 
 def hot_zone(klines_30MIN, klines_6HOUR):
