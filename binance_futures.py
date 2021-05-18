@@ -45,9 +45,9 @@ def throttle(i, position):
     positionAmt = abs(float(position_information(i)[0].get('positionAmt'))) * 2
     small_bites = config.quantity[i]
     if position == "LONG":
-        client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=small_bites, timestamp=get_timestamp())
+        client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
     if position == "SHORT":
-        client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=small_bites, timestamp=get_timestamp())
+        client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
 
 def close_position(i,position):
     positionAmt = float(position_information(i)[0].get('positionAmt'))
