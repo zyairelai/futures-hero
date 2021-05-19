@@ -79,12 +79,14 @@ def lets_make_some_money(i):
 
 def GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
         if hybrid_candle(mark_price, klines_1min) == "GREEN" and war_formation(mark_price, klines_1min) and \
-            war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_15min) and \
+            HEIKIN_ASHI(mark_price, klines_5min)  == "GREEN" and \
+            HEIKIN_ASHI(mark_price, klines_15min) == "GREEN" and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "GREEN" : return True
 
 def GO_SHORT(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
         if hybrid_candle(mark_price, klines_1min) == "RED" and war_formation(mark_price, klines_1min) and \
-            war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_15min) and \
+            HEIKIN_ASHI(mark_price, klines_5min)  == "RED" and \
+            HEIKIN_ASHI(mark_price, klines_15min) == "RED" and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "RED" : return True
 
 def EXIT_LONG(response, mark_price, profit, klines_1min):
