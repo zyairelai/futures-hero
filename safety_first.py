@@ -21,6 +21,8 @@ def lets_make_some_money(i):
     response = binance_futures.position_information(i)[0]
     mark_price   = binance_futures.mark_price(i)
     klines_1min  = binance_futures.KLINE_INTERVAL_1MINUTE(i)
+    klines_5min  = binance_futures.KLINE_INTERVAL_5MINUTE(i)
+    klines_15min = binance_futures.KLINE_INTERVAL_15MINUTE(i)
     klines_30MIN = binance_futures.KLINE_INTERVAL_30MINUTE(i)
     klines_1HOUR = binance_futures.KLINE_INTERVAL_1HOUR(i)
     klines_6HOUR = binance_futures.KLINE_INTERVAL_6HOUR(i)
@@ -58,14 +60,12 @@ def lets_make_some_money(i):
 
     else:
         if not hot_zone(klines_30MIN, klines_6HOUR) and ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) == "GREEN" and \
-            GO_LONG(mark_price, klines_1min, klines_1HOUR):
-
+            GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
             if live_trade: binance_futures.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
         elif not hot_zone(klines_30MIN, klines_6HOUR) and ALL_CLEAR(mark_price, klines_6HOUR, klines_12HOUR) == "RED" and \
-            GO_SHORT(mark_price, klines_1min, klines_1HOUR):
-
+            GO_SHORT(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
             if live_trade: binance_futures.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
@@ -77,12 +77,14 @@ def lets_make_some_money(i):
 #                                                        ENTRY_EXIT CONDITIONS
 # ==========================================================================================================================================================================
 
-def GO_LONG(mark_price, klines_1min, klines_1HOUR):
+def GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
         if hybrid_candle(mark_price, klines_1min) == "GREEN" and war_formation(mark_price, klines_1min) and \
+            war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_15min) and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "GREEN" : return True
 
-def GO_SHORT(mark_price, klines_1min, klines_1HOUR):
+def GO_SHORT(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
         if hybrid_candle(mark_price, klines_1min) == "RED" and war_formation(mark_price, klines_1min) and \
+            war_formation(mark_price, klines_5min) and war_formation(mark_price, klines_15min) and \
             HEIKIN_ASHI(mark_price, klines_1HOUR) == "RED" : return True
 
 def EXIT_LONG(response, mark_price, profit, klines_1min):
