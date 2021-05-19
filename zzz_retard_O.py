@@ -11,7 +11,7 @@ live_trade = config.live_trade
 throttle = True # Adding to losing position to pull back the entry price
 
 def profit_threshold():
-    return 0.2
+    return 0.4
 
 # ==========================================================================================================================================================================
 #     Check on 6HR and 1HR, the most standard way

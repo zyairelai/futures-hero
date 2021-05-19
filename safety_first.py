@@ -8,10 +8,10 @@ from termcolor import colored
 from heikin_ashi import war_formation, previous_candle, HEIKIN_ASHI, previous_is_strong
 
 live_trade = config.live_trade
-throttle = True # Adding to losing position to pull the entry price
+throttle = True 
 
 def profit_threshold():
-    return 0.2
+    return 0.4
 
 # ==========================================================================================================================================================================
 #     Check on 1HR, 6HR, 12HR, entry on 1 minute, confirmation with candlestick
