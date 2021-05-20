@@ -90,11 +90,11 @@ def GO_SHORT(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
 
 def EXIT_LONG(response, mark_price, profit, klines_1min):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
-        if HA_previous.Close(klines_1min) > mark_price: return True
+        if HA_previous.close(klines_1min) > mark_price: return True
 
 def EXIT_SHORT(response, mark_price, profit, klines_1min):
     if get_position.profit_or_loss(response, profit) == "PROFIT":
-        if HA_previous.Close(klines_1min) < mark_price: return True
+        if HA_previous.close(klines_1min) < mark_price: return True
 
 # Adding to the position to pull back the entry price when the maintenance margin is below 70%
 throttle_threshold = -0.7
