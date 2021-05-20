@@ -3,3 +3,8 @@ BTCUSDT/
 ETHUSDT/
 BNBUSDT/
 BCHUSDT/
+src/__pycache__/
+src/BTCUSDT/
+src/ETHUSDT/
+src/BNBUSDT/
+src/BCHUSDT/

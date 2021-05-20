@@ -1,4 +1,4 @@
-import config, binance_futures
+import config, binance_futures_api
 from termcolor import colored
 from datetime import datetime
 
@@ -8,8 +8,8 @@ midnight_timestamp = int(datetime.timestamp(midnight) * 1000)
 
 for coinlist in range(len(config.pair)):
     i, overall_PNL, win, lose = 0, 0, 0, 0
-    trades_list    = binance_futures.account_trades(coinlist, midnight_timestamp)
-    position_info  = binance_futures.position_information(coinlist)[0]
+    trades_list    = binance_futures_api.account_trades(coinlist, midnight_timestamp)
+    position_info  = binance_futures_api.position_information(coinlist)[0]
     markPrice      = float(position_info.get('markPrice'))
     positionAmt    = abs(float(position_info.get('positionAmt')))
     fees_in_USDT   = round(((markPrice * positionAmt * 0.1) / 100), 2)
