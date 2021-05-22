@@ -1,6 +1,6 @@
 try:
     import os, requests, socket, urllib3
-    import config, safety_first, risky_play, O_RETARD
+    import config, risk_level_1, risk_level_2, risk_level_3
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -11,9 +11,9 @@ try:
     while True:
         try:
             for i in range(len(config.pair)):
-                if config.risk_level == 1: safety_first.lets_make_some_money(i)
-                elif config.risk_level == 2: risky_play.lets_make_some_money(i)
-                else: O_RETARD.lets_make_some_money(i)
+                if config.risk_level == 1: risk_level_1.lets_make_some_money(i)
+                elif config.risk_level == 2: risk_level_2.lets_make_some_money(i)
+                else: risk_level_3.lets_make_some_money(i)
 
         except (socket.timeout,
                 BinanceAPIException,
