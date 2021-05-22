@@ -1,6 +1,8 @@
 live_trade  = False
 throttle    = False
-safe_mode   = True
+
+# Risk level can be set to 1, 2 or 3
+risk_level  = 1
 
 coin     = ["BTC"]
 quantity = [0.001]
