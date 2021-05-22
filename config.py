@@ -1,15 +1,13 @@
-live_trade      = False    # False to see the output & verify your API key is working
-troubleshooting = False   # Troubleshooting mode for @zyairelai
+live_trade  = False
+throttle    = False
+safe_mode   = True
 
-# ====================================================
-#                  User Settings
-# ====================================================
-coin     = ["BTC", "ETH"]
-quantity = [0.001, 0.01]
+coin     = ["BTC"]
+quantity = [0.001]
 leverage, pair = [], []
 
 # ====================================================
-#        !! DO NOT CHANGE THESE SETTINGS !!
+#        !! DO NOT CHANGE THE LEVERAGE !!
 # ====================================================
 pair = []
 for i in range(len(coin)):
@@ -17,7 +15,11 @@ for i in range(len(coin)):
     if   coin[i] == "BTC": leverage.append(50)
     elif coin[i] == "ETH": leverage.append(40)
     else: leverage.append(30)
+
     print("Pair Name        :   " + pair[i])
     print("Trade Quantity   :   " + str(quantity[i]) + " " + coin[i])
     print("Leverage         :   " + str(leverage[i]))
     print()
+
+# Troubleshooting mode for @zyairelai
+troubleshooting = False

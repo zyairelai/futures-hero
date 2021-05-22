@@ -26,13 +26,14 @@ for coinlist in range(len(config.pair)):
             print(str(i) + ". " + trade.get('realizedPnl') + " LOSER TRADE")
         else: continue
 
-    print()
+    print(config.pair[coinlist])
     print("TOTAL TRADES     :   " + str(i) + " TRADES")
     print("WIN-LOSE RATIO   :   " + str(win) + "-" + str(lose))
 
-    if overall_PNL > 0 : print(colored("\nOverall PNL for today : " + str(round(overall_PNL, 2)) + " USDT", "green"))
-    elif overall_PNL < 0 : print(colored("\nOverall PNL for today : " + str(round(overall_PNL, 2)) + " USDT", "red"))
-    else: print("\nOverall PNL for today : " + str(round(overall_PNL, 2)) + " USDT")
+    if overall_PNL > 0 : print(colored("Overall PNL for today : " + str(round(overall_PNL, 2)) + " USDT", "green"))
+    elif overall_PNL < 0 : print(colored("Overall PNL for today : " + str(round(overall_PNL, 2)) + " USDT", "red"))
+    else: print("Overall PNL for today : " + str(round(overall_PNL, 2)) + " USDT")
+    print()
 
     # print(colored(config.pair[coinlist], display))
     # print(colored("TOTAL TRADES          : " + str(i) + " TRADES", display))

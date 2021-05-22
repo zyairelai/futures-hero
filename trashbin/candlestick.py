@@ -1,4 +1,4 @@
-import config
+import config, HA_current
 from termcolor import colored
 troubleshooting = config.troubleshooting
 
@@ -61,3 +61,8 @@ def output_candle(klines):
 def CANDLE(klines):
     if candle_color(klines) == "GREEN" and strong_candle(klines): return "GREEN"
     elif candle_color(klines) == "RED" and strong_candle(klines): return "RED"
+
+def hybrid_candle(mark_price, klines):
+    if HA_current.heikin_ashi(mark_price, klines) == "GREEN" and CANDLE(klines) == "GREEN" : return "GREEN"
+    elif HA_current.heikin_ashi(mark_price, klines) == "RED" and CANDLE(klines) == "RED" : return "RED"
+    else: return "INDECISIVE"
