@@ -1,7 +1,7 @@
+import HA_current
 import binance_futures_api
 import config, get_position
 import direction, place_order
-import HA_current, HA_previous
 from datetime import datetime
 from termcolor import colored
 
