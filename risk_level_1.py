@@ -61,7 +61,7 @@ def lets_make_some_money(i):
         if not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
             direction.clear_direction(mark_price, klines_6HOUR) == "GREEN" and \
             direction.current_direction(mark_price, klines_12HOUR) == "GREEN" and \
-            place_order.GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
+            place_order.GO_LONG_ADVANCED(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
@@ -69,7 +69,7 @@ def lets_make_some_money(i):
         elif not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
             direction.clear_direction(mark_price, klines_6HOUR) == "RED" and \
             direction.current_direction(mark_price, klines_12HOUR) == "RED" and \
-            place_order.GO_SHORT(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
+            place_order.GO_SHORT_ADVANCED(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
