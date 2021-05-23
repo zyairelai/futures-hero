@@ -1,11 +1,11 @@
-import binance_futures_api, config
-import get_position, place_order
-import direction, HA_current, HA_previous
+import binance_futures_api, config, get_position
+import direction, HA_current, HA_previous, place_order
 from datetime import datetime
 from termcolor import colored
 
 throttle = config.throttle
 live_trade = config.live_trade
+enable_clear_direction = True
 
 # ==========================================================================================================================================================================
 #     AVOID FAKE OUT : Check on 1HR, 6HR, 12HR, entry on 1 minute, with 5 minute and 15 minute confirmation
@@ -22,7 +22,7 @@ def lets_make_some_money(i):
     klines_6HOUR = binance_futures_api.KLINE_INTERVAL_6HOUR(i)
     klines_12HOUR = binance_futures_api.KLINE_INTERVAL_12HOUR(i)
     position_info = get_position.get_position_info(i, response)
-    profit = 0.4
+    profit = get_position.profit_threshold()
 
     HA_current.output(mark_price, klines_12HOUR)
     HA_previous.output(klines_6HOUR)
@@ -58,18 +58,20 @@ def lets_make_some_money(i):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
-            direction.clear_direction(mark_price, klines_6HOUR) == "GREEN" and \
+        if enable_clear_direction:
+            current_trend = direction.clear_direction(mark_price, klines_6HOUR)
+        else: current_trend = direction.current_direction(mark_price, klines_6HOUR)
+
+        if current_trend == "GREEN" and not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
             direction.current_direction(mark_price, klines_12HOUR) == "GREEN" and \
-            place_order.GO_LONG_ADVANCED(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
+            place_order.GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
-        elif not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
-            direction.clear_direction(mark_price, klines_6HOUR) == "RED" and \
+        elif current_trend == "RED" and not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
             direction.current_direction(mark_price, klines_12HOUR) == "RED" and \
-            place_order.GO_SHORT_ADVANCED(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
+            place_order.GO_SHORT(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
