@@ -8,15 +8,13 @@ throttle = config.throttle
 live_trade = config.live_trade
 
 # ==========================================================================================================================================================================
-#     AVOID FAKE OUT : Check on 1HR and 6HR, entry on 1 minute, with 5 minute and 15 minute confirmation
+#     Check on 1HR and 6HR, entry on 1 minute. THE MOST STANDARD WAY (Zyaire's Manual Trading Strategy)
 # ==========================================================================================================================================================================
 
 def lets_make_some_money(i):
     response = binance_futures_api.position_information(i)[0]
     mark_price   = binance_futures_api.mark_price(i)
     klines_1min  = binance_futures_api.KLINE_INTERVAL_1MINUTE(i)
-    klines_5min  = binance_futures_api.KLINE_INTERVAL_5MINUTE(i)
-    klines_15min = binance_futures_api.KLINE_INTERVAL_15MINUTE(i)
     klines_30MIN = binance_futures_api.KLINE_INTERVAL_30MINUTE(i)
     klines_1HOUR = binance_futures_api.KLINE_INTERVAL_1HOUR(i)
     klines_6HOUR = binance_futures_api.KLINE_INTERVAL_6HOUR(i)
@@ -58,14 +56,14 @@ def lets_make_some_money(i):
     else:
         if not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
             direction.clear_direction(mark_price, klines_6HOUR) == "GREEN" and \
-            place_order.GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
+            place_order.GO_LONG(mark_price, klines_1min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
         elif not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
             direction.clear_direction(mark_price, klines_6HOUR) == "RED" and \
-            place_order.GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
+            place_order.GO_SHORT(mark_price, klines_1min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))

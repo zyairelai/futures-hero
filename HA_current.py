@@ -91,7 +91,8 @@ def candle(klines):
     elif (close(klines) > open(klines)): return "GREEN_INDECISIVE"
     else: return "NO_MOVEMENT"
 
-def candlebody(klines): return abs(open(klines) - close(klines))
+def candlebody(klines) : return abs(open(klines) - close(klines))
+def candle_size(klines): return abs(candlebody(klines) / open(klines) * 100)
 
 def output(mark_price, klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     if troubleshooting:

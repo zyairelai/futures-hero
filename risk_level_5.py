@@ -1,14 +1,14 @@
-import binance_futures_api, config
-import get_position, place_order
-import direction, HA_current, HA_previous
+import binance_futures_api
+import config, get_position
+import direction, place_order
+import HA_current, HA_previous
 from datetime import datetime
 from termcolor import colored
 
-throttle = config.throttle
 live_trade = config.live_trade
 
 # ==========================================================================================================================================================================
-#     AVOID FAKE OUT : Check on 1HR and 6HR, entry on 1 minute, with 5 minute and 15 minute confirmation
+#     FOMO STRATEGY : Check on 1HR, entry on 1 minute, with 5 minute and 15 minute confirmation to avoid Fake Out
 # ==========================================================================================================================================================================
 
 def lets_make_some_money(i):
@@ -23,13 +23,11 @@ def lets_make_some_money(i):
     position_info = get_position.get_position_info(i, response)
     profit = 0.4
 
-    HA_previous.output(klines_6HOUR)
     HA_current.output(mark_price, klines_6HOUR)
     HA_current.output(mark_price, klines_1HOUR)
     HA_current.output(mark_price, klines_1min)
-
-    if throttle: leverage = config.leverage[i]
-    else: leverage = int(config.leverage[i] + 10)
+    
+    leverage = int(config.leverage[i] + 10)
     if int(response.get("leverage")) != leverage: binance_futures_api.change_leverage(i, leverage)
     if response.get('marginType') != "isolated": binance_futures_api.change_margin_to_ISOLATED(i)
 
@@ -38,10 +36,6 @@ def lets_make_some_money(i):
             if live_trade: binance_futures_api.close_position(i, "LONG")
             print("ACTION           :   💰 CLOSE_LONG 💰")
 
-        elif place_order.THROTTLE_LONG(i, response, mark_price, klines_6HOUR):
-            if live_trade and throttle: binance_futures_api.throttle(i, "LONG")
-            print("ACTION           :   🔥 THROTTLE_LONG 🔥")
-
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
@@ -49,23 +43,19 @@ def lets_make_some_money(i):
             if live_trade: binance_futures_api.close_position(i, "SHORT")
             print("ACTION           :   💰 CLOSE_SHORT 💰")
 
-        elif place_order.THROTTLE_SHORT(i, response, mark_price, klines_6HOUR):
-            if live_trade and throttle: binance_futures_api.throttle(i, "SHORT")
-            print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
-
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
         if not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
-            direction.clear_direction(mark_price, klines_6HOUR) == "GREEN" and \
+            direction.current_direction(mark_price, klines_6HOUR) != "INDECISIVE" and \
             place_order.GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "LONG", config.quantity[i])
             print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
 
         elif not direction.hot_zone(klines_30MIN, klines_6HOUR) and \
-            direction.clear_direction(mark_price, klines_6HOUR) == "RED" and \
-            place_order.GO_LONG(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
+            direction.current_direction(mark_price, klines_6HOUR) != "INDECISIVE" and \
+            place_order.GO_SHORT(mark_price, klines_1min, klines_5min, klines_15min, klines_1HOUR):
 
             if live_trade: binance_futures_api.open_position(i, "SHORT", config.quantity[i])
             print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))

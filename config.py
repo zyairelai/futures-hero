@@ -1,7 +1,7 @@
 live_trade  = False
 throttle    = False
 
-# Risk level can be set to 1, 2 or 3
+# The Risk_Level model to choose. Read the line 11 for each risk_level_x.py module
 risk_level  = 1
 
 coin     = ["BTC"]

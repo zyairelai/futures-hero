@@ -1,11 +1,13 @@
 import HA_current, HA_previous
 
 def hot_zone(klines_30MIN, klines_6HOUR):
-    if klines_6HOUR[-1][0] == klines_30MIN[-1][0] and HA_current.candlebody(klines_6HOUR) > 2 : return True
+    if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
 def current_direction(mark_price, klines):
-    if HA_current.heikin_ashi(mark_price, klines) == "GREEN" : return "GREEN"
-    elif HA_current.heikin_ashi(mark_price, klines) == "RED" : return "RED"
+    # If candle_size is less than 2%, the candle is too small to trade
+    DO_NOT_FOMO = HA_current.candle_size(klines) > 2
+    if HA_current.heikin_ashi(mark_price, klines) == "GREEN" and DO_NOT_FOMO: return "GREEN"
+    elif HA_current.heikin_ashi(mark_price, klines) == "RED" and DO_NOT_FOMO: return "RED"
     else: return "INDECISIVE"
 
 def clear_direction(mark_price, klines):

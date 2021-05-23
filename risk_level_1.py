@@ -8,7 +8,7 @@ throttle = config.throttle
 live_trade = config.live_trade
 
 # ==========================================================================================================================================================================
-#     Check on 1HR, 6HR, 12HR, entry on 1 minute, with 5 minute and 15 minute confirmation to avoid Fake Out
+#     AVOID FAKE OUT : Check on 1HR, 6HR, 12HR, entry on 1 minute, with 5 minute and 15 minute confirmation
 # ==========================================================================================================================================================================
 
 def lets_make_some_money(i):

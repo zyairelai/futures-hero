@@ -8,7 +8,7 @@ throttle = config.throttle
 live_trade = config.live_trade
 
 # ==========================================================================================================================================================================
-#     Check on 1HR, 6HR, 12HR, entry on 1 minute. Might be longing at the top or shorting at the bottom.
+#     Check on 1HR, 6HR, 12HR, entry on 1 minute. Zyaire's manual trading strategy for safer mode
 # ==========================================================================================================================================================================
 
 def lets_make_some_money(i):
@@ -22,11 +22,12 @@ def lets_make_some_money(i):
     position_info = get_position.get_position_info(i, response)
     profit = 0.4
 
+    HA_current.output(mark_price, klines_12HOUR)
     HA_previous.output(klines_6HOUR)
     HA_current.output(mark_price, klines_6HOUR)
     HA_current.output(mark_price, klines_1HOUR)
     HA_current.output(mark_price, klines_1min)
-
+    
     if throttle: leverage = config.leverage[i]
     else: leverage = int(config.leverage[i] + 10)
     if int(response.get("leverage")) != leverage: binance_futures_api.change_leverage(i, leverage)
