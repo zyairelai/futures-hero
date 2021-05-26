@@ -31,8 +31,7 @@ def lets_make_some_money(i):
     HA_current.output(mark_price, klines_1HOUR)
     HA_current.output(mark_price, klines_1min)
 
-    if throttle: leverage = config.leverage[i]
-    else: leverage = int(config.leverage[i] + 10)
+    leverage = config.leverage[i]
     if int(response.get("leverage")) != leverage: binance_futures_api.change_leverage(i, leverage)
     if response.get('marginType') != "isolated": binance_futures_api.change_margin_to_ISOLATED(i)
     if not live_trade: backtest.trigger_backtest(i, mark_price, profit, klines_1min)
