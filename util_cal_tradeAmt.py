@@ -1,7 +1,7 @@
 import os, time
 from binance.client import Client
 
-coin = "BTC"
+coin = input("Enter Coin Name (eg. BTC, ETH, BNB...) : ").upper()
 trade_size_in_usdt = 1
 
 # Get environment variables

@@ -1,17 +1,17 @@
 live_trade  = False
 throttle    = False
 
-# The Risk_Level model to choose. Read the line 11 for each risk_level_x.py module
-risk_level  = 1
+# The Risk_Level model to choose.
+# Read the first line for each risk_level_x.py module
+risk_level = [ 2 ]
 
 coin     = ["BTC"]
 quantity = [0.001]
-leverage, pair = [], []
 
 # ====================================================
 #        !! DO NOT CHANGE THE LEVERAGE !!
 # ====================================================
-pair = []
+leverage, pair = [], []
 for i in range(len(coin)):
     pair.append(coin[i] + "USDT")
     if   coin[i] == "BTC": leverage.append(50)
@@ -23,5 +23,8 @@ for i in range(len(coin)):
     print("Leverage         :   " + str(leverage[i]))
     print()
 
-# Troubleshooting mode for @zyairelai
+# ====================================================
+#       Troubleshooting mode for @zyairelai
+# ====================================================
 troubleshooting = False
+clear_direction = True

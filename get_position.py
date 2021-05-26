@@ -20,8 +20,6 @@ def get_margin(response):
 
 def get_position_info(i, response): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
     title = config.pair[i] + " POSITION :   "
-
-    # response = binance_futures_api.position_information()[0]
     positionAmt = float(response.get('positionAmt'))
     unRealizedProfit = round(float(response.get('unRealizedProfit')), 2)
 
