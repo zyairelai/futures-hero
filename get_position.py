@@ -2,7 +2,7 @@ import config
 from termcolor import colored
 
 def profit_threshold():
-    return 0.4
+    return config.profit_margin
 
 def get_positionSize(response):
     return abs(float(response.get('positionAmt')))

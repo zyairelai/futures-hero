@@ -14,7 +14,7 @@ from termcolor import colored
 
 throttle = config.throttle
 live_trade = config.live_trade
-enable_clear_direction = config.clear_direction
+clear_direction = config.clear_direction
 
 def lets_make_some_money(i):
     response = binance_futures_api.position_information(i)[0]
@@ -59,8 +59,7 @@ def lets_make_some_money(i):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if enable_clear_direction:
-            current_trend = direction.clear_direction(mark_price, klines_6HOUR)
+        if clear_direction: current_trend = direction.clear_direction(mark_price, klines_6HOUR)
         else: current_trend = direction.current_direction(mark_price, klines_6HOUR)
 
         if current_trend == "GREEN" and not direction.hot_zone(klines_30MIN, klines_6HOUR) and \

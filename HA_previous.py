@@ -7,8 +7,8 @@ troubleshooting = config.troubleshooting
 # ==========================================================================================================================================================================
 
 def direction_wick(klines):
-    if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE": return high(klines) - close(klines)
-    elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE": return close(klines) - low(klines)
+    if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE": return float(high(klines) - close(klines))
+    elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE": return float(close(klines) - low(klines))
 
 def is_strong(klines):
     if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE":

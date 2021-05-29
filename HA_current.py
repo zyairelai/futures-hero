@@ -19,8 +19,8 @@ def candlebody_bigger_than_current_wick(klines):
     return candlebody(klines) > direction_wick(klines)
 
 def direction_wick(klines):
-    if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE": return high(klines) - close(klines)
-    elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE": return close(klines) - low(klines)
+    if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE": return float(high(klines) - close(klines))
+    elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE": return float(high(klines) - close(klines))
 
 def is_strong(mark_price, klines):
     if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE":
@@ -91,8 +91,8 @@ def candle(klines):
     elif (close(klines) > open(klines)): return "GREEN_INDECISIVE"
     else: return "NO_MOVEMENT"
 
-def candlebody(klines) : return abs(open(klines) - close(klines))
-def candle_size(klines): return abs(candlebody(klines) / open(klines) * 100)
+def candlebody(klines) : return float(abs(open(klines) - close(klines)))
+def candle_size(klines): return float(abs(candlebody(klines) / open(klines) * 100))
 
 def output(mark_price, klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     if troubleshooting:

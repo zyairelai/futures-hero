@@ -8,6 +8,9 @@ risk_level = [ 2 ]
 coin     = ["BTC"]
 quantity = [0.001]
 
+# profit_margin * leverage = Actual Profit Percentage.
+profit_margin = 0.4 # Minimum is 0.2 to cover the fees!!!
+
 # ====================================================
 #        !! DO NOT CHANGE THE LEVERAGE !!
 # ====================================================

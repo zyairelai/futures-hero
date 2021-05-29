@@ -9,18 +9,24 @@ from termcolor import colored
 def trigger_backtest(i, mark_price, profit, klines_1min):
     if not os.path.exists(os.path.join("BACKTEST", config.pair[i])): os.makedirs(os.path.join("BACKTEST", config.pair[i]))
     imaginary_position = retrieve_position(i)
-
+    unRealizedProfit = unrealizedPnL(i, mark_price)
     if imaginary_position == "LONGING":
         if demo_exit_long(i, mark_price, profit, klines_1min):
             append_close_position(i)
             print("ACTION           :   💰 CLOSE_LONG 💰")
-        else: print(colored("ACTION           :   HOLDING_LONG", "green"))
+        else:
+            print(colored("ACTION           :   HOLDING_LONG", "green"))
+            if unRealizedProfit > 0: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "green"))
+            else: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "red"))
 
     elif imaginary_position == "SHORTING":
         if demo_exit_short(i, mark_price, profit, klines_1min):
             append_close_position(i)
             print("ACTION           :   💰 CLOSE_SHORT 💰")
-        else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
+        else:
+            print(colored("ACTION           :   HOLDING_SHORT", "red"))
+            if unRealizedProfit > 0: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "green"))
+            else: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "red"))
 
 # ==========================================================================================================================================================================
 #                                           LONG and SHORT simulation
@@ -47,13 +53,14 @@ def demo_exit_long(i, mark_price, profit, klines_1min):
     current_percentage = unrealizedPnL(i, mark_price)
     if current_percentage > profit:
         if HA_previous.close(klines_1min) > mark_price:
-            realized_Pnl = (current_percentage - 0.2) * leverage
+            realized_Pnl = round((current_percentage - 0.2) * leverage , 2)
             append_PnL(i, realized_Pnl)
             reset_position(i)
             return True
 
     elif current_percentage <= liquidation_threshold(i):
         append_PnL(i, -100)
+        append_close_position(i)
         reset_position(i)
         return True
 
@@ -69,6 +76,7 @@ def demo_exit_short(i, mark_price, profit, klines_1min):
 
     elif current_percentage <= liquidation_threshold(i):
         append_PnL(i, -100)
+        append_close_position(i)
         reset_position(i)
         return True
 
@@ -87,12 +95,12 @@ def append_PnL(i, realized_PnL):
         message.write("NONE")
 
 def append_open_position(i, position):
-    with open((os.path.join("BACKTEST", config.pair[i], "timestamp.txt")), "w", encoding="utf-8") as message:
-        message.write(position + " - Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
+    with open((os.path.join("BACKTEST", config.pair[i], "timestamp.txt")), "a", encoding="utf-8") as message:
+        message.write(position + " - Last action executed @ " + datetime.now().strftime("%H:%M:%S\n"))
 
 def append_close_position(i):
-    with open((os.path.join("BACKTEST", config.pair[i], "timestamp.txt")), "w", encoding="utf-8") as message:
-        message.write("CLOSE - Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n\n")
+    with open((os.path.join("BACKTEST", config.pair[i], "timestamp.txt")), "a", encoding="utf-8") as message:
+        message.write("CLOSE - Last action executed @ " + datetime.now().strftime("%H:%M:%S\n\n"))
 
 def record_price(i, mark_price):
     with open((os.path.join("BACKTEST", config.pair[i], "price.txt")), "w", encoding="utf-8") as message:

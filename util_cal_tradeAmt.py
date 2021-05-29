@@ -1,7 +1,7 @@
 import os, time
 from binance.client import Client
 
-coin = input("Enter Coin Name (eg. BTC, ETH, BNB...) : ").upper()
+coin = input("\nEnter Coin Symbol (eg. BTC, ETH, BNB...) : ").upper()
 trade_size_in_usdt = 1
 
 # Get environment variables
@@ -21,5 +21,5 @@ def leverage(coin):
     else: return 30
 
 trade_amount_in_coin = round((trade_size_in_usdt * leverage(coin) / mark_price()), 6)
-print("Trade Quantity in Coin : " + str(trade_amount_in_coin) + " " + coin)
-print("This would cost around : " + str(trade_size_in_usdt) + " USDT")
+print("\nTrade Quantity in Coin : " + str(trade_amount_in_coin) + " " + coin)
+print("\nThis would cost around : " + str(trade_size_in_usdt) + " USDT\n")
