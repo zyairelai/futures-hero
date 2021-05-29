@@ -7,7 +7,6 @@ try:
     import risk_level_1
     import risk_level_2
     import risk_level_3
-    import risk_level_4
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -27,7 +26,6 @@ try:
                 if   risk_level == 1: risk_level_1.lets_make_some_money(i)
                 elif risk_level == 2: risk_level_2.lets_make_some_money(i)
                 elif risk_level == 3: risk_level_3.lets_make_some_money(i)
-                elif risk_level == 4: risk_level_4.lets_make_some_money(i)
                 else:
                     risk_level_2.lets_make_some_money(i)
 
