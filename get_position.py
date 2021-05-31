@@ -4,19 +4,17 @@ from termcolor import colored
 def profit_threshold():
     return config.profit_margin
 
+def get_entryPrice(response):
+    return abs(float(response.get('entryPrice')))
+
 def get_positionSize(response):
     return abs(float(response.get('positionAmt')))
 
-def get_unrealizedProfit(response):
-    return round(float(response.get('unRealizedProfit')), 2)
-
-def get_margin(response):
-    markPrice = float(response.get('markPrice'))
-    leverage = int(response.get('leverage'))
-    positionAmt = get_positionSize(response)
-
-    margin = (positionAmt / leverage) * markPrice
-    return margin
+def unrealizedPnL_Percentage(i, response, mark_price):
+    price_diff = mark_price - get_entryPrice(response)
+    increased_diff = price_diff / get_entryPrice(response) * 100
+    pnl_percentage = increased_diff * config.leverage[i]
+    return round(pnl_percentage, 2)
 
 def get_position_info(i, response): # >>> "LONGING" // "SHORTING" // "NO_POSITION"
     title = config.pair[i] + " POSITION :   "
@@ -51,3 +49,7 @@ def profit_or_loss(response, taker_maker_fees):
 
     if unRealizedProfit > breakeven_USDT: return "PROFIT"
     else: return "LOSS"
+
+def profit_margin_threshold(i):
+    profit_margin = config.take_profit_percentage / config.leverage[i]
+    return profit_margin

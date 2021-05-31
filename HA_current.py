@@ -12,9 +12,6 @@ def benchmark(high, low):
 def candlebody_bigger_than_previous_candle(klines):
     return candlebody(klines) > HA_previous.candlebody(klines) / 2
 
-def candlebody_bigger_than_previous_wick(klines):
-    return candlebody(klines) > HA_previous.direction_wick(klines)
-
 def candlebody_bigger_than_current_wick(klines):
     return candlebody(klines) > direction_wick(klines)
 
@@ -34,15 +31,16 @@ def is_strong(mark_price, klines):
 def heikin_ashi(mark_price, klines):
     if (candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE") and is_strong(mark_price, klines) and \
         candlebody_bigger_than_current_wick(klines) and \
-        candlebody_bigger_than_previous_wick(klines) and \
         candlebody_bigger_than_previous_candle(klines) : return "GREEN"
 
     elif (candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE") and is_strong(mark_price, klines) and \
         candlebody_bigger_than_current_wick(klines) and \
-        candlebody_bigger_than_previous_wick(klines) and \
         candlebody_bigger_than_previous_candle(klines): return "RED"
 
     else: return "INDECISIVE"
+
+def candlebody_bigger_than_previous_wick(klines):
+    return candlebody(klines) > HA_previous.direction_wick(klines)
 
 # ==========================================================================================================================================================================
 #                                                 WAR FORMATION
@@ -50,9 +48,9 @@ def heikin_ashi(mark_price, klines):
 
 def war_formation(mark_price, klines): # Pencil_Wick_Test    
     if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE":
-        if close(klines) > previous_Close(klines) and mark_price > previous_High(klines): return True
+        if close(klines) > previous_Close(klines) and mark_price > previous_Close(klines): return True
     elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE":
-        if close(klines) < previous_Close(klines) and mark_price < previous_Low(klines): return True
+        if close(klines) < previous_Close(klines) and mark_price < previous_Close(klines): return True
 
 def pattern_broken(klines): # return "BROKEN" // "NOT_BROKEN"
     current  = candle(klines)
