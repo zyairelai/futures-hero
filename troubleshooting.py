@@ -17,7 +17,10 @@ for i in range(len(config.pair)):
     current_trend = direction.current_direction(mark_price, klines_6HOUR)
 
 print(HA_current.war_formation(mark_price, klines_1min))
-print(HA_current.heikin_ashi(mark_price, klines_1min) == "GREEN")
-print(HA_current.heikin_ashi(mark_price, klines_5min)  == "GREEN")
-print(HA_current.heikin_ashi(mark_price, klines_1HOUR) == "GREEN")
+print(HA_current.heikin_ashi(mark_price, klines_1min) == "RED")
+print(HA_current.heikin_ashi(mark_price, klines_5min)  == "RED")
+print(HA_current.heikin_ashi(mark_price, klines_1HOUR) == "RED")
 print(direction.clear_mini_direction_movement(klines_1HOUR))
+
+print(HA_current.candlebody_bigger_than_previous_candle(klines_1HOUR))
+print(HA_current.candlebody_bigger_than_current_wick(klines_1HOUR))
