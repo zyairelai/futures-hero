@@ -4,7 +4,7 @@ live_trade = False
 enable_throttle = False
 
 # Cut loss when the percentage hits, enabled this will not trigger Throttle :)
-enable_stoploss = True
+enable_stoploss = False
 stoploss_percentage = 50
 
 # The Risk_Level model to choose.
@@ -16,7 +16,7 @@ quantity = [0.001]
 
 # profit_margin * leverage = Actual Profit Percentage.
 # Minimum is 0.1 to cover the fees!!!
-profit_margin = 0.2
+profit_margin = 0.4
 
 # ====================================================
 #        !! DO NOT CHANGE THE LEVERAGE !!

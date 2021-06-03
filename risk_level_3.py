@@ -22,8 +22,7 @@ def lets_make_some_money(i):
     position_info = get_position.get_position_info(i, response)
     profit_threshold = get_position.profit_threshold()
 
-    if direction.clear_mini_direction_movement(klines_1HOUR): print(colored("CLEAR MOVEMENT   :   TRUE", "green"))
-    else: print(colored("CLEAR MOVEMENT   :   FALSE", "red"))
+    HA_current.output(mark_price, klines_1HOUR)
     HA_current.output(mark_price, klines_1HOUR)
     HA_current.output(mark_price, klines_5min)
     HA_current.output(mark_price, klines_1min)

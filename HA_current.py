@@ -12,9 +12,6 @@ def benchmark(high, low):
 def candlebody_bigger_than_previous_candle(klines):
     return candlebody(klines) > HA_previous.candlebody(klines) / 2
 
-def candlebody_bigger_than_current_wick(klines):
-    return candlebody(klines) > direction_wick(klines)
-
 def direction_wick(klines):
     if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE": return float(high(klines) - close(klines))
     elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE": return float(close(klines) - low(klines))
@@ -30,17 +27,18 @@ def is_strong(mark_price, klines):
 
 def heikin_ashi(mark_price, klines):
     if (candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE") and is_strong(mark_price, klines) and \
-        candlebody_bigger_than_current_wick(klines) and \
         candlebody_bigger_than_previous_candle(klines) : return "GREEN"
 
     elif (candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE") and is_strong(mark_price, klines) and \
-        candlebody_bigger_than_current_wick(klines) and \
         candlebody_bigger_than_previous_candle(klines): return "RED"
 
     else: return "INDECISIVE"
 
 def candlebody_bigger_than_previous_wick(klines):
     return candlebody(klines) > HA_previous.direction_wick(klines)
+
+def candlebody_bigger_than_current_wick(klines):
+    return candlebody(klines) > direction_wick(klines)
 
 # ==========================================================================================================================================================================
 #                                                 WAR FORMATION

@@ -1,3 +1,5 @@
+color = "RED"
+
 import config
 import direction
 import HA_current
@@ -16,11 +18,10 @@ for i in range(len(config.pair)):
     ching_cheng_chong = HA_current.war_formation(mark_price, klines_1min)
     current_trend = direction.current_direction(mark_price, klines_6HOUR)
 
-print(HA_current.war_formation(mark_price, klines_1min))
-print(HA_current.heikin_ashi(mark_price, klines_1min) == "RED")
-print(HA_current.heikin_ashi(mark_price, klines_5min)  == "RED")
-print(HA_current.heikin_ashi(mark_price, klines_1HOUR) == "RED")
-print(direction.clear_mini_direction_movement(klines_1HOUR))
+print("BIG CANDLE       :   " + str(HA_current.candlebody_bigger_than_previous_candle(klines_1HOUR)))
+print("SURPASS WICK     :   " + str(HA_current.candlebody_bigger_than_current_wick(klines_1HOUR)))
 
-print(HA_current.candlebody_bigger_than_previous_candle(klines_1HOUR))
-print(HA_current.candlebody_bigger_than_current_wick(klines_1HOUR))
+print("1 HOUR           :   " + str(HA_current.heikin_ashi(mark_price, klines_1HOUR) == color))
+print("5 MINUTE         :   " + str(HA_current.heikin_ashi(mark_price, klines_5min)  == color))
+print("1 MINUTE         :   " + str(HA_current.heikin_ashi(mark_price, klines_1min) == color))
+print("WAR FORMATION    :   " + str(HA_current.war_formation(mark_price, klines_1min)))

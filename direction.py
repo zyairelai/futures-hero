@@ -7,9 +7,6 @@ def hot_zone(klines_30MIN, klines_6HOUR):
 def clear_movement(klines):
     return HA_current.candle_size(klines) > 2
 
-def clear_mini_direction_movement(klines_1HOUR):
-    return HA_current.candle_size(klines_1HOUR) > 1
-
 def current_direction(mark_price, klines):
     if HA_current.heikin_ashi(mark_price, klines) == "GREEN" and clear_movement(klines): return "GREEN"
     elif HA_current.heikin_ashi(mark_price, klines) == "RED" and clear_movement(klines): return "RED"

@@ -4,27 +4,23 @@ def GO_LONG(mark_price, klines_1min, klines_5min, klines_1HOUR):
         if HA_current.war_formation(mark_price, klines_1min) and \
             HA_current.heikin_ashi(mark_price, klines_1min) == "GREEN" and \
             HA_current.heikin_ashi(mark_price, klines_5min)  == "GREEN" and \
-            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "GREEN" and \
-            direction.clear_mini_direction_movement(klines_1HOUR): return True
+            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "GREEN": return True
 
 def GO_SHORT(mark_price, klines_1min, klines_5min, klines_1HOUR):
         if HA_current.war_formation(mark_price, klines_1min) and \
             HA_current.heikin_ashi(mark_price, klines_1min) == "RED" and \
             HA_current.heikin_ashi(mark_price, klines_5min)  == "RED" and \
-            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "RED" and \
-            direction.clear_mini_direction_movement(klines_1HOUR): return True
+            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "RED": return True
 
 def GO_LONG_FOCUS(mark_price, klines_1min, klines_1HOUR):
         if HA_current.war_formation(mark_price, klines_1min) and \
             HA_current.heikin_ashi(mark_price, klines_1min) == "GREEN" and \
-            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "GREEN" and \
-            direction.clear_mini_direction_movement(klines_1HOUR): return True
+            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "GREEN": return True
 
 def GO_SHORT_FOCUS(mark_price, klines_1min, klines_1HOUR):
         if HA_current.war_formation(mark_price, klines_1min) and \
             HA_current.heikin_ashi(mark_price, klines_1min) == "RED" and \
-            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "RED" and \
-            direction.clear_mini_direction_movement(klines_1HOUR): return True
+            HA_current.heikin_ashi(mark_price, klines_1HOUR) == "RED": return True
 
 def EXIT_LONG(i, response, mark_price, profit_threshold, klines_1min):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
