@@ -2,8 +2,8 @@ import os, time, config
 from binance.client import Client
 
 # Get environment variables
-api_key     = os.environ.get('API_KEY')
-api_secret  = os.environ.get('API_SECRET')
+api_key     = os.environ.get('BINANCE_KEY')
+api_secret  = os.environ.get('BINANCE_SECRET')
 client      = Client(api_key, api_secret)
 
 def get_timestamp()              : return int(time.time() * 1000)
