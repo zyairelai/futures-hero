@@ -15,7 +15,7 @@ def change_margin_to_ISOLATED(i) : return client.futures_change_margin_type(symb
 def change_margin_to_CROSSED(i)  : return client.futures_change_margin_type(symbol=config.pair[i], marginType="CROSSED", timestamp=get_timestamp())
 def cancel_all_open_orders(i)    : return client.futures_cancel_all_open_orders(symbol=config.pair[i], timestamp=get_timestamp())
 def get_open_orders(i)           : return client.futures_get_open_orders(symbol=config.pair[i], timestamp=get_timestamp())
-def position_information(i)      : return client.futures_position_information(symbol=config.pair[i], timestamp=get_timestamp())
+def position_information(i)      : return client.futures_position_information(symbol=config.pair[i], timestamp=get_timestamp())[0]
 
 query = 4
 def KLINE_INTERVAL_1MINUTE(i)   : return client.futures_klines(symbol=config.pair[i], limit=query, interval=Client.KLINE_INTERVAL_1MINUTE)
@@ -42,7 +42,7 @@ def open_position(i, position, amount):
         client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=amount, timestamp=get_timestamp())
 
 def throttle(i, position):
-    positionAmt = abs(float(position_information(i)[0].get('positionAmt'))) * 2
+    positionAmt = abs(float(position_information(i).get('positionAmt'))) * 2
     small_bites = config.quantity[i]
     if position == "LONG":
         client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
@@ -50,14 +50,14 @@ def throttle(i, position):
         client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
 
 def close_position(i,position):
-    positionAmt = float(position_information(i)[0].get('positionAmt'))
+    positionAmt = float(position_information(i).get('positionAmt'))
     if position == "LONG":
         client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
     if position == "SHORT":
         client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
 
 def set_trailing_stop(i, position, callbackRate):
-    positionAmt = float(position_information(i)[0].get('positionAmt'))
+    positionAmt = float(position_information(i).get('positionAmt'))
     if position == "LONG":
         client.futures_create_order(symbol=config.pair[i], side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=abs(positionAmt), timestamp=get_timestamp())
     elif position == "SHORT":
@@ -66,9 +66,9 @@ def set_trailing_stop(i, position, callbackRate):
 round_decimal = 5
 
 def set_take_profit(i, position, percentage): # Percentage to achieve so you could close the position
-    positionAmt = float(position_information(i)[0].get('positionAmt'))
-    entryPrice = float(position_information(i)[0].get("entryPrice"))
-    liquidationPrice = float(position_information(i)[0].get("liquidationPrice"))
+    positionAmt = float(position_information(i).get('positionAmt'))
+    entryPrice = float(position_information(i).get("entryPrice"))
+    liquidationPrice = float(position_information(i).get("liquidationPrice"))
 
     if position == "LONG":
         stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), round_decimal)
@@ -79,9 +79,9 @@ def set_take_profit(i, position, percentage): # Percentage to achieve so you cou
         client.futures_create_order(symbol=config.pair[i], side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
 
 def set_stop_loss(i, position, percentage): # Percentage of the initial amount that you are willing to lose
-    positionAmt = float(position_information(i)[0].get('positionAmt'))
-    entryPrice = float(position_information(i)[0].get("entryPrice"))
-    liquidationPrice = float(position_information(i)[0].get("liquidationPrice"))
+    positionAmt = float(position_information(i).get('positionAmt'))
+    entryPrice = float(position_information(i).get("entryPrice"))
+    liquidationPrice = float(position_information(i).get("liquidationPrice"))
 
     if position == "LONG":
         stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * (percentage / 100))), round_decimal)

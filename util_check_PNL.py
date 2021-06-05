@@ -9,7 +9,7 @@ midnight_timestamp = int(datetime.timestamp(midnight) * 1000)
 for coinlist in range(len(config.pair)):
     i, overall_PNL, win, lose = 0, 0, 0, 0
     trades_list    = binance_futures_api.account_trades(coinlist, midnight_timestamp)
-    position_info  = binance_futures_api.position_information(coinlist)[0]
+    position_info  = binance_futures_api.position_information(coinlist)
     markPrice      = float(position_info.get('markPrice'))
     positionAmt    = abs(float(position_info.get('positionAmt')))
     fees_in_USDT   = round(((markPrice * positionAmt * 0.1) / 100), 2)

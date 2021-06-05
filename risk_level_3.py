@@ -14,7 +14,7 @@ from termcolor import colored
 live_trade = config.live_trade
 
 def lets_make_some_money(i):
-    response = binance_futures_api.position_information(i)[0]
+    response = binance_futures_api.position_information(i)
     mark_price   = binance_futures_api.mark_price(i)
     klines_1min  = binance_futures_api.KLINE_INTERVAL_1MINUTE(i)
     klines_5min  = binance_futures_api.KLINE_INTERVAL_5MINUTE(i)
