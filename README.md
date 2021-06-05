@@ -32,8 +32,8 @@ REMEMBER 5% or 1/20 IS THE KEY
 ## 1. Environment Setup
 Paste the following into your Default Shell
 ```
-export API_KEY="your_binance_api_key"
-export API_SECRET="your_binance_secret_key"
+export BINANCE_KEY="your_binance_api_key"
+export BINANCE_SECRET="your_binance_secret_key"
 ```
 
 Or as an ALTERNATIVE, you can change `line 7-9` in `binance_futures_api.py` to following: 
