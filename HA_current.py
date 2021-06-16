@@ -116,3 +116,9 @@ def output(mark_price, klines): # return GREEN // GREEN_INDECISIVE // RED // RED
     elif current == "RED"   or current == "RED_INDECISIVE"  : print(colored("RECENT " + interval + ":   " + strength + " " + current, "red"))
     else: print(colored("RECENT " + interval + ":   " + strength + " " + current, "yellow"))
     return current
+
+def closing_price_list(klines):
+    closing_price_list = []
+    for candle in range(len(klines)):
+        closing_price_list.append(float(klines[candle][4]))
+    return closing_price_list

@@ -17,7 +17,7 @@ def cancel_all_open_orders(i)    : return client.futures_cancel_all_open_orders(
 def get_open_orders(i)           : return client.futures_get_open_orders(symbol=config.pair[i], timestamp=get_timestamp())
 def position_information(i)      : return client.futures_position_information(symbol=config.pair[i], timestamp=get_timestamp())[0]
 
-query = 4
+query = 300
 def KLINE_INTERVAL_1MINUTE(i)   : return client.futures_klines(symbol=config.pair[i], limit=query, interval=Client.KLINE_INTERVAL_1MINUTE)
 def KLINE_INTERVAL_3MINUTE(i)   : return client.futures_klines(symbol=config.pair[i], limit=query, interval=Client.KLINE_INTERVAL_3MINUTE)
 def KLINE_INTERVAL_5MINUTE(i)   : return client.futures_klines(symbol=config.pair[i], limit=query, interval=Client.KLINE_INTERVAL_5MINUTE)
@@ -56,14 +56,18 @@ def close_position(i,position):
     if position == "SHORT":
         client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
 
+# ==============================================================================================================================
+#                                                   USELESS FUNCTIONS
+# ==============================================================================================================================
+
+round_decimal = 5
+
 def set_trailing_stop(i, position, callbackRate):
     positionAmt = float(position_information(i).get('positionAmt'))
     if position == "LONG":
         client.futures_create_order(symbol=config.pair[i], side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=abs(positionAmt), timestamp=get_timestamp())
     elif position == "SHORT":
         client.futures_create_order(symbol=config.pair[i], side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=abs(positionAmt), timestamp=get_timestamp())
-
-round_decimal = 5
 
 def set_take_profit(i, position, percentage): # Percentage to achieve so you could close the position
     positionAmt = float(position_information(i).get('positionAmt'))

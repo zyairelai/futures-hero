@@ -24,9 +24,9 @@ profit_margin = 0.4
 leverage, pair = [], []
 for i in range(len(coin)):
     pair.append(coin[i] + "USDT")
-    if   coin[i] == "BTC": leverage.append(60)
+    if   coin[i] == "BTC": leverage.append(50)
     elif coin[i] == "ETH": leverage.append(40)
-    else: leverage.append(20)
+    else: leverage.append(30)
 
     print("Pair Name        :   " + pair[i])
     print("Trade Quantity   :   " + str(quantity[i]) + " " + coin[i])
@@ -37,4 +37,4 @@ for i in range(len(coin)):
 #       Troubleshooting mode for @zyairelai
 # ====================================================
 troubleshooting = False
-clear_direction = True
+clear_direction = False
