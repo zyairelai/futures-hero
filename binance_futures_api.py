@@ -1,10 +1,12 @@
 import os, time, config
 from binance.client import Client
+from termcolor import colored
 
 # Get environment variables
 api_key     = os.environ.get('BINANCE_KEY')
 api_secret  = os.environ.get('BINANCE_SECRET')
 client      = Client(api_key, api_secret)
+live_trade  = config.live_trade
 
 def get_timestamp()              : return int(time.time() * 1000)
 def timestamp_of(klines)         : return int(klines[-1][0])
@@ -37,24 +39,32 @@ def current_kline_timestamp(kline): return int(kline[-1][0])
 
 def open_position(i, position, amount):
     if position == "LONG":
-        client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=amount, timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=amount, timestamp=get_timestamp())
+        print(colored("ACTION           :   🚀 GO_LONG 🚀", "green"))
     if position == "SHORT":
-        client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=amount, timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=amount, timestamp=get_timestamp())
+        print(colored("ACTION           :   💥 GO_SHORT 💥", "red"))
 
 def throttle(i, position):
     positionAmt = abs(float(position_information(i).get('positionAmt'))) * 2
     small_bites = config.quantity[i]
     if position == "LONG":
-        client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
+        if config.enable_throttle: 
+            if live_trade: client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
+            print("ACTION           :   🔥 THROTTLE_LONG 🔥")
     if position == "SHORT":
-        client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
+        if config.enable_throttle: 
+            if live_trade: client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=positionAmt, timestamp=get_timestamp())
+            print("ACTION           :   🔥 THROTTLE_SHORT 🔥")
 
 def close_position(i,position):
     positionAmt = float(position_information(i).get('positionAmt'))
     if position == "LONG":
-        client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="SELL", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
+        print("ACTION           :   💰 CLOSE_LONG 💰")
     if position == "SHORT":
-        client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="BUY", type="MARKET", quantity=abs(positionAmt), timestamp=get_timestamp())
+        print("ACTION           :   💰 CLOSE_SHORT 💰")
 
 # ==============================================================================================================================
 #                                                   USELESS FUNCTIONS
@@ -65,9 +75,9 @@ round_decimal = 5
 def set_trailing_stop(i, position, callbackRate):
     positionAmt = float(position_information(i).get('positionAmt'))
     if position == "LONG":
-        client.futures_create_order(symbol=config.pair[i], side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=abs(positionAmt), timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="SELL", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=abs(positionAmt), timestamp=get_timestamp())
     elif position == "SHORT":
-        client.futures_create_order(symbol=config.pair[i], side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=abs(positionAmt), timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="BUY", type="TRAILING_STOP_MARKET", callbackRate=callbackRate, quantity=abs(positionAmt), timestamp=get_timestamp())
 
 def set_take_profit(i, position, percentage): # Percentage to achieve so you could close the position
     positionAmt = float(position_information(i).get('positionAmt'))
@@ -76,11 +86,11 @@ def set_take_profit(i, position, percentage): # Percentage to achieve so you cou
 
     if position == "LONG":
         stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), round_decimal)
-        client.futures_create_order(symbol=config.pair[i], side="SELL", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="SELL", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
 
     elif position == "SHORT":
         stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * (percentage / 100))), round_decimal)
-        client.futures_create_order(symbol=config.pair[i], side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="BUY", type="TAKE_PROFIT_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
 
 def set_stop_loss(i, position, percentage): # Percentage of the initial amount that you are willing to lose
     positionAmt = float(position_information(i).get('positionAmt'))
@@ -89,8 +99,8 @@ def set_stop_loss(i, position, percentage): # Percentage of the initial amount t
 
     if position == "LONG":
         stopPrice = round((entryPrice - ((entryPrice - liquidationPrice) * (percentage / 100))), round_decimal)
-        client.futures_create_order(symbol=config.pair[i], side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="SELL", type="STOP_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
 
     elif position == "SHORT":
         stopPrice = round((entryPrice + ((liquidationPrice - entryPrice) * (percentage / 100))), round_decimal)
-        client.futures_create_order(symbol=config.pair[i], side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())
+        if live_trade: client.futures_create_order(symbol=config.pair[i], side="BUY", type="STOP_MARKET", stopPrice=stopPrice, quantity=abs(positionAmt), timeInForce="GTC", timestamp=get_timestamp())

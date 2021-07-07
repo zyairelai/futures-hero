@@ -1,21 +1,15 @@
-live_trade = False
+live_trade = True
 
 # Adding to the losing position to pull back the entry price (Liquidation on Binance is when you hit 80%)
 enable_throttle = False
 
-# Cut loss when the percentage hits, enabled this will not trigger Throttle :)
-enable_stoploss = False
-stoploss_percentage = 50
-
 # The Risk_Level model to choose.
-# Read the first line for each risk_level_x.py module
-risk_level = [ 3 ]
+risk_level = [ 2 ]
 
 coin     = ["BTC"]
 quantity = [0.001]
 
 # profit_margin * leverage = Actual Profit Percentage.
-# Minimum is 0.1 to cover the fees!!!
 profit_margin = 0.4
 
 # ====================================================
@@ -33,8 +27,4 @@ for i in range(len(coin)):
     print("Leverage         :   " + str(leverage[i]))
     print()
 
-# ====================================================
-#       Troubleshooting mode for @zyairelai
-# ====================================================
 troubleshooting = False
-clear_direction = False

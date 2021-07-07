@@ -24,14 +24,14 @@ def get_position_info(i, response): # >>> "LONGING" // "SHORTING" // "NO_POSITIO
     if (positionAmt > 0):
         position = "LONGING"
         print(colored(title + position, "green"))
-        if unRealizedProfit > 0: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "green"))
-        else: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "red"))
+        if unRealizedProfit > 0: print(colored("unRealizedProfit :   " + str(unRealizedProfit) + " USDT", "green"))
+        else: print(colored("unRealizedProfit :   " + str(unRealizedProfit) + " USDT", "red"))
 
     elif (positionAmt < 0):
         position = "SHORTING"
         print(colored(title + position, "red"))
-        if unRealizedProfit > 0: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "green"))
-        else: print(colored("unRealizedProfit :   " + str(unRealizedProfit), "red"))
+        if unRealizedProfit > 0: print(colored("unRealizedProfit :   " + str(unRealizedProfit) + " USDT", "green"))
+        else: print(colored("unRealizedProfit :   " + str(unRealizedProfit) + " USDT", "red"))
 
     else:
         position = "NO_POSITION"
