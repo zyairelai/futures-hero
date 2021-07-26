@@ -4,9 +4,6 @@ try:
     import socket
     import urllib3
     import config
-    import risk_level_1
-    import risk_level_2
-    import risk_level_3
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -15,19 +12,14 @@ try:
         print(colored("LIVE TRADE IS ENABLED\n", "green"))
     else:
         print(colored("THIS IS BACKTESTING\n", "red"))
-        if not os.path.exists("BACKTEST"): os.makedirs("BACKTEST")
+        # if not os.path.exists("BACKTEST"): os.makedirs("BACKTEST")
 
     while True:
         try:
+            # Choose your strategy here
+            import strategy_Retard
             for i in range(len(config.pair)):
-                if len(config.risk_level) > 1 :
-                    risk_level = config.risk_level[i]
-                else: risk_level = config.risk_level[0]
-                if   risk_level == 1: risk_level_1.lets_make_some_money(i)
-                elif risk_level == 2: risk_level_2.lets_make_some_money(i)
-                elif risk_level == 3: risk_level_3.lets_make_some_money(i)
-                else:
-                    risk_level_2.lets_make_some_money(i)
+                strategy_Retard.lets_make_some_money(i)
 
         except (socket.timeout,
                 BinanceAPIException,
