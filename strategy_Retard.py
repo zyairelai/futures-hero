@@ -10,7 +10,9 @@ def lets_make_some_money(i):
     response = binance_futures_api.position_information(i)
     klines_30min = binance_futures_api.KLINE_INTERVAL_30MINUTE(i)
     klines_6HOUR = binance_futures_api.KLINE_INTERVAL_6HOUR(i)
+    klines_12HOUR = binance_futures_api.KLINE_INTERVAL_12HOUR(i)
     position_info = get_position.get_position_info(i, response)
+    profit_threshold = get_position.profit_threshold()
 
     heikin_ashi.output(klines_6HOUR)
     candlestick.output(klines_6HOUR)
@@ -20,11 +22,11 @@ def lets_make_some_money(i):
     if response.get('marginType') != "isolated": binance_futures_api.change_margin_to_ISOLATED(i)
 
     if position_info == "LONGING":
-        if EXIT_LONG(klines_6HOUR): binance_futures_api.close_position(i, "LONG")
+        if EXIT_LONG(response, profit_threshold, klines_6HOUR): binance_futures_api.close_position(i, "LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if EXIT_SHORT(klines_6HOUR): binance_futures_api.close_position(i, "SHORT")
+        if EXIT_SHORT(response, profit_threshold, klines_6HOUR): binance_futures_api.close_position(i, "SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
@@ -42,13 +44,15 @@ def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
 def GO_LONG(klines_6HOUR):
-    if candlestick.hybrid(klines_6HOUR) == "GREEN": return True
+    if candlestick.hybrid(klines_6HOUR) == "GREEN": return True #and candlestick.both_candle(klines_12HOUR) == "GREEN"
 
 def GO_SHORT(klines_6HOUR):
-    if candlestick.hybrid(klines_6HOUR) == "RED": return True
+    if candlestick.hybrid(klines_6HOUR) == "RED": return True #and candlestick.both_candle(klines_12HOUR) == "RED"
 
-def EXIT_LONG(klines_6HOUR):
+def EXIT_LONG(response, profit_threshold, klines_6HOUR):
     if heikin_ashi.VALID_CANDLE(klines_6HOUR) != "GREEN" and candlestick.candle_color(klines_6HOUR) == "RED": return True
 
-def EXIT_SHORT(klines_6HOUR):
+def EXIT_SHORT(response, profit_threshold, klines_6HOUR):
     if heikin_ashi.VALID_CANDLE(klines_6HOUR) != "RED" and candlestick.candle_color(klines_6HOUR) == "GREEN": return True
+
+# if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":

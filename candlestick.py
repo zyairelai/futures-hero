@@ -51,3 +51,7 @@ def output(klines):
 def hybrid(klines):
     if candle_color(klines) == "GREEN" and strong_candle(klines) and heikin_ashi.VALID_CANDLE(klines) == "GREEN": return "GREEN"
     elif candle_color(klines) == "RED" and strong_candle(klines) and heikin_ashi.VALID_CANDLE(klines) == "RED" : return "RED"
+
+def both_candle(klines):
+    if candle_color(klines) == "GREEN" and heikin_ashi.VALID_CANDLE(klines) == "GREEN": return "GREEN"
+    elif candle_color(klines) == "RED" and heikin_ashi.VALID_CANDLE(klines) == "RED" : return "RED"
