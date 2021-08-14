@@ -1,30 +1,43 @@
-import heikin_ashi
 from termcolor import colored
 
-def open(klines)  : return float(klines[-1][1])
-def high(klines)  : return float(klines[-1][2])
-def low(klines)   : return float(klines[-1][3])
-def close(klines) : return float(klines[-1][4])
+def previous_open(klines) : return float(klines[-2][1])
+def previous_high(klines) : return float(klines[-2][2])
+def previous_low(klines)  : return float(klines[-2][3])
+def previous_close(klines): return float(klines[-2][4])
+def current_open(klines)  : return float(klines[-1][1])
+def current_high(klines)  : return float(klines[-1][2])
+def current_low(klines)   : return float(klines[-1][3])
+def current_close(klines) : return float(klines[-1][4])
+def candle_body(klines)   : return abs(current_open(klines) - current_close(klines))
+def candle_wick(klines)   : return current_high(klines) - current_low(klines) - candle_body(klines)
 def timestamp_of(kline): return kline[-1][0]
-def candle_body(klines): return abs(open(klines) - close(klines))
+
+def closing_price_list(klines):
+    closing_price_list = []
+    for candle in range(len(klines)):
+        closing_price_list.append(float(klines[candle][4]))
+    return closing_price_list
 
 def candle_color(klines):
-    if close(klines) > open(klines): return "GREEN"
-    elif close(klines) < open(klines): return "RED"
+    if current_close(klines) > current_open(klines): return "GREEN"
+    elif current_close(klines) < current_open(klines): return "RED"
     else: return "INDECISIVE"
 
 def upper_wick(klines):
-    if candle_color(klines) == "GREEN": return high(klines) - close(klines)
-    elif candle_color(klines) == "RED": return high(klines) - open(klines)
+    if candle_color(klines) == "GREEN": return current_high(klines) - current_close(klines)
+    elif candle_color(klines) == "RED": return current_high(klines) - current_open(klines)
     else: return 0
 
 def lower_wick(klines):
-    if candle_color(klines) == "GREEN": return open(klines) - low(klines)
-    elif candle_color(klines) == "RED": return close(klines) - low(klines)
+    if candle_color(klines) == "GREEN": return current_open(klines)  - current_low(klines)
+    elif candle_color(klines) == "RED": return current_close(klines) - current_low(klines)
     else: return 0
 
 def strong_candle(klines):
-    if candle_body(klines) > upper_wick(klines) + lower_wick(klines): return True
+    if candle_body(klines) > candle_wick(klines): return True
+    else:
+        if candle_color(klines) == "GREEN" and current_close(klines) > previous_high(klines): return True
+        elif candle_color(klines) == "RED" and current_close(klines) < previous_low(klines): return True
 
 def output(klines):
     milliseconds = int(klines[-1][0]) - int(klines[-2][0])
@@ -47,11 +60,3 @@ def output(klines):
     elif candle == "RED"   or candle == "RED_INDECISIVE"  : print(colored("CANDLE " + interval + ":   " + strength + candle, "red"))
     else: print(colored("CANDLE " + interval + ":   " + candle, "yellow"))
     return candle
-
-def hybrid(klines):
-    if candle_color(klines) == "GREEN" and strong_candle(klines) and heikin_ashi.VALID_CANDLE(klines) == "GREEN": return "GREEN"
-    elif candle_color(klines) == "RED" and strong_candle(klines) and heikin_ashi.VALID_CANDLE(klines) == "RED" : return "RED"
-
-def both_candle(klines):
-    if candle_color(klines) == "GREEN" and heikin_ashi.VALID_CANDLE(klines) == "GREEN": return "GREEN"
-    elif candle_color(klines) == "RED" and heikin_ashi.VALID_CANDLE(klines) == "RED" : return "RED"

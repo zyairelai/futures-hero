@@ -1,6 +1,8 @@
+import RSI
 import config
 import candlestick
 import get_position
+import hybrid
 import heikin_ashi
 import binance_futures_api
 from datetime import datetime
@@ -14,6 +16,9 @@ def lets_make_some_money(i):
     klines_6HOUR = binance_futures_api.KLINE_INTERVAL_6HOUR(i)
     position_info = get_position.get_position_info(i, response)
     profit_threshold = get_position.profit_threshold()
+
+    closing_dataset = candlestick.closing_price_list(klines_1HOUR)
+    rsi = RSI.current_RSI(closing_dataset)
 
     heikin_ashi.output(klines_6HOUR)
     candlestick.output(klines_6HOUR)
@@ -34,10 +39,10 @@ def lets_make_some_money(i):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if GO_LONG(klines_1min, klines_1HOUR, klines_6HOUR):
+        if GO_LONG(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
             if not hot_zone(klines_30min, klines_6HOUR): binance_futures_api.open_position(i, "LONG", config.quantity[i])
 
-        elif GO_SHORT(klines_1min, klines_1HOUR, klines_6HOUR):
+        elif GO_SHORT(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
             if not hot_zone(klines_30min, klines_6HOUR): binance_futures_api.open_position(i, "SHORT", config.quantity[i])
 
         else: print("ACTION           :   🐺 WAIT 🐺")
@@ -47,20 +52,22 @@ def lets_make_some_money(i):
 def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
-def GO_LONG(klines_1min, klines_1HOUR, klines_6HOUR):
-    if  candlestick.hybrid(klines_1min) == "GREEN" and \
-        candlestick.hybrid(klines_1HOUR) == "GREEN" and \
-        candlestick.hybrid(klines_6HOUR) == "GREEN": return True
+def GO_LONG(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
+    if RSI.you_can_long(rsi) and \
+        hybrid.both_color(klines_1min) == "GREEN" and \
+        hybrid.both_color(klines_1HOUR) == "GREEN" and \
+        hybrid.both_color(klines_6HOUR) == "GREEN": return True
 
-def GO_SHORT(klines_1min, klines_1HOUR, klines_6HOUR):
-    if  candlestick.hybrid(klines_1min) == "RED" and \
-        candlestick.hybrid(klines_1HOUR) == "RED" and \
-        candlestick.hybrid(klines_6HOUR) == "RED": return True
+def GO_SHORT(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
+    if RSI.you_can_short(rsi) and \
+        hybrid.both_color(klines_1min) == "RED" and \
+        hybrid.both_color(klines_1HOUR) == "RED" and \
+        hybrid.both_color(klines_6HOUR) == "RED": return True
 
 def EXIT_LONG(response, profit_threshold, klines_1min):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
-        if candlestick.hybrid(klines_1min) == "RED": return True
+        if hybrid.both_color(klines_1min) == "RED": return True
 
 def EXIT_SHORT(response, profit_threshold, klines_1min):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
-        if candlestick.hybrid(klines_1min) == "GREEN": return True
+        if hybrid.both_color(klines_1min) == "GREEN": return True

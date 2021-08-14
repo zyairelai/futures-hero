@@ -4,6 +4,7 @@ try:
     import socket
     import urllib3
     import config
+    import strategy
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -16,10 +17,7 @@ try:
 
     while True:
         try:
-            # Choose your strategy here
-            import strategy_Retard
-            for i in range(len(config.pair)):
-                strategy_Retard.lets_make_some_money(i)
+            for i in range(len(config.pair)): strategy.lets_make_some_money(i)
 
         except (socket.timeout,
                 BinanceAPIException,

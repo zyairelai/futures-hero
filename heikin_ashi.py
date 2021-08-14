@@ -62,12 +62,6 @@ def output(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE 
     else: print(colored("RECENT " + interval + ":   " + " " + current, "yellow"))
     return current
 
-def closing_price_list(klines):
-    closing_price_list = []
-    for candle in range(len(klines)):
-        closing_price_list.append(float(klines[candle][4]))
-    return closing_price_list
-
 def war_formation(klines): # Pencil_Wick_Test    
     if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE":
         if close(klines) > previous_Close(klines) and high(klines) > previous_High(klines): return True
