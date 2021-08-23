@@ -39,12 +39,10 @@ def lets_make_some_money(i):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if GO_LONG(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
-            if not hot_zone(klines_30min, klines_6HOUR): binance_futures_api.open_position(i, "LONG", config.quantity[i])
-
-        elif GO_SHORT(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
-            if not hot_zone(klines_30min, klines_6HOUR): binance_futures_api.open_position(i, "SHORT", config.quantity[i])
-
+        if not hot_zone(klines_30min, klines_6HOUR):
+            if GO_LONG(rsi, klines_1min, klines_1HOUR, klines_6HOUR): binance_futures_api.open_position(i, "LONG", config.quantity[i])
+            elif GO_SHORT(rsi, klines_1min, klines_1HOUR, klines_6HOUR): binance_futures_api.open_position(i, "SHORT", config.quantity[i])
+            else: print("ACTION           :   🐺 WAIT 🐺")
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
@@ -53,16 +51,16 @@ def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
 def GO_LONG(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
-    if RSI.you_can_long(rsi) and \
+    if (RSI.you_can_long(rsi) and \
         hybrid.both_color(klines_1min) == "GREEN" and \
         hybrid.both_color(klines_1HOUR) == "GREEN" and \
-        hybrid.both_color(klines_6HOUR) == "GREEN": return True
+        hybrid.both_color(klines_6HOUR) == "GREEN"): return True
 
 def GO_SHORT(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
-    if RSI.you_can_short(rsi) and \
+    if (RSI.you_can_short(rsi) and \
         hybrid.both_color(klines_1min) == "RED" and \
         hybrid.both_color(klines_1HOUR) == "RED" and \
-        hybrid.both_color(klines_6HOUR) == "RED": return True
+        hybrid.both_color(klines_6HOUR) == "RED"): return True
 
 def EXIT_LONG(response, profit_threshold, klines_1min):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
