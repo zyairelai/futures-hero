@@ -51,13 +51,13 @@ def hot_zone(klines_30MIN, klines_6HOUR):
     if klines_6HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
 def GO_LONG(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
-    if (RSI.you_can_long(rsi) and \
+    if (RSI.feel_free_to_long(rsi) and \
         hybrid.both_color(klines_1min) == "GREEN" and \
         hybrid.both_color(klines_1HOUR) == "GREEN" and \
         hybrid.both_color(klines_6HOUR) == "GREEN"): return True
 
 def GO_SHORT(rsi, klines_1min, klines_1HOUR, klines_6HOUR):
-    if (RSI.you_can_short(rsi) and \
+    if (RSI.feel_free_to_short(rsi) and \
         hybrid.both_color(klines_1min) == "RED" and \
         hybrid.both_color(klines_1HOUR) == "RED" and \
         hybrid.both_color(klines_6HOUR) == "RED"): return True

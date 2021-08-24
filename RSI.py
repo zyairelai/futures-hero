@@ -23,10 +23,10 @@ def cal_rsi(dataset):
 def current_RSI(dataset):
     return cal_rsi(dataset)[-1]
 
-def you_can_long(rsi):
+def feel_free_to_long(rsi):
     if rsi < 70: return True
 
-def you_can_short(rsi):
+def feel_free_to_short(rsi):
     if rsi > 30: return True
 
 def do_not_long(rsi):
