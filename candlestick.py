@@ -23,6 +23,11 @@ def candle_color(klines):
     elif current_close(klines) < current_open(klines): return "RED"
     else: return "INDECISIVE"
 
+def previous_candle_color(klines):
+    if previous_close(klines) > previous_open(klines): return "GREEN"
+    elif previous_close(klines) < previous_open(klines): return "RED"
+    else: return "INDECISIVE"
+
 def upper_wick(klines):
     if candle_color(klines) == "GREEN": return current_high(klines) - current_close(klines)
     elif candle_color(klines) == "RED": return current_high(klines) - current_open(klines)
@@ -34,10 +39,14 @@ def lower_wick(klines):
     else: return 0
 
 def strong_candle(klines):
-    if candle_body(klines) > candle_wick(klines): return True
-    else:
-        if candle_color(klines) == "GREEN" and current_close(klines) > previous_high(klines): return True
-        elif candle_color(klines) == "RED" and current_close(klines) < previous_low(klines): return True
+    if previous_candle_color(klines) == "GREEN" and candle_color(klines) == "GREEN":
+        if current_close(klines) > previous_close(klines): return True
+    elif previous_candle_color(klines) == "GREEN" and candle_color(klines) == "RED":
+        if current_close(klines) < previous_open(klines): return True
+    elif previous_candle_color(klines) == "RED" and candle_color(klines) == "GREEN":
+        if current_close(klines) > previous_open(klines): return True
+    elif previous_candle_color(klines) == "RED" and candle_color(klines) == "RED":
+        if current_close(klines) < previous_close(klines): return True
 
 def output(klines):
     milliseconds = int(klines[-1][0]) - int(klines[-2][0])
