@@ -2,65 +2,85 @@ import RSI
 import config
 import candlestick
 import get_position
-import hybrid
 import heikin_ashi
+import hybrid
 import binance_futures_api
 from datetime import datetime
 from termcolor import colored
 
 def lets_make_some_money(i):
     response = binance_futures_api.position_information(i)
-    main_direction    = binance_futures_api.KLINE_INTERVAL_4HOUR(i)
-    support_direction = binance_futures_api.KLINE_INTERVAL_1HOUR(i)
-    entry_interval    = binance_futures_api.KLINE_INTERVAL_1MINUTE(i)
-    position_info     = get_position.get_position_info(i, response)
-    profit_threshold  = get_position.profit_threshold()
+    klines_4HOUR = binance_futures_api.KLINE_INTERVAL_4HOUR(i)
+    klines_1HOUR = binance_futures_api.KLINE_INTERVAL_1HOUR(i)
+    klines_5MIN  = binance_futures_api.KLINE_INTERVAL_5MINUTE(i)
+    klines_1MIN  = binance_futures_api.KLINE_INTERVAL_1MINUTE(i)
+    position_info = get_position.get_position_info(i, response)
+    profit_threshold = get_position.profit_threshold()
 
-    closing_dataset = candlestick.closing_price_list(entry_interval)
-    rsi = RSI.current_RSI(closing_dataset)
+    rsi_5MIN = RSI.current_RSI(candlestick.closing_price_list(klines_5MIN))
+    rsi_1MIN = RSI.current_RSI(candlestick.closing_price_list(klines_1MIN))
 
-    heikin_ashi.output(main_direction)
-    candlestick.output(main_direction)
-    heikin_ashi.output(support_direction)
-    candlestick.output(support_direction)
-    heikin_ashi.output(entry_interval)
-    print("CURRENT RSI      :   " + str(rsi))
+    candlestick.output(klines_4HOUR)
+    candlestick.output(klines_1HOUR)
+    candlestick.output(klines_5MIN)
+    candlestick.output(klines_1MIN)
+    print()
+    heikin_ashi.output(klines_4HOUR)
+    heikin_ashi.output(klines_1HOUR)
+    heikin_ashi.output(klines_5MIN)
+    heikin_ashi.output(klines_1MIN)
+    print("CURRENT 5MIN RSI :   " + str(rsi_5MIN))
+    print("CURRENT 1MIN RSI :   " + str(rsi_1MIN))
 
     leverage = config.leverage[i]
     if int(response.get("leverage")) != leverage: binance_futures_api.change_leverage(i, leverage)
     if response.get('marginType') != "isolated": binance_futures_api.change_margin_to_ISOLATED(i)
 
     if position_info == "LONGING":
-        if EXIT_LONG(response, profit_threshold, entry_interval): binance_futures_api.close_position(i, "LONG")
+        if EXIT_LONG(response, profit_threshold, klines_1MIN): binance_futures_api.close_position(i, "LONG")
         else: print(colored("ACTION           :   HOLDING_LONG", "green"))
 
     elif position_info == "SHORTING":
-        if EXIT_SHORT(response, profit_threshold, entry_interval): binance_futures_api.close_position(i, "SHORT")
+        if EXIT_SHORT(response, profit_threshold, klines_1MIN): binance_futures_api.close_position(i, "SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if GO_LONG(main_direction, support_direction, entry_interval, rsi): binance_futures_api.open_position(i, "LONG", config.quantity[i])
-        elif GO_SHORT(main_direction, support_direction, entry_interval, rsi): binance_futures_api.open_position(i, "SHORT", config.quantity[i])
+        if GO_LONG(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN): binance_futures_api.open_position(i, "LONG", config.quantity[i])
+        elif GO_SHORT(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN): binance_futures_api.open_position(i, "SHORT", config.quantity[i])
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
+    if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN)
 
-def GO_LONG(main_direction, support_direction, entry_interval, rsi):
-    if  hybrid.strong_trend(main_direction) == "GREEN" and \
-        hybrid.strong_trend(support_direction) == "GREEN" and \
-        hybrid.strong_trend(entry_interval) == "GREEN" and \
-        rsi < 70: return True
+def hot_zone(klines_30MIN, klines_1HOUR):
+    if klines_1HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
-def GO_SHORT(main_direction, support_direction, entry_interval, rsi):
-    if  hybrid.strong_trend(main_direction) == "RED" and \
-        hybrid.strong_trend(support_direction) == "RED" and \
-        hybrid.strong_trend(entry_interval) == "RED" and \
-        rsi > 30: return True
+def GO_LONG(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
+    if  hybrid.strong_trend(klines_4HOUR) == "GREEN" and \
+        hybrid.strong_trend(klines_1HOUR) == "GREEN" and \
+        hybrid.strong_trend(klines_5MIN) == "GREEN" and \
+        hybrid.strong_trend(klines_1MIN) == "GREEN" and \
+        rsi_5MIN < 70 and rsi_1MIN < 70: return True
 
-def EXIT_LONG(response, profit_threshold, entry_interval):
+def GO_SHORT(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
+    if  hybrid.strong_trend(klines_4HOUR) == "RED" and \
+        hybrid.strong_trend(klines_1HOUR) == "RED" and \
+        hybrid.strong_trend(klines_5MIN) == "RED" and \
+        hybrid.strong_trend(klines_1MIN) == "RED" and \
+        rsi_5MIN > 30 and rsi_1MIN > 30: return True
+
+def EXIT_LONG(response, profit_threshold, klines_1MIN):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
-        if hybrid.strong_trend(entry_interval) == "RED": return True
+        if hybrid.strong_trend(klines_1MIN) == "RED": return True
 
-def EXIT_SHORT(response, profit_threshold, entry_interval):
+def EXIT_SHORT(response, profit_threshold, klines_1MIN):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
-        if hybrid.strong_trend(entry_interval) == "GREEN": return True
+        if hybrid.strong_trend(klines_1MIN) == "GREEN": return True
+
+def print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN):
+    test_color = "RED".upper()
+    print("4 hour YES") if hybrid.strong_trend(klines_4HOUR) == test_color else print("4 hour NO")
+    print("1 hour YES") if hybrid.strong_trend(klines_1HOUR) == test_color else print("1 hour NO")
+    print("5 minute YES")if hybrid.strong_trend(klines_5MIN) == test_color else print("5 minute NO")
+    print("1 minute YES") if hybrid.strong_trend(klines_1MIN) == test_color else print("1 minute NO")
+    print()
