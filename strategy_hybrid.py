@@ -29,8 +29,6 @@ def lets_make_some_money(i):
     heikin_ashi.output(klines_1HOUR)
     heikin_ashi.output(klines_5MIN)
     heikin_ashi.output(klines_1MIN)
-    print("CURRENT 5MIN RSI :   " + str(rsi_5MIN))
-    print("CURRENT 1MIN RSI :   " + str(rsi_1MIN))
 
     leverage = config.leverage[i]
     if int(response.get("leverage")) != leverage: binance_futures_api.change_leverage(i, leverage)
@@ -50,7 +48,7 @@ def lets_make_some_money(i):
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
-    if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN)
+    if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
 
 def hot_zone(klines_30MIN, klines_1HOUR):
     if klines_1HOUR[-1][0] == klines_30MIN[-1][0]: return True
@@ -58,29 +56,31 @@ def hot_zone(klines_30MIN, klines_1HOUR):
 def GO_LONG(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
     if  hybrid.strong_trend(klines_4HOUR) == "GREEN" and \
         hybrid.strong_trend(klines_1HOUR) == "GREEN" and \
-        hybrid.strong_trend(klines_5MIN) == "GREEN" and \
-        hybrid.strong_trend(klines_1MIN) == "GREEN" and \
+        heikin_ashi.VALID_CANDLE(klines_5MIN) == "GREEN" and \
+        heikin_ashi.VALID_CANDLE(klines_1MIN) == "GREEN" and \
         rsi_5MIN < 70 and rsi_1MIN < 70: return True
 
 def GO_SHORT(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
     if  hybrid.strong_trend(klines_4HOUR) == "RED" and \
         hybrid.strong_trend(klines_1HOUR) == "RED" and \
-        hybrid.strong_trend(klines_5MIN) == "RED" and \
-        hybrid.strong_trend(klines_1MIN) == "RED" and \
+        heikin_ashi.VALID_CANDLE(klines_5MIN) == "RED" and \
+        heikin_ashi.VALID_CANDLE(klines_1MIN) == "RED" and \
         rsi_5MIN > 30 and rsi_1MIN > 30: return True
 
 def EXIT_LONG(response, profit_threshold, klines_1MIN):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
-        if hybrid.strong_trend(klines_1MIN) == "RED": return True
+        if heikin_ashi.VALID_CANDLE(klines_1MIN) == "RED": return True
 
 def EXIT_SHORT(response, profit_threshold, klines_1MIN):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
-        if hybrid.strong_trend(klines_1MIN) == "GREEN": return True
+        if heikin_ashi.VALID_CANDLE(klines_1MIN) == "GREEN": return True
 
-def print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN):
+def print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
     test_color = "RED".upper()
-    print("4 hour YES") if hybrid.strong_trend(klines_4HOUR) == test_color else print("4 hour NO")
-    print("1 hour YES") if hybrid.strong_trend(klines_1HOUR) == test_color else print("1 hour NO")
-    print("5 minute YES")if hybrid.strong_trend(klines_5MIN) == test_color else print("5 minute NO")
-    print("1 minute YES") if hybrid.strong_trend(klines_1MIN) == test_color else print("1 minute NO")
+    print("4 HOUR YES") if hybrid.strong_trend(klines_4HOUR) == test_color else print("4 HOUR NO")
+    print("1 HOUR YES") if hybrid.strong_trend(klines_1HOUR) == test_color else print("1 HOUR NO")
+    print("5 MIN  YES") if heikin_ashi.VALID_CANDLE(klines_5MIN) == test_color else print("5 MIN  NO")
+    print("1 MIN  YES") if heikin_ashi.VALID_CANDLE(klines_1MIN) == test_color else print("1 MIN  NO")
+    print("5MIN RSI " + str(rsi_5MIN))
+    print("1MIN RSI " + str(rsi_1MIN))
     print()

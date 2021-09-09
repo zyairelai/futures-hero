@@ -44,7 +44,7 @@ def lets_make_some_money(i):
         else: print("ACTION           :   🐺 WAIT 🐺")
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
-    if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN)
+    if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
 
 def hot_zone(klines_30MIN, klines_1HOUR):
     if klines_1HOUR[-1][0] == klines_30MIN[-1][0]: return True
@@ -71,10 +71,12 @@ def EXIT_SHORT(response, profit_threshold, klines_1MIN):
     if get_position.profit_or_loss(response, profit_threshold) == "PROFIT":
         if heikin_ashi.VALID_CANDLE(klines_1MIN) == "GREEN": return True
 
-def print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN):
+def print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
     test_color = "RED".upper()
-    print("4 hour YES") if heikin_ashi.VALID_CANDLE(klines_4HOUR) == test_color else print("4 hour NO")
-    print("1 hour YES") if heikin_ashi.VALID_CANDLE(klines_1HOUR) == test_color else print("1 hour NO")
-    print("5 minute YES")if heikin_ashi.VALID_CANDLE(klines_5MIN) == test_color else print("5 minute NO")
-    print("1 minute YES") if heikin_ashi.VALID_CANDLE(klines_1MIN) == test_color else print("1 minute NO")
+    print("4 HOUR YES") if heikin_ashi.VALID_CANDLE(klines_4HOUR) == test_color else print("4 HOUR NO")
+    print("1 HOUR YES") if heikin_ashi.VALID_CANDLE(klines_1HOUR) == test_color else print("1 HOUR NO")
+    print("5 MIN  YES") if heikin_ashi.VALID_CANDLE(klines_5MIN) == test_color else print("5 MIN  NO")
+    print("1 MIN  YES") if heikin_ashi.VALID_CANDLE(klines_1MIN) == test_color else print("1 MIN  NO")
+    print("5MIN RSI " + str(rsi_5MIN))
+    print("1MIN RSI " + str(rsi_1MIN))
     print()
