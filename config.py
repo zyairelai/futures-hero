@@ -2,7 +2,7 @@ live_trade = False
 
 coin     = ["BTC"]
 quantity = [0.001]
-hybrid   = False
+hybrid   = True
 
 # profit_margin * leverage = Actual Profit Percentage.
 profit_margin = 0.4
