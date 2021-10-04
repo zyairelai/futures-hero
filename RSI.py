@@ -6,7 +6,7 @@ def compute(length, dataset):
     return ema[0].values.tolist()
 
 def cal_rsi(dataset):
-    periods = 30
+    periods = 14
     close_delta = pd.DataFrame(dataset).diff()
 
     # Make two series: one for lower closes and one for higher closes
@@ -22,3 +22,6 @@ def cal_rsi(dataset):
 
 def current_RSI(dataset):
     return round(float(cal_rsi(dataset)[-1]), 2)
+
+def upper_limit(): return 66
+def lower_limit(): return 33
