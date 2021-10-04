@@ -40,15 +40,15 @@ def lets_make_some_money(i):
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
     else:
-        if config.trade_all_week: check_trade_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
+        if config.trade_all_week: check_trade_condition(i, klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
         else:
             if datetime.today().weekday() < 5:
-                check_trade_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
+                check_trade_condition(i, klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
     if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
 
-def check_trade_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
+def check_trade_condition(i, klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
     if GO_LONG(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
         binance_futures_api.open_position(i, "LONG", config.quantity[i])
     elif GO_SHORT(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
