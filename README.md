@@ -6,8 +6,8 @@ Leverage Trading Automation on Binance Futures.
 This is a `Set and Forget` script, means you need to keep it running 24/7 and forget about it.  
 
 # DISCLAIMER
-This automation software is purely handcoded by [@zyairelai](https://github.com/zyairelai) from scratch with my personal manual trading strategy.  
-Anybody may copy, redistribute, modify of the software. However, limited to NON-COMMERCIAL USED only.  
+This automation software is implemented base on my personal manual trading strategy.  
+However not all my manual trading strategies are completely transformed into code. For example, common sense and 6th sense are not the part I could do in this code.
 
 LEVERAGE TRADING IS A HIGH RISK GAME.  
 PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.
@@ -44,10 +44,15 @@ client      = Client(api_key, api_secret)
 ```
 
 ## 2. Pip3 Requirements
-You need to have these libraries installed:
+To install all the dependencies requirements:
+```
+pip3 install -r requirements
+```
+Or if you prefer to install these libraries one by one:
 ```
 pip3 install apscheduler==3.6.3
-pip3 install cryptography==3.3.2 
+pip3 install cryptography==3.4.6
+pip3 install pandas==1.2.4
 pip3 install python-binance==0.7.9
 pip3 install termcolor==1.1.0
 ```
