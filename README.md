@@ -46,7 +46,7 @@ client      = Client(api_key, api_secret)
 ## 2. Pip3 Requirements
 To install all the dependencies requirements:
 ```
-pip3 install -r requirements
+pip3 install -r requirements.txt
 ```
 Or if you prefer to install these libraries one by one:
 ```
