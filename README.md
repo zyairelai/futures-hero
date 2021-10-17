@@ -22,14 +22,25 @@ This is a `Set and Forget` script, means you need to keep it running 24/7 and fo
 ## DISCLAIMER
 This automation software is implemented base on my PERSONAL MANUAL TRADING STRATEGY.  
 However not all my manual trading strategies are completely transformed into code.  
-For example, common sense, 6th sense, knowing when to stop trading are NOT the part I could do in this code.  
+For example, common sense, 6th sense, knowing when to stop trading are **NOT** the part I could do in this code.  
 
 **LEVERAGE TRADING IS A HIGH RISK GAME.**  
 **PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.**
 
 <a name="how_it_works"></a>
 ## HOW-IT-WORKS
-Coming Soon......
+In short, this code takes these few conditions into considerations:
+4-hour timeframe, 1-hour timeframe, 1-minute timeframe
+
+1. It checks the overall main direction, 4-hour. Let's say the newest current 4-hour candle is `GREEN`.  
+
+2. Then it checks the 1-hour candle for confirmation. Let's say the newest current 1-hour candle is match with 4-hour candle `GREEN`.  
+
+3. Since both main direction and confiramtion are `GREEN`, now it will find a good entry (The part takes 6th sense which I am not able to implement into code). 
+
+4. The entry will be on the 1-minute chart. In the case above, it will look for a long position entry.
+
+5. The exit will be based on the `profit_margin`.  
 
 <a name="how_to_use"></a>
 ## HOW-TO-USE
