@@ -2,7 +2,7 @@ import os, time
 from binance.client import Client
 
 coin = input("\nEnter Coin Symbol (eg. BTC, ETH, BNB...) : ").upper()
-trade_size_in_usdt = 1
+trade_size_in_usdt = float(input("\nEnter The trade amount in USDT unit: "))
 
 # Get environment variables
 api_key     = os.environ.get('API_KEY')

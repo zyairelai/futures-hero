@@ -1,35 +1,40 @@
-# DISCORD MY DISCORD HERE
-https://discord.gg/r4TnhcdqmT
+## TABLE OF CONTENTS
 
-# futures-hero
+1. [FUTURES-HERO](#futures_hero)
+2. [DISCLAIMER](#hello_disclaimer)
+3. [HOW-IT-WORKS](#how_it_works)
+4. [HOW-TO-USE](#how_to_use)
+    1. [ENVIRONMENT SETUP](#environment_setup)
+    2. [PIP3 REQUIREMENTS](#pip3_requirements)
+    3. [CONFIGURATIONS](#configurations)
+    4. [RUN](#run)
+5. [SCREENSHOTS](#hello_screenshots)
+    - [SAMPLE-OUTPUT](#sample_output)
+6. [JOIN-MY-DISCORD](#discord)
+    - [QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/r4TnhcdqmT)
+
+<a name="futures_hero"></a>
+## FUTURES-HERO
 Leverage Trading Automation on Binance Futures.  
 This is a `Set and Forget` script, means you need to keep it running 24/7 and forget about it.  
 
-# DISCLAIMER
-This automation software is implemented base on my personal manual trading strategy.  
-However not all my manual trading strategies are completely transformed into code. For example, common sense and 6th sense are not the part I could do in this code.
+<a name="hello_disclaimer"></a>
+## DISCLAIMER
+This automation software is implemented base on my PERSONAL MANUAL TRADING STRATEGY.  
+However not all my manual trading strategies are completely transformed into code.  
+For example, common sense, 6th sense, knowing when to stop trading are NOT the part I could do in this code.  
 
-LEVERAGE TRADING IS A HIGH RISK GAME.  
-PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.
+** LEVERAGE TRADING IS A HIGH RISK GAME.**  
+** PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.**
 
-# WALLET MANAGEMENT TUTORIAL
-This is a very crude, yet, ridiculously simple strategy with high risk high reward.  
-Hence, your wallet management skill becomes the priority to your success using this project.  
-The recommendation trade amount in this project is 10% of your Futures Wallet as your total trade amount.  
-```
-For Example, I trade only BTCUSDT.
-I have 20 USDT in my Futures Wallet. The maximum amount that I will place for one position is 1 USDT.
+<a name="how_it_works"></a>
+## HOW-IT-WORKS
+Coming Soon......
 
-Second Example, I want to trade both BTCUSDT and ETHUSDT at the same time.
-I want to place 1 USDT for each position.
-This will require my Futures Wallet to have at least 40 USDT to do so. 
-So I can place 1 USDT for BTCUSDT position and 1 USDT for ETHUSDT position.
-The total trade amount in this case will be 2 USDT, which is 5% of 40 USDT in my whole Futures Wallet.
-
-REMEMBER 5% or 1/20 IS THE KEY
-```
-
-## 1. Environment Setup
+<a name="how_to_use"></a>
+## HOW-TO-USE
+<a name="environment_setup"></a>
+### 1. ENVIRONMENT SETUP
 Paste the following into your Default Shell
 ```
 export BINANCE_KEY="your_binance_api_key"
@@ -42,40 +47,65 @@ api_key     = "your_binance_api_key"
 api_secret  = "your_binance_secret_key"
 client      = Client(api_key, api_secret)
 ```
+Don't forget the `" "` symbol to make your API key into `STRING` type!  
 
-## 2. Pip3 Requirements
-To install all the dependencies requirements:
+**I WILL NO LONGER ANSWER QUESTION REGARDING TO THIS ERROR:**
+```
+AttributeError: 'NoneType' object has no attribute 'encode'
+``` 
+**QUICK GOOGLE SEARCH or FIX YOUR API KEY AND DO NOT SPAM MY EMAIL AND DISTURB MY PEACEFUL LIFE LOL**
+
+<a name="pip3_requirements"></a>
+### 2. PIP3 REQUIREMENTS
+To install all the dependencies requirements in one line:
 ```
 pip3 install -r requirements.txt
 ```
 Or if you prefer to install these libraries one by one:
 ```
-pip3 install apscheduler==3.6.3
 pip3 install cryptography==3.4.6
 pip3 install pandas==1.2.4
 pip3 install python-binance==0.7.9
 pip3 install termcolor==1.1.0
 ```
 
-## 3. Before Running......
-Make sure you go to `config.py`, read the comments and adjust your `RISK LEVEL` !  
-The script is mainly focusing on `BTC/USDT` and `ETH/USDT` movement pattern.  
-If you'd like to test with other pairs, you can tweak around with `config.py`.
+<a name="configurations"></a>
+### 3. CONFIGURATIONS
+Before running, maybe you want to see how the output looks like.  
+The settings can be configured in `config.py`.
 
-## 4. Run
+| Variables           | Description                                                                                            |
+| --------------------| -------------------------------------------------------------------------------------------------------|
+| `live_trade`        |`True` to place actual order <br /> `False` to see sample output                                        |
+| `coin`              | You can put your coin list here, to add more it will be ["BTC", "ETH"]                                 |
+| `quantity`          | Trade amount. You can run `util_cal_tradeAmt.py` to check the trade amount                             |
+| `profit_margin`     | Minimum has to be 0.1 to cover the fees. <br /> `profit_margin * leverage = Actual Profit Percentage`  |
+
+The following code illustrate how you add more pairs to trade with:  
+```
+coin = ["BTC", "ETH"]
+quantity = [0.001, 0.01]
+```
+**IMPORTANT NOTE:**  
+- Check your minimum trade size here https://www.binance.com/en/futures/trading-rules/perpetual
+
+<a name="run"></a>
+### 4. RUN
+Now if you are all ready, set `live_trade = True` and ...
+
 Let's make the magic happens!
 ```
 python3 run.py
 ```
-To check the trend, position, realizedPNL and many others:
-```
-python3 check.py
-```
 
-## 5. Donate for MORE!!
-If you found this useful to generate your passive income, feel free to donate to me so I can IMPROVE MORE!  
-```
-BTC  (BTC)   : 15VowsyMp9A5DWbKbZEVt4A4r7dQQgddtn
-ETH  (ERC20) : 0x7701948f0477e629c5bb5d79f99b833133ab30d5
-USDT (ERC20) : 0x7701948f0477e629c5bb5d79f99b833133ab30d5
-```
+<a name="hello_screenshots"></a>
+## SCREENSHOTS
+
+<a name="sample_output"></a>
+### SAMPLE OUTPUT
+<p align="center">
+  <img src="screenshots/sample_output.png">
+</p>
+
+<a name="discord"></a>
+## [JOIN MY DISCORD - QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/r4TnhcdqmT)
