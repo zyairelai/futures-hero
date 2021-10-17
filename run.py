@@ -4,8 +4,7 @@ try:
     import socket
     import urllib3
     import config
-    import strategy_hybrid
-    import strategy_heikin_ashi
+    import strategy
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
@@ -19,8 +18,7 @@ try:
     while True:
         try:
             for i in range(len(config.pair)):
-                if config.hybrid: strategy_hybrid.lets_make_some_money(i)
-                else: strategy_heikin_ashi.lets_make_some_money(i)
+                strategy.lets_make_some_money(i)
 
         except (socket.timeout,
                 BinanceAPIException,

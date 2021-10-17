@@ -25,7 +25,7 @@ def lower_wick(klines):
     elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE": return float(current_close(klines) - current_low(klines))
 
 def absolute_indecisive(klines):
-    if candle_body(klines) < upper_wick(klines) and candle_body(klines) < lower_wick(klines) : return True
+    if upper_wick(klines) > candle_body(klines) and lower_wick(klines) > candle_body(klines): return True
 
 def candle(klines):
     if   (current_open(klines) == current_high(klines)): return "RED"
@@ -33,6 +33,12 @@ def candle(klines):
     elif (current_open(klines) > current_close(klines)): return "RED_INDECISIVE"
     elif (current_close(klines) > current_open(klines)): return "GREEN_INDECISIVE"
     else: return "NO_MOVEMENT"
+
+def color(klines):
+    if not absolute_indecisive(klines):
+        if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE": return "GREEN"
+        elif candle(klines) == "RED" or candle(klines) == "RED": return "RED"
+    else: return "INDECISIVE"
 
 def output(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE // NO_MOVEMENT
     milliseconds = int(klines[-1][0]) - int(klines[-2][0])
@@ -54,15 +60,11 @@ def output(klines): # return GREEN // GREEN_INDECISIVE // RED // RED_INDECISIVE 
     return current
 
 def VALID_CANDLE(klines):
-    if (candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE") and \
-        candle_body(klines) > lower_wick(klines) and \
-        current_close(klines) > previous_Close(klines) and \
-        current_close(klines) > previous_Open(klines): return "GREEN"
-
-    elif (candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE") and \
-        candle_body(klines) > upper_wick(klines) and \
-        current_close(klines) < previous_Close(klines) and \
-        current_close(klines) < previous_Open(klines): return "RED"
+    if not absolute_indecisive(klines):
+        if (candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE") and \
+            current_close(klines) > previous_Close(klines) and current_close(klines) > previous_Open(klines): return "GREEN"
+        elif (candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE") and \
+            current_close(klines) < previous_Close(klines) and current_close(klines) < previous_Open(klines): return "RED"
 
 def war_formation(klines): # Pencil_Wick_Test
     if candle(klines) == "GREEN" or candle(klines) == "GREEN_INDECISIVE":

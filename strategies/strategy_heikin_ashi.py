@@ -1,14 +1,16 @@
+# Strategy Heikin Ashi
+
 import RSI
 import config
 import candlestick
 import get_position
 import heikin_ashi
+import recent_minute
 import binance_futures_api
 from datetime import datetime
 from termcolor import colored
 
 def lets_make_some_money(i):
-    which_day_is_today()
     response = binance_futures_api.position_information(i)
     klines_4HOUR = binance_futures_api.KLINE_INTERVAL_4HOUR(i)
     klines_1HOUR = binance_futures_api.KLINE_INTERVAL_1HOUR(i)
@@ -39,11 +41,7 @@ def lets_make_some_money(i):
         if EXIT_SHORT(response, profit_threshold, klines_1MIN): binance_futures_api.close_position(i, "SHORT")
         else: print(colored("ACTION           :   HOLDING_SHORT", "red"))
 
-    else:
-        if config.trade_all_week: check_trade_condition(i, klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
-        else:
-            if datetime.today().weekday() < 5:
-                check_trade_condition(i, klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
+    else: check_trade_condition(i, klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
 
     print("Last action executed @ " + datetime.now().strftime("%H:%M:%S") + "\n")
     if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN)
@@ -59,14 +57,16 @@ def hot_zone(klines_30MIN, klines_1HOUR):
     if klines_1HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
 def GO_LONG(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
-    if  heikin_ashi.VALID_CANDLE(klines_4HOUR) == "GREEN" and \
+    if not recent_minute(klines_1MIN) == "GREEN" and \
+        heikin_ashi.VALID_CANDLE(klines_4HOUR) == "GREEN" and \
         heikin_ashi.VALID_CANDLE(klines_1HOUR) == "GREEN" and \
         heikin_ashi.VALID_CANDLE(klines_5MIN) == "GREEN" and \
         heikin_ashi.VALID_CANDLE(klines_1MIN) == "GREEN" and \
         rsi_5MIN < RSI.upper_limit() and rsi_1MIN < RSI.upper_limit(): return True
 
 def GO_SHORT(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
-    if  heikin_ashi.VALID_CANDLE(klines_4HOUR) == "RED" and \
+    if not recent_minute(klines_1MIN) == "RED" and \
+        heikin_ashi.VALID_CANDLE(klines_4HOUR) == "RED" and \
         heikin_ashi.VALID_CANDLE(klines_1HOUR) == "RED" and \
         heikin_ashi.VALID_CANDLE(klines_5MIN) == "RED" and \
         heikin_ashi.VALID_CANDLE(klines_1MIN) == "RED" and \
@@ -89,13 +89,3 @@ def print_entry_condition(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, 
     print("5MIN RSI " + str(rsi_5MIN))
     print("1MIN RSI " + str(rsi_1MIN))
     print()
-
-def which_day_is_today():
-    if datetime.today().weekday() == 0: print("Monday")
-    elif datetime.today().weekday() == 1: print("Tuesday")
-    elif datetime.today().weekday() == 2: print("Wednesday")
-    elif datetime.today().weekday() == 3: print("Thursday")
-    elif datetime.today().weekday() == 4: print("Friday")
-    elif datetime.today().weekday() == 5: print("Saturday")
-    elif datetime.today().weekday() == 6: print("Sunday")
-    else: print("END OF THE WORLD")
