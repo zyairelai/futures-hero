@@ -107,6 +107,10 @@ quantity = [0.001, 0.01]
 
 <a name="run"></a>
 ### 4. RUN
+You can select your strategy in the `strategies` folder.  
+
+Just replace the `strategy.py` file with any strategy in that folder and you are good to go.  
+
 Now if you are all ready, set `live_trade = True` and ...
 
 Let's make the magic happens!
