@@ -24,8 +24,8 @@ This automation software is implemented base on my PERSONAL MANUAL TRADING STRAT
 However not all my manual trading strategies are completely transformed into code.  
 For example, common sense, 6th sense, knowing when to stop trading are NOT the part I could do in this code.  
 
-** LEVERAGE TRADING IS A HIGH RISK GAME.**  
-** PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.**
+**LEVERAGE TRADING IS A HIGH RISK GAME.**  
+**PLEASE MANAGE YOUR RISK LEVEL BEFORE USING MY SCRIPT.**
 
 <a name="how_it_works"></a>
 ## HOW-IT-WORKS
@@ -53,7 +53,8 @@ Don't forget the `" "` symbol to make your API key into `STRING` type!
 ```
 AttributeError: 'NoneType' object has no attribute 'encode'
 ``` 
-**QUICK GOOGLE SEARCH or FIX YOUR API KEY AND DO NOT SPAM MY EMAIL AND DISTURB MY PEACEFUL LIFE LOL**
+**QUICK GOOGLE SEARCH or FIX YOUR API KEY**  
+**DO NOT SPAM MY EMAIL AND DISTURB MY PEACEFUL LIFE LOL**
 
 <a name="pip3_requirements"></a>
 ### 2. PIP3 REQUIREMENTS
