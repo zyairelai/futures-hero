@@ -44,8 +44,8 @@ def lets_make_some_money(i):
     if not config.live_trade: print_entry_condition(klines_4HOUR, klines_1HOUR, rsi)
 
 def check_trade_condition(i, klines_4HOUR, klines_1HOUR, rsi):
-    if GO_LONG(klines_4HOUR, klines_1HOUR): binance_futures_api.open_position(i, "LONG", config.quantity[i])
-    elif GO_SHORT(klines_4HOUR, klines_1HOUR): binance_futures_api.open_position(i, "SHORT", config.quantity[i])
+    if GO_LONG(klines_4HOUR, klines_1HOUR, rsi): binance_futures_api.open_position(i, "LONG", config.quantity[i])
+    elif GO_SHORT(klines_4HOUR, klines_1HOUR, rsi): binance_futures_api.open_position(i, "SHORT", config.quantity[i])
     else: print("ACTION           :   🐺 WAIT 🐺")
 
 def GO_LONG(klines_4HOUR, klines_1HOUR, rsi):

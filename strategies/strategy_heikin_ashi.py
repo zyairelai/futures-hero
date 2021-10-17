@@ -57,7 +57,7 @@ def hot_zone(klines_30MIN, klines_1HOUR):
     if klines_1HOUR[-1][0] == klines_30MIN[-1][0]: return True
 
 def GO_LONG(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
-    if not recent_minute(klines_1MIN) == "GREEN" and \
+    if not recent_minute.recent_candles(klines_1MIN) == "GREEN" and \
         heikin_ashi.VALID_CANDLE(klines_4HOUR) == "GREEN" and \
         heikin_ashi.VALID_CANDLE(klines_1HOUR) == "GREEN" and \
         heikin_ashi.VALID_CANDLE(klines_5MIN) == "GREEN" and \
@@ -65,7 +65,7 @@ def GO_LONG(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_
         rsi_5MIN < RSI.upper_limit() and rsi_1MIN < RSI.upper_limit(): return True
 
 def GO_SHORT(klines_4HOUR, klines_1HOUR, klines_5MIN, klines_1MIN, rsi_5MIN, rsi_1MIN):
-    if not recent_minute(klines_1MIN) == "RED" and \
+    if not recent_minute.recent_candles(klines_1MIN) == "RED" and \
         heikin_ashi.VALID_CANDLE(klines_4HOUR) == "RED" and \
         heikin_ashi.VALID_CANDLE(klines_1HOUR) == "RED" and \
         heikin_ashi.VALID_CANDLE(klines_5MIN) == "RED" and \
