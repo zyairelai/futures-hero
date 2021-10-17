@@ -111,6 +111,8 @@ You can select your strategy in the `strategies` folder.
 
 Just replace the `strategy.py` file with any strategy in that folder and you are good to go.  
 
+The default strategy is `strategy_hybrid.py`.  
+
 Now if you are all ready, set `live_trade = True` and ...
 
 Let's make the magic happens!
