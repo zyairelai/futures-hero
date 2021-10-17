@@ -32,13 +32,17 @@ For example, common sense, 6th sense, knowing when to stop trading are **NOT** t
 In short, this code takes these few conditions into considerations:  
 4-hour timeframe, 1-hour timeframe and 1-minute timeframe
 
-1. It checks the overall main direction, 4-hour. Let's say the newest current 4-hour candle is `GREEN`.  
+1. It checks the overall main direction, 4-hour.  
+   Let's say the newest current 4-hour candle is `GREEN`.  
 
-2. Then it checks the 1-hour candle for confirmation. Let's say the newest current 1-hour candle is matched with 4-hour candle `GREEN`.  
+2. Then it checks the 1-hour candle for confirmation.  
+   Let's say the newest current 1-hour candle is matched with 4-hour candle `GREEN`.  
 
-3. Since both main direction and confirmation are `GREEN`, now it will find an entry (The part which I am not able to implement into code). 
+3. Since both main direction and confirmation are `GREEN`, now it will find an entry  
+   (The part which I am not able to implement into code). 
 
-4. The entry will be on the 1-minute chart. In the case above, it will look for a `LONG` position entry.
+4. The entry will be on the 1-minute chart.  
+   In the case above, it will look for a `LONG` position entry.
 
 5. The exit will be based on the `profit_margin`.  
 
@@ -103,6 +107,12 @@ quantity = [0.001, 0.01]
 
 <a name="run"></a>
 ### 4. RUN
+You can select your strategy in the `strategies` folder.  
+
+Just replace the `strategy.py` file with any strategy in that folder and you are good to go.  
+
+The default strategy is `strategy_hybrid.py`.  
+
 Now if you are all ready, set `live_trade = True` and ...
 
 Let's make the magic happens!
