@@ -1,6 +1,0 @@
-[!] GALAUSDT - Created at : 18-10-2021 @ 22:26:26
-APIError(code=-4028): Leverage 30 is not valid
-
-[!] GALAUSDT - Created at : 18-10-2021 @ 22:26:39
-APIError(code=-4028): Leverage 30 is not valid
-
