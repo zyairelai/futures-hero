@@ -1,6 +1,7 @@
 # Strategy One Hour
 
 import RSI
+import MACD
 import config
 import candlestick
 import get_position
@@ -63,7 +64,7 @@ def EXIT_SHORT(response, profit_threshold, klines_1HOUR):
         if hybrid.both_color(klines_1HOUR) == "GREEN": return True
 
 def print_entry_condition(klines_4HOUR, klines_1HOUR, rsi):
-    test_color = "RED".upper()
+    test_color = "GREEN".upper()
     print("4 HOUR YES") if hybrid.strong_trend(klines_4HOUR) == test_color else print("4 HOUR NO")
     print("1 HOUR YES") if hybrid.strong_trend(klines_1HOUR) == test_color else print("1 HOUR NO")
     print("1 HOUR RSI " + str(rsi))
