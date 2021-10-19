@@ -1,0 +1,15 @@
+[!] AVAXUSDT - Created at : 18-10-2021 @ 22:40:15
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] AVAXUSDT - Created at : 18-10-2021 @ 22:40:42
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] AVAXUSDT - Created at : 18-10-2021 @ 22:45:40
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] AVAXUSDT - Created at : 18-10-2021 @ 22:46:06
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] AVAXUSDT - Created at : 18-10-2021 @ 22:46:41
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+

@@ -1,0 +1,18 @@
+[!] UNIUSDT - Created at : 18-10-2021 @ 22:47:13
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] UNIUSDT - Created at : 18-10-2021 @ 22:47:45
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] UNIUSDT - Created at : 19-10-2021 @ 00:33:29
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] UNIUSDT - Created at : 19-10-2021 @ 00:55:43
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] UNIUSDT - Created at : 19-10-2021 @ 00:56:19
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
+[!] UNIUSDT - Created at : 19-10-2021 @ 00:59:47
+APIError(code=-1111): Precision is over the maximum defined for this asset.
+
