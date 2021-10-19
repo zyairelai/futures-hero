@@ -25,7 +25,7 @@ def lower_wick(klines):
     elif candle(klines) == "RED" or candle(klines) == "RED_INDECISIVE": return float(current_close(klines) - current_low(klines))
 
 def absolute_indecisive(klines):
-    if upper_wick(klines) > candle_body(klines) and lower_wick(klines) > candle_body(klines): return True
+    return True if upper_wick(klines) > candle_body(klines) and lower_wick(klines) > candle_body(klines) else False
 
 def candle(klines):
     if   (current_open(klines) == current_high(klines)): return "RED"
