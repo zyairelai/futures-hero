@@ -1,1 +1,0 @@
-Here are the explaination of different strategies:

@@ -1,55 +1,37 @@
+import config, ccxt, pandas
 from termcolor import colored
+ccxt_client = ccxt.binance()
 
-def previous_open(klines) : return float(klines[-2][1])
-def previous_high(klines) : return float(klines[-2][2])
-def previous_low(klines)  : return float(klines[-2][3])
-def previous_close(klines): return float(klines[-2][4])
-def current_open(klines)  : return float(klines[-1][1])
-def current_high(klines)  : return float(klines[-1][2])
-def current_low(klines)   : return float(klines[-1][3])
-def current_close(klines) : return float(klines[-1][4])
-def candle_body(klines)   : return abs(current_open(klines) - current_close(klines))
-def candle_wick(klines)   : return current_high(klines) - current_low(klines) - candle_body(klines)
-def timestamp_of(kline): return kline[-1][0]
+query = 55
+tohlcv_colume = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
+def KLINE_INTERVAL_1MIN(i) : return pandas.DataFrame(ccxt_client.fetch_ohlcv(config.pair[i], '1m', limit=query), columns=tohlcv_colume)
+def KLINE_INTERVAL_5MIN(i) : return pandas.DataFrame(ccxt_client.fetch_ohlcv(config.pair[i], '5m', limit=query), columns=tohlcv_colume)
+def KLINE_INTERVAL_30MIN(i): return pandas.DataFrame(ccxt_client.fetch_ohlcv(config.pair[i], '30m',limit=query), columns=tohlcv_colume)
+def KLINE_INTERVAL_1HOUR(i): return pandas.DataFrame(ccxt_client.fetch_ohlcv(config.pair[i], '1h', limit=query), columns=tohlcv_colume)
+def KLINE_INTERVAL_6HOUR(i): return pandas.DataFrame(ccxt_client.fetch_ohlcv(config.pair[i], '6h', limit=query), columns=tohlcv_colume)
 
-def closing_price_list(klines):
-    closing_price_list = []
-    for candle in range(len(klines)):
-        closing_price_list.append(float(klines[candle][4]))
-    return closing_price_list
+def candlestick(klines):
+    candlestick_df = klines # make a new DataFrame called candlestick_df
 
-def candle_color(klines):
-    if current_close(klines) > current_open(klines): return "GREEN"
-    elif current_close(klines) < current_open(klines): return "RED"
-    else: return "INDECISIVE"
+    # Temporary previous column
+    candlestick_df["pre_high"]     = klines['high'].shift(1)
+    candlestick_df["pre_low"]      = klines['low'].shift(1)
+    candlestick_df["pre_pre_low"]  = klines['low'].shift(2)
+    candlestick_df["pre_pre_high"] = klines['high'].shift(2)
 
-def previous_candle_color(klines):
-    if previous_close(klines) > previous_open(klines): return "GREEN"
-    elif previous_close(klines) < previous_open(klines): return "RED"
-    else: return "INDECISIVE"
+    # Compute candlestick details
+    candlestick_df["color"]  = candlestick_df.apply(candle_color, axis=1)
+    candlestick_df["upper"]  = candlestick_df.apply(upper_wick, axis=1)
+    candlestick_df["lower"]  = candlestick_df.apply(lower_wick, axis=1)
+    candlestick_df["body"]   = abs(candlestick_df['open'] - candlestick_df['close'])
+    candlestick_df["strong"] = candlestick_df.apply(strong_candle, axis=1)
 
-def upper_wick(klines):
-    if candle_color(klines) == "GREEN": return current_high(klines) - current_close(klines)
-    elif candle_color(klines) == "RED": return current_high(klines) - current_open(klines)
-    else: return 0
+    # Drop Previous Column
+    dataset = candlestick_df.drop(["pre_high", "pre_low", "pre_pre_low", "pre_pre_high"], axis=1)
+    return dataset
 
-def lower_wick(klines):
-    if candle_color(klines) == "GREEN": return current_open(klines)  - current_low(klines)
-    elif candle_color(klines) == "RED": return current_close(klines) - current_low(klines)
-    else: return 0
-
-def strong_candle(klines):
-    if previous_candle_color(klines) == "GREEN" and candle_color(klines) == "GREEN":
-        if current_close(klines) > previous_close(klines): return True
-    elif previous_candle_color(klines) == "GREEN" and candle_color(klines) == "RED":
-        if current_close(klines) < previous_open(klines): return True
-    elif previous_candle_color(klines) == "RED" and candle_color(klines) == "GREEN":
-        if current_close(klines) > previous_open(klines): return True
-    elif previous_candle_color(klines) == "RED" and candle_color(klines) == "RED":
-        if current_close(klines) < previous_close(klines): return True
-
-def output(klines):
-    milliseconds = int(klines[-1][0]) - int(klines[-2][0])
+def output(candlestick):
+    milliseconds = int(candlestick['timestamp'].iloc[1]) - int(candlestick['timestamp'].iloc[0])
     if milliseconds == 1 * 60000: interval = "1 MINUTE  "
     elif milliseconds == 3 * 60000: interval = "3 MINUTE  "
     elif milliseconds == 5 * 60000: interval = "5 MINUTE  "
@@ -61,11 +43,48 @@ def output(klines):
     elif milliseconds == 6 * 60 * 60000: interval = "6 HOUR    "
     elif milliseconds == 12 * 60 * 60000: interval = "12 HOUR   "
 
-    candle = candle_color(klines)
-    if strong_candle(klines): strength = "STRONG "
-    else: strength = "WEAK "
+    strength = "STRONG " if candlestick["strong"].iloc[-1] else "WEAK "
+    if   candlestick['color'].iloc[-1] == "GREEN": print(colored("CANDLE " + interval + ":   " + strength + str(candlestick['color'].iloc[-1]), "green"))
+    elif candlestick['color'].iloc[-1] == "RED"  : print(colored("CANDLE " + interval + ":   " + strength + str(candlestick['color'].iloc[-1]), "red"))
+    else: print(colored("CANDLE " + interval + ":   " + str(candlestick['color'].iloc[-1]), "yellow"))
 
-    if   candle == "GREEN" or candle == "GREEN_INDECISIVE": print(colored("CANDLE " + interval + ":   " + strength + candle, "green"))
-    elif candle == "RED"   or candle == "RED_INDECISIVE"  : print(colored("CANDLE " + interval + ":   " + strength + candle, "red"))
-    else: print(colored("CANDLE " + interval + ":   " + candle, "yellow"))
-    return candle
+# ==========================================================================================================================================================================
+#                                                           PANDAS CONDITIONS
+# ==========================================================================================================================================================================
+
+def candle_color(candle):
+    if candle['close'] > candle['open']: return "GREEN"
+    elif candle['close'] < candle['open']: return "RED"
+    else: return "INDECISIVE"
+
+def upper_wick(candle):
+    if candle['color'] == "GREEN": return candle['high'] - candle['close']
+    elif candle['color'] == "RED": return candle['high'] - candle['open']
+    else: return (candle['high'] - candle['open'] + candle['high'] - candle['close']) / 2
+
+def lower_wick(candle):
+    if candle['color'] == "GREEN": return candle['open'] - candle['low']
+    elif candle['color'] == "RED": return candle['close'] - candle['low']
+    else: return (candle['open'] - candle['low'] + candle['close'] - candle['low']) / 2
+
+def strong_candle(candle):
+    if candle["color"] == "GREEN": return True if candle['close'] > candle['pre_high'] and candle['close'] > candle['pre_pre_high'] else False
+    elif candle["color"] == "RED": return True if candle['close'] < candle['pre_low'] and candle['close'] < candle['pre_pre_low'] else False
+    else: return False
+
+# ==========================================================================================================================================================================
+#                                                               TEST
+# ==========================================================================================================================================================================
+
+def test():
+    klines = KLINE_INTERVAL_1HOUR(0)
+    print("candlestick.KLINE_INTERVAL_1HOUR(0)")
+    print(klines)
+    print()
+
+    processed_candle = candlestick(klines)
+    print("candlestick.candlestick(klines)")
+    print(processed_candle)
+    print()
+
+# test()

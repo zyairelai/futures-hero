@@ -8,12 +8,7 @@ try:
     from datetime import datetime
     from termcolor import colored
     from binance.exceptions import BinanceAPIException
-
-    if config.live_trade:
-        print(colored("LIVE TRADE IS ENABLED\n", "green"))
-    else:
-        print(colored("THIS IS BACKTESTING\n", "red"))
-        # if not os.path.exists("BACKTEST"): os.makedirs("BACKTEST")
+    print(colored("LIVE TRADE IS ENABLED\n", "green")) if config.live_trade else print(colored("THIS IS BACKTESTING\n", "red")) 
 
     while True:
         try:
@@ -31,7 +26,7 @@ try:
 
             if not os.path.exists("ERROR"): os.makedirs("ERROR")
             with open((os.path.join("ERROR", config.pair[i] + ".txt")), "a", encoding="utf-8") as error_message:
-                error_message.write("[!] " + config.pair[i] + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n")
-                error_message.write(str(e) + "\n\n")
+                error_message.write("[!] " + config.pair[i] + " - " + "Created at : " + datetime.today().strftime("%d-%m-%Y @ %H:%M:%S") + "\n" + str(e) + "\n\n")
+                print(e)
 
 except KeyboardInterrupt: print("\n\nAborted.\n")
