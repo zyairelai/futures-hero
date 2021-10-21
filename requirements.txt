@@ -1,6 +1,7 @@
 ccxt
 numpy
 pandas
+requests
 termcolor
 cryptography==3.4.6
 python-binance==0.7.5
