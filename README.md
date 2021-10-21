@@ -79,10 +79,12 @@ pip3 install -r requirements.txt
 ```
 Or if you prefer to install these libraries one by one:
 ```
-pip3 install cryptography==3.4.6
-pip3 install pandas==1.2.4
-pip3 install python-binance==0.7.9
-pip3 install termcolor==1.1.0
+pip3 install ccxt
+pip3 install numpy
+pip3 install pandas
+pip3 install requests
+pip3 install termcolor
+pip3 install python-binance
 ```
 
 <a name="configurations"></a>

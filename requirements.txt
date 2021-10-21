@@ -3,5 +3,5 @@ numpy
 pandas
 requests
 termcolor
+python-binance
 cryptography==3.4.6
-python-binance==0.7.5
