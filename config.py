@@ -1,10 +1,8 @@
 live_trade = False
+cover_fees = False
 
 coin     = ["BTC"]
 quantity = [0.001]
-
-# profit_margin * leverage = Actual Profit Percentage.
-profit_margin = 0.2
 
 # ====================================================
 #        !! DO NOT CHANGE THE LEVERAGE !!
