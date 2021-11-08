@@ -1,7 +1,6 @@
-test_module = False
+import pandas
 
 def heikin_ashi(klines):
-    import pandas
     heikin_ashi_df = pandas.DataFrame(index=klines.index.values, columns=['open', 'high', 'low', 'close'])
     heikin_ashi_df['close'] = (klines['open'] + klines['high'] + klines['low'] + klines['close']) / 4
 
@@ -22,11 +21,10 @@ def heikin_ashi(klines):
     heikin_ashi_df["body_s2"] = heikin_ashi_df['body'].shift(2)
     heikin_ashi_df["indecisive"] = heikin_ashi_df.apply(absolute_indecisive, axis=1)
     heikin_ashi_df["strong"] = heikin_ashi_df.apply(super_strong, axis=1)
-    
-    # Reserve Useful Column
     heikin_ashi_df["candle"] = heikin_ashi_df.apply(valid_candle, axis=1)
-    heikin_ashi_df = heikin_ashi_df.drop(["indecisive", "strong", "upper", "lower", "body", "body_s1", "body_s2"], axis=1)
-    return heikin_ashi_df
+
+    clean = heikin_ashi_df[["timestamp", "open", "high", "low", "close", "color", "candle", "indecisive"]].copy()
+    return clean
 
 # ==========================================================================================================================================================================
 #                                                           PANDAS CONDITIONS
@@ -49,7 +47,7 @@ def lower_wick(HA):
 
 def super_strong(HA):
     if  HA['indecisive'] == False and \
-        HA['body'] > HA['body_s1'] and \
+        HA['body'] > HA['body_s1'] or \
         HA['body'] > HA['body_s2'] : return True
     else: return False
 
@@ -63,9 +61,11 @@ def valid_candle(HA):
         elif HA['color'] == "RED": return "RED"
     else: return "INDECISIVE"
 
-if test_module:
+def test_module():
     import candlestick
-    klines = candlestick.KLINE_INTERVAL_1HOUR("BTCUSDT")
+    klines = candlestick.get_klines("BTCUSDT", "1h")
     processed_heikin_ashi = heikin_ashi(klines)
     print("\nheikin_ashi.heikin_ashi")
     print(processed_heikin_ashi)
+
+# test_module()

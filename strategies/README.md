@@ -1,0 +1,1 @@
+### I will write the details of the strategies later

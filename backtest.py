@@ -1,20 +1,21 @@
 import config
-import strategy
+import strategies.combined
+import strategies.stronger
 from datetime import datetime
 
-fees = 0.2
-cover_fees = False
+fees = 0.1
 print_logs = False
+choose_your_fighter = strategies.stronger
 
 def backtest():
     all_pairs = 0
     for i in range(len(config.pair)):
         print(config.pair[i])
         leverage = config.leverage[i]
-        hero = strategy.futures_hero(config.pair[i])
-        print("Start Time Since " + str(datetime.fromtimestamp(hero["timestamp"].iloc[0]/1000)))
-        if print_logs : print(hero)
+        hero = choose_your_fighter.futures_hero(config.pair[i])
 
+        if print_logs : print(hero)
+        print("Start Time Since " + str(datetime.fromtimestamp(hero["timestamp"].iloc[0]/1000)))
         long_result = round(check_PNL(hero, leverage, "_LONG"), 2)
         short_reult = round(check_PNL(hero, leverage, "SHORT"), 2)
         overall_result = round(long_result + short_reult, 2)
@@ -41,42 +42,25 @@ def check_PNL(hero, leverage, positionSide):
     for i in range(len(hero)):
         if not position:
             if hero[open_position].iloc[i]:
-                position = True
                 entry_price = hero['close'].iloc[i]
+                position = True
         else:
             liquidated = (hero[liq_indicator].iloc[i] - entry_price) / entry_price * 100 * leverage < -80
+            unrealizedPNL = (hero['close'].iloc[i] - entry_price) / entry_price * 100 * leverage
+            breakeven_PNL = fees * leverage
 
-            if not cover_fees:
-                if hero[exit_position].iloc[i] or liquidated:
-                    position = False
+            if (hero[exit_position].iloc[i] and unrealizedPNL > breakeven_PNL) or liquidated:
+                if liquidated:
+                    realized_pnl = -100
+                    liquidations = liquidations + 1
+                else: realized_pnl = unrealizedPNL - breakeven_PNL
 
-                    if liquidated:
-                        realized_pnl = -100
-                        liquidations = liquidations + 1
-                    else: realized_pnl = ((hero['close'].iloc[i] - entry_price) / entry_price * 100 * leverage) - (fees * leverage)
+                if realized_pnl > 0: wintrade = wintrade + 1
+                else: losetrade = losetrade + 1
 
-                    if realized_pnl > fees * leverage: wintrade = wintrade + 1
-                    else: losetrade = losetrade + 1
-
-                    total_trades = total_trades + 1
-                    total_pnl = total_pnl + realized_pnl
-            else:
-                unrealizedPNL = (hero['close'].iloc[i] - entry_price) / entry_price * 100 * leverage
-                breakeven_PNL = fees * leverage
-
-                if (hero[exit_position].iloc[i] and unrealizedPNL > breakeven_PNL) or liquidated:
-                    position = False
-
-                    if liquidated:
-                        realized_pnl = -100
-                        liquidations = liquidations + 1
-                    else: realized_pnl = ((hero['close'].iloc[i] - entry_price) / entry_price * 100 * leverage) - (fees * leverage)
-
-                    if realized_pnl > fees * leverage: wintrade = wintrade + 1
-                    else: losetrade = losetrade + 1
-
-                    total_trades = total_trades + 1
-                    total_pnl = total_pnl + realized_pnl
+                total_trades = total_trades + 1
+                total_pnl = total_pnl + realized_pnl
+                position = False
 
     if total_pnl != 0:
         print("PNL for " + positionSide + " Positions: " + str(round(total_pnl, 2)) + "%")

@@ -1,8 +1,11 @@
 live_trade = False
-cover_fees = False
 
-coin     = ["BTC"]
-quantity = [0.001]
+coin     = ["ETH"]
+quantity = [0.002]
+
+# For Backtesting Multiple Pairs
+# coin     = ["BTC", "ETH", "BNB", "BCH", "LTC", "XRP", "ADA", "EOS"]
+# quantity = [1, 1, 1, 1, 1, 1, 1, 1]
 
 # ====================================================
 #        !! DO NOT CHANGE THE LEVERAGE !!

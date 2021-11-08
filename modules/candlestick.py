@@ -1,16 +1,11 @@
 import ccxt
 import pandas
 
-test_module = False
-
 query = 1000
 ccxt_client = ccxt.binance()
 tohlcv_colume = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
-def KLINE_INTERVAL_1MIN(pair) : return pandas.DataFrame(ccxt_client.fetch_ohlcv(pair, '1m', limit=query), columns=tohlcv_colume)
-def KLINE_INTERVAL_5MIN(pair) : return pandas.DataFrame(ccxt_client.fetch_ohlcv(pair, '5m', limit=query), columns=tohlcv_colume)
-def KLINE_INTERVAL_30MIN(pair): return pandas.DataFrame(ccxt_client.fetch_ohlcv(pair, '30m',limit=query), columns=tohlcv_colume)
-def KLINE_INTERVAL_1HOUR(pair): return pandas.DataFrame(ccxt_client.fetch_ohlcv(pair, '1h', limit=query), columns=tohlcv_colume)
-def KLINE_INTERVAL_6HOUR(pair): return pandas.DataFrame(ccxt_client.fetch_ohlcv(pair, '6h', limit=query), columns=tohlcv_colume)
+def get_klines(pair, interval):
+    return pandas.DataFrame(ccxt_client.fetch_ohlcv(pair, interval , limit=query), columns=tohlcv_colume)
 
 def candlestick(klines):
     candlestick_df = klines # make a new DataFrame called candlestick_df
@@ -28,9 +23,8 @@ def candlestick(klines):
     candlestick_df["body"]   = abs(candlestick_df['open'] - candlestick_df['close'])
     candlestick_df["strong"] = candlestick_df.apply(strong_candle, axis=1)
 
-    # Drop Temporarily Column
-    dataset = candlestick_df.drop(["volume", "upper", "lower", "body", "high_s1", "low_s1", "low_s2", "high_s2"], axis=1)
-    return dataset
+    clean = candlestick_df[["timestamp", "open", "high", "low", "close", "color", "strong"]].copy()
+    return clean
 
 # ==========================================================================================================================================================================
 #                                                           PANDAS CONDITIONS
@@ -56,8 +50,10 @@ def strong_candle(candle):
     elif candle["color"] == "RED": return True if candle['close'] < candle['low_s1'] and candle['close'] < candle['low_s2'] else False
     else: return False
 
-if test_module:
-    klines = KLINE_INTERVAL_1HOUR("BTCUSDT")
+def test_module():
+    klines = get_klines("BTCUSDT", "1h")
     processed_candle = candlestick(klines)
     print("\ncandlestick.candlestick(klines)")
     print(processed_candle)
+
+# test_module()
