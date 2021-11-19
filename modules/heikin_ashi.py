@@ -12,6 +12,7 @@ def heikin_ashi(klines):
     heikin_ashi_df['low']  = heikin_ashi_df.loc[:, ['open', 'close']].join(klines['low']).min(axis=1)
     heikin_ashi_df["color"] = heikin_ashi_df.apply(color, axis=1)
     heikin_ashi_df.insert(0,'timestamp', klines['timestamp'])
+    heikin_ashi_df["volume"] = klines["volume"]
 
     # Use Temporary Column to Identify Strength
     heikin_ashi_df["upper"] = heikin_ashi_df.apply(upper_wick, axis=1)
@@ -20,10 +21,9 @@ def heikin_ashi(klines):
     heikin_ashi_df["body_s1"] = heikin_ashi_df['body'].shift(1)
     heikin_ashi_df["body_s2"] = heikin_ashi_df['body'].shift(2)
     heikin_ashi_df["indecisive"] = heikin_ashi_df.apply(absolute_indecisive, axis=1)
-    heikin_ashi_df["strong"] = heikin_ashi_df.apply(super_strong, axis=1)
     heikin_ashi_df["candle"] = heikin_ashi_df.apply(valid_candle, axis=1)
 
-    clean = heikin_ashi_df[["timestamp", "open", "high", "low", "close", "color", "candle", "indecisive"]].copy()
+    clean = heikin_ashi_df[["timestamp", "open", "high", "low", "close", "volume", "color", "candle", "indecisive"]].copy()
     return clean
 
 # ==========================================================================================================================================================================
@@ -45,18 +45,12 @@ def lower_wick(HA):
     elif HA['color'] == "RED": return HA['close'] - HA['low']
     else: return (HA['open'] - HA['low'] + HA['close'] - HA['low']) / 2
 
-def super_strong(HA):
-    if  HA['indecisive'] == False and \
-        HA['body'] > HA['body_s1'] or \
-        HA['body'] > HA['body_s2'] : return True
-    else: return False
-
 def absolute_indecisive(HA):
     if HA['body'] * 2 < HA['upper'] and HA['body'] * 2 < HA['lower'] : return True
     else: return False
 
 def valid_candle(HA):
-    if HA['strong']:
+    if not HA['indecisive']:
         if HA['color'] == "GREEN": return "GREEN"
         elif HA['color'] == "RED": return "RED"
     else: return "INDECISIVE"

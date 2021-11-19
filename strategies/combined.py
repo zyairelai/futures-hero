@@ -6,37 +6,36 @@ import modules.heikin_ashi
 test_module = False
 
 def futures_hero(pair):
-    # Process Heikin Ashi & Apply Technical Analysis
-    main_raw    = modules.candlestick.get_klines(pair, '6h')
-    support_raw = modules.candlestick.get_klines(pair, '4h')
-    entry       = modules.candlestick.get_klines(pair, '1m')
-
-    default, process = entry, entry
-    main_candle    = modules.candlestick.candlestick(main_raw)[["timestamp", "color"]].copy()
-    main_direction = modules.heikin_ashi.heikin_ashi(main_raw)[["timestamp", "color"]].copy()
-    support_candle = modules.candlestick.candlestick(support_raw)[["timestamp", "color"]].copy()
-    support_HA     = modules.heikin_ashi.heikin_ashi(support_raw)[["timestamp", "color"]].copy()
+    # Fetch the raw klines data
+    main_raw = modules.candlestick.get_klines(pair, '6h')
+    rSupport = modules.candlestick.get_klines(pair, '1h')
+    entry    = modules.candlestick.get_klines(pair, '1m')
 
     # Backtest with FEDA json
     feda_klines = "feda_output.json"
     if os.path.isfile(feda_klines):
-        feda_1min = pandas.read_json(feda_klines)
-        feda_1min = feda_1min.rename({0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'volume'}, axis=1)
-        default, process = feda_1min, feda_1min
+        default = pandas.read_json(feda_klines).rename({0: 'timestamp', 1: 'open', 2: 'high', 3: 'low', 4: 'close', 5: 'vol'}, axis=1) 
+    else: default = entry
 
-    dataset   = modules.candlestick.candlestick(default)
-    macd1MIN  = modules.MACD.apply_default(modules.heikin_ashi.heikin_ashi(process))
+    # Process Heikin Ashi & Apply Technical Analysis
+    dataset  = modules.candlestick.candlestick(default)
+    main_can = modules.candlestick.candlestick(main_raw)[["timestamp", "color"]].copy()
+    main_dir = modules.heikin_ashi.heikin_ashi(main_raw)[["timestamp", "color"]].copy()
+    supp_can = modules.candlestick.candlestick(rSupport)[["timestamp", "color"]].copy()
+    supp_dir = modules.heikin_ashi.heikin_ashi(rSupport)[["timestamp", "color"]].copy()
+    macd1MIN = modules.MACD.apply_default(modules.heikin_ashi.heikin_ashi(default))
 
-    main_candle    = main_candle.rename(columns={'color': 'main_candle'})
-    main_direction = main_direction.rename(columns={'color': 'main_HA'})
-    support_candle = support_candle.rename(columns={'color': 'support_candle'})
-    support_HA     = support_HA.rename(columns={'color': 'support_HA'})
+    # Rename the column to avoid conflict
+    main_can = main_can.rename(columns={'color': 'main_candle'})
+    main_dir = main_dir.rename(columns={'color': 'main_HA'})
+    supp_can = supp_can.rename(columns={'color': 'support_candle'})
+    supp_dir = supp_dir.rename(columns={'color': 'support_HA'})
 
     # Merge all the necessarily data into one Dataframe
-    dataset = pandas.merge_asof(dataset, main_candle, on='timestamp')
-    dataset = pandas.merge_asof(dataset, main_direction, on='timestamp')
-    dataset = pandas.merge_asof(dataset, support_candle, on='timestamp')
-    dataset = pandas.merge_asof(dataset, support_HA, on='timestamp')
+    dataset = pandas.merge_asof(dataset, main_can, on='timestamp')
+    dataset = pandas.merge_asof(dataset, main_dir, on='timestamp')
+    dataset = pandas.merge_asof(dataset, supp_can, on='timestamp')
+    dataset = pandas.merge_asof(dataset, supp_dir, on='timestamp')
     dataset = pandas.merge_asof(dataset, macd1MIN, on='timestamp')
 
     # Apply Place Order Condition

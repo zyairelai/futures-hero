@@ -1,11 +1,12 @@
 import config
 import strategies.combined
-import strategies.stronger
+import strategies.ichimoku
+import strategies.seven
+import strategies.volume
 from datetime import datetime
 
 fees = 0.1
-print_logs = False
-choose_your_fighter = strategies.stronger
+choose_your_fighter = strategies.ichimoku
 
 def backtest():
     all_pairs = 0
@@ -13,8 +14,8 @@ def backtest():
         print(config.pair[i])
         leverage = config.leverage[i]
         hero = choose_your_fighter.futures_hero(config.pair[i])
+        # print(hero)
 
-        if print_logs : print(hero)
         print("Start Time Since " + str(datetime.fromtimestamp(hero["timestamp"].iloc[0]/1000)))
         long_result = round(check_PNL(hero, leverage, "_LONG"), 2)
         short_reult = round(check_PNL(hero, leverage, "SHORT"), 2)

@@ -1,4 +1,6 @@
-def apply_default(dataset):
+MACD_threshold = 50
+
+def apply_MACD(dataset):
     dataset['12_EMA'] = dataset['close'].ewm(span=12).mean()
     dataset['26_EMA'] = dataset['close'].ewm(span=26).mean()
     dataset['MACD'] = dataset['12_EMA'] - dataset['26_EMA']
@@ -11,23 +13,21 @@ def apply_default(dataset):
     return clean
 
 def long_condition(dataset):
-    if  dataset['Signal'] < 0 and \
-        dataset['Signal'] < dataset['MACD'] and \
+    if  dataset['Signal'] < MACD_threshold and \
         dataset['Histogram'] > 0 : return True 
     else: return False
 
 def short_condition(dataset):
-    if  dataset['Signal'] > 0 and \
-        dataset['Signal'] > dataset['MACD'] and \
-        dataset['Histogram'] < 0 : return True  
+    if  dataset['Signal'] > -MACD_threshold and \
+        dataset['Histogram'] < 0 : return True
     else: return False
 
 def test_module():
     import candlestick, heikin_ashi
     klines = candlestick.get_klines("BTCUSDT", "1h")
     # heikin = heikin_ashi.heikin_ashi(klines)
-    apply_MACD = apply_default(klines)
+    applyMACD = apply_MACD(klines)
     print("\nMACD.apply_default(klines)")
-    print(apply_MACD)
+    print(applyMACD)
 
 # test_module()

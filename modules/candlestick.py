@@ -22,8 +22,9 @@ def candlestick(klines):
     candlestick_df["lower"]  = candlestick_df.apply(lower_wick, axis=1)
     candlestick_df["body"]   = abs(candlestick_df['open'] - candlestick_df['close'])
     candlestick_df["strong"] = candlestick_df.apply(strong_candle, axis=1)
+    candlestick_df["volumeAvg"] = sum(klines["volume"]) / query / 3
 
-    clean = candlestick_df[["timestamp", "open", "high", "low", "close", "color", "strong"]].copy()
+    clean = candlestick_df[["timestamp", "open", "high", "low", "close", "volume", "volumeAvg", "color", "strong"]].copy()
     return clean
 
 # ==========================================================================================================================================================================

@@ -1,7 +1,9 @@
 import api_binance
 import config
 import strategies.combined
-import strategies.stronger
+import strategies.ichimoku
+import strategies.seven
+import strategies.volume
 import os, requests, socket, urllib3
 from datetime import datetime
 from termcolor import colored
