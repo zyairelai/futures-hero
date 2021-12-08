@@ -22,7 +22,7 @@ def futures_hero(pair):
     dataset   = modules.candlestick.candlestick(default)[["timestamp", "open", "high", "low", "close"]].copy()
     volume    = modules.candlestick.candlestick(main_raw)[["timestamp", "volume", "volumeAvg"]].copy()
     direction = modules.heikin_ashi.heikin_ashi(main_raw)[["timestamp", "candle"]].copy()
-    ema_trend = modules.EMA.apply_EMA(main_raw)[["timestamp", "50EMA", "trend"]].copy()
+    ema_trend = modules.EMA.apply_EMA(main_raw, 50)[["timestamp", "50EMA"]].copy()
     support   = modules.heikin_ashi.heikin_ashi(rSupport)[["timestamp", "candle"]].copy()
     entry     = modules.candlestick.get_klines(pair, '1m')
     macd1MIN  = modules.MACD.apply_MACD(modules.heikin_ashi.heikin_ashi(default))
@@ -47,26 +47,22 @@ def futures_hero(pair):
 
 def GO_LONG_CONDITION(dataset):
     color = "GREEN"
-    ema_trend = "UP"
     volume_confirmation = dataset['volume'] > dataset['volumeAvg']
 
     if  dataset['direction'] == color and \
         dataset['support'] == color and \
         dataset['MACD_long'] and \
-        volume_confirmation and \
-        ema_trend : return True
+        volume_confirmation : return True
     else: return False
 
 def GO_SHORT_CONDITION(dataset):
     color = "RED"
-    ema_trend = "DOWN"
     volume_confirmation = dataset['volume'] > dataset['volumeAvg']
 
     if  dataset['direction'] == color and \
         dataset['support'] == color and \
         dataset['MACD_short'] and \
-        volume_confirmation and \
-        ema_trend : return True
+        volume_confirmation : return True
     else: return False
 
 def EXIT_LONG_CONDITION(dataset):

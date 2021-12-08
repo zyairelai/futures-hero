@@ -1,12 +1,12 @@
 import config
 import strategies.combined
 import strategies.ichimoku
-import strategies.seven
 import strategies.volume
+import strategies.william_fractal
 from datetime import datetime
 
 fees = 0.1
-choose_your_fighter = strategies.ichimoku
+choose_your_fighter = strategies.volume
 
 def backtest():
     all_pairs = 0
