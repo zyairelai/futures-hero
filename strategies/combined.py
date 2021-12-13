@@ -23,7 +23,7 @@ def futures_hero(pair):
     main_dir = modules.heikin_ashi.heikin_ashi(main_raw)[["timestamp", "color"]].copy()
     supp_can = modules.candlestick.candlestick(rSupport)[["timestamp", "color"]].copy()
     supp_dir = modules.heikin_ashi.heikin_ashi(rSupport)[["timestamp", "color"]].copy()
-    macd1MIN = modules.MACD.apply_default(modules.heikin_ashi.heikin_ashi(default))
+    macd1MIN = modules.MACD.apply_MACD(modules.heikin_ashi.heikin_ashi(default))
 
     # Rename the column to avoid conflict
     main_can = main_can.rename(columns={'color': 'main_candle'})

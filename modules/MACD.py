@@ -27,7 +27,7 @@ def test_module():
     klines = candlestick.get_klines("BTCUSDT", "1h")
     # heikin = heikin_ashi.heikin_ashi(klines)
     applyMACD = apply_MACD(klines)
-    print("\nMACD.apply_default(klines)")
+    print("\nMACD.apply_MACD(klines)")
     print(applyMACD)
 
 # test_module()
