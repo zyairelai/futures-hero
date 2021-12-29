@@ -11,7 +11,7 @@
 5. [SCREENSHOTS](#hello_screenshots)
     - [SAMPLE-OUTPUT](#sample_output)
 6. [JOIN-MY-DISCORD](#discord)
-    - [QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/r4TnhcdqmT)
+    - [QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/6J2mXvYsFB)
 
 <a name="futures_hero"></a>
 ## FUTURES-HERO
@@ -132,4 +132,4 @@ python3 run.py
 </p>
 
 <a name="discord"></a>
-## [JOIN MY DISCORD - QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/r4TnhcdqmT)
+## [JOIN MY DISCORD - QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/6J2mXvYsFB)
