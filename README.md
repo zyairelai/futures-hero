@@ -12,6 +12,7 @@
     - [SAMPLE-OUTPUT](#sample_output)
 6. [JOIN-MY-DISCORD](#discord)
     - [QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/6J2mXvYsFB)
+    - Please email or create an issue if the invitation link does not work  
 
 <a name="futures_hero"></a>
 ## FUTURES-HERO
@@ -133,3 +134,4 @@ python3 run.py
 
 <a name="discord"></a>
 ## [JOIN MY DISCORD - QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/6J2mXvYsFB)
+### Please email or create an issue if the invitation link does not work  
