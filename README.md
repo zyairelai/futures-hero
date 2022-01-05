@@ -18,6 +18,10 @@
 ## FUTURES-HERO
 Leverage Trading Automation on Binance Futures.  
 This is a `Set and Forget` script, means you need to keep it running 24/7 and forget about it.  
+**The bot is stable in current version therefore no new changes until new bugs been spotted.**  
+**I do not use this bot personally, however, I do use the other 2 bots:**  
+- https://github.com/zyairelai/buy-low-sell-high
+- https://github.com/zyairelai/long-term-low-leverage
 
 <a name="hello_disclaimer"></a>
 ## DISCLAIMER
