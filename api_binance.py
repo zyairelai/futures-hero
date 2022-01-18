@@ -1,4 +1,5 @@
-import os, time, config
+import os, time, config, requests
+from webhook_launcher import telegram_bot_sendtext
 from binance.client import Client
 from termcolor import colored
 
@@ -7,6 +8,9 @@ api_key     = os.environ.get('BINANCE_KEY')
 api_secret  = os.environ.get('BINANCE_SECRET')
 client      = Client(api_key, api_secret)
 live_trade  = config.live_trade
+
+#To send webhook or telegram notification
+active_webhook = False
 
 def get_timestamp():
     return int(time.time() * 1000)
@@ -44,6 +48,12 @@ def market_open_long(pair, quantity):
                                     side="BUY",
                                     timestamp=get_timestamp())
     print(colored("🚀 GO_LONG 🚀", "green"))
+    if active_webhook:
+        telegram_bot_sendtext("🚀 GO_LONG 🚀 "+ str(pair) + " "+ str(quantity) + " BUY MARKET ")
+
+
+
+
 
 def market_open_short(pair, quantity):
     if live_trade:
@@ -54,6 +64,9 @@ def market_open_short(pair, quantity):
                                     side="SELL",
                                     timestamp=get_timestamp())
     print(colored("💥 GO_SHORT 💥", "red"))
+    if active_webhook:
+        telegram_bot_sendtext("🚀 GO_SHORT 🚀 "+ str(pair) + " "+ str(quantity) + " SELL MARKET ")
+
 
 def market_close_long(pair, response):
     if live_trade:
@@ -64,6 +77,8 @@ def market_close_long(pair, response):
                                     type="MARKET",
                                     timestamp=get_timestamp())
     print("💰 CLOSE_LONG 💰")
+    if active_webhook:
+        telegram_bot_sendtext("💰 CLOSE_LONG 💰 "+str(pair)+ " | Position: "+ str(abs(float(response[1].get('positionAmt')))) + "| X"+ str(response[1].get('leverage')) + " | Market Price: "+ str(float(response[1].get('markPrice'))) + " Profit: "+ str(float(response[1].get('unRealizedProfit'))) + " SELL MARKET ")
 
 def market_close_short(pair, response):
     if live_trade:
@@ -74,5 +89,7 @@ def market_close_short(pair, response):
                                     type="MARKET",
                                     timestamp=get_timestamp())
     print("💰 CLOSE_SHORT 💰")
+    if active_webhook:
+        telegram_bot_sendtext("💰 CLOSE_SHORT 💰 "+pair+" | Position: "+ str(abs(float(response[2].get('positionAmt')))) + "| X"+ str(response[2].get('leverage')) + " | Market Price: "+ str(float(response[2].get('markPrice'))) + " Profit: "+ str(float(response[2].get('unRealizedProfit'))) + "   BUY MARKET ")
 
 set_hedge_mode()
