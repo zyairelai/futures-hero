@@ -1,3 +1,6 @@
+# Project Update:
+I am currently not able to give this project enough time to fix the current issues or add new features. I am busy with some other projects. But I do plan to fix all the issues and add some new features. So the maintenance is temporarily on hold and this project is not dead. I also plan to make a web only version of Udeler.
+
 ## TABLE OF CONTENTS
 
 1. [FUTURES-HERO](#futures_hero)
@@ -48,8 +51,6 @@ In short, this code takes these few conditions into considerations:
 
 4. The entry will be on the 1-minute chart.  
    In the case above, it will look for a `LONG` position entry.
-
-5. The exit will be based on the `profit_margin`.  
 
 <a name="how_to_use"></a>
 ## HOW-TO-USE
@@ -102,7 +103,6 @@ The settings can be configured in `config.py`.
 | `live_trade`        |`True` to place actual order <br /> `False` to see sample output                                        |
 | `coin`              | You can put your coin list here, to add more it will be ["BTC", "ETH"]                                 |
 | `quantity`          | Trade amount. You can run `util_cal_tradeAmt.py` to check the trade amount                             |
-| `profit_margin`     | Minimum has to be 0.1 to cover the fees. <br /> `profit_margin * leverage = Actual Profit Percentage`  |
 
 The following code illustrate how you add more pairs to trade with:  
 ```
