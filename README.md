@@ -130,6 +130,8 @@ Let's make the magic happens!
 python3 run.py
 ```
 
+**Make sure you are having Python 3.8 as default python, else you might need to specify your path with python3.8**
+
 <a name="hello_screenshots"></a>
 ## SCREENSHOTS
 
