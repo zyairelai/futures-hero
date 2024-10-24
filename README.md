@@ -16,9 +16,6 @@ If you are interested in other trading bot, kindly visit [Buy Low Sell High](htt
     4. [RUN](#run)
 5. [SCREENSHOTS](#hello_screenshots)
     - [SAMPLE-OUTPUT](#sample_output)
-6. [JOIN-MY-DISCORD](#discord)
-    - [QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/6J2mXvYsFB)
-    - Please email or create an issue if the invitation link does not work  
 
 <a name="futures_hero"></a>
 ## FUTURES-HERO
@@ -142,6 +139,3 @@ python3 run.py
   <img src="screenshots/sample_output.png">
 </p>
 
-<a name="discord"></a>
-## [JOIN MY DISCORD - QUICK ACCESS TO THE DARK DIMENSION](https://discord.gg/6J2mXvYsFB)
-### Please email or create an issue if the invitation link does not work  
